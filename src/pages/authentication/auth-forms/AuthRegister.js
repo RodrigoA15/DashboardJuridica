@@ -51,7 +51,6 @@ const AuthRegister = () => {
     changePassword('');
   }, []);
 
-
   return (
     <>
       <Formik

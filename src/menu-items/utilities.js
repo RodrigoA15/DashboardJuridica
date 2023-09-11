@@ -9,15 +9,15 @@ const icons = {
 // ==============================|| MENU ITEMS - UTILITIES ||============================== //
 
 const utilities = {
-  id: 'utilities',
-  title: 'Utilities',
+  id: 'Radicados',
+  title: 'Radicados',
   type: 'group',
   children: [
     {
       id: 'util-shadow',
-      title: 'Shadow',
+      title: 'Radicados',
       type: 'item',
-      url: '/shadow',
+      url: '/radicados',
       icon: icons.BarcodeOutlined
     }
   ]

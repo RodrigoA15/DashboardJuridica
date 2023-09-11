@@ -15,6 +15,11 @@ import 'assets/third-party/apex-chart.css';
 import App from './App';
 import { store } from 'store';
 import reportWebVitals from './reportWebVitals';
+//bootstrap
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle';
+//css
+import './index.css';
 
 // ==============================|| MAIN - REACT DOM RENDER  ||============================== //
 
@@ -23,7 +28,7 @@ const root = createRoot(container); // createRoot(container!) if you use TypeScr
 root.render(
   <StrictMode>
     <ReduxProvider store={store}>
-      <BrowserRouter basename="/free">
+      <BrowserRouter>
         <App />
       </BrowserRouter>
     </ReduxProvider>
