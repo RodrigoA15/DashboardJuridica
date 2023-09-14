@@ -3,35 +3,51 @@
 // project import
 import MainCard from 'components/MainCard';
 import ComponentSkeleton from './ComponentSkeleton';
-import { useForm } from 'react-hook-form';
+// import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import axios from 'axios';
 import GetEntrada from './CanalEntrada/GetEntrada';
+import Buscador from './Procedencia/Buscador';
+import GetAsunto from './Asunto/GetAsunto';
+import GetTipificacion from './Tipificacion/GetTipificacion';
+import GetEntidad from './Entidad/GetEntidad';
+import GetDepartamentos from './Departamento/GetDepartamentos';
+import { useForm } from 'react-hook-form';
 
 // ===============================|| CUSTOM - SHADOW BOX ||=============================== //
 
 function ComponentRadicados() {
   const [numero_radicado, setNumero_radicado] = useState('');
   const [fecha_radicado, setFecha_radicado] = useState('');
-
+  //Canal Entrada
+  const [canalEntrada, setCanalEntrada] = useState('');
+  //Asunto
+  const [asunto, setAsunto] = useState('');
+  //Tipificacion
+  const [tipificacion, setTipificacion] = useState('');
+  //Entidad
+  const [entidad, setEntidad] = useState('');
+  //Procedencia
+  const [procedencia, setProcedencia] = useState('');
+  //Departamentos
+  const [departamento, setDepartamento] = useState('');
   const {
-    register,
-    formState: { errors },
     handleSubmit,
+    register,
     watch,
-    reset
-  } = useForm({ mode: 'onBlur' });
+    formState: { errors }
+  } = useForm();
 
   const datos = {
     numero_radicado: numero_radicado,
-    fecha_radicado: fecha_radicado
+    fecha_radicado: fecha_radicado,
+    id_canal_entrada: canalEntrada,
+    id_asunto: asunto,
+    id_tipificacion: tipificacion,
+    id_entidad: entidad,
+    id_procedencia: procedencia,
+    id_departamento: departamento
   };
-
-  const onSubmit = handleSubmit((data) => {
-    console.log(data);
-    createRadicado();
-    reset();
-  });
 
   const createRadicado = async () => {
     try {
@@ -41,108 +57,15 @@ function ComponentRadicados() {
     }
   };
 
+  const onSubmit = handleSubmit((data) => {
+    console.log(data);
+  });
+
   return (
     <ComponentSkeleton>
       <MainCard title="Crear Radicados">
-        <form onSubmit={onSubmit}>
-          <div className="row ">
-            <h4>Informacion Procedencia</h4>
-            <div className="col">
-              <select className="form-select mt-4 mb-4 rounded-pill" {...register('tipo_identificacion')}>
-                <option>Seleccione tipo de Identificacion</option>
-                <option value="CC">Cedula de ciudadania</option>
-                <option value="CE">Cedula de extranjeria</option>
-                <option value="PS">Pasaporte</option>
-                <option value="P">Permanencia</option>
-              </select>
-
-              {watch('tipo_identificacion') == 'CC' && (
-                <>
-                  <input
-                    type="number"
-                    placeholder="Cedula de Ciudadania"
-                    className="form-control mb-3 "
-                    {...register('cedula_ciudadania', {
-                      required: {
-                        value: true,
-                        message: 'Este campo es obligatorio'
-                      },
-                      minLength: {
-                        value: 8,
-                        message: 'Debe tener minimo 8 caracteres'
-                      },
-                      maxLength: {
-                        value: 10,
-                        message: 'Debe tener maximo 10 caracteres'
-                      }
-                    })}
-                  />
-                  {errors.cedula_ciudadania && <span className="errors">{errors.cedula_ciudadania.message}</span>}
-                </>
-              )}
-
-              {watch('tipo_identificacion') == 'CE' && (
-                <>
-                  <input
-                    type="number"
-                    placeholder="Cedula de Extranjeria"
-                    className="form-control mb-3"
-                    {...register('cedula_extranjeria', {
-                      required: {
-                        value: true,
-                        message: 'Este campo es obligatorio'
-                      },
-                      minLength: {
-                        value: 8,
-                        message: 'Debe tener minimo 8 caracteres'
-                      },
-                      maxLength: {
-                        value: 10,
-                        message: 'Debe tener maximo 10 caracteres'
-                      }
-                    })}
-                  />
-                  {errors.cedula_extranjeria && <span className="errors">{errors.cedula_extranjeria.message}</span>}
-                </>
-              )}
-            </div>
-
-            <div className="col">
-              <label htmlFor="nombre" className="form-label h6">
-                Nombre
-              </label>
-              <input
-                type="text"
-                className="form-control rounded-pill"
-                id="nombre"
-                {...register('nombre', {
-                  required: {
-                    value: true,
-                    message: 'Esta campo es obligatorio'
-                  }
-                })}
-              />
-              {errors.nombre && <span className="errors">{errors.nombre.message}</span>}
-            </div>
-
-            <div className=" col-3">
-              <label htmlFor="label" className="form-label h6">
-                Apellido
-              </label>
-              <input
-                type="text"
-                className="form-control rounded-pill"
-                id="apellido"
-                {...register('apellido', {
-                  required: {
-                    value: true,
-                    message: 'Esta campo es obligatorio'
-                  }
-                })}
-              />
-              {errors.apellido && <span className="errors">{errors.apellido.message}</span>}
-            </div>
-          </div>
+        <form>
+          <Buscador createRadicado={createRadicado} setProcedencia={setProcedencia} />
 
           <div className="row">
             <div className="col">
@@ -210,9 +133,7 @@ function ComponentRadicados() {
             </div>
           </div>
 
-          <div className="row ">
-            <div className="col"></div>
-          </div>
+          {/* Radicados */}
           <div className="row mb-3">
             <h4>Informacion Radicado</h4>
             <div className="mb-3 col">
@@ -224,33 +145,14 @@ function ComponentRadicados() {
                 className="form-control rounded-pill"
                 id="radicados"
                 onChange={(e) => setNumero_radicado(e.target.value)}
-                {...register('numero_radicado', {
-                  required: {
-                    value: true,
-                    message: 'Esta campo es obligatorio'
-                  }
-                })}
               />
-              {errors.numero_radicado && <span className="errors">{errors.numero_radicado.message}</span>}
             </div>
 
             <div className="mb-3 col">
               <label htmlFor="fecha" className="form-label h6">
                 Fecha Radicado
               </label>
-              <input
-                type="date"
-                className="form-control rounded-pill"
-                id="fecha"
-                onChange={(e) => setFecha_radicado(e.target.value)}
-                {...register('fecha_radicado', {
-                  required: {
-                    value: true,
-                    message: 'Esta campo es obligatorio'
-                  }
-                })}
-              />
-              {errors.fecha_radicado && <span className="errors">{errors.fecha_radicado.message}</span>}
+              <input type="date" className="form-control rounded-pill" id="fecha" onChange={(e) => setFecha_radicado(e.target.value)} />
             </div>
           </div>
 
@@ -258,31 +160,19 @@ function ComponentRadicados() {
             <div className="mb-3 col">
               <h3>Canal Entrada</h3>
 
-              <div>
-                <GetEntrada />
-              </div>
+              <GetEntrada setCanalEntrada={setCanalEntrada} />
             </div>
 
             <div className="mb-3 col">
               <h3>Asunto</h3>
 
-              <select className="form-select mb-4 rounded-pill " aria-label="Default select example">
-                <option value="numero_identificacion">Numero Identificacion</option>
-                <option value="tipo_infraccion">Tipo Infraccion</option>
-                <option value="placa">Placa</option>
-                <option value="placa">Cambio Infractor</option>
-              </select>
+              <GetAsunto setAsunto={setAsunto} />
             </div>
 
             <div className="mb-3 col">
               <h3>Tipificacion</h3>
 
-              <select className="form-select mb-4 rounded-pill " aria-label="Default select example">
-                <option value="numero_identificacion">Numero Identificacion</option>
-                <option value="tipo_infraccion">Tipo Infraccion</option>
-                <option value="placa">Placa</option>
-                <option value="placa">Cambio Infractor</option>
-              </select>
+              <GetTipificacion setTipificacion={setTipificacion} />
             </div>
           </div>
 
@@ -290,26 +180,16 @@ function ComponentRadicados() {
             <div className="mb-3 col">
               <h3>Entidad</h3>
 
-              <select className="form-select mb-4 rounded-pill " aria-label="Default select example">
-                <option value="numero_identificacion">Numero Identificacion</option>
-                <option value="tipo_infraccion">Tipo Infraccion</option>
-                <option value="placa">Placa</option>
-                <option value="placa">Cambio Infractor</option>
-              </select>
+              <GetEntidad setEntidad={setEntidad} />
             </div>
 
             <div className="mb-3 col">
               <h3>Dirigido a </h3>
 
-              <select className="form-select mb-4 rounded-pill " aria-label="Default select example">
-                <option value="numero_identificacion">Numero Identificacion</option>
-                <option value="tipo_infraccion">Tipo Infraccion</option>
-                <option value="placa">Placa</option>
-                <option value="placa">Cambio Infractor</option>
-              </select>
+              <GetDepartamentos setDepartamento={setDepartamento} />
             </div>
           </div>
-          <button type="submit" className="btn btn-success">
+          <button className="btn btn-success" type="submit">
             Enviar
           </button>
         </form>
