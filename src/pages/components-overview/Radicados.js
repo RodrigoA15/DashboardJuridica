@@ -32,7 +32,6 @@ function ComponentRadicados() {
   //Departamentos
   const [departamento, setDepartamento] = useState('');
   const {
-    handleSubmit,
     register,
     watch,
     formState: { errors }
@@ -56,10 +55,6 @@ function ComponentRadicados() {
       console.log(error);
     }
   };
-
-  const onSubmit = handleSubmit((data) => {
-    console.log(data);
-  });
 
   return (
     <ComponentSkeleton>

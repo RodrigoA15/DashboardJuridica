@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { Toaster, toast } from 'sonner';
-import { IconButton } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
 
 function Buscador({ setProcedencia, createRadicado }) {
   const [numero_identificacion, setNumero_identificacion] = useState('');
@@ -13,7 +11,16 @@ function Buscador({ setProcedencia, createRadicado }) {
   const [nombre, setNombre] = useState('');
   const [apellido, setApellido] = useState('');
 
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault(); // Evitar la recarga de la página
+      GetidentificacionById();
+      PostProcedencia();
+    }
+  };
+
   const handleInputChange = (e) => {
+    e.preventDefault();
     setNumero_identificacion(e.target.value);
   };
 
@@ -62,11 +69,6 @@ function Buscador({ setProcedencia, createRadicado }) {
     }
   };
 
-  const handleOnClick = async () => {
-    PostProcedencia();
-    createRadicado();
-  };
-
   return (
     <div>
       <Toaster position="top-right" richColors />
@@ -81,11 +83,12 @@ function Buscador({ setProcedencia, createRadicado }) {
             type="text"
             placeholder="Numero de identificacion"
             onChange={handleInputChange}
+            onKeyDown={handleKeyPress}
           />
 
-          <IconButton className="custom-button" variant="outlined" onClick={GetidentificacionById}>
-            <SearchIcon />
-          </IconButton>
+          <button type="button" className="custom-button" onClick={GetidentificacionById}>
+            Buscar
+          </button>
         </div>
         {/* Campos de entrada*/}
         {entrada === true && (
@@ -145,7 +148,7 @@ function Buscador({ setProcedencia, createRadicado }) {
         </div>
       </div>
 
-      <button type="submit" onClick={handleOnClick}>
+      <button type="button" onClick={createRadicado}>
         Ejecutar PostProcedencia
       </button>
     </div>
