@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { useAuth } from 'context/authContext';
 
 // material-ui
 import {
@@ -31,8 +32,8 @@ import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 // ============================|| FIREBASE - LOGIN ||============================ //
 
 const AuthLogin = () => {
+  const { signin } = useAuth();
   const [checked, setChecked] = useState(false);
-
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -46,21 +47,25 @@ const AuthLogin = () => {
     <>
       <Formik
         initialValues={{
-          email: 'info@codedthemes.com',
-          password: '123456',
+          email: '',
+          password: '',
           submit: null
         }}
         validationSchema={Yup.object().shape({
-          email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
+          email: Yup.string().email('Debe ser un correo electronico válido').max(255).required('Email is required'),
           password: Yup.string().max(255).required('Password is required')
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           try {
-            setStatus({ success: false });
-            setSubmitting(false);
+            signin(values);
+            setStatus({ success: true });
+            setSubmitting(true);
           } catch (err) {
-            setStatus({ success: false });
-            setErrors({ submit: err.message });
+            if (err.response && err.response.data && err.response.data.message) {
+              setErrors({ submit: err.response.data.message });
+            } else {
+              setErrors({ submit: 'Ocurrió un error al iniciar sesion.' });
+            }
             setSubmitting(false);
           }
         }}

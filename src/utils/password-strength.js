@@ -9,11 +9,11 @@ const hasSpecial = (number) => new RegExp(/[!#@$%^&*)(+=._-]/).test(number);
 
 // set color based on password strength
 export const strengthColor = (count) => {
-  if (count < 2) return { label: 'Poor', color: 'error.main' };
-  if (count < 3) return { label: 'Weak', color: 'warning.main' };
+  if (count < 2) return { label: 'Pobre', color: 'error.main' };
+  if (count < 3) return { label: 'Débil', color: 'warning.main' };
   if (count < 4) return { label: 'Normal', color: 'warning.dark' };
-  if (count < 5) return { label: 'Good', color: 'success.main' };
-  if (count < 6) return { label: 'Strong', color: 'success.dark' };
+  if (count < 5) return { label: 'Buena', color: 'success.main' };
+  if (count < 6) return { label: 'Fuerte', color: 'success.dark' };
   return { label: 'Poor', color: 'error.main' };
 };
 

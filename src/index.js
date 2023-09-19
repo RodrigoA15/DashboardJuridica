@@ -20,6 +20,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle';
 //css
 import './index.css';
+import { AuthProvider } from 'context/authContext';
 
 // ==============================|| MAIN - REACT DOM RENDER  ||============================== //
 
@@ -28,9 +29,11 @@ const root = createRoot(container); // createRoot(container!) if you use TypeScr
 root.render(
   <StrictMode>
     <ReduxProvider store={store}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <AuthProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </AuthProvider>
     </ReduxProvider>
   </StrictMode>
 );

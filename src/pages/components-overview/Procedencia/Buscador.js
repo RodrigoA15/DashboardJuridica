@@ -32,7 +32,7 @@ function Buscador({ setProcedencia, createRadicado }) {
       toast.error('El termino busqueda no puede estar vacio');
     }
     try {
-      const response = await axios.get(`http://localhost:4000/api/procedencia/${numero_identificacion}`);
+      const response = await axios.get(`http://localhost:4000/api/procedencia/procedencia/${numero_identificacion}`);
       if (response.data.length > 0) {
         setid(response.data);
         const procedenciaValue = response.data[0]._id;
