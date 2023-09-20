@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import { useAuth } from 'context/authContext';
 
 // material-ui
@@ -32,7 +32,9 @@ import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 // ============================|| FIREBASE - LOGIN ||============================ //
 
 const AuthLogin = () => {
-  const { signin } = useAuth();
+  const { signin, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
   const [checked, setChecked] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => {
@@ -42,6 +44,12 @@ const AuthLogin = () => {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+    
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/radicados');
+    }
+  }, [isAuthenticated]);
 
   return (
     <>
