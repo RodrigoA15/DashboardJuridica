@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import axios from '../../../../node_modules/axios/index';
+import axios from 'api/axios';
+import PropTypes from 'prop-types';
 
 function GetDepartamentos({ setDepartamento }) {
   const [dataDepartamento, setDataDepartamento] = useState([]);
@@ -10,7 +11,7 @@ function GetDepartamentos({ setDepartamento }) {
 
   const listDepartamentos = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/api/departamento');
+      const response = await axios.get('/departamentos/departamento');
       setDataDepartamento(response.data);
     } catch (error) {
       console.log(error);
@@ -31,3 +32,7 @@ function GetDepartamentos({ setDepartamento }) {
 }
 
 export default GetDepartamentos;
+
+GetDepartamentos.propTypes = {
+  setDepartamento: PropTypes.func.isRequired
+};

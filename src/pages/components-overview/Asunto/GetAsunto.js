@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from '../../../api/axios';
+import PropTypes from 'prop-types';
 
 function GetAsunto({ setAsunto }) {
   const [dataAsunto, setDataAsunto] = useState([]);
@@ -10,7 +11,7 @@ function GetAsunto({ setAsunto }) {
 
   const listaAsuntos = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/api/asunto');
+      const response = await axios.get('/asunto/asunto');
       setDataAsunto(response.data);
     } catch (error) {
       console.log(error);
@@ -33,3 +34,7 @@ function GetAsunto({ setAsunto }) {
 }
 
 export default GetAsunto;
+
+GetAsunto.propTypes = {
+  setAsunto: PropTypes.func.isRequired
+};

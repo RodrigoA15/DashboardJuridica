@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from '../../../api/axios';
+import PropTypes from 'prop-types';
+
 function GetEntrada({ setCanalEntrada }) {
   const [entrada, setEntrada] = useState([]);
 
@@ -9,7 +11,7 @@ function GetEntrada({ setCanalEntrada }) {
 
   const apiGetEntrada = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/api/canal');
+      const response = await axios.get('canal/canal');
       setEntrada(response.data);
       console.log(response.data);
     } catch (error) {
@@ -34,3 +36,7 @@ function GetEntrada({ setCanalEntrada }) {
 }
 
 export default GetEntrada;
+
+GetEntrada.propTypes = {
+  setCanalEntrada: PropTypes.func.isRequired
+};

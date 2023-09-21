@@ -26,7 +26,6 @@ import { Routes } from 'react-router-dom';
 import { Route } from 'react-router-dom';
 import ProtectedRoute from 'ProtectedRoutes';
 import App from 'App';
-import SamplePage from 'pages/extra-pages/SamplePage';
 
 // ==============================|| MAIN - REACT DOM RENDER  ||============================== //
 
@@ -40,8 +39,8 @@ root.render(
           <App />
           <Routes>
             <Route element={<ProtectedRoute />}>
-              <Route path="radicados" />
-              <Route path="sample" element={<SamplePage />} />
+              <Route path="radicados" element="" />
+              <Route path="juridica" element="" />
             </Route>
           </Routes>
         </BrowserRouter>

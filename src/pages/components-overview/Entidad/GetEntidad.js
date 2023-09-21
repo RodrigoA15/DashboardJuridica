@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from 'api/axios';
+import PropTypes from 'prop-types';
 
 function GetEntidad({ setEntidad }) {
   const [dataEntidad, setDataEntidad] = useState([]);
@@ -10,7 +11,7 @@ function GetEntidad({ setEntidad }) {
 
   const listEntidad = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/api/entidad');
+      const response = await axios.get('/entidad/entidad');
       setDataEntidad(response.data);
     } catch (error) {
       console.log(error);
@@ -31,3 +32,7 @@ function GetEntidad({ setEntidad }) {
 }
 
 export default GetEntidad;
+
+GetEntidad.propTypes = {
+  setEntidad: PropTypes.func.isRequired
+};

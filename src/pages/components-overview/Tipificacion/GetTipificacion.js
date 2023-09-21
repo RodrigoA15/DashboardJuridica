@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import axios from '../../../../node_modules/axios/index';
+import axios from '../../../api/axios';
+import PropTypes from 'prop-types';
 
 function GetTipificacion({ setTipificacion }) {
   const [dataTipicacion, setDataTipificacion] = useState([]);
@@ -10,7 +11,7 @@ function GetTipificacion({ setTipificacion }) {
 
   const listTipificacion = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/api/tipificacion');
+      const response = await axios.get('/tipificacion/tipificacion');
       setDataTipificacion(response.data);
     } catch (error) {
       console.log(error);
@@ -32,3 +33,7 @@ function GetTipificacion({ setTipificacion }) {
 }
 
 export default GetTipificacion;
+
+GetTipificacion.propTypes = {
+  setTipificacion: PropTypes.func.isRequired
+};

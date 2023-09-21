@@ -1,11 +1,9 @@
-// material-ui
-
 // project import
 import MainCard from 'components/MainCard';
 import ComponentSkeleton from './ComponentSkeleton';
 // import { useForm } from 'react-hook-form';
 import { useState } from 'react';
-import axios from 'axios';
+import axios from 'api/axios';
 import GetEntrada from './CanalEntrada/GetEntrada';
 import Buscador from './Procedencia/Buscador';
 import GetAsunto from './Asunto/GetAsunto';
@@ -45,12 +43,13 @@ function ComponentRadicados() {
     id_tipificacion: tipificacion,
     id_entidad: entidad,
     id_procedencia: procedencia,
-    id_departamento: departamento
+    id_departamento: departamento,
+    estado_radicado: 'Pendientes'
   };
 
   const createRadicado = async () => {
     try {
-      await axios.post(`http://localhost:4000/api/radicados`, datos);
+      await axios.post(`/radicados/radicados`, datos);
     } catch (error) {
       console.log(error);
     }
