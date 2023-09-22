@@ -44,7 +44,7 @@ function ComponentRadicados() {
     id_entidad: entidad,
     id_procedencia: procedencia,
     id_departamento: departamento,
-    estado_radicado: 'Pendientes'
+    estado_radicado: 'Pendiente'
   };
 
   const createRadicado = async () => {

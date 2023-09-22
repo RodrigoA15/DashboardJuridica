@@ -30,6 +30,7 @@ function GetPendientes({ onPendientesCountChange }) {
             <TableCell align="left">Fecha Radicado</TableCell>
             <TableCell align="left">Departamento</TableCell>
             <TableCell align="left">Asignar Radicado</TableCell>
+            <TableCell align="left">Acciones</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -40,8 +41,10 @@ function GetPendientes({ onPendientesCountChange }) {
               </TableCell>
               <TableCell align="left">{new Date(pendiente.fecha_radicado).toLocaleDateString()}</TableCell>
               <TableCell align="left">{pendiente.id_departamento.nombre_departamento}</TableCell>
+              <TableCell align="left">{pendiente._id}</TableCell>
+
               <TableCell>
-                <UsuariosJuridica />
+                <UsuariosJuridica pendiente={pendiente} />
               </TableCell>
             </TableRow>
           ))}
