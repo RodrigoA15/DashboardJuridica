@@ -11,6 +11,8 @@ import GetTipificacion from './Tipificacion/GetTipificacion';
 import GetEntidad from './Entidad/GetEntidad';
 import GetDepartamentos from './Departamento/GetDepartamentos';
 import { useForm } from 'react-hook-form';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
 // ===============================|| CUSTOM - SHADOW BOX ||=============================== //
 
@@ -34,7 +36,7 @@ function ComponentRadicados() {
     watch,
     formState: { errors }
   } = useForm();
-
+  const MySwal = withReactContent(Swal);
   const datos = {
     numero_radicado: numero_radicado,
     fecha_radicado: fecha_radicado,
@@ -50,8 +52,16 @@ function ComponentRadicados() {
   const createRadicado = async () => {
     try {
       await axios.post(`/radicados/radicados`, datos);
+      MySwal.fire({
+        title: 'Creado correctamente',
+        icon: 'success'
+      });
     } catch (error) {
       console.log(error);
+      MySwal.fire({
+        title: 'Error al crear radicado',
+        icon: 'error'
+      });
     }
   };
 

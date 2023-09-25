@@ -25,7 +25,7 @@ import MonthlyBarChart from './MonthlyBarChart';
 import ReportAreaChart from './ReportAreaChart';
 import SalesColumnChart from './SalesColumnChart';
 import MainCard from 'components/MainCard';
-import AnalyticEcommerce from 'components/cards/statistics/AnalyticEcommerce';
+import AnalyticPQRSCreadas from 'components/cards/statistics/AnalyticPQRSCreadas';
 
 // assets
 import { GiftOutlined, MessageOutlined, SettingOutlined } from '@ant-design/icons';
@@ -33,6 +33,7 @@ import avatar1 from 'assets/images/users/avatar-1.png';
 import avatar2 from 'assets/images/users/avatar-2.png';
 import avatar3 from 'assets/images/users/avatar-3.png';
 import avatar4 from 'assets/images/users/avatar-4.png';
+import AnalyticPQRSAsignadas from 'components/cards/statistics/AnalyticPQRSAsignadas';
 
 // avatar style
 const avatarSX = {
@@ -80,16 +81,16 @@ const DashboardDefault = () => {
         <Typography variant="h5">Dashboard</Typography>
       </Grid>
       <Grid item xs={12} sm={6} md={4} lg={3}>
-        <AnalyticEcommerce />
+        <AnalyticPQRSCreadas />
       </Grid>
       <Grid item xs={12} sm={6} md={4} lg={3}>
-        <AnalyticEcommerce />
+        <AnalyticPQRSAsignadas />
       </Grid>
       <Grid item xs={12} sm={6} md={4} lg={3}>
-        <AnalyticEcommerce />
+        {/* Componentes de grafica */}
       </Grid>
       <Grid item xs={12} sm={6} md={4} lg={3}>
-        <AnalyticEcommerce />
+        {/* Componentes de grafica */}
       </Grid>
 
       <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
