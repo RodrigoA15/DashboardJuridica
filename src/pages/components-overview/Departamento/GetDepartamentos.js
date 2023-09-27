@@ -19,7 +19,7 @@ function GetDepartamentos({ setDepartamento }) {
   };
   return (
     <div>
-      <select className="form-select rounded-pill" onChange={(e) => setDepartamento(e.target.value)}>
+      <select className="form-select rounded-pill minimal-input-dark" onChange={(e) => setDepartamento(e.target.value)}>
         <option>Seleccione un departamento</option>
         {dataDepartamento.map((i) => (
           <option key={i._id} value={i._id}>

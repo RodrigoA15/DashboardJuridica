@@ -6,8 +6,8 @@ const config = {
   i18n: 'en',
   miniDrawer: false,
   container: true,
-  mode: 'light',
-  presetColor: 'default',
+  mode: 'dark',
+  presetColor: 'theme2',
   themeDirection: 'ltr'
 };
 

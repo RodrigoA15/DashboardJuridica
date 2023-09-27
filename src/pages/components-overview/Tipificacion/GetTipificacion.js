@@ -20,7 +20,7 @@ function GetTipificacion({ setTipificacion }) {
 
   return (
     <div>
-      <select className="form-select rounded-pill" onChange={(e) => setTipificacion(e.target.value)}>
+      <select className="form-select rounded-pill minimal-input-dark" onChange={(e) => setTipificacion(e.target.value)}>
         <option>Seleccione Tipificacion</option>
         {dataTipicacion.map((i) => (
           <option key={i._id} value={i._id}>

@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { Toaster, toast } from 'sonner';
+import { InputAdornment, OutlinedInput } from '@mui/material';
+import { SearchOutlined } from '@mui/icons-material';
 
 function Buscador({ setProcedencia, createRadicado }) {
   const [numero_identificacion, setNumero_identificacion] = useState('');
@@ -78,17 +80,23 @@ function Buscador({ setProcedencia, createRadicado }) {
 
         {/* Buscador */}
         <div className="col-4 input-container">
-          <input
-            className="form-control mt-4 rounded-pill"
-            type="text"
-            placeholder="Numero de identificacion"
+          <OutlinedInput
+            size="small"
+            id="header-search"
+            sx={{
+              width: '400px',
+              border: '1px solid black',
+              borderRadius: '5px'
+            }}
+            startAdornment={
+              <InputAdornment position="start" sx={{ mr: -0.5 }}>
+                <SearchOutlined />
+              </InputAdornment>
+            }
+            placeholder="Busca por numero de identificacion"
             onChange={handleInputChange}
             onKeyDown={handleKeyPress}
           />
-
-          <button type="button" className="custom-button" onClick={GetidentificacionById}>
-            Buscar
-          </button>
         </div>
         {/* Campos de entrada*/}
         {entrada === true && (
@@ -99,13 +107,13 @@ function Buscador({ setProcedencia, createRadicado }) {
                   <label htmlFor="nombre" className="form-label h6">
                     Nombre
                   </label>
-                  <input type="text" className="form-control rounded-pill" id="nombre" value={i.nombre} readOnly />
+                  <input type="text" className="form-control rounded-pill minimal-input-dark" id="nombre" value={i.nombre} readOnly />
                 </div>
                 <div className="col mb-3">
                   <label htmlFor="label" className="form-label h6">
                     Apellido
                   </label>
-                  <input type="text" className="form-control rounded-pill" id="apellido" value={i.apellido} readOnly />
+                  <input type="text" className="form-control rounded-pill minimal-input-dark" id="apellido" value={i.apellido} readOnly />
                 </div>
               </div>
             ))}
@@ -128,7 +136,13 @@ function Buscador({ setProcedencia, createRadicado }) {
                 <label htmlFor="nombre" className="form-label  h6">
                   Nombre
                 </label>
-                <input type="text" className="form-control rounded-pill" id="nombre" onChange={(e) => setNombre(e.target.value)} required />
+                <input
+                  type="text"
+                  className="form-control rounded-pill minimal-input-dark"
+                  id="nombre"
+                  onChange={(e) => setNombre(e.target.value)}
+                  required
+                />
               </div>
 
               <div className="col mb-3">
@@ -137,7 +151,7 @@ function Buscador({ setProcedencia, createRadicado }) {
                 </label>
                 <input
                   type="text"
-                  className="form-control rounded-pill"
+                  className="form-control rounded-pill minimal-input-dark"
                   id="apellido"
                   onChange={(e) => setApellido(e.target.value)}
                   required

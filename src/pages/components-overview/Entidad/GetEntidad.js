@@ -19,7 +19,7 @@ function GetEntidad({ setEntidad }) {
   };
   return (
     <div>
-      <select className="form-select rounded-pill" onChange={(e) => setEntidad(e.target.value)}>
+      <select className="form-select rounded-pill minimal-input-dark" onChange={(e) => setEntidad(e.target.value)}>
         <option>Seleccione la entidad</option>
         {dataEntidad.map((i) => (
           <option key={i._id} value={i._id}>

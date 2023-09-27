@@ -39,6 +39,7 @@ const Palette = (mode) => {
         black: '#000',
         white: '#fff'
       },
+
       ...paletteColor,
       text: {
         primary: paletteColor.grey[700],

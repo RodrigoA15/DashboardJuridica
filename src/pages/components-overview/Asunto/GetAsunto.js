@@ -20,7 +20,7 @@ function GetAsunto({ setAsunto }) {
 
   return (
     <div>
-      <select className="form-control rounded-pill" onChange={(e) => setAsunto(e.target.value)}>
+      <select className="form-select rounded-pill minimal-input-dark" onChange={(e) => setAsunto(e.target.value)}>
         <option>Seleccione un asunto</option>
         {dataAsunto &&
           dataAsunto.map((i) => (

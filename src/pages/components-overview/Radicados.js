@@ -67,13 +67,13 @@ function ComponentRadicados() {
 
   return (
     <ComponentSkeleton>
-      <MainCard title="Crear Radicados">
+      <MainCard title="Crear Radicados" className="border-card card-background">
         <form>
           <Buscador createRadicado={createRadicado} setProcedencia={setProcedencia} />
 
           <div className="row">
             <div className="col">
-              <select className="form-select mb-4 rounded-pill" {...register('info_contacto')}>
+              <select className="form-select mb-4 rounded-pill minimal-input-dark" {...register('info_contacto')}>
                 <option>Seleccione una opcion de contacto</option>
                 <option value="direccion">Direccion</option>
                 <option value="telefono">Telefono</option>
@@ -84,7 +84,7 @@ function ComponentRadicados() {
               {watch('info_contacto') == 'direccion' && (
                 <>
                   <input
-                    className="form-control rounded-pill"
+                    className="form-control rounded-pill minimal-input-dark"
                     placeholder="Direccion de residencia"
                     type="text"
                     id="direccion"
@@ -102,7 +102,7 @@ function ComponentRadicados() {
               {watch('info_contacto') == 'telefono' && (
                 <>
                   <input
-                    className="form-control rounded-pill"
+                    className="form-control rounded-pill minimal-input-dark"
                     placeholder="Telefono"
                     type="text"
                     id="telefono"
@@ -120,7 +120,7 @@ function ComponentRadicados() {
               {watch('info_contacto') == 'correo' && (
                 <>
                   <input
-                    className="form-control rounded-pill"
+                    className="form-control rounded-pill minimal-input-dark"
                     placeholder="Correo Electronico"
                     type="text"
                     id="correo"
@@ -146,7 +146,7 @@ function ComponentRadicados() {
               </label>
               <input
                 type="number"
-                className="form-control rounded-pill"
+                className="form-control rounded-pill minimal-input-dark"
                 id="radicados"
                 onChange={(e) => setNumero_radicado(e.target.value)}
               />
@@ -156,7 +156,12 @@ function ComponentRadicados() {
               <label htmlFor="fecha" className="form-label h6">
                 Fecha Radicado
               </label>
-              <input type="date" className="form-control rounded-pill" id="fecha" onChange={(e) => setFecha_radicado(e.target.value)} />
+              <input
+                type="date"
+                className="form-control rounded-pill minimal-input-dark"
+                id="fecha"
+                onChange={(e) => setFecha_radicado(e.target.value)}
+              />
             </div>
           </div>
 
@@ -193,9 +198,6 @@ function ComponentRadicados() {
               <GetDepartamentos setDepartamento={setDepartamento} />
             </div>
           </div>
-          <button className="btn btn-success" type="submit">
-            Enviar
-          </button>
         </form>
       </MainCard>
     </ComponentSkeleton>

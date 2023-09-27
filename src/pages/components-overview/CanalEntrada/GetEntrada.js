@@ -21,7 +21,7 @@ function GetEntrada({ setCanalEntrada }) {
   return (
     <div>
       {console.log(entrada)}
-      <select className="form-select  rounded-pill " aria-label="Default select example" onChange={(e) => setCanalEntrada(e.target.value)}>
+      <select className="form-select  rounded-pill minimal-input-dark" aria-label="Default select example" onChange={(e) => setCanalEntrada(e.target.value)}>
         <option>Seleccione un canal</option>
         {entrada &&
           entrada.map((i) => (

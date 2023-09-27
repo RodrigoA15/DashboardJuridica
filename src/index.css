@@ -15,12 +15,24 @@
 }
 
 .custom-button {
-  position: absolute;
-  top: 25px;
-  right: 0;
-  padding: 8px 9px;
-  border: none;
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
-  cursor: pointer;
+  position: relative;
+  float: right;
 }
+
+.minimal-input-dark {
+  border: 1px solid #666;
+  font-size: 14px;
+  border-radius: 5px;
+}
+
+.minimal-input-dark:focus {
+  border-color: 4px #1890ff;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2); /* Sombra más oscura */
+}
+
+.border-card {
+  border: 1.9px solid #989898;
+  background-color: #e1e1e1;
+  border: 2px solid #1890ff
+}
+
