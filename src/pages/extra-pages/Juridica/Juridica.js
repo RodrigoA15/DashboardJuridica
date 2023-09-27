@@ -10,13 +10,8 @@ import GetAsignados from './GetAsignados';
 
 const Juridica = () => {
   const [value, setValue] = useState('1');
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
-  };
-
-  const handlePendientesCountChange = (count) => {
-    setPendientesCount(count);
   };
 
   return (
@@ -30,7 +25,7 @@ const Juridica = () => {
           </TabList>
         </Box>
         <TabPanel value="1">
-          <GetPendientes onPendientesCountChange={handlePendientesCountChange} />
+          <GetPendientes />
         </TabPanel>
         <TabPanel value="2">
           <GetAsignados />

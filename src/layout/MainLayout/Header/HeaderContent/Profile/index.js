@@ -4,7 +4,6 @@ import { useRef, useState } from 'react';
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import {
-  Avatar,
   Box,
   ButtonBase,
   CardContent,
@@ -18,16 +17,16 @@ import {
   Tabs,
   Typography
 } from '@mui/material';
-
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 // project import
 import MainCard from 'components/MainCard';
 import Transitions from 'components/@extended/Transitions';
 import ProfileTab from './ProfileTab';
 import SettingTab from './SettingTab';
-
+import { useAuth } from 'context/authContext';
 // assets
-import avatar1 from 'assets/images/users/avatar-1.png';
 import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
 
 // tab panel wrapper
 function TabPanel({ children, value, index, ...other }) {
@@ -55,9 +54,10 @@ function a11yProps(index) {
 
 const Profile = () => {
   const theme = useTheme();
-
+  const { user, logout } = useAuth();
   const handleLogout = async () => {
-    // logout
+    // Lógica para el logout aquí
+    logout();
   };
 
   const anchorRef = useRef(null);
@@ -80,7 +80,7 @@ const Profile = () => {
   };
 
   const iconBackColorOpen = 'grey.300';
-
+  console.log(user);
   return (
     <Box sx={{ flexShrink: 0, ml: 0.75 }}>
       <ButtonBase
@@ -97,8 +97,8 @@ const Profile = () => {
         onClick={handleToggle}
       >
         <Stack direction="row" spacing={2} alignItems="center" sx={{ p: 0.5 }}>
-          <Avatar alt="profile user" src={avatar1} sx={{ width: 32, height: 32 }} />
-          <Typography variant="subtitle1">John Doe</Typography>
+          <AccountCircleIcon />
+          <Typography variant="subtitle1">{user.username}</Typography>
         </Stack>
       </ButtonBase>
       <Popper
@@ -139,19 +139,20 @@ const Profile = () => {
                       <Grid container justifyContent="space-between" alignItems="center">
                         <Grid item>
                           <Stack direction="row" spacing={1.25} alignItems="center">
-                            <Avatar alt="profile user" src={avatar1} sx={{ width: 32, height: 32 }} />
                             <Stack>
-                              <Typography variant="h6">John Doe</Typography>
+                              <Typography variant="h6">{user.username}</Typography>
                               <Typography variant="body2" color="textSecondary">
-                                UI/UX Designer
+                                {user.role.nombre_rol}
                               </Typography>
                             </Stack>
                           </Stack>
                         </Grid>
                         <Grid item>
-                          <IconButton size="large" color="secondary" onClick={handleLogout}>
-                            <LogoutOutlined />
-                          </IconButton>
+                          <Link to="/login" onClick={handleLogout}>
+                            <IconButton size="large" color="secondary">
+                              <LogoutOutlined />
+                            </IconButton>
+                          </Link>
                         </Grid>
                       </Grid>
                     </CardContent>

@@ -1,6 +1,7 @@
 import { login, register, verifyToken } from 'api/auth';
 import { useContext, useEffect } from 'react';
 import { createContext, useState } from 'react';
+import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
 
 export const AuthContext = createContext();
@@ -14,14 +15,13 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const signup = async (user) => {
     try {
       const res = await register(user);
-      console.log(res);
       setUser(res.data);
       setIsAuthenticated(true);
     } catch (error) {
@@ -32,7 +32,6 @@ export const AuthProvider = ({ children }) => {
   const signin = async (user) => {
     try {
       const res = await login(user);
-      console.log(res);
       setIsAuthenticated(true);
       setUser(res.data);
     } catch (error) {
@@ -40,10 +39,15 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const logout = () => {
+    Cookies.remove('token');
+    setUser('');
+    setIsAuthenticated(false);
+  };
+
   useEffect(() => {
     const checkLogin = async () => {
       const cookies = Cookies.get();
-
       if (!cookies.token) {
         setIsAuthenticated(false);
         setLoading(false);
@@ -51,7 +55,6 @@ export const AuthProvider = ({ children }) => {
       }
       try {
         const res = await verifyToken(cookies.token);
-        console.log(res);
         if (!res.data) {
           setIsAuthenticated(false);
           setLoading(false);
@@ -77,6 +80,7 @@ export const AuthProvider = ({ children }) => {
       value={{
         signup,
         signin,
+        logout,
         loading,
         user,
         isAuthenticated
@@ -85,4 +89,8 @@ export const AuthProvider = ({ children }) => {
       {children}
     </AuthContext.Provider>
   );
+};
+
+AuthProvider.propTypes = {
+  children: PropTypes.object.isRequired
 };

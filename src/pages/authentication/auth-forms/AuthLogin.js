@@ -44,7 +44,7 @@ const AuthLogin = () => {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
-    
+
   useEffect(() => {
     if (isAuthenticated) {
       navigate('/radicados');

@@ -3,6 +3,7 @@ import { lazy } from 'react';
 import Loadable from 'components/Loadable';
 import MainLayout from 'layout/MainLayout';
 import Juridica from 'pages/extra-pages/Juridica/Juridica';
+import PendientesUsuario from 'pages/extra-pages/PQRSPendientesUsuario/PendientesUsuario';
 // render - dashboard
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
 
@@ -35,6 +36,10 @@ const MainRoutes = {
     {
       path: 'radicados',
       element: <Radicados />
+    },
+    {
+      path: 'pendientes',
+      element: <PendientesUsuario />
     }
   ]
 };
