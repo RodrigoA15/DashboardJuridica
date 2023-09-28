@@ -33,6 +33,8 @@ import avatar2 from 'assets/images/users/avatar-2.png';
 import avatar3 from 'assets/images/users/avatar-3.png';
 import avatar4 from 'assets/images/users/avatar-4.png';
 import AnalyticPQRSAsignadas from 'components/cards/statistics/AnalyticPQRSAsignadas';
+import AnalyticPQRSRespondidas from 'components/cards/statistics/AnalyticPQRSRespondidas';
+import AnalyticPQRSPendientes from 'components/cards/statistics/AnalyticPQRSPendientes';
 
 // avatar style
 const avatarSX = {
@@ -83,13 +85,13 @@ const DashboardDefault = () => {
         <AnalyticPQRSCreadas />
       </Grid>
       <Grid item xs={12} sm={6} md={4} lg={3}>
+        <AnalyticPQRSPendientes />
+      </Grid>
+      <Grid item xs={12} sm={6} md={4} lg={3}>
         <AnalyticPQRSAsignadas />
       </Grid>
       <Grid item xs={12} sm={6} md={4} lg={3}>
-        {/* Componentes de grafica */}
-      </Grid>
-      <Grid item xs={12} sm={6} md={4} lg={3}>
-        {/* Componentes de grafica */}
+        <AnalyticPQRSRespondidas />
       </Grid>
 
       <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
@@ -98,7 +100,7 @@ const DashboardDefault = () => {
       <Grid item xs={12} md={7} lg={8}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
-            <Typography variant="h5">Unique Visitor</Typography>
+            <Typography variant="h5">Radicados por mes</Typography>
           </Grid>
           <Grid item>
             <Stack direction="row" alignItems="center" spacing={0}>
@@ -130,7 +132,7 @@ const DashboardDefault = () => {
       <Grid item xs={12} md={5} lg={4}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
-            <Typography variant="h5">Income Overview</Typography>
+            <Typography variant="h5">Canales de entrada</Typography>
           </Grid>
           <Grid item />
         </Grid>
@@ -162,7 +164,7 @@ const DashboardDefault = () => {
       <Grid item xs={12} md={5} lg={4}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
-            <Typography variant="h5">Analytics Report</Typography>
+            <Typography variant="h5">Entidad</Typography>
           </Grid>
           <Grid item />
         </Grid>

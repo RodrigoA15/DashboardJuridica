@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Box, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import axios from 'api/axios';
-import { Button, TableCell } from '../../../../node_modules/@mui/material/index';
+import { Button, TableCell } from '@mui/material';
 import PropTypes from 'prop-types';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
+import { Toaster, toast } from 'sonner';
 
 function UsuariosJuridica({ pendiente }) {
   const [users, setUsers] = useState([]);
@@ -43,6 +44,7 @@ function UsuariosJuridica({ pendiente }) {
         await axios.put(`/radicados/radicados/${pendiente._id}`, {
           estado_radicado: 'Asignados'
         });
+        toast.success('Asignado Correctamente');
       }
     } catch (error) {
       console.log(error);
@@ -68,6 +70,7 @@ function UsuariosJuridica({ pendiente }) {
   };
   return (
     <div>
+      <Toaster richColors position="top-center" />
       <Box sx={{ minWidth: 120 }}>
         <FormControl fullWidth>
           <InputLabel id="demo-simple-select-label">Judicantes</InputLabel>

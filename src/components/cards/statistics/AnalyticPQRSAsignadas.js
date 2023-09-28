@@ -8,11 +8,14 @@ function AnalyticPQRSAsignadas() {
 
   useEffect(() => {
     apiDataAsignadas();
+    const time = setInterval(apiDataAsignadas, 5000);
+
+    return () => clearInterval(time);
   }, []);
 
   const apiDataAsignadas = async () => {
     try {
-      const response = await axios.get('/asignaciones');
+      const response = await axios.get('/radicados/radicados_asignados');
       setCount(response.data.length);
     } catch (error) {
       console.log(error);

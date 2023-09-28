@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'api/axios';
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material/index';
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { useAuth } from 'context/authContext';
 import { Toaster } from 'sonner';
+import { Button } from '@mui/material';
+import DoneIcon from '@mui/icons-material/Done';
+import SendIcon from '@mui/icons-material/Send';
+import withReactContent from 'sweetalert2-react-content';
+import Swal from 'sweetalert2';
+import { toast } from '../../../../node_modules/sonner/dist/index';
 
 function PendientesUsuario() {
   const [users, setUser] = useState([]);
@@ -18,6 +24,30 @@ function PendientesUsuario() {
       const response = await axios.get('/asignaciones');
       setUser(response.data);
       setPendiente(response.data.some((pendiente) => user.email === pendiente.id_usuario.email));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updateEstadoRespondido = async (id_radicado) => {
+    try {
+      const MySwal = withReactContent(Swal);
+      const alert = await MySwal.fire({
+        title: 'Esta seguro de responder?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Si, modificar',
+        cancelButtonText: 'Cancelar'
+      });
+
+      if (alert.isConfirmed) {
+        await axios.put(`radicados/radicados/${id_radicado}`, {
+          estado_radicado: 'Respuesta'
+        });
+        toast.success('Respondido correctamente');
+      } else {
+        toast.error('No se pudo asignar la peticion');
+      }
     } catch (error) {
       console.log(error);
     }
@@ -45,6 +75,16 @@ function PendientesUsuario() {
                     </TableCell>
                     <TableCell align="left">{new Date(pendiente.id_radicado.fecha_radicado).toLocaleString()}</TableCell>
                     <TableCell align="left">{new Date(pendiente.fecha_asignacion).toLocaleString()}</TableCell>
+                    <TableCell>
+                      <Button color="success" startIcon={<DoneIcon />} onClick={() => updateEstadoRespondido(pendiente.id_radicado._id)}>
+                        Respuesta
+                      </Button>
+                    </TableCell>
+                    <TableCell>
+                      <Button color="primary" startIcon={<SendIcon />}>
+                        Reasignar
+                      </Button>
+                    </TableCell>
                   </>
                 ) : null}
               </TableRow>

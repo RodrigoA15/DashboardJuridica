@@ -13,7 +13,12 @@ const AnalyticPQRSCreadas = () => {
 
   useEffect(() => {
     dataApi();
+
+    const time = setInterval(dataApi, 5000);
+
+    return () => clearInterval(time);
   }, []);
+
   const dataApi = async () => {
     try {
       const response = await axios.get('radicados/radicados');

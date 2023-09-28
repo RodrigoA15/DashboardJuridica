@@ -1,10 +1,11 @@
 // project import
 
 import { Box, Tab } from '@mui/material/index';
-import { TabContext, TabList, TabPanel } from '../../../../node_modules/@mui/lab/index';
+import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { useState } from 'react';
 import GetPendientes from './GetPendientes';
 import GetAsignados from './GetAsignados';
+import GetRespuesta from './GetRespuesta';
 
 // ==============================|| SAMPLE PAGE ||============================== //
 
@@ -21,7 +22,7 @@ const Juridica = () => {
           <TabList onChange={handleChange}>
             <Tab label="Pendientes" value="1" />
             <Tab label="Asignados" value="2" />
-            <Tab label="Respondidos" value="3" />
+            <Tab label="Respuestas" value="3" />
           </TabList>
         </Box>
         <TabPanel value="1">
@@ -30,7 +31,9 @@ const Juridica = () => {
         <TabPanel value="2">
           <GetAsignados />
         </TabPanel>
-        <TabPanel value="3">Respondidos</TabPanel>
+        <TabPanel value="3">
+          <GetRespuesta />
+        </TabPanel>
       </TabContext>
     </Box>
   );

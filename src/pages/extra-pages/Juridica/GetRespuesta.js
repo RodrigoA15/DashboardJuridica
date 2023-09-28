@@ -1,42 +1,43 @@
-import axios from 'api/axios';
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+
+import axios from 'api/axios';
 import { useEffect, useState } from 'react';
 
-function GetAsignados() {
-  const [asignados, setAsignados] = useState([]);
+function GetRespuesta() {
+  const [respondidos, setRespondidos] = useState([]);
 
   useEffect(() => {
-    apiAsignados();
+    apiGetRespuesta();
   }, []);
 
-  const apiAsignados = async () => {
+  const apiGetRespuesta = async () => {
     try {
-      const response = await axios.get('/asignaciones');
-      setAsignados(response.data);
+      const response = await axios.get('/radicados/juridica_respondidos');
+      setRespondidos(response.data);
     } catch (error) {
       console.log(error);
     }
   };
-
   return (
     <div>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 350 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Estado</TableCell>
+              <TableCell>Número Radicado</TableCell>
+              <TableCell align="left">Asunto</TableCell>
               <TableCell align="left">Fecha Asignacion</TableCell>
-              <TableCell align="left">Responsable</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {asignados.map((i) => (
+            {respondidos.map((i) => (
               <TableRow key={i._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell component="th" scope="row">
-                  {i.id_radicado.estado_radicado}
-                </TableCell>
-                <TableCell align="left">{new Date(i.fecha_asignacion).toLocaleDateString()}</TableCell>
-                <TableCell>{i.id_usuario.username}</TableCell>
+                <>
+                  <TableCell component="th" scope="row">
+                    {i.numero_radicado}
+                  </TableCell>
+                  <TableCell align="left">{i.id_asunto.nombre_asunto}</TableCell>
+                </>
               </TableRow>
             ))}
           </TableBody>
@@ -46,4 +47,4 @@ function GetAsignados() {
   );
 }
 
-export default GetAsignados;
+export default GetRespuesta;
