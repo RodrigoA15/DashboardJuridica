@@ -20,9 +20,7 @@ import {
 
 // project import
 import OrdersTable from './OrdersTable';
-import IncomeAreaChart from './IncomeAreaChart';
 import MonthlyBarChart from './MonthlyBarChart';
-import ReportAreaChart from './ReportAreaChart';
 import SalesColumnChart from './SalesColumnChart';
 import MainCard from 'components/MainCard';
 import AnalyticPQRSCreadas from 'components/cards/statistics/AnalyticPQRSCreadas';
@@ -35,6 +33,8 @@ import avatar4 from 'assets/images/users/avatar-4.png';
 import AnalyticPQRSAsignadas from 'components/cards/statistics/AnalyticPQRSAsignadas';
 import AnalyticPQRSRespondidas from 'components/cards/statistics/AnalyticPQRSRespondidas';
 import AnalyticPQRSPendientes from 'components/cards/statistics/AnalyticPQRSPendientes';
+import ChartEntidad from './ChartEntidad';
+import RadicadosChart from './RadicadosChart';
 
 // avatar style
 const avatarSX = {
@@ -73,7 +73,6 @@ const status = [
 
 const DashboardDefault = () => {
   const [value, setValue] = useState('today');
-  const [slot, setSlot] = useState('week');
 
   return (
     <Grid container rowSpacing={4.5} columnSpacing={2.75}>
@@ -102,30 +101,10 @@ const DashboardDefault = () => {
           <Grid item>
             <Typography variant="h5">Radicados por mes</Typography>
           </Grid>
-          <Grid item>
-            <Stack direction="row" alignItems="center" spacing={0}>
-              <Button
-                size="small"
-                onClick={() => setSlot('month')}
-                color={slot === 'month' ? 'primary' : 'secondary'}
-                variant={slot === 'month' ? 'outlined' : 'text'}
-              >
-                Month
-              </Button>
-              <Button
-                size="small"
-                onClick={() => setSlot('week')}
-                color={slot === 'week' ? 'primary' : 'secondary'}
-                variant={slot === 'week' ? 'outlined' : 'text'}
-              >
-                Week
-              </Button>
-            </Stack>
-          </Grid>
         </Grid>
         <MainCard content={false} sx={{ mt: 1.5 }}>
           <Box sx={{ pt: 1, pr: 2 }}>
-            <IncomeAreaChart slot={slot} />
+            <RadicadosChart />
           </Box>
         </MainCard>
       </Grid>
@@ -169,21 +148,7 @@ const DashboardDefault = () => {
           <Grid item />
         </Grid>
         <MainCard sx={{ mt: 2 }} content={false}>
-          <List sx={{ p: 0, '& .MuiListItemButton-root': { py: 2 } }}>
-            <ListItemButton divider>
-              <ListItemText primary="Company Finance Growth" />
-              <Typography variant="h5">+45.14%</Typography>
-            </ListItemButton>
-            <ListItemButton divider>
-              <ListItemText primary="Company Expenses Ratio" />
-              <Typography variant="h5">0.58%</Typography>
-            </ListItemButton>
-            <ListItemButton>
-              <ListItemText primary="Business Risk Cases" />
-              <Typography variant="h5">Low</Typography>
-            </ListItemButton>
-          </List>
-          <ReportAreaChart />
+          <ChartEntidad />
         </MainCard>
       </Grid>
 

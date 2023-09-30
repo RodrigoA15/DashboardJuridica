@@ -140,7 +140,7 @@ const SalesColumnChart = () => {
 
   return (
     <div id="chart">
-      <ReactApexChart options={options} series={series} type="bar" height={430} />
+      <ReactApexChart options={options} series={series} type="bar" height={530} />
     </div>
   );
 };
