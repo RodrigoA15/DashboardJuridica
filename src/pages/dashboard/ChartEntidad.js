@@ -32,7 +32,7 @@ function ChartEntidad() {
         colors: ['transparent']
       },
       xaxis: {
-        type: "datatime",
+        type: 'datetime',
         categories: []
       }
     }
@@ -51,7 +51,6 @@ function ChartEntidad() {
       const response = await axios.get('/radicados/chart_entidad');
       const formattedDates = response.data.map((item) => new Date(item.fecha).toDateString());
       setChartData({
-        ...chartData,
         series: [
           {
             data: response.data.map((item) => item.Movit)
@@ -64,7 +63,6 @@ function ChartEntidad() {
         options: {
           ...chartData.options,
           xaxis: {
-
             categories: formattedDates
           }
         }
