@@ -35,11 +35,12 @@ function RadicadosChart() {
   const apiChartRadicados = async () => {
     try {
       const response = await axios.get('/radicados/chart_radicados');
-      const fecha = response.data.map((item) => item.fecha);
+      const fecha = response.data.map((item) => item.fecha_radicado);
+
       setChartData({
         series: [
           {
-            data: response.data.map((item) => item.respuestas)
+            data: response.data.map((item) => item.NUM_RADICADOS)
           }
         ],
         options: {
@@ -58,9 +59,9 @@ function RadicadosChart() {
   useEffect(() => {
     apiChartRadicados();
 
-    const intervalId = setInterval(apiChartRadicados, 5000);
+    // const intervalId = setInterval(apiChartRadicados, 5000);
 
-    return () => clearInterval(intervalId);
+    // return () => clearInterval(intervalId);
   }, []);
 
   return (

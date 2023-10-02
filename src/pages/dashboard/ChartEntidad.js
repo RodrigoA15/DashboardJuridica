@@ -22,7 +22,7 @@ function ChartEntidad() {
       plotOptions: {
         bar: {
           horizontal: false,
-          columnWidth: '50%',
+          columnWidth: '80%',
           endingShape: 'rounded'
         }
       },
@@ -48,20 +48,22 @@ function ChartEntidad() {
 
   const apiChartData = async () => {
     try {
-      const response = await axios.get('/radicados/chart_entidad');
-      const formattedDates = response.data.map((item) => new Date(item.fecha).toDateString());
+      const secretaria = await axios.get('/radicados/chart_entidad2');
+      const movit = await axios.get('/radicados/chart_entidad');
+      const formattedDates = movit.data.map((item) => item.fecha_radicado);
+
       setChartData({
         series: [
           {
-            data: response.data.map((item) => item.Movit)
+            data: movit.data.map((item) => item.Movit)
           },
           {
-            data: response.data.map((item) => item.Secretaria)
+            data: secretaria.data.map((item) => item.Secretaria)
           }
         ],
 
         options: {
-          ...chartData.options,
+          ...chartData.options.xaxis,
           xaxis: {
             categories: formattedDates
           }
@@ -74,7 +76,7 @@ function ChartEntidad() {
 
   return (
     <div id="chart">
-      <ReactApexChart options={chartData.options} series={chartData.series} type="bar" height={chartData.options.chart.height} />
+      <ReactApexChart options={chartData.options} series={chartData.series} type="bar" height={350} />
     </div>
   );
 }
