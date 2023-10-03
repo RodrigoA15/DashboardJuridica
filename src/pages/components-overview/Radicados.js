@@ -10,7 +10,7 @@ import GetAsunto from './Asunto/GetAsunto';
 import GetTipificacion from './Tipificacion/GetTipificacion';
 import GetEntidad from './Entidad/GetEntidad';
 import GetDepartamentos from './Departamento/GetDepartamentos';
-import { useForm } from 'react-hook-form';
+
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
@@ -31,11 +31,9 @@ function ComponentRadicados() {
   const [procedencia, setProcedencia] = useState('');
   //Departamentos
   const [departamento, setDepartamento] = useState('');
-  const {
-    register,
-    watch,
-    formState: { errors }
-  } = useForm();
+  //Numero de respuestas
+  const [respuesta, setRespuesta] = useState('');
+
   const MySwal = withReactContent(Swal);
   const datos = {
     numero_radicado: numero_radicado,
@@ -46,7 +44,8 @@ function ComponentRadicados() {
     id_entidad: entidad,
     id_procedencia: procedencia,
     id_departamento: departamento,
-    estado_radicado: 'Pendiente'
+    estado_radicado: 'Pre-asignacion',
+    cantidad_respuesta: respuesta
   };
 
   const createRadicado = async () => {
@@ -70,72 +69,6 @@ function ComponentRadicados() {
       <MainCard title="Crear Radicados" className="border-card card-background">
         <form>
           <Buscador createRadicado={createRadicado} setProcedencia={setProcedencia} />
-
-          <div className="row">
-            <div className="col">
-              <select className="form-select mb-4 rounded-pill minimal-input-dark" {...register('info_contacto')}>
-                <option>Seleccione una opcion de contacto</option>
-                <option value="direccion">Direccion</option>
-                <option value="telefono">Telefono</option>
-                <option value="correo">Correo Electronico</option>
-              </select>
-            </div>
-            <div className="col">
-              {watch('info_contacto') == 'direccion' && (
-                <>
-                  <input
-                    className="form-control rounded-pill minimal-input-dark"
-                    placeholder="Direccion de residencia"
-                    type="text"
-                    id="direccion"
-                    {...register('direccion', {
-                      required: {
-                        value: true,
-                        message: 'Este campo es obligatorio'
-                      }
-                    })}
-                  />
-                  {errors.direccion && <span className="errors">{errors.direccion.message}</span>}
-                </>
-              )}
-
-              {watch('info_contacto') == 'telefono' && (
-                <>
-                  <input
-                    className="form-control rounded-pill minimal-input-dark"
-                    placeholder="Telefono"
-                    type="text"
-                    id="telefono"
-                    {...register('telefono', {
-                      required: {
-                        value: true,
-                        message: 'Este campo es obligatorio'
-                      }
-                    })}
-                  />
-                  {errors.telefono && <span className="errors">{errors.telefono.message}</span>}
-                </>
-              )}
-
-              {watch('info_contacto') == 'correo' && (
-                <>
-                  <input
-                    className="form-control rounded-pill minimal-input-dark"
-                    placeholder="Correo Electronico"
-                    type="text"
-                    id="correo"
-                    {...register('correo', {
-                      required: {
-                        value: true,
-                        message: 'Este campo es obligatorio'
-                      }
-                    })}
-                  />
-                  {errors.correo && <span className="errors">{errors.correo.message}</span>}
-                </>
-              )}
-            </div>
-          </div>
 
           {/* Radicados */}
           <div className="row mb-3">
@@ -167,19 +100,19 @@ function ComponentRadicados() {
 
           <div className="row mb-3">
             <div className="mb-3 col">
-              <h3>Canal Entrada</h3>
+              <h4>Canal Entrada</h4>
 
               <GetEntrada setCanalEntrada={setCanalEntrada} />
             </div>
 
             <div className="mb-3 col">
-              <h3>Asunto</h3>
+              <h4>Asunto</h4>
 
               <GetAsunto setAsunto={setAsunto} />
             </div>
 
             <div className="mb-3 col">
-              <h3>Tipificacion</h3>
+              <h4>Tipificacion</h4>
 
               <GetTipificacion setTipificacion={setTipificacion} />
             </div>
@@ -187,17 +120,29 @@ function ComponentRadicados() {
 
           <div className="row mb-3">
             <div className="mb-3 col">
-              <h3>Entidad</h3>
+              <h4>Entidad</h4>
 
               <GetEntidad setEntidad={setEntidad} />
             </div>
 
             <div className="mb-3 col">
-              <h3>Dirigido a </h3>
+              <h4>Dirigido a </h4>
 
               <GetDepartamentos setDepartamento={setDepartamento} />
             </div>
+
+            <div className="mb-3 col">
+              <h4>Numero de respuestas</h4>
+              <input
+                className="form-control rounded-pill minimal-input-dark"
+                type="number"
+                onChange={(e) => setRespuesta(e.target.value)}
+              />
+            </div>
           </div>
+          <button type="button" className="btn btn-success" onClick={createRadicado}>
+            Registrar
+          </button>
         </form>
       </MainCard>
     </ComponentSkeleton>

@@ -13,7 +13,8 @@ function RadicadosChart() {
     options: {
       chart: {
         height: 350,
-        type: 'area'
+        type: 'area',
+        group: 'social'
       },
       dataLabels: {
         enabled: false
@@ -21,6 +22,13 @@ function RadicadosChart() {
       stroke: {
         curve: 'smooth'
       },
+      markers: {
+        size: 6,
+        hover: {
+          size: 9
+        }
+      },
+
       xaxis: {
         categories: []
       },

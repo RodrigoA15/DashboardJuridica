@@ -16,24 +16,30 @@ function ChartEntidad() {
     ],
     options: {
       chart: {
-        type: 'bar',
-        height: 350
+        height: 350,
+        type: 'area',
+        group: 'social'
       },
-      plotOptions: {
-        bar: {
-          horizontal: false,
-          columnWidth: '80%',
-          endingShape: 'rounded'
-        }
+      dataLabels: {
+        enabled: false
       },
       stroke: {
-        show: true,
-        width: 2,
-        colors: ['transparent']
+        curve: 'smooth'
       },
+      markers: {
+        size: 6,
+        hover: {
+          size: 9
+        }
+      },
+
       xaxis: {
-        type: 'datetime',
         categories: []
+      },
+      tooltip: {
+        x: {
+          format: 'dd/MM/yy HH:mm'
+        }
       }
     }
   });
@@ -76,7 +82,7 @@ function ChartEntidad() {
 
   return (
     <div id="chart">
-      <ReactApexChart options={chartData.options} series={chartData.series} type="bar" height={350} />
+      <ReactApexChart options={chartData.options} series={chartData.series} type="area" height={350} />
     </div>
   );
 }

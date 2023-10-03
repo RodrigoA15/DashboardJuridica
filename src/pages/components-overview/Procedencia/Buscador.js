@@ -1,23 +1,25 @@
 import { useState } from 'react';
-import axios from 'axios';
+import axios from 'api/axios';
 import { Toaster, toast } from 'sonner';
-import { InputAdornment, OutlinedInput } from '@mui/material';
 import { SearchOutlined } from '@mui/icons-material';
+import { Button } from '@mui/material';
+import { InputAdornment, OutlinedInput } from '../../../../node_modules/@mui/material/index';
 
-function Buscador({ setProcedencia, createRadicado }) {
+function Buscador({ setProcedencia }) {
   const [numero_identificacion, setNumero_identificacion] = useState('');
-  const [id, setid] = useState([]);
+  const [procedenciaData, setProcedenciaData] = useState([]);
   const [entrada, setEntrada] = useState(false);
   //Estados metodo post
   const [select, setSelect] = useState('');
   const [nombre, setNombre] = useState('');
   const [apellido, setApellido] = useState('');
+  const [tipoContacto, setTipoContacto] = useState('');
+  const [infoContacto, setInfoContacto] = useState('');
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       e.preventDefault(); // Evitar la recarga de la página
       GetidentificacionById();
-      PostProcedencia();
     }
   };
 
@@ -34,9 +36,9 @@ function Buscador({ setProcedencia, createRadicado }) {
       toast.error('El termino busqueda no puede estar vacio');
     }
     try {
-      const response = await axios.get(`http://localhost:4000/api/procedencia/procedencia/${numero_identificacion}`);
+      const response = await axios.get(`/procedencia/procedencia/${numero_identificacion}`);
       if (response.data.length > 0) {
-        setid(response.data);
+        setProcedenciaData(response.data);
         const procedenciaValue = response.data[0]._id;
         setProcedencia(procedenciaValue);
         setEntrada(true);
@@ -60,12 +62,14 @@ function Buscador({ setProcedencia, createRadicado }) {
     tipo_identificacion: select,
     numero_identificacion: numero_identificacion,
     nombre: nombre,
-    apellido: apellido
+    apellido: apellido,
+    tipo_contacto: tipoContacto,
+    info_contacto: infoContacto
   };
 
   const PostProcedencia = async () => {
     try {
-      await axios.post('http://localhost:4000/api/procedencia', data);
+      await axios.post('/procedencia/procedencia', data);
     } catch (error) {
       console.log(error);
     }
@@ -98,10 +102,18 @@ function Buscador({ setProcedencia, createRadicado }) {
             onKeyDown={handleKeyPress}
           />
         </div>
+
+        {entrada === false && (
+          <div className="col-2">
+            <Button variant="contained" onClick={PostProcedencia}>
+              Registrar
+            </Button>
+          </div>
+        )}
         {/* Campos de entrada*/}
         {entrada === true && (
           <div>
-            {id.map((i) => (
+            {procedenciaData.map((i) => (
               <div key={i._id} className="row">
                 <div className="col mb-3">
                   <label htmlFor="nombre" className="form-label h6">
@@ -157,14 +169,31 @@ function Buscador({ setProcedencia, createRadicado }) {
                   required
                 />
               </div>
+
+              <div className="row">
+                <div className="col">
+                  <select className="form-select mb-4 rounded-pill minimal-input-dark" onChange={(e) => setTipoContacto(e.target.value)}>
+                    <option>Seleccione una opcion de contacto</option>
+                    <option value="direccion">Direccion</option>
+                    <option value="telefono">Telefono</option>
+                    <option value="correo">Correo Electronico</option>
+                  </select>
+                </div>
+                <div className="col">
+                  <input
+                    className="form-control rounded-pill minimal-input-dark"
+                    placeholder="Informacion de contacto"
+                    type="text"
+                    id="contacto"
+                    onChange={(e) => setInfoContacto(e.target.value)}
+                  />
+                </div>
+              </div>
             </div>
           )}
         </div>
       </div>
-
-      <button type="button" onClick={createRadicado}>
-        Ejecutar PostProcedencia
-      </button>
+      {/* Exc radicados */}
     </div>
   );
 }

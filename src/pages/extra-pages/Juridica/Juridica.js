@@ -6,6 +6,7 @@ import { useState } from 'react';
 import GetPendientes from './GetPendientes';
 import GetAsignados from './GetAsignados';
 import GetRespuesta from './GetRespuesta';
+import Preasignaciones from '../PQRSPreasignadas/Preasignaciones';
 
 // ==============================|| SAMPLE PAGE ||============================== //
 
@@ -20,18 +21,22 @@ const Juridica = () => {
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <TabList onChange={handleChange}>
-            <Tab label="Pendientes" value="1" />
-            <Tab label="Asignados" value="2" />
-            <Tab label="Respuestas" value="3" />
+            <Tab label="Pre-asignacion" value="1" />
+            <Tab label="Pendientes" value="2" />
+            <Tab label="Asignados" value="3" />
+            <Tab label="Respuestas" value="4" />
           </TabList>
         </Box>
         <TabPanel value="1">
-          <GetPendientes />
+          <Preasignaciones />
         </TabPanel>
         <TabPanel value="2">
-          <GetAsignados />
+          <GetPendientes />
         </TabPanel>
         <TabPanel value="3">
+          <GetAsignados />
+        </TabPanel>
+        <TabPanel value="4">
           <GetRespuesta />
         </TabPanel>
       </TabContext>
