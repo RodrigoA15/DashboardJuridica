@@ -17,8 +17,7 @@ function ChartEntidad() {
     options: {
       chart: {
         height: 350,
-        type: 'area',
-        group: 'social'
+        type: 'area'
       },
       dataLabels: {
         enabled: false
@@ -56,7 +55,7 @@ function ChartEntidad() {
     try {
       const secretaria = await axios.get('/radicados/chart_entidad2');
       const movit = await axios.get('/radicados/chart_entidad');
-      const formattedDates = movit.data.map((item) => item.fecha_radicado);
+      const formattedDates = secretaria.data.map((item) => item.fecha_radicado);
 
       setChartData({
         series: [

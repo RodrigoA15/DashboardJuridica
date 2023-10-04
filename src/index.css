@@ -37,3 +37,13 @@
 .MuiAppBar-colorInherit {
   background-color: #117dbf;
 }
+
+.swal-zindex {
+  z-index: 10000;
+}
+
+.inputForm {
+  display: block;
+  color: tomato;
+  font-style: x-small;
+}

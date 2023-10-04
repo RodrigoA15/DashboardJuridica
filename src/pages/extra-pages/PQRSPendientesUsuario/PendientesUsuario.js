@@ -6,18 +6,36 @@ import { Toaster } from 'sonner';
 import { Button } from '@mui/material';
 import DoneIcon from '@mui/icons-material/Done';
 import SendIcon from '@mui/icons-material/Send';
+import AddIcon from '@mui/icons-material/Add';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import { toast } from '../../../../node_modules/sonner/dist/index';
+import ModalRespuestas from './ModalRespuestas';
 
 function PendientesUsuario() {
   const [users, setUser] = useState([]);
   const [Pendiente, setPendiente] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [selected, setSelected] = useState(null);
   const { user } = useAuth();
 
   useEffect(() => {
     apiDataUser();
+
+    const intervalId = setInterval(apiDataUser, 5000);
+
+    return () => clearInterval(intervalId);
   }, []);
+
+  const handleOpen = (data) => {
+    setSelected(data);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setSelected(null);
+    setOpen(false);
+  };
 
   const apiDataUser = async () => {
     try {
@@ -46,7 +64,7 @@ function PendientesUsuario() {
         });
         toast.success('Respondido correctamente');
       } else {
-        toast.error('No se pudo asignar la peticion');
+        toast.error('No se respondio la peticion');
       }
     } catch (error) {
       console.log(error);
@@ -63,6 +81,8 @@ function PendientesUsuario() {
               <TableCell>Número Radicado</TableCell>
               <TableCell align="left">Fecha Radicado</TableCell>
               <TableCell align="left">Fecha Asignacion</TableCell>
+              <TableCell align="left">Respuestas estimadas</TableCell>
+              <TableCell align="center">Acciones</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -75,13 +95,15 @@ function PendientesUsuario() {
                     </TableCell>
                     <TableCell align="left">{new Date(pendiente.id_radicado.fecha_radicado).toLocaleString()}</TableCell>
                     <TableCell align="left">{new Date(pendiente.fecha_asignacion).toLocaleString()}</TableCell>
-                    <TableCell>
-                      <Button color="success" startIcon={<DoneIcon />} onClick={() => updateEstadoRespondido(pendiente.id_radicado._id)}>
-                        Respuesta
+                    <TableCell align="left">{pendiente.id_radicado.cantidad_respuesta}</TableCell>
+                    <TableCell align="center">
+                      <Button color="primary" startIcon={<AddIcon />} onClick={() => handleOpen(pendiente)}>
+                        Agregar Respuesta
                       </Button>
-                    </TableCell>
-                    <TableCell>
-                      <Button color="primary" startIcon={<SendIcon />}>
+                      <Button color="success" startIcon={<DoneIcon />} onClick={() => updateEstadoRespondido(pendiente.id_radicado._id)}>
+                        Responder
+                      </Button>
+                      <Button color="secondary" startIcon={<SendIcon />}>
                         Reasignar
                       </Button>
                     </TableCell>
@@ -97,6 +119,7 @@ function PendientesUsuario() {
               </TableRow>
             )}
           </TableBody>
+          <ModalRespuestas open={open} handleClose={handleClose} data={selected} />
         </Table>
       </TableContainer>
     </div>

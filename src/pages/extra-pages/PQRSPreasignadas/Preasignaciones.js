@@ -12,6 +12,9 @@ import {
   TableHead,
   TableRow
 } from '../../../../node_modules/@mui/material/index';
+import withReactContent from 'sweetalert2-react-content';
+import Swal from 'sweetalert2';
+import { Toaster, toast } from '../../../../node_modules/sonner/dist/index';
 
 function Preasignaciones() {
   const [data, setData] = useState([]);
@@ -32,57 +35,71 @@ function Preasignaciones() {
   };
 
   const updateStatePreasignacion = async (pre) => {
-    try {
+    const MySwal = withReactContent(Swal);
+
+    const alert = await MySwal.fire({
+      title: 'Esta seguro de aceptar esta peticion',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Si, modificar',
+      cancelButtonText: 'Cancelar'
+    });
+
+    if (alert.isConfirmed) {
       await axios.put(`/radicados/radicados/${pre._id}`, {
         estado_radicado: 'Pendiente'
       });
       setUpdating(false);
-    } catch (error) {
-      console.log(error);
+      toast.success('Peticion aceptada correctamente');
+    } else {
+      toast.error('No se acepto la peticion');
     }
   };
 
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 350 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Número Radicado</TableCell>
-            <TableCell align="left">Fecha Radicado</TableCell>
-            <TableCell align="left">Asunto</TableCell>
-            <TableCell align="left">Departamento</TableCell>
-            <TableCell align="center">Acciones</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data.map((pre) => (
-            <TableRow key={pre._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-              {updating ? (
-                <>
-                  <TableCell component="th" scope="row">
-                    {pre.numero_radicado}
-                  </TableCell>
-                  <TableCell align="left">{new Date(pre.fecha_radicado).toLocaleDateString()}</TableCell>
-                  <TableCell align="left">{pre.id_asunto.nombre_asunto}</TableCell>
-                  <TableCell align="left">{pre.id_departamento.nombre_departamento}</TableCell>
-
-                  <TableCell align="center">
-                    <Button color="success" startIcon={<DoneIcon />} onClick={() => updateStatePreasignacion(pre)}>
-                      Aceptar
-                    </Button>
-                    <Button color="error" startIcon={<CloseIcon />}>
-                      Rechazar
-                    </Button>
-                  </TableCell>
-                </>
-              ) : (
-                <p>No tienes nada</p>
-              )}
+    <div>
+      <Toaster position="top-right" richColors />
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 350 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Número Radicado</TableCell>
+              <TableCell align="left">Fecha Radicado</TableCell>
+              <TableCell align="left">Asunto</TableCell>
+              <TableCell align="left">Departamento</TableCell>
+              <TableCell align="center">Acciones</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {data.map((pre) => (
+              <TableRow key={pre._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                {updating ? (
+                  <>
+                    <TableCell component="th" scope="row">
+                      {pre.numero_radicado}
+                    </TableCell>
+                    <TableCell align="left">{new Date(pre.fecha_radicado).toLocaleDateString()}</TableCell>
+                    <TableCell align="left">{pre.id_asunto.nombre_asunto}</TableCell>
+                    <TableCell align="left">{pre.id_departamento.nombre_departamento}</TableCell>
+
+                    <TableCell align="center">
+                      <Button color="success" startIcon={<DoneIcon />} onClick={() => updateStatePreasignacion(pre)}>
+                        Aceptar
+                      </Button>
+                      <Button color="error" startIcon={<CloseIcon />}>
+                        Rechazar
+                      </Button>
+                    </TableCell>
+                  </>
+                ) : (
+                  <p>No tienes nada</p>
+                )}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </div>
   );
 }
 

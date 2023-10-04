@@ -67,9 +67,9 @@ function RadicadosChart() {
   useEffect(() => {
     apiChartRadicados();
 
-    // const intervalId = setInterval(apiChartRadicados, 5000);
+    const intervalId = setInterval(apiChartRadicados, 5000);
 
-    // return () => clearInterval(intervalId);
+    return () => clearInterval(intervalId);
   }, []);
 
   return (
