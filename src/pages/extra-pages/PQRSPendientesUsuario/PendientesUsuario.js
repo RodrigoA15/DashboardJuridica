@@ -5,18 +5,23 @@ import { useAuth } from 'context/authContext';
 import { Toaster } from 'sonner';
 import { Button } from '@mui/material';
 import DoneIcon from '@mui/icons-material/Done';
-import SendIcon from '@mui/icons-material/Send';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import AddIcon from '@mui/icons-material/Add';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import { toast } from '../../../../node_modules/sonner/dist/index';
 import ModalRespuestas from './ModalRespuestas';
+import ModalRadicadosRespuestas from './ModalRadicadosRespuestas';
 
 function PendientesUsuario() {
   const [users, setUser] = useState([]);
   const [Pendiente, setPendiente] = useState(false);
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(null);
+  //
+  const [abrir, setAbrir] = useState(false);
+  const [seleccionar, setSeleccionar] = useState(null);
+
   const { user } = useAuth();
 
   useEffect(() => {
@@ -35,6 +40,16 @@ function PendientesUsuario() {
   const handleClose = () => {
     setSelected(null);
     setOpen(false);
+  };
+
+  const handleOpenR = (respuesta) => {
+    setSeleccionar(respuesta);
+    setAbrir(true);
+  };
+
+  const handleCloseR = () => {
+    setSeleccionar(null);
+    setAbrir(false);
   };
 
   const apiDataUser = async () => {
@@ -100,11 +115,11 @@ function PendientesUsuario() {
                       <Button color="primary" startIcon={<AddIcon />} onClick={() => handleOpen(pendiente)}>
                         Agregar Respuesta
                       </Button>
+                      <Button color="secondary" startIcon={<VisibilityIcon />} onClick={() => handleOpenR(pendiente)}>
+                        Ver Respuestas
+                      </Button>
                       <Button color="success" startIcon={<DoneIcon />} onClick={() => updateEstadoRespondido(pendiente.id_radicado._id)}>
                         Responder
-                      </Button>
-                      <Button color="secondary" startIcon={<SendIcon />}>
-                        Reasignar
                       </Button>
                     </TableCell>
                   </>
@@ -120,6 +135,7 @@ function PendientesUsuario() {
             )}
           </TableBody>
           <ModalRespuestas open={open} handleClose={handleClose} data={selected} />
+          <ModalRadicadosRespuestas open={abrir} handleClose={handleCloseR} respuesta={seleccionar} />
         </Table>
       </TableContainer>
     </div>
