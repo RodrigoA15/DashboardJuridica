@@ -4,12 +4,9 @@ import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow
 import { useAuth } from 'context/authContext';
 import { Toaster } from 'sonner';
 import { Button } from '@mui/material';
-import DoneIcon from '@mui/icons-material/Done';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import AddIcon from '@mui/icons-material/Add';
-import withReactContent from 'sweetalert2-react-content';
-import Swal from 'sweetalert2';
-import { toast } from '../../../../node_modules/sonner/dist/index';
+
 import ModalRespuestas from './ModalRespuestas';
 import ModalRadicadosRespuestas from './ModalRadicadosRespuestas';
 
@@ -18,7 +15,6 @@ function PendientesUsuario() {
   const [Pendiente, setPendiente] = useState(false);
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(null);
-  //
   const [abrir, setAbrir] = useState(false);
   const [seleccionar, setSeleccionar] = useState(null);
 
@@ -62,30 +58,6 @@ function PendientesUsuario() {
     }
   };
 
-  const updateEstadoRespondido = async (id_radicado) => {
-    try {
-      const MySwal = withReactContent(Swal);
-      const alert = await MySwal.fire({
-        title: 'Esta seguro de responder?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'Si, modificar',
-        cancelButtonText: 'Cancelar'
-      });
-
-      if (alert.isConfirmed) {
-        await axios.put(`radicados/radicados/${id_radicado}`, {
-          estado_radicado: 'Respuesta'
-        });
-        toast.success('Respondido correctamente');
-      } else {
-        toast.error('No se respondio la peticion');
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
     <div>
       <Toaster position="top-right" richColors expand={true} offset="80px" />
@@ -117,9 +89,6 @@ function PendientesUsuario() {
                       </Button>
                       <Button color="secondary" startIcon={<VisibilityIcon />} onClick={() => handleOpenR(pendiente)}>
                         Ver Respuestas
-                      </Button>
-                      <Button color="success" startIcon={<DoneIcon />} onClick={() => updateEstadoRespondido(pendiente.id_radicado._id)}>
-                        Responder
                       </Button>
                     </TableCell>
                   </>

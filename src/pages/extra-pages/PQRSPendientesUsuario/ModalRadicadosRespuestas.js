@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'api/axios';
-import { Toaster } from '../../../../node_modules/sonner/dist/index';
+import { Toaster } from 'sonner';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
-// import Button from '@mui/material/Button';
+import Button from '@mui/material/Button';
+import withReactContent from 'sweetalert2-react-content';
+import Swal from 'sweetalert2';
+import { toast } from 'sonner';
 
 const style = {
   position: 'absolute',
@@ -19,6 +22,7 @@ const style = {
 
 function ModalRadicadosRespuestas({ open, handleClose, respuesta }) {
   const [radicadosRpta, setRadicadosRpta] = useState([]);
+  const [countRadicados, setCountRadicados] = useState(0);
   useEffect(() => {
     if (respuesta && respuesta.id_radicado && respuesta.id_radicado.numero_radicado) {
       apiRadicadosRespuesta();
@@ -29,6 +33,34 @@ function ModalRadicadosRespuestas({ open, handleClose, respuesta }) {
     try {
       const response = await axios.get(`/radicados_respuestas/${respuesta.id_radicado.numero_radicado}`);
       setRadicadosRpta(response.data);
+      setCountRadicados(response.data.length);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updateEstadoRespondido = async (id_radicado) => {
+    try {
+      const MySwal = withReactContent(Swal);
+      const alert = await MySwal.fire({
+        title: 'Esta seguro de responder?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Si, modificar',
+        cancelButtonText: 'Cancelar',
+        customClass: {
+          container: 'swal-zindex'
+        }
+      });
+
+      if (alert.isConfirmed) {
+        await axios.put(`radicados/radicados/${id_radicado}`, {
+          estado_radicado: 'Respuesta'
+        });
+        toast.success('Respondido correctamente');
+      } else {
+        toast.error('No se respondio la peticion');
+      }
     } catch (error) {
       console.log(error);
     }
@@ -49,6 +81,14 @@ function ModalRadicadosRespuestas({ open, handleClose, respuesta }) {
                     </ul>
                   </div>
                 ))}
+              <Button
+                variant="contained"
+                color="success"
+                onClick={() => updateEstadoRespondido(respuesta.id_radicado._id)}
+                disabled={respuesta.id_radicado.cantidad_respuesta !== countRadicados}
+              >
+                Responder
+              </Button>
             </>
           )}
         </Box>
