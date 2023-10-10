@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import axios from 'api/axios';
-import { Button, TableCell } from '@mui/material';
+import { Button } from '@mui/material';
 import PropTypes from 'prop-types';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
@@ -69,7 +69,7 @@ function UsuariosJuridica({ pendiente }) {
     asignar();
   };
   return (
-    <div>
+    <>
       <Toaster richColors position="top-center" />
       <Box sx={{ minWidth: 120 }}>
         <FormControl fullWidth>
@@ -83,12 +83,11 @@ function UsuariosJuridica({ pendiente }) {
           </Select>
         </FormControl>
       </Box>
-      <TableCell>
-        <Button variant="outlined" onClick={handleButtonClick}>
-          Asignar
-        </Button>
-      </TableCell>
-    </div>
+
+      <Button variant="outlined" onClick={handleButtonClick}>
+        Asignar
+      </Button>
+    </>
   );
 }
 

@@ -1,66 +1,73 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'api/axios';
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
-import { useAuth } from 'context/authContext';
-import { Toaster } from 'sonner';
-import { Button } from '@mui/material';
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import AddIcon from '@mui/icons-material/Add';
-
+import { Toaster } from 'sonner';
+import axios from 'api/axios';
+import { useAuth } from 'context/authContext';
 import ModalRespuestas from './ModalRespuestas';
 import ModalRadicadosRespuestas from './ModalRadicadosRespuestas';
 
 function PendientesUsuario() {
-  const [users, setUser] = useState([]);
-  const [Pendiente, setPendiente] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState(null);
-  const [abrir, setAbrir] = useState(false);
-  const [seleccionar, setSeleccionar] = useState(null);
-
   const { user } = useAuth();
+  const [users, setUsers] = useState([]);
+  const [isPendiente, setIsPendiente] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedData, setSelectedData] = useState(null);
+  const [openRespuestasModal, setOpenRespuestasModal] = useState(false);
+  const [selectedRespuesta, setSelectedRespuesta] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const apiDataUser = async () => {
+    try {
+      const response = await axios.get('/asignaciones');
+      setUsers(response.data);
+      setIsLoading(false);
+      setIsPendiente(response.data.some((pendiente) => user.email === pendiente.id_usuario.email));
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        setError('No tienes PQRS asignadas');
+      } else {
+        setError('Error de servidor');
+      }
+      setIsLoading(false);
+    }
+  };
+
+  const formatDate = (date) => new Date(date).toLocaleDateString('es-ES', { timeZone: 'UTC' });
 
   useEffect(() => {
     apiDataUser();
 
     const intervalId = setInterval(apiDataUser, 5000);
-
     return () => clearInterval(intervalId);
   }, []);
 
   const handleOpen = (data) => {
-    setSelected(data);
-    setOpen(true);
+    setSelectedData(data);
+    setOpenModal(true);
   };
 
   const handleClose = () => {
-    setSelected(null);
-    setOpen(false);
+    setSelectedData(null);
+    setOpenModal(false);
   };
 
   const handleOpenR = (respuesta) => {
-    setSeleccionar(respuesta);
-    setAbrir(true);
+    setSelectedRespuesta(respuesta);
+    setOpenRespuestasModal(true);
   };
 
   const handleCloseR = () => {
-    setSeleccionar(null);
-    setAbrir(false);
-  };
-
-  const apiDataUser = async () => {
-    try {
-      const response = await axios.get('/asignaciones');
-      setUser(response.data);
-      setPendiente(response.data.some((pendiente) => user.email === pendiente.id_usuario.email));
-    } catch (error) {
-      console.log(error);
-    }
+    setSelectedRespuesta(null);
+    setOpenRespuestasModal(false);
   };
 
   return (
     <div>
       <Toaster position="top-right" richColors expand={true} offset="80px" />
+
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 350 }} aria-label="simple table">
           <TableHead>
@@ -73,40 +80,54 @@ function PendientesUsuario() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {users.map((pendiente) => (
-              <TableRow key={pendiente._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                {user.email === pendiente.id_usuario.email ? (
-                  <>
-                    <TableCell component="th" scope="row">
-                      {pendiente.id_radicado.numero_radicado}
-                    </TableCell>
-                    <TableCell align="left">{new Date(pendiente.id_radicado.fecha_radicado).toLocaleString()}</TableCell>
-                    <TableCell align="left">{new Date(pendiente.fecha_asignacion).toLocaleString()}</TableCell>
-                    <TableCell align="left">{pendiente.id_radicado.cantidad_respuesta}</TableCell>
-                    <TableCell align="center">
-                      <Button color="primary" startIcon={<AddIcon />} onClick={() => handleOpen(pendiente)}>
-                        Agregar Respuesta
-                      </Button>
-                      <Button color="secondary" startIcon={<VisibilityIcon />} onClick={() => handleOpenR(pendiente)}>
-                        Ver Respuestas
-                      </Button>
-                    </TableCell>
-                  </>
-                ) : null}
+            {isLoading ? (
+              <TableRow key="loading">
+                <TableCell colSpan={5}>Cargando...</TableCell>
               </TableRow>
-            ))}
-            {!Pendiente && (
-              <TableRow key="no-pendiente" sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell colSpan={3}>
-                  <p>No tienes PQRS pendientes :D</p>
-                </TableCell>
+            ) : error ? (
+              <TableRow key="error">
+                <TableCell colSpan={5}>{error}</TableCell>
               </TableRow>
+            ) : (
+              <>
+                {users.map((pendiente) => {
+                  const isCurrentUserPendiente = user.email === pendiente.id_usuario.email;
+                  return (
+                    isCurrentUserPendiente && (
+                      <TableRow key={pendiente._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                        <TableCell component="th" scope="row">
+                          {pendiente.id_radicado.numero_radicado}
+                        </TableCell>
+                        <TableCell align="left">{formatDate(pendiente.id_radicado.fecha_radicado)}</TableCell>
+                        <TableCell align="left">{formatDate(pendiente.fecha_asignacion)}</TableCell>
+                        <TableCell align="left">{pendiente.id_radicado.cantidad_respuesta}</TableCell>
+                        <TableCell align="center">
+                          <Button color="primary" startIcon={<AddIcon />} onClick={() => handleOpen(pendiente)}>
+                            Agregar Respuesta
+                          </Button>
+                          <Button color="secondary" startIcon={<VisibilityIcon />} onClick={() => handleOpenR(pendiente)}>
+                            Ver Respuestas
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    )
+                  );
+                })}
+                {!isPendiente && (
+                  <TableRow key="no-pendiente" sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell colSpan={3}>
+                      <p>No tienes PQRS pendientes :D</p>
+                    </TableCell>
+                  </TableRow>
+                )}
+              </>
             )}
           </TableBody>
-          <ModalRespuestas open={open} handleClose={handleClose} data={selected} />
-          <ModalRadicadosRespuestas open={abrir} handleClose={handleCloseR} respuesta={seleccionar} />
         </Table>
       </TableContainer>
+
+      <ModalRespuestas open={openModal} handleClose={handleClose} data={selectedData} />
+      <ModalRadicadosRespuestas opens={openRespuestasModal} handleCloses={handleCloseR} respuestas={selectedRespuesta} />
     </div>
   );
 }

@@ -20,18 +20,20 @@ const style = {
   p: 4
 };
 
-function ModalRadicadosRespuestas({ open, handleClose, respuesta }) {
+function ModalRadicadosRespuestas({ opens, handleCloses, respuestas }) {
   const [radicadosRpta, setRadicadosRpta] = useState([]);
   const [countRadicados, setCountRadicados] = useState(0);
   useEffect(() => {
-    if (respuesta && respuesta.id_radicado && respuesta.id_radicado.numero_radicado) {
+    if (respuestas && respuestas.id_radicado && respuestas.id_radicado.numero_radicado) {
+      setRadicadosRpta([]);
+      setCountRadicados(0);
       apiRadicadosRespuesta();
     }
-  }, [respuesta]);
+  }, [respuestas]);
 
   const apiRadicadosRespuesta = async () => {
     try {
-      const response = await axios.get(`/radicados_respuestas/${respuesta.id_radicado.numero_radicado}`);
+      const response = await axios.get(`/radicados_respuestas/${respuestas.id_radicado.numero_radicado}`);
       setRadicadosRpta(response.data);
       setCountRadicados(response.data.length);
     } catch (error) {
@@ -58,6 +60,7 @@ function ModalRadicadosRespuestas({ open, handleClose, respuesta }) {
           estado_radicado: 'Respuesta'
         });
         toast.success('Respondido correctamente');
+        
       } else {
         toast.error('No se respondio la peticion');
       }
@@ -69,9 +72,9 @@ function ModalRadicadosRespuestas({ open, handleClose, respuesta }) {
   return (
     <div>
       <Toaster position="top-right" richColors expand={true} offset="80px" />
-      <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
+      <Modal open={opens} onClose={handleCloses} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
         <Box sx={style}>
-          {respuesta && (
+          {respuestas && (
             <>
               {radicadosRpta &&
                 radicadosRpta.map((i) => (
@@ -84,8 +87,8 @@ function ModalRadicadosRespuestas({ open, handleClose, respuesta }) {
               <Button
                 variant="contained"
                 color="success"
-                onClick={() => updateEstadoRespondido(respuesta.id_radicado._id)}
-                disabled={respuesta.id_radicado.cantidad_respuesta !== countRadicados}
+                onClick={() => updateEstadoRespondido(respuestas.id_radicado._id)}
+                disabled={respuestas.id_radicado.cantidad_respuesta !== countRadicados }
               >
                 Responder
               </Button>

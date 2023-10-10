@@ -27,6 +27,7 @@ import { useAuth } from 'context/authContext';
 // assets
 import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
+import { Navigate } from '../../../../../../node_modules/react-router-dom/dist/index';
 
 // tab panel wrapper
 function TabPanel({ children, value, index, ...other }) {
@@ -98,7 +99,7 @@ const Profile = () => {
       >
         <Stack direction="row" spacing={2} alignItems="center" sx={{ p: 0.5 }}>
           <AccountCircleIcon />
-          <Typography variant="subtitle1">{user.username}</Typography>
+          <Typography variant="subtitle1">{user !== null ? user.username : <Navigate to="/login" />}</Typography>
         </Stack>
       </ButtonBase>
       <Popper

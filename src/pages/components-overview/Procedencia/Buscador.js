@@ -2,8 +2,7 @@ import { useState } from 'react';
 import axios from 'api/axios';
 import { Toaster, toast } from 'sonner';
 import { SearchOutlined } from '@mui/icons-material';
-import { Button } from '@mui/material';
-import { InputAdornment, OutlinedInput } from '../../../../node_modules/@mui/material/index';
+import { InputAdornment, OutlinedInput, Button } from '@mui/material';
 
 function Buscador({ setProcedencia }) {
   const [numero_identificacion, setNumero_identificacion] = useState('');
@@ -86,7 +85,7 @@ function Buscador({ setProcedencia }) {
         <div className="col-4 input-container">
           <OutlinedInput
             size="small"
-            id="header-search"
+            id="search2"
             sx={{
               width: '400px',
               border: '1px solid black',
@@ -151,7 +150,7 @@ function Buscador({ setProcedencia }) {
                 <input
                   type="text"
                   className="form-control rounded-pill minimal-input-dark"
-                  id="nombre"
+                  id="nombres"
                   onChange={(e) => setNombre(e.target.value)}
                   required
                 />
@@ -164,7 +163,7 @@ function Buscador({ setProcedencia }) {
                 <input
                   type="text"
                   className="form-control rounded-pill minimal-input-dark"
-                  id="apellido"
+                  id="apellidos"
                   onChange={(e) => setApellido(e.target.value)}
                   required
                 />

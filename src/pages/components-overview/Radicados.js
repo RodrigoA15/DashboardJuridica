@@ -56,9 +56,11 @@ function ComponentRadicados() {
         icon: 'success'
       });
     } catch (error) {
-      console.log(error);
+      console.error('Error al crear radicado:', error);
+      const errorMessage = error.response?.data?.message || 'Error al crear radicado';
       MySwal.fire({
-        title: 'Error al crear radicado',
+        title: 'Error',
+        text: errorMessage,
         icon: 'error'
       });
     }
@@ -83,6 +85,7 @@ function ComponentRadicados() {
                 id="radicados"
                 onChange={(e) => setNumero_radicado(e.target.value)}
               />
+             
             </div>
 
             <div className="mb-3 col">

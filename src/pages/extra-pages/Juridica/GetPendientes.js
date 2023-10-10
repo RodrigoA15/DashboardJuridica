@@ -5,17 +5,28 @@ import UsuariosJuridica from './UsuariosJuridica';
 
 function GetPendientes() {
   const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     getDataPendiente();
+
+    const intervalId = setInterval(getDataPendiente, 5000);
+    return () => clearInterval(intervalId);
   }, []);
 
   const getDataPendiente = async () => {
     try {
       const response = await axios.get('/radicados/depjuridica_radicados');
       setData(response.data);
+      setIsLoading(false);
     } catch (error) {
-      console.log(error);
+      if (error.response && error.response.status === 404) {
+        setError('No tienes PQRS Pendientes');
+      } else {
+        setError('Error de servidor');
+      }
+      setIsLoading(false);
     }
   };
   return (
@@ -32,19 +43,29 @@ function GetPendientes() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((pendiente) => (
-            <TableRow key={pendiente._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-              <TableCell component="th" scope="row">
-                {pendiente.numero_radicado}
-              </TableCell>
-              <TableCell align="left">{new Date(pendiente.fecha_radicado).toLocaleDateString()}</TableCell>
-              <TableCell align="left">{pendiente.id_asunto.nombre_asunto}</TableCell>
-              <TableCell align="left">{pendiente.id_departamento.nombre_departamento}</TableCell>
-              <TableCell>
-                <UsuariosJuridica pendiente={pendiente} />
-              </TableCell>
+          {isLoading ? (
+            <TableRow key="loading">
+              <TableCell colSpan={5}>Cargando...</TableCell>
             </TableRow>
-          ))}
+          ) : error ? (
+            <TableRow key="error">
+              <TableCell colSpan={5}>{error}</TableCell>
+            </TableRow>
+          ) : (
+            data.map((pendiente) => (
+              <TableRow key={pendiente._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                <TableCell component="th" scope="row">
+                  {pendiente.numero_radicado}
+                </TableCell>
+                <TableCell align="left">{new Date(pendiente.fecha_radicado).toLocaleDateString('es-ES', { timeZone: 'UTC' })}</TableCell>
+                <TableCell align="left">{pendiente.id_asunto.nombre_asunto}</TableCell>
+                <TableCell align="left">{pendiente.id_departamento.nombre_departamento}</TableCell>
+                <TableCell>
+                  <UsuariosJuridica pendiente={pendiente} />
+                </TableCell>
+              </TableRow>
+            ))
+          )}
         </TableBody>
       </Table>
     </TableContainer>
