@@ -85,7 +85,6 @@ function ComponentRadicados() {
                 id="radicados"
                 onChange={(e) => setNumero_radicado(e.target.value)}
               />
-             
             </div>
 
             <div className="mb-3 col">
@@ -109,15 +108,15 @@ function ComponentRadicados() {
             </div>
 
             <div className="mb-3 col">
-              <h4>Asunto</h4>
-
-              <GetAsunto setAsunto={setAsunto} />
-            </div>
-
-            <div className="mb-3 col">
               <h4>Tipificacion</h4>
 
               <GetTipificacion setTipificacion={setTipificacion} />
+            </div>
+
+            <div className="mb-3 col">
+              <h4>Asunto</h4>
+
+              <GetAsunto setAsunto={setAsunto} />
             </div>
           </div>
 

@@ -17,7 +17,7 @@ function PendientesUsuario() {
   const [openRespuestasModal, setOpenRespuestasModal] = useState(false);
   const [selectedRespuesta, setSelectedRespuesta] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState('');
 
   const apiDataUser = async () => {
     try {
@@ -29,7 +29,7 @@ function PendientesUsuario() {
       if (error.response && error.response.status === 404) {
         setError('No tienes PQRS asignadas');
       } else {
-        setError('Error de servidor');
+        setError(error.response.data);
       }
       setIsLoading(false);
     }

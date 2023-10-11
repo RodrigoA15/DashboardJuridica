@@ -83,7 +83,6 @@ function UsuariosJuridica({ pendiente }) {
           </Select>
         </FormControl>
       </Box>
-
       <Button variant="outlined" onClick={handleButtonClick}>
         Asignar
       </Button>

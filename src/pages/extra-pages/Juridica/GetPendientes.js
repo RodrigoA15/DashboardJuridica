@@ -58,7 +58,15 @@ function GetPendientes() {
                   {pendiente.numero_radicado}
                 </TableCell>
                 <TableCell align="left">{new Date(pendiente.fecha_radicado).toLocaleDateString('es-ES', { timeZone: 'UTC' })}</TableCell>
-                <TableCell align="left">{pendiente.id_asunto.nombre_asunto}</TableCell>
+                <TableCell
+                  align="left"
+                  style={{
+                    color: pendiente.id_asunto.nombre_asunto === 'TUTELA' ? 'white' : 'white',
+                    background: pendiente.id_asunto.nombre_asunto === 'TUTELA' ? '#e63637' : '#36802d'
+                  }}
+                >
+                  {pendiente.id_asunto.nombre_asunto}
+                </TableCell>
                 <TableCell align="left">{pendiente.id_departamento.nombre_departamento}</TableCell>
                 <TableCell>
                   <UsuariosJuridica pendiente={pendiente} />

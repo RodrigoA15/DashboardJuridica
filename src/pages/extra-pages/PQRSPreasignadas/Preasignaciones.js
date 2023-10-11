@@ -6,11 +6,14 @@ import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, 
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import { Toaster, toast } from 'sonner';
+import ModalReasignacion from './ModalReasignacion';
 
 function Preasignaciones() {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [selectedData, setSelectedData] = useState(null);
 
   useEffect(() => {
     getAllPreasignaciones();
@@ -18,6 +21,16 @@ function Preasignaciones() {
     const intervalId = setInterval(getAllPreasignaciones, 5000);
     return () => clearInterval(intervalId);
   }, []);
+
+  const handleOpen = (data) => {
+    setSelectedData(data);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setSelectedData(null);
+    setOpen(false);
+  };
 
   const getAllPreasignaciones = async () => {
     try {
@@ -47,7 +60,6 @@ function Preasignaciones() {
 
     if (alert.isConfirmed) {
       try {
-        // Realiza la actualización solo para el elemento pre seleccionado
         await axios.put(`/radicados/radicados/${pre._id}`, {
           estado_radicado: 'Pendiente'
         });
@@ -97,12 +109,11 @@ function Preasignaciones() {
                   <TableCell align="left">{new Date(pre.fecha_radicado).toLocaleDateString('es-ES', { timeZone: 'UTC' })}</TableCell>
                   <TableCell align="left">{pre.id_asunto.nombre_asunto}</TableCell>
                   <TableCell align="left">{pre.id_departamento.nombre_departamento}</TableCell>
-
                   <TableCell align="center">
-                    <Button color="success" startIcon={<DoneIcon />} onClick={() => updateStatePreasignacion(pre)}>
+                    <Button color="success" variant="contained" startIcon={<DoneIcon />} onClick={() => updateStatePreasignacion(pre)}>
                       Aceptar
                     </Button>
-                    <Button color="error" startIcon={<CloseIcon />}>
+                    <Button color="error" variant="contained" startIcon={<CloseIcon />} onClick={() => handleOpen(pre)}>
                       Rechazar
                     </Button>
                   </TableCell>
@@ -112,6 +123,7 @@ function Preasignaciones() {
           </TableBody>
         </Table>
       </TableContainer>
+      <ModalReasignacion open={open} handleClose={handleClose} data={selectedData} />
     </div>
   );
 }
