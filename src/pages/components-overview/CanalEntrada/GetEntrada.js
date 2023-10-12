@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from '../../../api/axios';
 import PropTypes from 'prop-types';
 
-function GetEntrada({ setCanalEntrada }) {
+function GetEntrada({ register, errors }) {
   const [entrada, setEntrada] = useState([]);
 
   useEffect(() => {
@@ -14,14 +14,20 @@ function GetEntrada({ setCanalEntrada }) {
       const response = await axios.get('canal/canal');
       setEntrada(response.data);
     } catch (error) {
-      console.log(error);
+      console.error('Error fetching data:', error);
     }
   };
 
   return (
     <div>
-      {console.log(entrada)}
-      <select className="form-select  rounded-pill minimal-input-dark" aria-label="Default select example" onChange={(e) => setCanalEntrada(e.target.value)}>
+      {console.log('Errors in GetEntrada:', errors)}
+      <select
+        className="form-select rounded-pill minimal-input-dark"
+        aria-label="Default select example"
+        {...register('id_canal_entrada', {
+          required: 'Canal entrada es obligatorio'
+        })}
+      >
         <option>Seleccione un canal</option>
         {entrada &&
           entrada.map((i) => (
@@ -30,6 +36,7 @@ function GetEntrada({ setCanalEntrada }) {
             </option>
           ))}
       </select>
+      {errors.id_canal_entrada && <span className="inputForm">{errors.id_canal_entrada.message}</span>}
     </div>
   );
 }
@@ -37,5 +44,6 @@ function GetEntrada({ setCanalEntrada }) {
 export default GetEntrada;
 
 GetEntrada.propTypes = {
-  setCanalEntrada: PropTypes.func.isRequired
+  register: PropTypes.func.isRequired,
+  errors: PropTypes.object.isRequired
 };

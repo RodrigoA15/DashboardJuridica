@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'api/axios';
 import PropTypes from 'prop-types';
 
-function GetEntidad({ setEntidad }) {
+function GetEntidad({ register }) {
   const [dataEntidad, setDataEntidad] = useState([]);
 
   useEffect(() => {
@@ -19,7 +19,14 @@ function GetEntidad({ setEntidad }) {
   };
   return (
     <div>
-      <select className="form-select rounded-pill minimal-input-dark" onChange={(e) => setEntidad(e.target.value)}>
+      <select
+        className="form-select rounded-pill minimal-input-dark"
+        {...register('id_entidad', {
+          required: {
+            value: true
+          }
+        })}
+      >
         <option>Seleccione la entidad</option>
         {dataEntidad.map((i) => (
           <option key={i._id} value={i._id}>
@@ -34,5 +41,5 @@ function GetEntidad({ setEntidad }) {
 export default GetEntidad;
 
 GetEntidad.propTypes = {
-  setEntidad: PropTypes.func.isRequired
+  register: PropTypes.func.isRequired
 };

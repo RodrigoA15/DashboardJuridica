@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'api/axios';
 import PropTypes from 'prop-types';
 
-function GetDepartamentos({ setDepartamento }) {
+function GetDepartamentos({ register }) {
   const [dataDepartamento, setDataDepartamento] = useState([]);
 
   useEffect(() => {
@@ -19,7 +19,14 @@ function GetDepartamentos({ setDepartamento }) {
   };
   return (
     <div>
-      <select className="form-select rounded-pill minimal-input-dark" onChange={(e) => setDepartamento(e.target.value)}>
+      <select
+        className="form-select rounded-pill minimal-input-dark"
+        {...register('id_departamento', {
+          required: {
+            value: true
+          }
+        })}
+      >
         <option>Seleccione un departamento</option>
         {dataDepartamento.map((i) => (
           <option key={i._id} value={i._id}>
@@ -34,5 +41,5 @@ function GetDepartamentos({ setDepartamento }) {
 export default GetDepartamentos;
 
 GetDepartamentos.propTypes = {
-  setDepartamento: PropTypes.func.isRequired
+  register: PropTypes.func.isRequired
 };

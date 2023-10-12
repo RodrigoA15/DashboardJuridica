@@ -3,6 +3,7 @@ import axios from 'api/axios';
 import { Toaster, toast } from 'sonner';
 import { SearchOutlined } from '@mui/icons-material';
 import { InputAdornment, OutlinedInput, Button } from '@mui/material';
+import PropTypes from 'prop-types';
 
 function Buscador({ setProcedencia }) {
   const [numero_identificacion, setNumero_identificacion] = useState('');
@@ -198,3 +199,7 @@ function Buscador({ setProcedencia }) {
 }
 
 export default Buscador;
+
+Buscador.proTypes = {
+  setProcedencia: PropTypes.func.isRequired
+};

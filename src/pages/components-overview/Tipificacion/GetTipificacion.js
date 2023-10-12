@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from '../../../api/axios';
 import PropTypes from 'prop-types';
 
-function GetTipificacion({ setTipificacion }) {
+function GetTipificacion({ register }) {
   const [dataTipicacion, setDataTipificacion] = useState([]);
 
   useEffect(() => {
@@ -20,7 +20,14 @@ function GetTipificacion({ setTipificacion }) {
 
   return (
     <div>
-      <select className="form-select rounded-pill minimal-input-dark" onChange={(e) => setTipificacion(e.target.value)}>
+      <select
+        className="form-select rounded-pill minimal-input-dark"
+        {...register('id_tipificacion', {
+          required: {
+            value: true
+          }
+        })}
+      >
         <option>Seleccione Tipificacion</option>
         {dataTipicacion.map((i) => (
           <option key={i._id} value={i._id}>
@@ -35,5 +42,5 @@ function GetTipificacion({ setTipificacion }) {
 export default GetTipificacion;
 
 GetTipificacion.propTypes = {
-  setTipificacion: PropTypes.func.isRequired
+  register: PropTypes.func.isRequired
 };

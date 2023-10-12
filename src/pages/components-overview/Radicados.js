@@ -1,8 +1,7 @@
 // project import
 import MainCard from 'components/MainCard';
 import ComponentSkeleton from './ComponentSkeleton';
-// import { useForm } from 'react-hook-form';
-import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import axios from 'api/axios';
 import GetEntrada from './CanalEntrada/GetEntrada';
 import Buscador from './Procedencia/Buscador';
@@ -10,6 +9,7 @@ import GetAsunto from './Asunto/GetAsunto';
 import GetTipificacion from './Tipificacion/GetTipificacion';
 import GetEntidad from './Entidad/GetEntidad';
 import GetDepartamentos from './Departamento/GetDepartamentos';
+import { useState } from 'react';
 
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
@@ -17,39 +17,23 @@ import withReactContent from 'sweetalert2-react-content';
 // ===============================|| CUSTOM - SHADOW BOX ||=============================== //
 
 function ComponentRadicados() {
-  const [numero_radicado, setNumero_radicado] = useState('');
-  const [fecha_radicado, setFecha_radicado] = useState('');
-  //Canal Entrada
-  const [canalEntrada, setCanalEntrada] = useState('');
-  //Asunto
-  const [asunto, setAsunto] = useState('');
-  //Tipificacion
-  const [tipificacion, setTipificacion] = useState('');
-  //Entidad
-  const [entidad, setEntidad] = useState('');
-  //Procedencia
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm();
   const [procedencia, setProcedencia] = useState('');
-  //Departamentos
-  const [departamento, setDepartamento] = useState('');
-  //Numero de respuestas
-  const [respuesta, setRespuesta] = useState('');
 
   const MySwal = withReactContent(Swal);
-  const datos = {
-    numero_radicado: numero_radicado,
-    fecha_radicado: fecha_radicado,
-    id_canal_entrada: canalEntrada,
-    id_asunto: asunto,
-    id_tipificacion: tipificacion,
-    id_entidad: entidad,
-    id_procedencia: procedencia,
-    id_departamento: departamento,
-    estado_radicado: 'Pre-asignacion',
-    cantidad_respuesta: respuesta
-  };
 
-  const createRadicado = async () => {
+  const onSubmit = handleSubmit((data) => {
+    createRadicado(data);
+    console.log(data);
+  });
+
+  const createRadicado = async (data) => {
     try {
+      const datos = { ...data, id_procedencia: procedencia, estado_radicado: 'Pre-asignacion' };
       await axios.post(`/radicados/radicados`, datos);
       MySwal.fire({
         title: 'Creado correctamente',
@@ -69,8 +53,8 @@ function ComponentRadicados() {
   return (
     <ComponentSkeleton>
       <MainCard title="Crear Radicados" className="border-card card-background">
-        <form>
-          <Buscador createRadicado={createRadicado} setProcedencia={setProcedencia} />
+        <form onSubmit={onSubmit}>
+          <Buscador setProcedencia={setProcedencia} />
 
           {/* Radicados */}
           <div className="row mb-3">
@@ -83,8 +67,14 @@ function ComponentRadicados() {
                 type="number"
                 className="form-control rounded-pill minimal-input-dark"
                 id="radicados"
-                onChange={(e) => setNumero_radicado(e.target.value)}
+                {...register('numero_radicado', {
+                  required: {
+                    value: true,
+                    message: 'Numero Radicado es obligatorio'
+                  }
+                })}
               />
+              {errors.numero_radicado && <span className="inputForm ">{errors.numero_radicado.message}</span>}
             </div>
 
             <div className="mb-3 col">
@@ -95,28 +85,34 @@ function ComponentRadicados() {
                 type="date"
                 className="form-control rounded-pill minimal-input-dark"
                 id="fecha"
-                onChange={(e) => setFecha_radicado(e.target.value)}
+                {...register('fecha_radicado', {
+                  required: {
+                    value: true,
+                    message: 'Fecha Radicado es obligatorio'
+                  }
+                })}
               />
+              {errors.fecha_radicado && <span className="inputForm ">{errors.fecha_radicado.message}</span>}
             </div>
           </div>
 
           <div className="row mb-3">
             <div className="mb-3 col">
               <h4>Canal Entrada</h4>
-
-              <GetEntrada setCanalEntrada={setCanalEntrada} />
+              {console.log('Errors prop:', errors)} {/* Add this line to log errors */}
+              <GetEntrada register={register} errors={errors} />
             </div>
 
             <div className="mb-3 col">
               <h4>Tipificacion</h4>
 
-              <GetTipificacion setTipificacion={setTipificacion} />
+              <GetTipificacion register={register} />
             </div>
 
             <div className="mb-3 col">
               <h4>Asunto</h4>
 
-              <GetAsunto setAsunto={setAsunto} />
+              <GetAsunto register={register} />
             </div>
           </div>
 
@@ -124,13 +120,13 @@ function ComponentRadicados() {
             <div className="mb-3 col">
               <h4>Entidad</h4>
 
-              <GetEntidad setEntidad={setEntidad} />
+              <GetEntidad register={register} />
             </div>
 
             <div className="mb-3 col">
               <h4>Dirigido a </h4>
 
-              <GetDepartamentos setDepartamento={setDepartamento} />
+              <GetDepartamentos register={register} />
             </div>
 
             <div className="mb-3 col">
@@ -138,11 +134,16 @@ function ComponentRadicados() {
               <input
                 className="form-control rounded-pill minimal-input-dark"
                 type="number"
-                onChange={(e) => setRespuesta(e.target.value)}
+                {...register('cantidad_respuesta', {
+                  required: {
+                    value: true,
+                    message: 'Cantidad de respuesta es obligatorio'
+                  }
+                })}
               />
             </div>
           </div>
-          <button type="button" className="btn btn-success" onClick={createRadicado}>
+          <button type="submit" className="btn btn-success">
             Registrar
           </button>
         </form>
