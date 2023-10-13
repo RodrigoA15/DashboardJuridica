@@ -5,14 +5,13 @@ import { useForm } from 'react-hook-form';
 import axios from 'api/axios';
 import GetEntrada from './CanalEntrada/GetEntrada';
 import Buscador from './Procedencia/Buscador';
-import GetAsunto from './Asunto/GetAsunto';
 import GetTipificacion from './Tipificacion/GetTipificacion';
 import GetEntidad from './Entidad/GetEntidad';
 import GetDepartamentos from './Departamento/GetDepartamentos';
 import { useState } from 'react';
-
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+import { useAuth } from 'context/authContext';
 
 // ===============================|| CUSTOM - SHADOW BOX ||=============================== //
 
@@ -22,7 +21,10 @@ function ComponentRadicados() {
     handleSubmit,
     formState: { errors }
   } = useForm();
+
+  const { user } = useAuth();
   const [procedencia, setProcedencia] = useState('');
+  const [id_departamento, setIdDepartamento] = useState('');
 
   const MySwal = withReactContent(Swal);
 
@@ -33,7 +35,7 @@ function ComponentRadicados() {
 
   const createRadicado = async (data) => {
     try {
-      const datos = { ...data, id_procedencia: procedencia, estado_radicado: 'Pre-asignacion' };
+      const datos = { ...data, id_procedencia: procedencia, estado_radicado: 'Pre-asignacion', id_departamento };
       await axios.post(`/radicados/radicados`, datos);
       MySwal.fire({
         title: 'Creado correctamente',
@@ -55,7 +57,7 @@ function ComponentRadicados() {
       <MainCard title="Crear Radicados" className="border-card card-background">
         <form onSubmit={onSubmit}>
           <Buscador setProcedencia={setProcedencia} />
-
+          {user.username}
           {/* Radicados */}
           <div className="row mb-3">
             <h4>Informacion Radicado</h4>
@@ -99,7 +101,6 @@ function ComponentRadicados() {
           <div className="row mb-3">
             <div className="mb-3 col">
               <h4>Canal Entrada</h4>
-              {console.log('Errors prop:', errors)} {/* Add this line to log errors */}
               <GetEntrada register={register} errors={errors} />
             </div>
 
@@ -107,12 +108,6 @@ function ComponentRadicados() {
               <h4>Tipificacion</h4>
 
               <GetTipificacion register={register} />
-            </div>
-
-            <div className="mb-3 col">
-              <h4>Asunto</h4>
-
-              <GetAsunto register={register} />
             </div>
           </div>
 
@@ -126,7 +121,7 @@ function ComponentRadicados() {
             <div className="mb-3 col">
               <h4>Dirigido a </h4>
 
-              <GetDepartamentos register={register} />
+              <GetDepartamentos register={register} setIdDepartamento={setIdDepartamento} id_departamento={id_departamento} />
             </div>
 
             <div className="mb-3 col">

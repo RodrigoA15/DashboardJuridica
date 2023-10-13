@@ -20,7 +20,6 @@ function GetEntrada({ register, errors }) {
 
   return (
     <div>
-      {console.log('Errors in GetEntrada:', errors)}
       <select
         className="form-select rounded-pill minimal-input-dark"
         aria-label="Default select example"

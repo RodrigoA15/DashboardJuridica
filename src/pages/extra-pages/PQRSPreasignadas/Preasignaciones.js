@@ -7,8 +7,10 @@ import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import { Toaster, toast } from 'sonner';
 import ModalReasignacion from './ModalReasignacion';
+import { useAuth } from 'context/authContext';
 
 function Preasignaciones() {
+  const { user } = useAuth();
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -34,7 +36,7 @@ function Preasignaciones() {
 
   const getAllPreasignaciones = async () => {
     try {
-      const response = await axios.get('/preasignados');
+      const response = await axios.get(`/preasignados/${user.departamento}`);
       setData(response.data);
       setIsLoading(false);
     } catch (error) {

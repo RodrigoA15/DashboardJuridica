@@ -71,7 +71,7 @@ function UsuariosJuridica({ pendiente }) {
   return (
     <>
       <Toaster richColors position="top-center" />
-      <Box sx={{ minWidth: 120 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', minWidth: 120 }}>
         <FormControl fullWidth>
           <InputLabel id="demo-simple-select-label">Judicantes</InputLabel>
           <Select labelId="demo-simple-select-label" id="demo-simple-select" label="Judicantes" value={usuarios} onChange={handleChange}>
@@ -82,10 +82,10 @@ function UsuariosJuridica({ pendiente }) {
             ))}
           </Select>
         </FormControl>
+        <Button className="ms-5" variant="outlined" onClick={handleButtonClick}>
+          Asignar
+        </Button>
       </Box>
-      <Button variant="outlined" onClick={handleButtonClick}>
-        Asignar
-      </Button>
     </>
   );
 }
