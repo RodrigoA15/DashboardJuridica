@@ -19,9 +19,18 @@ function PendientesUsuario() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
 
+  useEffect(() => {
+    {
+      user && apiDataUser();
+
+      const intervalId = setInterval(apiDataUser, 5000);
+      return () => clearInterval(intervalId);
+    }
+  }, [user]);
+
   const apiDataUser = async () => {
     try {
-      const response = await axios.get('/asignaciones');
+      const response = await axios.get(`/asignaciones/${user.departamento}`);
       setUsers(response.data);
       setIsLoading(false);
       setIsPendiente(response.data.some((pendiente) => user.email === pendiente.id_usuario.email));
@@ -36,13 +45,6 @@ function PendientesUsuario() {
   };
 
   const formatDate = (date) => new Date(date).toLocaleDateString('es-ES', { timeZone: 'UTC' });
-
-  useEffect(() => {
-    apiDataUser();
-
-    const intervalId = setInterval(apiDataUser, 5000);
-    return () => clearInterval(intervalId);
-  }, []);
 
   const handleOpen = (data) => {
     setSelectedData(data);

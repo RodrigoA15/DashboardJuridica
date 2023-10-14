@@ -6,18 +6,22 @@ import PropTypes from 'prop-types';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import { Toaster, toast } from 'sonner';
+import { useAuth } from 'context/authContext';
 
 function UsuariosJuridica({ pendiente }) {
   const [users, setUsers] = useState([]);
   const [usuarios, setUsuarios] = useState('');
+  const { user } = useAuth();
   useEffect(() => {
-    apiUsuarios();
-  }, []);
+    {
+      user && apiUsuarios();
+    }
+  }, [user]);
 
   //Listado de usuarios
   const apiUsuarios = async () => {
     try {
-      const response = await axios.get('/departamentos/legal_user');
+      const response = await axios.get(`/departamentos/usuarios_departamento/${user.departamento}`);
       setUsers(response.data);
     } catch (error) {
       console.log(error);

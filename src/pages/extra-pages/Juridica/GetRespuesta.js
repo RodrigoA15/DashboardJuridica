@@ -1,19 +1,23 @@
 import React from 'react';
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import axios from 'api/axios';
+import { useAuth } from 'context/authContext';
 
 import { useEffect, useState } from 'react';
 
 function GetRespuesta() {
   const [respondidos, setRespondidos] = useState([]);
+  const { user } = useAuth();
 
   useEffect(() => {
-    apiGetRespuesta();
-  }, []);
+    {
+      user && apiGetRespuesta();
+    }
+  }, [user]);
 
   const apiGetRespuesta = async () => {
     try {
-      const response = await axios.get('/respuestas_juridica');
+      const response = await axios.get(`/respuestas_departamento/${user.departamento}`);
       setRespondidos(response.data);
     } catch (error) {
       console.log(error);

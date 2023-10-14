@@ -18,11 +18,13 @@ function Preasignaciones() {
   const [selectedData, setSelectedData] = useState(null);
 
   useEffect(() => {
-    getAllPreasignaciones();
+    {
+      user && getAllPreasignaciones();
 
-    const intervalId = setInterval(getAllPreasignaciones, 5000);
-    return () => clearInterval(intervalId);
-  }, []);
+      const intervalId = setInterval(getAllPreasignaciones, 5000);
+      return () => clearInterval(intervalId);
+    }
+  }, [user]);
 
   const handleOpen = (data) => {
     setSelectedData(data);

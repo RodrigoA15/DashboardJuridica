@@ -1,22 +1,26 @@
 import axios from 'api/axios';
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { useAuth } from 'context/authContext';
 
 function GetAsignados() {
   const [asignados, setAsignados] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { user } = useAuth();
 
   useEffect(() => {
-    apiAsignados();
+    {
+      user && apiAsignados();
 
-    const intervalId = setInterval(apiAsignados, 5000);
-    return () => clearInterval(intervalId);
-  }, []);
+      const intervalId = setInterval(apiAsignados, 5000);
+      return () => clearInterval(intervalId);
+    }
+  }, [user]);
 
   const apiAsignados = async () => {
     try {
-      const response = await axios.get('/asignaciones');
+      const response = await axios.get(`/asignaciones/${user.departamento}`);
       setAsignados(response.data);
       setIsLoading(false);
     } catch (error) {
