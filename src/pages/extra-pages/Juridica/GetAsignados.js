@@ -59,7 +59,7 @@ function GetAsignados() {
                   <TableCell component="th" scope="row">
                     {i.id_radicado.estado_radicado}
                   </TableCell>
-                  <TableCell align="left">{new Date(i.fecha_asignacion).toLocaleDateString('es-ES', { timeZone: 'UTC' })}</TableCell>
+                  <TableCell align="left">{new Date(i.fecha_asignacion).toLocaleDateString()}</TableCell>
                   <TableCell>{i.id_usuario.username}</TableCell>
                 </TableRow>
               ))

@@ -46,8 +46,13 @@ function GetPendientes() {
         </TableHead>
         <TableBody>
           {isLoading ? (
-            <TableRow key="loading">
-              <TableCell colSpan={5}>Cargando...</TableCell>
+            <TableRow>
+              <div className="newtons-cradle">
+                <div className="newtons-cradle__dot"></div>
+                <div className="newtons-cradle__dot"></div>
+                <div className="newtons-cradle__dot"></div>
+                <div className="newtons-cradle__dot"></div>
+              </div>
             </TableRow>
           ) : error ? (
             <TableRow key="error">

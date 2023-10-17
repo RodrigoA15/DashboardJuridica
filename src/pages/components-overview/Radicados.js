@@ -19,7 +19,8 @@ function ComponentRadicados() {
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
+    reset
   } = useForm();
 
   const { user } = useAuth();
@@ -41,6 +42,7 @@ function ComponentRadicados() {
         title: 'Creado correctamente',
         icon: 'success'
       });
+      reset();
     } catch (error) {
       console.error('Error al crear radicado:', error);
       const errorMessage = error.response?.data?.message || 'Error al crear radicado';

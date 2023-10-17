@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import { toast } from 'sonner';
+import { useAuth } from 'context/authContext';
 
 const style = {
   position: 'absolute',
@@ -23,6 +24,7 @@ const style = {
 function ModalRadicadosRespuestas({ opens, handleCloses, respuestas }) {
   const [radicadosRpta, setRadicadosRpta] = useState([]);
   const [countRadicados, setCountRadicados] = useState(0);
+  const { user } = useAuth();
   useEffect(() => {
     if (respuestas && respuestas.id_radicado && respuestas.id_radicado.numero_radicado) {
       setRadicadosRpta([]);
@@ -33,7 +35,7 @@ function ModalRadicadosRespuestas({ opens, handleCloses, respuestas }) {
 
   const apiRadicadosRespuesta = async () => {
     try {
-      const response = await axios.get(`/radicados_respuestas/${respuestas.id_radicado.numero_radicado}`);
+      const response = await axios.get(`/radicados_respuestas/${user.departamento}/${respuestas.id_radicado.numero_radicado}`);
       setRadicadosRpta(response.data);
       setCountRadicados(response.data.length);
     } catch (error) {
@@ -60,7 +62,6 @@ function ModalRadicadosRespuestas({ opens, handleCloses, respuestas }) {
           estado_radicado: 'Respuesta'
         });
         toast.success('Respondido correctamente');
-        
       } else {
         toast.error('No se respondio la peticion');
       }
@@ -88,7 +89,7 @@ function ModalRadicadosRespuestas({ opens, handleCloses, respuestas }) {
                 variant="contained"
                 color="success"
                 onClick={() => updateEstadoRespondido(respuestas.id_radicado._id)}
-                disabled={respuestas.id_radicado.cantidad_respuesta !== countRadicados }
+                disabled={respuestas.id_radicado.cantidad_respuesta !== countRadicados}
               >
                 Responder
               </Button>

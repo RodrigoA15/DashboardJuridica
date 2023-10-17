@@ -3,29 +3,35 @@ import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow
 import axios from 'api/axios';
 import { useAuth } from 'context/authContext';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { toast } from '../../../../node_modules/sonner/dist/index';
+import { Toaster } from '../../../../node_modules/sonner/dist/index';
 
 function GetRespuesta() {
   const [respondidos, setRespondidos] = useState([]);
   const { user } = useAuth();
-
-  useEffect(() => {
-    {
-      user && apiGetRespuesta();
-    }
-  }, [user]);
+  const [numero_radicado, setNumeroRadicado] = useState('');
 
   const apiGetRespuesta = async () => {
+    if (numero_radicado.trim() === '') {
+      toast.error('Termino busqeuda no debe estar vacio');
+      return;
+    }
     try {
-      const response = await axios.get(`/respuestas_departamento/${user.departamento}`);
+      const response = await axios.get(`/radicados_respuestas/${user.departamento}/${numero_radicado}`);
       setRespondidos(response.data);
     } catch (error) {
-      console.log(error);
+      if (error.response && error.response.status === 404) {
+        toast.error('No se encontraron resultados en la busqueda');
+      }
     }
   };
 
   return (
     <div>
+      <input type="text" placeholder="Buscar" onChange={(e) => setNumeroRadicado(e.target.value)} />
+      <button onClick={apiGetRespuesta}>Buscar</button>
+      <Toaster position="top-right" richColors />
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 350 }} aria-label="simple table">
           <TableHead>
@@ -33,7 +39,7 @@ function GetRespuesta() {
               <TableCell>Número Radicado</TableCell>
               <TableCell align="left">Asunto</TableCell>
               <TableCell align="left">Responsable</TableCell>
-              <TableCell align="left">Evidencia</TableCell>
+              <TableCell>Número Radicado respuestas</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -44,6 +50,7 @@ function GetRespuesta() {
                 </TableCell>
                 <TableCell align="left">{i.id_asignacion.id_radicado.id_asunto.nombre_asunto}</TableCell>
                 <TableCell align="left">{i.id_asignacion.id_usuario.username}</TableCell>
+                <TableCell align="left">{i.numero_radicado_respuesta}</TableCell>
               </TableRow>
             ))}
           </TableBody>
