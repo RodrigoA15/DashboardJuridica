@@ -12,6 +12,7 @@ import { useState } from 'react';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { useAuth } from 'context/authContext';
+import { Button } from '../../../node_modules/@mui/material/index';
 
 // ===============================|| CUSTOM - SHADOW BOX ||=============================== //
 
@@ -26,6 +27,7 @@ function ComponentRadicados() {
   const { user } = useAuth();
   const [procedencia, setProcedencia] = useState('');
   const [id_departamento, setIdDepartamento] = useState('');
+  const [check, setCheck] = useState(false);
 
   const MySwal = withReactContent(Swal);
 
@@ -140,6 +142,21 @@ function ComponentRadicados() {
               />
             </div>
           </div>
+
+          <div className="row">
+            <div className="col-2 mb-2">
+              <Button variant="text" className="m-3" onClick={() => setCheck((prevCheck) => !prevCheck)}>
+                {check ? 'Cancelar Observacion' : 'Agregar Observacion'}
+              </Button>
+            </div>
+            {check && (
+              <div className="mb-3 col-4">
+                <label htmlFor="observaciones">Observaciones</label>
+                <textarea className="form-control minimal-input-dark" placeholder="Observaciones Radicado" disabled={!check}></textarea>
+              </div>
+            )}
+          </div>
+
           <button type="submit" className="btn btn-success">
             Registrar
           </button>

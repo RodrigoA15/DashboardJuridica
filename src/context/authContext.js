@@ -53,6 +53,7 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
         return setUser(null);
       }
+
       try {
         const res = await verifyToken(cookies.token);
         if (!res.data) {

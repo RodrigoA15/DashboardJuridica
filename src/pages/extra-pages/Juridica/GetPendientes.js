@@ -13,9 +13,13 @@ function GetPendientes() {
   useEffect(() => {
     getDataPendiente();
 
-    const intervalId = setInterval(getDataPendiente, 5000);
-    return () => clearInterval(intervalId);
+    // const intervalId = setInterval(getDataPendiente, 5000);
+    // return () => clearInterval(intervalId);
   }, []);
+
+  useEffect(() => {
+    diasHabiles(data);
+  }, [data]);
 
   const getDataPendiente = async () => {
     try {
@@ -32,6 +36,46 @@ function GetPendientes() {
     }
   };
 
+  const diasHabiles = (fecha_radicado) => {
+    let contador = 0;
+    let fechaInicio = new Date(fecha_radicado);
+    let fechaFin = new Date();
+    let festivos = ['2023-10-06', '2023-10-05'];
+
+    while (fechaInicio <= fechaFin) {
+      const diaSemana = fechaInicio.getDay();
+      const fechaActual = fechaInicio.toISOString().split('T')[0];
+      const lunes = 1;
+      const viernes = 5;
+
+      if (diaSemana >= lunes && diaSemana <= viernes) {
+        if (!festivos.includes(fechaActual)) {
+          contador++;
+        }
+      }
+
+      fechaInicio.setDate(fechaInicio.getDate() + 1);
+    }
+
+    console.log('Días laborables:', contador);
+
+    return contador;
+  };
+
+  const getBackgroundColor = (fechaRadicado) => {
+    const diasLaborables = diasHabiles(fechaRadicado);
+
+    if (diasLaborables <= 5) {
+      return '#748E63'; // Verde
+    } else if (diasLaborables >= 6 && diasLaborables <= 9) {
+      return '#FFCD4B'; // Amarillo
+    } else if (diasLaborables >= 10 && diasLaborables <= 12) {
+      return '#d43a00'; // Naranja
+    } else if (diasLaborables >= 13) {
+      return '#BB2525'; // Rojo
+    }
+  };
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 350 }} aria-label="simple table">
@@ -42,6 +86,7 @@ function GetPendientes() {
             <TableCell align="center">Asunto</TableCell>
             <TableCell align="center">Departamento</TableCell>
             <TableCell align="center">Asignar Radicado</TableCell>
+            <TableCell align="center">Dias</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -61,23 +106,25 @@ function GetPendientes() {
           ) : (
             data.map((pendiente) => (
               <TableRow key={pendiente._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell component="th" scope="row">
+                <TableCell
+                  component="th"
+                  scope="row"
+                  style={{
+                    color: pendiente.id_asunto.nombre_asunto === 'TUTELA' ? 'black' : 'black',
+                    background: getBackgroundColor(new Date(pendiente.fecha_radicado))
+                  }}
+                >
                   {pendiente.numero_radicado}
                 </TableCell>
                 <TableCell align="center">{new Date(pendiente.fecha_radicado).toLocaleDateString('es-ES', { timeZone: 'UTC' })}</TableCell>
-                <TableCell
-                  align="center"
-                  style={{
-                    color: pendiente.id_asunto.nombre_asunto === 'TUTELA' ? 'white' : 'white',
-                    background: pendiente.id_asunto.nombre_asunto === 'TUTELA' ? '#e63637' : '#36802d'
-                  }}
-                >
-                  {pendiente.id_asunto.nombre_asunto}
+                <TableCell align="center">
+                  <b>{pendiente.id_asunto.nombre_asunto}</b>
                 </TableCell>
                 <TableCell align="center">{pendiente.id_departamento.nombre_departamento}</TableCell>
                 <TableCell>
                   <UsuariosJuridica pendiente={pendiente} />
                 </TableCell>
+                <TableCell>{diasHabiles(new Date(pendiente.fecha_radicado))}</TableCell>
               </TableRow>
             ))
           )}
