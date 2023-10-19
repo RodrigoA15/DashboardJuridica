@@ -3,6 +3,7 @@ import axios from 'api/axios';
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import UsuariosJuridica from './UsuariosJuridica';
 import { useAuth } from 'context/authContext';
+import Loader from 'pages/components-overview/Loader';
 
 function GetPendientes() {
   const [data, setData] = useState([]);
@@ -91,14 +92,7 @@ function GetPendientes() {
         </TableHead>
         <TableBody>
           {isLoading ? (
-            <TableRow>
-              <div className="newtons-cradle">
-                <div className="newtons-cradle__dot"></div>
-                <div className="newtons-cradle__dot"></div>
-                <div className="newtons-cradle__dot"></div>
-                <div className="newtons-cradle__dot"></div>
-              </div>
-            </TableRow>
+            <Loader />
           ) : error ? (
             <TableRow key="error">
               <TableCell colSpan={5}>{error}</TableCell>
@@ -109,17 +103,16 @@ function GetPendientes() {
                 <TableCell
                   component="th"
                   scope="row"
+                  align="center"
                   style={{
                     color: pendiente.id_asunto.nombre_asunto === 'TUTELA' ? 'black' : 'black',
                     background: getBackgroundColor(new Date(pendiente.fecha_radicado))
                   }}
                 >
-                  {pendiente.numero_radicado}
+                  <b>{pendiente.numero_radicado}</b>
                 </TableCell>
                 <TableCell align="center">{new Date(pendiente.fecha_radicado).toLocaleDateString('es-ES', { timeZone: 'UTC' })}</TableCell>
-                <TableCell align="center">
-                  <b>{pendiente.id_asunto.nombre_asunto}</b>
-                </TableCell>
+                <TableCell align="center">{pendiente.id_asunto.nombre_asunto}</TableCell>
                 <TableCell align="center">{pendiente.id_departamento.nombre_departamento}</TableCell>
                 <TableCell>
                   <UsuariosJuridica pendiente={pendiente} />

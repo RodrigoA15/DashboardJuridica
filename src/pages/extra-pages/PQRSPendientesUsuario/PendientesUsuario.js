@@ -67,6 +67,46 @@ function PendientesUsuario() {
     setOpenRespuestasModal(false);
   };
 
+  const diasHabiles = (fecha_radicado) => {
+    let contador = 0;
+    let fechaInicio = new Date(fecha_radicado);
+    let fechaFin = new Date();
+    let festivos = ['2023-10-06', '2023-10-05'];
+
+    while (fechaInicio <= fechaFin) {
+      const diaSemana = fechaInicio.getDay();
+      const fechaActual = fechaInicio.toISOString().split('T')[0];
+      const lunes = 1;
+      const viernes = 5;
+
+      if (diaSemana >= lunes && diaSemana <= viernes) {
+        if (!festivos.includes(fechaActual)) {
+          contador++;
+        }
+      }
+
+      fechaInicio.setDate(fechaInicio.getDate() + 1);
+    }
+
+    console.log('Días laborables:', contador);
+
+    return contador;
+  };
+
+  const getBackgroundColor = (fechaRadicado) => {
+    const diasLaborables = diasHabiles(fechaRadicado);
+
+    if (diasLaborables <= 5) {
+      return '#748E63'; // Verde
+    } else if (diasLaborables >= 6 && diasLaborables <= 9) {
+      return '#FFCD4B'; // Amarillo
+    } else if (diasLaborables >= 10 && diasLaborables <= 12) {
+      return '#d43a00'; // Naranja
+    } else if (diasLaborables >= 13) {
+      return '#BB2525'; // Rojo
+    }
+  };
+
   return (
     <div>
       <Toaster position="top-right" richColors expand={true} offset="80px" />
@@ -79,6 +119,7 @@ function PendientesUsuario() {
               <TableCell align="left">Fecha Radicado</TableCell>
               <TableCell align="left">Fecha Asignacion</TableCell>
               <TableCell align="left">Respuestas estimadas</TableCell>
+              <TableCell align="center">Dias</TableCell>
               <TableCell align="center">Acciones</TableCell>
             </TableRow>
           </TableHead>
@@ -101,9 +142,17 @@ function PendientesUsuario() {
                         <TableCell component="th" scope="row">
                           {pendiente.id_radicado.numero_radicado}
                         </TableCell>
-                        <TableCell align="left">{formatDate(pendiente.id_radicado.fecha_radicado)}</TableCell>
+                        <TableCell
+                          align="left"
+                          style={{
+                            background: getBackgroundColor(new Date(pendiente.id_radicado.fecha_radicado))
+                          }}
+                        >
+                          {formatDate(pendiente.id_radicado.fecha_radicado)}
+                        </TableCell>
                         <TableCell align="left">{formatDate(pendiente.fecha_asignacion)}</TableCell>
                         <TableCell align="left">{pendiente.id_radicado.cantidad_respuesta}</TableCell>
+                        <TableCell>{diasHabiles(new Date(pendiente.id_radicado.fecha_radicado))}</TableCell>
                         <TableCell align="center">
                           <Button color="primary" startIcon={<AddIcon />} onClick={() => handleOpen(pendiente)}>
                             Agregar Respuesta

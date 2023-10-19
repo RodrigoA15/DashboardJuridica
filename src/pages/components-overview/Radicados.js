@@ -152,7 +152,13 @@ function ComponentRadicados() {
             {check && (
               <div className="mb-3 col-4">
                 <label htmlFor="observaciones">Observaciones</label>
-                <textarea className="form-control minimal-input-dark" placeholder="Observaciones Radicado" disabled={!check}></textarea>
+                <textarea
+                  className="form-control minimal-input-dark"
+                  placeholder="Observaciones Radicado"
+                  defaultValue={check ? 'NA' : 'NA'}
+                  disabled={!check}
+                  {...register('observaciones_radicado')}
+                ></textarea>
               </div>
             )}
           </div>
