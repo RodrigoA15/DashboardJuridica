@@ -155,7 +155,6 @@ function ComponentRadicados() {
                 <textarea
                   className="form-control minimal-input-dark"
                   placeholder="Observaciones Radicado"
-                  defaultValue={check ? 'NA' : 'NA'}
                   disabled={!check}
                   {...register('observaciones_radicado')}
                 ></textarea>

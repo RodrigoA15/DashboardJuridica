@@ -35,6 +35,7 @@ function ChartEntidad() {
       xaxis: {
         categories: []
       },
+
       tooltip: {
         x: {
           format: 'dd/MM/yy HH:mm'
@@ -54,13 +55,15 @@ function ChartEntidad() {
   const apiChartData = async () => {
     try {
       const secretaria = await axios.get('/radicados/chart_entidad2');
-      const movit = await axios.get('/radicados/chart_entidad');
-      const formattedDates = secretaria.data.map((item) => item.fecha_radicado);
+      // const movit = await axios.get('/radicados/chart_entidad');
+      const formattedDates = secretaria.data.map((item) => new Date(item.fecha_radicado).toLocaleDateString('es-ES', { timeZone: 'UTC' }));
+      // const fechas = await axios.get('/radicados/chart_fecha');
+      // const formattedDates = fechas.data.map((data) => new Date(data.fecha_radicado).toLocaleDateString('es-ES', { timeZone: 'UTC' }));
 
       setChartData({
         series: [
           {
-            data: movit.data.map((item) => item.Movit)
+            data: secretaria.data.map((item) => item.Movit)
           },
           {
             data: secretaria.data.map((item) => item.Secretaria)
@@ -68,7 +71,7 @@ function ChartEntidad() {
         ],
 
         options: {
-          ...chartData.options.xaxis,
+          ...chartData.options,
           xaxis: {
             categories: formattedDates
           }
