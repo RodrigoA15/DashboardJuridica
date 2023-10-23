@@ -8,7 +8,7 @@ import PendientesUsuario from 'pages/extra-pages/PQRSPendientesUsuario/Pendiente
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
 
 // render - utilities
-const Radicados = Loadable(lazy(() => import('pages/components-overview/Radicados')));
+const Radicados = Loadable(lazy(() => import('pages/components-overview/Radicados/Radicados')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 

@@ -1,18 +1,18 @@
 // project import
 import MainCard from 'components/MainCard';
-import ComponentSkeleton from './ComponentSkeleton';
+import ComponentSkeleton from '../ComponentSkeleton';
 import { useForm } from 'react-hook-form';
 import axios from 'api/axios';
-import GetEntrada from './CanalEntrada/GetEntrada';
-import Buscador from './Procedencia/Buscador';
-import GetTipificacion from './Tipificacion/GetTipificacion';
-import GetEntidad from './Entidad/GetEntidad';
-import GetDepartamentos from './Departamento/GetDepartamentos';
+import GetEntrada from '../CanalEntrada/GetEntrada';
+import Buscador from '../Procedencia/Buscador';
+import GetTipificacion from '../Tipificacion/GetTipificacion';
+import GetEntidad from '../Entidad/GetEntidad';
+import GetDepartamentos from '../Departamento/GetDepartamentos';
 import { useState } from 'react';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { useAuth } from 'context/authContext';
-import { Button } from '../../../node_modules/@mui/material/index';
+import { Button } from '../../../../node_modules/@mui/material/index';
 
 // ===============================|| CUSTOM - SHADOW BOX ||=============================== //
 

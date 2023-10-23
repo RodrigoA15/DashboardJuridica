@@ -3,7 +3,6 @@ import {
   Avatar,
   AvatarGroup,
   Box,
-  Button,
   Grid,
   List,
   ListItemAvatar,
@@ -31,6 +30,7 @@ import AnalyticPQRSPendientes from 'components/cards/statistics/AnalyticPQRSPend
 import ChartEntidad from './ChartEntidad';
 import RadicadosChart from './RadicadosChart';
 import CanalEntradaChart from './CanalEntradaChart';
+import JsonToFileExcel from 'pages/components-overview/Radicados/JsonToXLSX';
 
 // avatar style
 const avatarSX = {
@@ -144,7 +144,7 @@ const DashboardDefault = () => {
       <Grid item xs={12} md={5} lg={4}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
-            <Typography variant="h5">Transaction History</Typography>
+            <Typography variant="h5">Exportar Informacion Radicados</Typography>
           </Grid>
           <Grid item />
         </Grid>
@@ -238,10 +238,10 @@ const DashboardDefault = () => {
               <Grid item>
                 <Stack>
                   <Typography variant="h5" noWrap>
-                    Help & Support Chat
+                    Exportar Datos
                   </Typography>
                   <Typography variant="caption" color="secondary" noWrap>
-                    Typical replay within 5 min
+                    Exporta un archivo excel de todos los radicados
                   </Typography>
                 </Stack>
               </Grid>
@@ -253,9 +253,7 @@ const DashboardDefault = () => {
                 </AvatarGroup>
               </Grid>
             </Grid>
-            <Button size="small" variant="contained" sx={{ textTransform: 'capitalize' }}>
-              Need Help?
-            </Button>
+            <JsonToFileExcel />
           </Stack>
         </MainCard>
       </Grid>
