@@ -241,7 +241,7 @@ const DashboardDefault = () => {
                     Exportar Datos
                   </Typography>
                   <Typography variant="caption" color="secondary" noWrap>
-                    Exporta un archivo excel de todos los radicados
+                    Exportar archivo radicados
                   </Typography>
                 </Stack>
               </Grid>

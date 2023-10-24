@@ -19,7 +19,7 @@ function JsonToFileExcel() {
     }
   };
 
-  const dataLimpia = () => {
+  const downloadData = () => {
     return data.map((item) => {
       return {
         numero_radicado: item.numero_radicado,
@@ -36,32 +36,46 @@ function JsonToFileExcel() {
     });
   };
 
+  const downloadJSON = () => {
+    if (data) {
+      const jsonDataString = JSON.stringify(data, null, 2);
+      const blob = new Blob([jsonDataString], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'ReporteRadicados.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  };
+
   return (
     <div className="row">
       <div className="col mb-3">
-        <JsonToExcel title="Descargar Excel" data={dataLimpia()} fileName="ReporteRadicados" />
+        <JsonToExcel title="Descargar Excel" data={downloadData()} fileName="ReporteRadicados" />
       </div>
       <div className="col mb-3">
         <CsvDownloadButton
-          data={dataLimpia()}
+          data={downloadData()}
           filename="ReporteRadicados"
           style={{
-            boxShadow: 'inset 0px 1px 0px 0px #117dbf',
             background: '#117dbf',
             backgroundColor: '#117dbf',
-            display: 'inline-block',
             cursor: 'pointer',
             color: '#ffffff',
             fontSize: '15px',
-            fontWeight: 'bold',
             padding: '6px 24px',
-            textDecoration: 'none',
             textShadow: '0px 1px 0px #9b14b3',
-            height: "55px"
+            height: '55px'
           }}
         >
           Descargar CSV
         </CsvDownloadButton>
+      </div>
+      <div className="m-0 d-flex justify-content-center">
+        <button className="btn btn-warning" onClick={downloadJSON}>
+          Descargar JSON
+        </button>
       </div>
     </div>
   );
