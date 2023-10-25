@@ -11,7 +11,6 @@ import GetDepartamentos from '../Departamento/GetDepartamentos';
 import { useState } from 'react';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import { useAuth } from 'context/authContext';
 import { Button } from '../../../../node_modules/@mui/material/index';
 
 // ===============================|| CUSTOM - SHADOW BOX ||=============================== //
@@ -24,7 +23,6 @@ function ComponentRadicados() {
     reset
   } = useForm();
 
-  const { user } = useAuth();
   const [procedencia, setProcedencia] = useState('');
   const [id_departamento, setIdDepartamento] = useState('');
   const [check, setCheck] = useState(false);
@@ -59,9 +57,8 @@ function ComponentRadicados() {
   return (
     <ComponentSkeleton>
       <MainCard title="Crear Radicados" className="border-card card-background">
+        <Buscador setProcedencia={setProcedencia} />
         <form onSubmit={onSubmit}>
-          <Buscador setProcedencia={setProcedencia} />
-          {user.username}
           {/* Radicados */}
           <div className="row mb-3">
             <h4>Informacion Radicado</h4>
@@ -111,7 +108,7 @@ function ComponentRadicados() {
             <div className="mb-3 col">
               <h4>Tipificacion</h4>
 
-              <GetTipificacion register={register} />
+              <GetTipificacion register={register} errors={errors} />
             </div>
           </div>
 
@@ -119,13 +116,18 @@ function ComponentRadicados() {
             <div className="mb-3 col">
               <h4>Entidad</h4>
 
-              <GetEntidad register={register} />
+              <GetEntidad register={register} errors={errors} />
             </div>
 
             <div className="mb-3 col">
               <h4>Dirigido a </h4>
 
-              <GetDepartamentos register={register} setIdDepartamento={setIdDepartamento} id_departamento={id_departamento} />
+              <GetDepartamentos
+                register={register}
+                setIdDepartamento={setIdDepartamento}
+                id_departamento={id_departamento}
+                errors={errors}
+              />
             </div>
 
             <div className="mb-3 col">
@@ -134,12 +136,10 @@ function ComponentRadicados() {
                 className="form-control rounded-pill minimal-input-dark"
                 type="number"
                 {...register('cantidad_respuesta', {
-                  required: {
-                    value: true,
-                    message: 'Cantidad de respuesta es obligatorio'
-                  }
+                  required: 'Cantidad de respuesta es obligatorio'
                 })}
               />
+              {errors.cantidad_respuesta && <span className="inputForm">{errors.cantidad_respuesta.message}</span>}
             </div>
           </div>
 

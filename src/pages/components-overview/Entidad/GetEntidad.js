@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'api/axios';
 import PropTypes from 'prop-types';
 
-function GetEntidad({ register }) {
+function GetEntidad({ register, errors }) {
   const [dataEntidad, setDataEntidad] = useState([]);
 
   useEffect(() => {
@@ -22,18 +22,17 @@ function GetEntidad({ register }) {
       <select
         className="form-select rounded-pill minimal-input-dark"
         {...register('id_entidad', {
-          required: {
-            value: true
-          }
+          required: 'Campo entidad es obligatorio'
         })}
       >
-        <option>Seleccione la entidad</option>
+        <option value="">Seleccione la entidad</option>
         {dataEntidad.map((i) => (
           <option key={i._id} value={i._id}>
             {i.nombre_entidad}
           </option>
         ))}
       </select>
+      {errors.id_entidad && <span className="inputForm">{errors.id_entidad.message}</span>}
     </div>
   );
 }

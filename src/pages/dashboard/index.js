@@ -15,7 +15,6 @@ import {
 
 // project import
 import OrdersTable from './OrdersTable';
-import MonthlyBarChart from './MonthlyBarChart';
 import MainCard from 'components/MainCard';
 import AnalyticPQRSCreadas from 'components/cards/statistics/AnalyticPQRSCreadas';
 
@@ -31,6 +30,7 @@ import ChartEntidad from './ChartEntidad';
 import RadicadosChart from './RadicadosChart';
 import CanalEntradaChart from './CanalEntradaChart';
 import JsonToFileExcel from 'pages/components-overview/Radicados/JsonToXLSX';
+import ChartDepartamentos from './ChartDepartamentos';
 
 // avatar style
 const avatarSX = {
@@ -89,20 +89,12 @@ const DashboardDefault = () => {
       <Grid item xs={12} md={5} lg={4}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
-            <Typography variant="h5">Canales de entrada</Typography>
+            <Typography variant="h5">Radicados por departamento</Typography>
           </Grid>
           <Grid item />
         </Grid>
         <MainCard sx={{ mt: 2 }} content={false}>
-          <Box sx={{ p: 3, pb: 0 }}>
-            <Stack spacing={2}>
-              <Typography variant="h6" color="textSecondary">
-                This Week Statistics
-              </Typography>
-              <Typography variant="h3">$7,650</Typography>
-            </Stack>
-          </Box>
-          <MonthlyBarChart />
+          <ChartDepartamentos />
         </MainCard>
       </Grid>
 

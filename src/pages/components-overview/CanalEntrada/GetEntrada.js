@@ -27,7 +27,7 @@ function GetEntrada({ register, errors }) {
           required: 'Canal entrada es obligatorio'
         })}
       >
-        <option>Seleccione un canal</option>
+        <option value="">Seleccione un canal</option>
         {entrada &&
           entrada.map((i) => (
             <option key={i._id} value={i._id}>

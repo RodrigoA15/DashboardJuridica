@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from '../../../api/axios';
 import PropTypes from 'prop-types';
 
-function GetTipificacion({ register }) {
+function GetTipificacion({ register, errors }) {
   const [dataTipicacion, setDataTipificacion] = useState([]);
 
   useEffect(() => {
@@ -23,18 +23,18 @@ function GetTipificacion({ register }) {
       <select
         className="form-select rounded-pill minimal-input-dark"
         {...register('id_tipificacion', {
-          required: {
-            value: true
-          }
+          required: 'Tipificacion es obligatorio'
         })}
       >
-        <option>Seleccione Tipificacion</option>
-        {dataTipicacion.map((i) => (
-          <option key={i._id} value={i._id}>
-            {i.nombre_tipificacion}
-          </option>
-        ))}
+        <option value="">Seleccione Tipificacion</option>
+        {dataTipicacion &&
+          dataTipicacion.map((i) => (
+            <option key={i._id} value={i._id}>
+              {i.nombre_tipificacion}
+            </option>
+          ))}
       </select>
+      {errors.id_tipificacion && <span className="inputForm">{errors.id_tipificacion.message}</span>}
     </div>
   );
 }
@@ -42,5 +42,6 @@ function GetTipificacion({ register }) {
 export default GetTipificacion;
 
 GetTipificacion.propTypes = {
-  register: PropTypes.func.isRequired
+  register: PropTypes.func.isRequired,
+  errors: PropTypes.object.isRequired
 };

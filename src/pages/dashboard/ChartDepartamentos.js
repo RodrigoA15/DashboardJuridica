@@ -1,0 +1,104 @@
+import React, { useEffect, useState } from 'react';
+import axios from 'api/axios';
+import ReactApexChart from 'react-apexcharts';
+
+function ChartDepartamentos() {
+  const [data, setData] = useState({
+    series: [
+      {
+        name: 'Juridica',
+        data: []
+      },
+      {
+        name: 'RMI',
+        data: []
+      },
+      {
+        name: 'FrontOffice',
+        data: []
+      },
+      {
+        name: 'Sistemas',
+        data: []
+      }
+    ],
+
+    options: {
+      chart: {
+        height: 350,
+        type: 'area'
+      },
+      dataLabels: {
+        enabled: false
+      },
+
+      stroke: {
+        curve: 'smooth'
+      },
+
+      markers: {
+        size: 6,
+        hover: {
+          size: 9
+        }
+      },
+
+      xaxis: {
+        categories: []
+      },
+
+      tooltip: {
+        x: {
+          format: 'dd/MM/yy HH:mm'
+        }
+      }
+    }
+  });
+
+  useEffect(() => {
+    apiDataDepartamentos();
+  }, []);
+
+  const apiDataDepartamentos = async () => {
+    try {
+      const response = await axios.get('/radicados/chartdepartamentos');
+      const fecha = response.data.map((departamento) =>
+        new Date(departamento.fecha_radicado).toLocaleDateString('es-ES', { timeZone: 'UTC' })
+      );
+
+      setData({
+        series: [
+          {
+            data: response.data.map((juridica) => juridica.JURIDICA)
+          },
+          {
+            data: response.data.map((rmi) => rmi.RMI)
+          },
+          {
+            data: response.data.map((front) => front.FRONT_OFFICE)
+          },
+          {
+            data: response.data.map((sistemas) => sistemas.SISTEMAS)
+          }
+        ],
+
+        options: {
+          ...data.options,
+          xaxis: {
+            categories: fecha
+          }
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return (
+    <div>
+      <ReactApexChart options={data.options} series={data.series} type="area" height={350} />
+    </div>
+  );
+}
+
+export default ChartDepartamentos;

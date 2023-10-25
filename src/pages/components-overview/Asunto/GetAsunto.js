@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from '../../../api/axios';
 import PropTypes from 'prop-types';
 
-function GetAsunto({ register, id_departamento }) {
+function GetAsunto({ register, id_departamento, errors }) {
   const [dataAsunto, setDataAsunto] = useState([]);
 
   useEffect(() => {
@@ -22,8 +22,11 @@ function GetAsunto({ register, id_departamento }) {
 
   return (
     <div>
-      <select className="form-select rounded-pill minimal-input-dark" {...register('id_asunto')}>
-        <option>Seleccione un asunto</option>
+      <select
+        className="form-select rounded-pill minimal-input-dark"
+        {...register('id_asunto', { required: 'Campo asunto es obligatorio' })}
+      >
+        <option value="">Seleccione un asunto</option>
         {dataAsunto && dataAsunto.length > 0 ? (
           dataAsunto.map((i) => (
             <option key={i._id} value={i._id}>
@@ -31,9 +34,10 @@ function GetAsunto({ register, id_departamento }) {
             </option>
           ))
         ) : (
-          <option disabled>No asuntos available</option>
+          <option disabled>No asuntos</option>
         )}
       </select>
+      {errors.id_asunto && <span className="inputForm">{errors.id_asunto.message}</span>}
     </div>
   );
 }

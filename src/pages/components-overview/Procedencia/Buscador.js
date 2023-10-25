@@ -2,19 +2,19 @@ import { useState } from 'react';
 import axios from 'api/axios';
 import { Toaster, toast } from 'sonner';
 import { SearchOutlined } from '@mui/icons-material';
-import { InputAdornment, OutlinedInput, Button } from '@mui/material';
+import { InputAdornment, OutlinedInput } from '@mui/material';
 import PropTypes from 'prop-types';
+import { useForm } from 'react-hook-form';
 
 function Buscador({ setProcedencia }) {
   const [numero_identificacion, setNumero_identificacion] = useState('');
   const [procedenciaData, setProcedenciaData] = useState([]);
   const [entrada, setEntrada] = useState(false);
-  //Estados metodo post
-  const [select, setSelect] = useState('');
-  const [nombre, setNombre] = useState('');
-  const [apellido, setApellido] = useState('');
-  const [tipoContacto, setTipoContacto] = useState('');
-  const [infoContacto, setInfoContacto] = useState('');
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm();
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
@@ -56,20 +56,16 @@ function Buscador({ setProcedencia }) {
     }
   };
 
+  const onSubmit = handleSubmit((data) => {
+    PostProcedencia(data);
+    console.log(data);
+  });
+
   //Data metodo post
 
-  const data = {
-    tipo_identificacion: select,
-    numero_identificacion: numero_identificacion,
-    nombre: nombre,
-    apellido: apellido,
-    tipo_contacto: tipoContacto,
-    info_contacto: infoContacto
-  };
-
-  const PostProcedencia = async () => {
+  const PostProcedencia = async (data) => {
     try {
-      await axios.post('/procedencia/procedencia', data);
+      await axios.post('/procedencia/procedencia', { ...data, numero_identificacion });
     } catch (error) {
       console.log(error);
     }
@@ -103,13 +99,6 @@ function Buscador({ setProcedencia }) {
           />
         </div>
 
-        {entrada === false && (
-          <div className="col-2">
-            <Button variant="contained" onClick={PostProcedencia}>
-              Registrar
-            </Button>
-          </div>
-        )}
         {/* Campos de entrada*/}
         {entrada === true && (
           <div>
@@ -134,62 +123,82 @@ function Buscador({ setProcedencia }) {
 
         <div>
           {entrada === false && (
-            <div className="row">
-              <div className="col-4">
-                <select className="form-select mt-4 mb-4 rounded-pill" onChange={(e) => setSelect(e.target.value)}>
-                  <option>Seleccione tipo de Identificacion</option>
-                  <option value="CC">Cedula de ciudadania</option>
-                  <option value="CE">Cedula de extranjeria</option>
-                  <option value="PEP">Permiso Especial De Permanencia</option>
-                  <option value="PPT">Permiso Proteccion Temporal</option>
-                </select>
-              </div>
-              <div className="col  mb-3">
-                <label htmlFor="nombre" className="form-label  h6">
-                  Nombre
-                </label>
-                <input
-                  type="text"
-                  className="form-control rounded-pill minimal-input-dark"
-                  id="nombres"
-                  onChange={(e) => setNombre(e.target.value)}
-                  required
-                />
-              </div>
-
-              <div className="col mb-3">
-                <label htmlFor="label" className="form-label h6">
-                  Apellido
-                </label>
-                <input
-                  type="text"
-                  className="form-control rounded-pill minimal-input-dark"
-                  id="apellidos"
-                  onChange={(e) => setApellido(e.target.value)}
-                  required
-                />
-              </div>
-
+            <form onSubmit={onSubmit}>
               <div className="row">
-                <div className="col">
-                  <select className="form-select mb-4 rounded-pill minimal-input-dark" onChange={(e) => setTipoContacto(e.target.value)}>
-                    <option>Seleccione una opcion de contacto</option>
-                    <option value="direccion">Direccion</option>
-                    <option value="telefono">Telefono</option>
-                    <option value="correo">Correo Electronico</option>
+                <div className="col-4">
+                  <select
+                    className="form-select mt-4 rounded-pill"
+                    {...register('tipo_identificacion', { required: 'Tipo identificacion es requerido' })}
+                  >
+                    <option value="">Seleccione tipo de Identificacion</option>
+                    <option value="CC">Cedula de ciudadania</option>
+                    <option value="CE">Cedula de extranjeria</option>
+                    <option value="PEP">Permiso Especial De Permanencia</option>
+                    <option value="PPT">Permiso Proteccion Temporal</option>
                   </select>
+                  {errors.tipo_identificacion && <span className="inputForm ">{errors.tipo_identificacion.message}</span>}
                 </div>
-                <div className="col">
+                <div className="col  mb-3">
+                  <label htmlFor="nombre" className="form-label  h6">
+                    Nombre
+                  </label>
                   <input
-                    className="form-control rounded-pill minimal-input-dark"
-                    placeholder="Informacion de contacto"
                     type="text"
-                    id="contacto"
-                    onChange={(e) => setInfoContacto(e.target.value)}
+                    className="form-control rounded-pill minimal-input-dark"
+                    id="nombres"
+                    {...register('nombre', { required: { value: true, message: 'Campo nombre es requerido' } })}
                   />
+                  {errors.nombre && <span className="inputForm ">{errors.nombre.message}</span>}
+                </div>
+
+                <div className="col mb-3">
+                  <label htmlFor="label" className="form-label h6">
+                    Apellido
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control rounded-pill minimal-input-dark"
+                    id="apellidos"
+                    {...register('apellido', { required: { value: true, message: 'Campo apellido es requerido' } })}
+                  />
+                  {errors.apellido && <span className="inputForm ">{errors.apellido.message}</span>}
+                </div>
+
+                <div className="row">
+                  <div className="col">
+                    <select
+                      className="form-select  rounded-pill minimal-input-dark"
+                      {...register('tipo_contacto', {
+                        required: 'Tipo contacto es obligatorio'
+                      })}
+                    >
+                      <option value="">Seleccione una opción de contacto</option>
+                      <option value="direccion">Dirección</option>
+                      <option value="telefono">Teléfono</option>
+                      <option value="correo">Correo Electrónico</option>
+                    </select>
+
+                    {errors.tipo_contacto && <span className="inputForm ">{errors.tipo_contacto.message}</span>}
+                  </div>
+                  <div className="col">
+                    <input
+                      className="form-control rounded-pill minimal-input-dark"
+                      placeholder="Informacion de contacto"
+                      type="text"
+                      id="contacto"
+                      {...register('info_contacto', { required: 'Informacion de contacto es requerido' })}
+                    />
+                    {errors.info_contacto && <span className="inputForm ">{errors.info_contacto.message}</span>}
+                  </div>
                 </div>
               </div>
-            </div>
+
+              <div className="col-2 mb-3">
+                <button className="btn btn-primary mt-3" type="submit">
+                  Registrar
+                </button>
+              </div>
+            </form>
           )}
         </div>
       </div>

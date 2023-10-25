@@ -14,8 +14,8 @@ function GetPendientes() {
   useEffect(() => {
     getDataPendiente();
 
-    // const intervalId = setInterval(getDataPendiente, 5000);
-    // return () => clearInterval(intervalId);
+    const intervalId = setInterval(getDataPendiente, 5000);
+    return () => clearInterval(intervalId);
   }, []);
 
   useEffect(() => {
@@ -85,7 +85,7 @@ function GetPendientes() {
             <TableCell>Número Radicado</TableCell>
             <TableCell align="center">Fecha Radicado</TableCell>
             <TableCell align="center">Asunto</TableCell>
-            <TableCell align="center">Departamento</TableCell>
+            <TableCell align="center">Procedencia</TableCell>
             <TableCell align="center">Asignar Radicado</TableCell>
             <TableCell align="center">Dias</TableCell>
           </TableRow>
@@ -113,7 +113,9 @@ function GetPendientes() {
                 </TableCell>
                 <TableCell align="center">{new Date(pendiente.fecha_radicado).toLocaleDateString('es-ES', { timeZone: 'UTC' })}</TableCell>
                 <TableCell align="center">{pendiente.id_asunto.nombre_asunto}</TableCell>
-                <TableCell align="center">{pendiente.id_departamento.nombre_departamento}</TableCell>
+                <TableCell align="center">
+                  {pendiente.id_procedencia.nombre} {pendiente.id_procedencia.apellido}
+                </TableCell>
                 <TableCell>
                   <UsuariosJuridica pendiente={pendiente} />
                 </TableCell>

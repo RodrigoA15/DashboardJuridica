@@ -3,7 +3,7 @@ import axios from 'api/axios';
 import PropTypes from 'prop-types';
 import GetAsunto from '../Asunto/GetAsunto';
 
-function GetDepartamentos({ register, setIdDepartamento, id_departamento }) {
+function GetDepartamentos({ register, setIdDepartamento, id_departamento, errors }) {
   const [dataDepartamento, setDataDepartamento] = useState([]);
   useEffect(() => {
     listDepartamentos();
@@ -18,13 +18,9 @@ function GetDepartamentos({ register, setIdDepartamento, id_departamento }) {
     }
   };
 
-  const siu = (event) => {
-    setIdDepartamento(event.target.value);
-  };
-
   return (
     <div>
-      <select className="form-select rounded-pill minimal-input-dark" onChange={siu}>
+      <select className="form-select rounded-pill minimal-input-dark" onChange={(e) => setIdDepartamento(e.target.value)}>
         <option>Seleccione un departamento</option>
         {dataDepartamento.map((i) => (
           <option key={i._id} value={i._id}>
@@ -32,7 +28,7 @@ function GetDepartamentos({ register, setIdDepartamento, id_departamento }) {
           </option>
         ))}
       </select>
-      <GetAsunto register={register} id_departamento={id_departamento} />
+      <GetAsunto register={register} errors={errors} id_departamento={id_departamento} />
       {id_departamento}
     </div>
   );
