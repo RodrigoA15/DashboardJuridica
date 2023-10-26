@@ -29,14 +29,14 @@ const AnalyticPQRSCreadas = () => {
     }
   };
   return (
-    <MainCard contentSX={{ p: 2.25 }}>
+    <MainCard contentSX={{ p: 2.25 }} className="card1">
       <Stack spacing={0.5}>
         <Typography variant="h6" color="textSecondary">
           PQRS Creadas
         </Typography>
         <Grid container alignItems="center">
           <Grid item>
-            <Typography variant="h4" color="inherit">
+            <Typography variant="h3" color="inherit">
               {count}
             </Typography>
           </Grid>

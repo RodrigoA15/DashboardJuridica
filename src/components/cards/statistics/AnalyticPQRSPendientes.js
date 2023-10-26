@@ -22,16 +22,17 @@ function AnalyticPQRSPendientes() {
       console.log(error);
     }
   };
+
   return (
     <div>
-      <MainCard contentSX={{ p: 2.25 }}>
+      <MainCard contentSX={{ p: 2.25 }} className="card4">
         <Stack spacing={0.5}>
           <Typography variant="h6" color="textSecondary">
             PQRS Pendientes
           </Typography>
           <Grid container alignItems="center">
             <Grid item>
-              <Typography variant="h4" color="inherit">
+              <Typography variant="h3" color="inherit">
                 {count}
               </Typography>
             </Grid>

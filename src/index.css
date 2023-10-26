@@ -27,7 +27,7 @@
 
 .minimal-input-dark:focus {
   border-color: 4px #1890ff;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2); /* Sombra más oscura */
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
 }
 
 .border-card {
@@ -121,3 +121,55 @@
   }
 }
 
+/* Body */
+.siu1 {
+  background: #262626;
+  color: white;
+}
+
+.css-8qynzz-MuiTypography-root {
+  color: white;
+}
+
+/* Card Creados */
+.card1 {
+  background: #5a96e3;
+  border: none;
+  color: white;
+}
+
+/* Card Respondidos */
+.card2 {
+  background: #99b080;
+  border: none;
+  color: white;
+}
+
+/* Card Asignados */
+.card3 {
+  background: #ff9b50;
+  border: none;
+  color: white;
+}
+
+/* Card Creados */
+.card4 {
+  background: #ff6666;
+  border: none;
+  color: white;
+}
+
+/* nombre componente */
+.css-1ndydts-MuiTypography-root {
+  color: white;
+}
+
+/* Texto Tabs asignaciones-Pendientes-Asignados */
+.css-7ojolc-MuiButtonBase-root-MuiTab-root {
+  color: white;
+}
+
+.left-icon {
+  align-self: flex-end;
+  margin-bottom: 50px;
+}

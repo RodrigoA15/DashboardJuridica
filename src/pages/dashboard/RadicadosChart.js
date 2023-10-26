@@ -3,6 +3,12 @@ import axios from 'api/axios';
 import ReactApexChart from 'react-apexcharts';
 
 function RadicadosChart() {
+  const dia = new Date();
+  const fecha1 = new Date(dia.getFullYear(), dia.getMonth(), 1);
+  const fecha2 = new Date();
+  const [fechaInicio, setFechaInicio] = useState(fecha1);
+  const [fechaFin, setFechaFin] = useState(fecha2);
+
   const [chartData, setChartData] = useState({
     series: [
       {
@@ -13,7 +19,7 @@ function RadicadosChart() {
     options: {
       chart: {
         height: 350,
-        type: 'area',
+        type: 'line',
         group: 'social'
       },
       dataLabels: {
@@ -42,8 +48,8 @@ function RadicadosChart() {
 
   const apiChartRadicados = async () => {
     try {
-      const response = await axios.get('/radicados/chart_radicados');
-      const fecha = response.data.map((item) => item.fecha_radicado);
+      const response = await axios.get(`/radicados/chart_radicados/${fechaInicio}/${fechaFin}`);
+      const fechaRadicado = response.data.map((item) => item.fecha_radicado);
 
       setChartData({
         series: [
@@ -55,7 +61,7 @@ function RadicadosChart() {
           ...chartData.options.xaxis,
           xaxis: {
             type: 'datetime',
-            categories: fecha
+            categories: fechaRadicado
           }
         }
       });
@@ -72,9 +78,30 @@ function RadicadosChart() {
     return () => clearInterval(intervalId);
   }, []);
 
+  const handleFechaInicio = (e) => {
+    setFechaInicio(e.target.value);
+  };
+
+  const handleFechaFin = (e) => {
+    setFechaFin(e.target.value);
+  };
+
   return (
     <div id="chart">
-      <ReactApexChart options={chartData.options} series={chartData.series} type="area" height={350} />
+      <div className="row m-1">
+        <div className="col">
+          <input className="form-control" type="date" onChange={handleFechaInicio} />
+        </div>
+        <div className="col">
+          <input className="form-control" type="date" onChange={handleFechaFin} />
+        </div>
+        <div className="col">
+          <button className="btn btn-primary" onClick={apiChartRadicados}>
+            Buscar
+          </button>
+        </div>
+      </div>
+      <ReactApexChart options={chartData.options} series={chartData.series} type="line" height={350} />
     </div>
   );
 }

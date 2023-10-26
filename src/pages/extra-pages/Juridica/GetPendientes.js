@@ -67,13 +67,13 @@ function GetPendientes() {
     const diasLaborables = diasHabiles(fechaRadicado);
 
     if (diasLaborables <= 5) {
-      return '#748E63'; // Verde
+      return '#99B080'; // Verde
     } else if (diasLaborables >= 6 && diasLaborables <= 9) {
       return '#FFCD4B'; // Amarillo
     } else if (diasLaborables >= 10 && diasLaborables <= 12) {
-      return '#d43a00'; // Naranja
+      return '#FF9B50'; // Naranja
     } else if (diasLaborables >= 13) {
-      return '#BB2525'; // Rojo
+      return '#ff6666'; // Rojo
     }
   };
 

@@ -114,10 +114,10 @@ function Preasignaciones() {
                   <TableCell align="left">{pre.id_asunto.nombre_asunto}</TableCell>
                   <TableCell align="left">{pre.id_departamento.nombre_departamento}</TableCell>
                   <TableCell align="center">
-                    <Button color="success" variant="contained" startIcon={<DoneIcon />} onClick={() => updateStatePreasignacion(pre)}>
+                    <Button className="card2 " variant="contained" startIcon={<DoneIcon />} onClick={() => updateStatePreasignacion(pre)}>
                       Aceptar
                     </Button>
-                    <Button color="error" variant="contained" startIcon={<CloseIcon />} onClick={() => handleOpen(pre)}>
+                    <Button className="card4 ms-3" variant="contained" startIcon={<CloseIcon />} onClick={() => handleOpen(pre)}>
                       Rechazar
                     </Button>
                   </TableCell>
