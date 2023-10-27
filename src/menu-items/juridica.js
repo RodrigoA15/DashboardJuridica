@@ -11,15 +11,15 @@ const icons = {
 // ==============================|| MENU ITEMS - SAMPLE PAGE & DOCUMENTATION ||============================== //
 
 const support = {
-  id: 'juridica',
-  title: 'Juridica',
+  id: 'pqrs',
+  title: 'Pqrs',
   type: 'group',
   children: [
     {
-      id: 'Juridica',
-      title: 'Juridica',
+      id: 'Pqrs',
+      title: 'Pqrs',
       type: 'item',
-      url: '/juridica',
+      url: '/pqrs',
       icon: icons.LayersIcon
     }
   ]

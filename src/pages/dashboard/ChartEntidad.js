@@ -3,6 +3,12 @@ import axios from 'api/axios';
 import ReactApexChart from 'react-apexcharts';
 
 function ChartEntidad() {
+  const fecha = new Date();
+  const dateFirstMonth = new Date(fecha.getFullYear(), fecha.getMonth(), 1);
+  const dateEndMonth = new Date();
+  const [fechaInicio, setFechaInicio] = useState(dateFirstMonth);
+  const [fechaFin, setFechaFin] = useState(dateEndMonth);
+
   const [chartData, setChartData] = useState({
     series: [
       {
@@ -54,7 +60,7 @@ function ChartEntidad() {
 
   const apiChartData = async () => {
     try {
-      const secretaria = await axios.get('/radicados/chart_entidad2');
+      const secretaria = await axios.get(`/radicados/chart_entidad2/${fechaInicio}/${fechaFin}`);
       // const movit = await axios.get('/radicados/chart_entidad');
       const formattedDates = secretaria.data.map((item) => new Date(item.fecha_radicado).toLocaleDateString('es-ES', { timeZone: 'UTC' }));
       // const fechas = await axios.get('/radicados/chart_fecha');
@@ -82,8 +88,29 @@ function ChartEntidad() {
     }
   };
 
+  const handleFechaInicio = (e) => {
+    setFechaInicio(e.target.value);
+  };
+
+  const handleFechaFin = (e) => {
+    setFechaFin(e.target.value);
+  };
+
   return (
     <div id="chart">
+      <div className="row m-1">
+        <div className="col">
+          <input className="form-control" type="date" value={fechaInicio} onChange={handleFechaInicio} />
+        </div>
+        <div className="col">
+          <input className="form-control" type="date" value={fechaFin} onChange={handleFechaFin} />
+        </div>
+        <div className="col">
+          <button className="btn btn-primary" onClick={apiChartData}>
+            Buscar
+          </button>
+        </div>
+      </div>
       <ReactApexChart options={chartData.options} series={chartData.series} type="area" height={350} />
     </div>
   );

@@ -106,7 +106,8 @@ function GetPendientes() {
                   align="center"
                   style={{
                     color: pendiente.id_asunto.nombre_asunto === 'TUTELA' ? 'black' : 'black',
-                    background: getBackgroundColor(new Date(pendiente.fecha_radicado))
+                    background:
+                      pendiente.id_asunto.nombre_asunto === 'TUTELA' ? '#ff6666' : getBackgroundColor(new Date(pendiente.fecha_radicado))
                   }}
                 >
                   <b>{pendiente.numero_radicado}</b>

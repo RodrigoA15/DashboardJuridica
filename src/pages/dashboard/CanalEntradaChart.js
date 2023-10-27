@@ -3,6 +3,12 @@ import axios from 'api/axios';
 import ReactApexChart from 'react-apexcharts';
 
 function CanalEntradaChart() {
+  const fecha = new Date();
+  const dateFirstMonth = new Date(fecha.getFullYear(), fecha.getMonth(), 1);
+  const dateEndMonth = new Date();
+  const [fechaInicio, setFechaInicio] = useState(dateFirstMonth);
+  const [fechaFin, setFechaFin] = useState(dateEndMonth);
+
   const [chartData, setChartData] = useState({
     series: [
       {
@@ -62,7 +68,7 @@ function CanalEntradaChart() {
 
   const dataCanalesChart = async () => {
     try {
-      const response = await axios.get('/radicados/chart_canal');
+      const response = await axios.get(`/radicados/chart_canal/${fechaInicio}/${fechaFin}`);
       const fecha = response.data.map((canal) => new Date(canal.fecha_radicado).toLocaleDateString('es-ES', { timeZone: 'UTC' }));
 
       setChartData({
@@ -93,8 +99,29 @@ function CanalEntradaChart() {
     }
   };
 
+  const handleFechaInicio = (e) => {
+    setFechaInicio(e.target.value);
+  };
+
+  const handleFechaFin = (e) => {
+    setFechaFin(e.target.value);
+  };
+
   return (
     <div>
+      <div className="row m-1">
+        <div className="col">
+          <input className="form-control" type="date" value={fechaInicio} onChange={handleFechaInicio} />
+        </div>
+        <div className="col">
+          <input className="form-control" type="date" value={fechaFin} onChange={handleFechaFin} />
+        </div>
+        <div className="col">
+          <button className="btn btn-primary" onClick={dataCanalesChart}>
+            Buscar
+          </button>
+        </div>
+      </div>
       <ReactApexChart options={chartData.options} series={chartData.series} type="line" heigth={100} />
     </div>
   );

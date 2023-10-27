@@ -30,7 +30,7 @@ const MainRoutes = {
       ]
     },
     {
-      path: 'juridica',
+      path: 'pqrs',
       element: <Juridica />
     },
     {

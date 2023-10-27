@@ -40,7 +40,7 @@ root.render(
           <Routes>
             <Route element={<ProtectedRoute />}>
               <Route path="radicados" element="" />
-              <Route path="juridica" element="" />
+              <Route path="pqrs" element="" />
             </Route>
           </Routes>
         </BrowserRouter>

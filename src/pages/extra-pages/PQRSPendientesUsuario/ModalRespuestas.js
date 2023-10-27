@@ -45,7 +45,6 @@ function ModalRespuestas({ open, handleClose, data }) {
     } else {
       toast.error('Respuesta Cancelada');
     }
-
     reset();
   });
 

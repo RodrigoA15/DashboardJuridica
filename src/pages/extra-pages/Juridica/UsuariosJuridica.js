@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import { Box } from '@mui/material';
 import axios from 'api/axios';
 import { Button } from '@mui/material';
 import PropTypes from 'prop-types';
@@ -7,37 +7,37 @@ import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import { Toaster, toast } from 'sonner';
 import { useAuth } from 'context/authContext';
+import { useForm } from 'react-hook-form';
 
 function UsuariosJuridica({ pendiente }) {
   const [users, setUsers] = useState([]);
-  const [usuarios, setUsuarios] = useState('');
   const { user } = useAuth();
+  const {
+    register,
+    formState: { errors },
+    handleSubmit
+  } = useForm();
+
   useEffect(() => {
-    {
-      user && apiUsuarios();
+    if (user) {
+      apiUsuarios();
     }
   }, [user]);
 
-  //Listado de usuarios
   const apiUsuarios = async () => {
     try {
       const response = await axios.get(`/departamentos/usuarios_departamento/${user.departamento}`);
       setUsers(response.data);
     } catch (error) {
+      toast.error('Error al cargar usuarios');
       console.log(error);
     }
   };
-
-  const handleChange = (event) => {
-    setUsuarios(event.target.value);
-  };
-
-  //Asignacion de id_usuario y estado :Asignados
-  const actualizacionEstado = async () => {
+  const onSubmit = handleSubmit(async (data) => {
     try {
       const MySwal = withReactContent(Swal);
       const result = await MySwal.fire({
-        title: 'Esta seguro de asignar el radicado?',
+        title: '¿Está seguro de asignar el radicado?',
         icon: 'question',
         showCancelButton: true,
         confirmButtonText: 'Si, modificar',
@@ -45,57 +45,67 @@ function UsuariosJuridica({ pendiente }) {
       });
 
       if (result.isConfirmed) {
-        await axios.put(`/radicados/radicados/${pendiente._id}`, {
-          estado_radicado: 'Asignados'
-        });
+        asignar(data);
+        actualizacionEstado();
         toast.success('Asignado Correctamente');
       }
+      console.log(data);
     } catch (error) {
+      toast.error('Error de servidor');
       console.log(error);
     }
-  };
+  });
 
-  //Metodo post para asignar radicado a usuarios
-  const asignar = async () => {
+  const actualizacionEstado = async () => {
     try {
-      await axios.post(`/asignacion`, {
-        id_usuario: usuarios,
-        id_radicado: pendiente._id,
-        fecha_asignacion: new Date()
+      await axios.put(`/radicados/radicados/${pendiente._id}`, {
+        estado_radicado: 'Asignados'
       });
     } catch (error) {
+      toast.error('Error al actualizar estado');
       console.log(error);
     }
   };
 
-  const handleButtonClick = () => {
-    actualizacionEstado();
-    asignar();
+  const asignar = async (data) => {
+    try {
+      const datos = {
+        ...data,
+        id_radicado: pendiente._id,
+        fecha_asignacion: new Date()
+      };
+      await axios.post(`/asignacion`, datos);
+    } catch (error) {
+      toast.error('Error al asignar');
+      console.log(error);
+    }
   };
+  
   return (
-    <>
+    <div>
       <Toaster richColors position="top-center" />
       <Box sx={{ display: 'flex', alignItems: 'center', minWidth: 120 }}>
-        <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Judicantes</InputLabel>
-          <Select labelId="demo-simple-select-label" id="demo-simple-select" label="Judicantes" value={usuarios} onChange={handleChange}>
-            {users.map((usuarios) => (
-              <MenuItem key={usuarios._id} value={usuarios._id}>
-                {usuarios.username}
-              </MenuItem>
+        <form onSubmit={onSubmit}>
+          <select className="form-select" {...register('id_usuario', { required: 'Seleccione un usuario' })}>
+            <option value="">Seleccione un usuario</option>
+            {users.map((usuario) => (
+              <option key={usuario._id} value={usuario._id}>
+                {usuario.username}
+              </option>
             ))}
-          </Select>
-        </FormControl>
-        <Button className="ms-5" variant="outlined" onClick={handleButtonClick}>
-          Asignar
-        </Button>
+          </select>
+          {errors.id_usuario && <span className="inputForm">{errors.id_usuario.message}</span>}
+          <Button className="ms-5" variant="outlined" type="submit">
+            Asignar
+          </Button>
+        </form>
       </Box>
-    </>
+    </div>
   );
 }
-
-export default UsuariosJuridica;
 
 UsuariosJuridica.propTypes = {
   pendiente: PropTypes.object.isRequired
 };
+
+export default UsuariosJuridica;
