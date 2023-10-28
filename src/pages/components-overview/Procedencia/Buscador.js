@@ -76,7 +76,7 @@ function Buscador({ setProcedencia }) {
       <Toaster position="top-right" richColors />
       <div className="row ">
         {/* Select */}
-        <h4>Informacion Procedencia</h4>
+        <h4>Informaci&oacute;n Procedencia</h4>
 
         {/* Buscador */}
         <div className="col-4 input-container">
@@ -128,9 +128,9 @@ function Buscador({ setProcedencia }) {
                 <div className="col-4">
                   <select
                     className="form-select mt-4 rounded-pill"
-                    {...register('tipo_identificacion', { required: 'Tipo identificacion es requerido' })}
+                    {...register('tipo_identificacion', { required: 'Tipo identificación es requerido' })}
                   >
-                    <option value="">Seleccione tipo de Identificacion</option>
+                    <option value="">Seleccione tipo de Identificaci&oacute;n</option>
                     <option value="CC">Cedula de ciudadania</option>
                     <option value="CE">Cedula de extranjeria</option>
                     <option value="PEP">Permiso Especial De Permanencia</option>
@@ -172,7 +172,7 @@ function Buscador({ setProcedencia }) {
                         required: 'Tipo contacto es obligatorio'
                       })}
                     >
-                      <option value="">Seleccione una opción de contacto</option>
+                      <option value="">Seleccione una opci&oacute;n de contacto</option>
                       <option value="direccion">Dirección</option>
                       <option value="telefono">Teléfono</option>
                       <option value="correo">Correo Electrónico</option>
@@ -183,10 +183,10 @@ function Buscador({ setProcedencia }) {
                   <div className="col">
                     <input
                       className="form-control rounded-pill minimal-input-dark"
-                      placeholder="Informacion de contacto"
+                      placeholder="Informaci&oacute;n de contacto"
                       type="text"
                       id="contacto"
-                      {...register('info_contacto', { required: 'Informacion de contacto es requerido' })}
+                      {...register('info_contacto', { required: 'Información de contacto es requerido' })}
                     />
                     {errors.info_contacto && <span className="inputForm ">{errors.info_contacto.message}</span>}
                   </div>

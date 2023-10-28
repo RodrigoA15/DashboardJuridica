@@ -1,7 +1,6 @@
 // material-ui
 import {
   Avatar,
-  AvatarGroup,
   Box,
   Grid,
   List,
@@ -20,9 +19,6 @@ import AnalyticPQRSCreadas from 'components/cards/statistics/AnalyticPQRSCreadas
 
 // assets
 import { GiftOutlined, MessageOutlined, SettingOutlined } from '@ant-design/icons';
-import avatar2 from 'assets/images/users/avatar-2.png';
-import avatar3 from 'assets/images/users/avatar-3.png';
-import avatar4 from 'assets/images/users/avatar-4.png';
 import AnalyticPQRSAsignadas from 'components/cards/statistics/AnalyticPQRSAsignadas';
 import AnalyticPQRSRespondidas from 'components/cards/statistics/AnalyticPQRSRespondidas';
 import AnalyticPQRSPendientes from 'components/cards/statistics/AnalyticPQRSPendientes';
@@ -236,13 +232,6 @@ const DashboardDefault = () => {
                     Exportar archivo radicados
                   </Typography>
                 </Stack>
-              </Grid>
-              <Grid item>
-                <AvatarGroup sx={{ '& .MuiAvatar-root': { width: 32, height: 32 } }}>
-                  <Avatar alt="Travis Howard" src={avatar2} />
-                  <Avatar alt="Cindy Baker" src={avatar3} />
-                  <Avatar alt="Agnes Walker" src={avatar4} />
-                </AvatarGroup>
               </Grid>
             </Grid>
             <JsonToFileExcel />

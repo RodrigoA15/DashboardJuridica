@@ -80,24 +80,30 @@ function UsuariosJuridica({ pendiente }) {
       console.log(error);
     }
   };
-  
+
   return (
     <div>
       <Toaster richColors position="top-center" />
       <Box sx={{ display: 'flex', alignItems: 'center', minWidth: 120 }}>
         <form onSubmit={onSubmit}>
-          <select className="form-select" {...register('id_usuario', { required: 'Seleccione un usuario' })}>
-            <option value="">Seleccione un usuario</option>
-            {users.map((usuario) => (
-              <option key={usuario._id} value={usuario._id}>
-                {usuario.username}
-              </option>
-            ))}
-          </select>
-          {errors.id_usuario && <span className="inputForm">{errors.id_usuario.message}</span>}
-          <Button className="ms-5" variant="outlined" type="submit">
-            Asignar
-          </Button>
+          <div className="row d-flex">
+            <div className="col-8">
+              <select className="form-select" {...register('id_usuario', { required: 'Seleccione un usuario' })}>
+                <option value="">Seleccione un usuario</option>
+                {users.map((usuario) => (
+                  <option key={usuario._id} value={usuario._id}>
+                    {usuario.username}
+                  </option>
+                ))}
+              </select>
+              {errors.id_usuario && <span className="inputForm">{errors.id_usuario.message}</span>}
+            </div>
+            <div className="col-4 justify-content-center">
+              <Button className="ms-5" variant="outlined" type="submit">
+                Asignar
+              </Button>
+            </div>
+          </div>
         </form>
       </Box>
     </div>

@@ -59,21 +59,35 @@ function JsonToFileExcel() {
           data={downloadData()}
           filename="ReporteRadicados"
           style={{
-            background: '#117dbf',
+            background: '#ff870a',
             backgroundColor: '#117dbf',
             cursor: 'pointer',
             color: '#ffffff',
             fontSize: '15px',
             padding: '6px 24px',
             textShadow: '0px 1px 0px #9b14b3',
-            height: '55px'
+            height: '55px',
+            border: 'none'
           }}
         >
           Descargar CSV
         </CsvDownloadButton>
       </div>
       <div className="m-0 d-flex justify-content-center">
-        <button className="btn btn-warning" onClick={downloadJSON}>
+        <button
+          style={{
+            background: '#ff870a',
+            backgroundColor: '#117dbf',
+            cursor: 'pointer',
+            color: '#ffffff',
+            fontSize: '15px',
+            padding: '6px 24px',
+            textShadow: '0px 1px 0px #9b14b3',
+            height: '55px',
+            border: 'none'
+          }}
+          onClick={downloadJSON}
+        >
           Descargar JSON
         </button>
       </div>

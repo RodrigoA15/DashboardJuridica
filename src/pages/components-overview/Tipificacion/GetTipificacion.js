@@ -23,10 +23,10 @@ function GetTipificacion({ register, errors }) {
       <select
         className="form-select rounded-pill minimal-input-dark"
         {...register('id_tipificacion', {
-          required: 'Tipificacion es obligatorio'
+          required: 'Tipificación es obligatorio'
         })}
       >
-        <option value="">Seleccione Tipificacion</option>
+        <option value="">Seleccione Tipificaci&oacute;n</option>
         {dataTipicacion &&
           dataTipicacion.map((i) => (
             <option key={i._id} value={i._id}>

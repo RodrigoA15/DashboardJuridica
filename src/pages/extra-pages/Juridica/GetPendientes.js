@@ -117,7 +117,7 @@ function GetPendientes() {
                 <TableCell align="center">
                   {pendiente.id_procedencia.nombre} {pendiente.id_procedencia.apellido}
                 </TableCell>
-                <TableCell>
+                <TableCell align="center">
                   <UsuariosJuridica pendiente={pendiente} />
                 </TableCell>
                 <TableCell>{diasHabiles(new Date(pendiente.fecha_radicado))}</TableCell>

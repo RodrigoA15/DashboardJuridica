@@ -29,8 +29,19 @@ function GetRespuesta() {
 
   return (
     <div>
-      <input type="text" placeholder="Buscar" onChange={(e) => setNumeroRadicado(e.target.value)} />
-      <button onClick={apiGetRespuesta}>Buscar</button>
+      <div className="row m-1 mb-3">
+        <input
+          className="form-control w-25"
+          type="text"
+          placeholder="Buscar Respuestas"
+          onChange={(e) => setNumeroRadicado(e.target.value)}
+        />
+        <div className="col-4">
+          <button className="btn btn-primary" onClick={apiGetRespuesta}>
+            Buscar
+          </button>
+        </div>
+      </div>
       <Toaster position="top-right" richColors />
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 350 }} aria-label="simple table">

@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react';
-import DoneIcon from '@mui/icons-material/Done';
-import CloseIcon from '@mui/icons-material/Close';
 import axios from 'api/axios';
 import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import withReactContent from 'sweetalert2-react-content';
@@ -114,22 +112,10 @@ function Preasignaciones() {
                   <TableCell align="left">{pre.id_asunto.nombre_asunto}</TableCell>
                   <TableCell align="left">{pre.id_departamento.nombre_departamento}</TableCell>
                   <TableCell align="center">
-                    <Button
-                      className="card2 "
-                      size="small"
-                      variant="contained"
-                      startIcon={<DoneIcon />}
-                      onClick={() => updateStatePreasignacion(pre)}
-                    >
+                    <Button className="card2 " size="small" variant="contained" onClick={() => updateStatePreasignacion(pre)}>
                       Aceptar
                     </Button>
-                    <Button
-                      className="card4 ms-3"
-                      size="small"
-                      variant="contained"
-                      startIcon={<CloseIcon />}
-                      onClick={() => handleOpen(pre)}
-                    >
+                    <Button className="card4 ms-3" size="small" variant="contained" onClick={() => handleOpen(pre)}>
                       Rechazar
                     </Button>
                   </TableCell>

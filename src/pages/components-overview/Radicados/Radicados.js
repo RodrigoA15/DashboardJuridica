@@ -61,10 +61,10 @@ function ComponentRadicados() {
         <form onSubmit={onSubmit}>
           {/* Radicados */}
           <div className="row mb-3">
-            <h4>Informacion Radicado</h4>
+            <h4>Informaci&oacute;n Radicado</h4>
             <div className="mb-3 col">
               <label htmlFor="label" className="form-label h6">
-                Numero radicado
+                N&uacute;mero radicado
               </label>
               <input
                 type="number"
@@ -73,7 +73,7 @@ function ComponentRadicados() {
                 {...register('numero_radicado', {
                   required: {
                     value: true,
-                    message: 'Numero Radicado es obligatorio'
+                    message: 'Número Radicado es obligatorio'
                   }
                 })}
               />
@@ -106,7 +106,7 @@ function ComponentRadicados() {
             </div>
 
             <div className="mb-3 col">
-              <h4>Tipificacion</h4>
+              <h4>Tipificaci&oacute;n</h4>
 
               <GetTipificacion register={register} errors={errors} />
             </div>
@@ -131,7 +131,7 @@ function ComponentRadicados() {
             </div>
 
             <div className="mb-3 col">
-              <h4>Numero de respuestas</h4>
+              <h4>N&uacute;mero de respuestas</h4>
               <input
                 className="form-control rounded-pill minimal-input-dark"
                 type="number"
@@ -146,7 +146,7 @@ function ComponentRadicados() {
           <div className="row">
             <div className="col-2 mb-2">
               <Button variant="text" className="m-3" onClick={() => setCheck((prevCheck) => !prevCheck)}>
-                {check ? 'Cancelar Observacion' : 'Agregar Observacion'}
+                {check ? 'Cancelar Observación' : 'Agregar Observación'}
               </Button>
             </div>
             {check && (
