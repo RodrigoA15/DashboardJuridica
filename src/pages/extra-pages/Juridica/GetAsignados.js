@@ -2,6 +2,8 @@ import axios from 'api/axios';
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useAuth } from 'context/authContext';
+import { Stack, Typography } from '@mui/material';
+import Dot from 'components/@extended/Dot';
 
 function GetAsignados() {
   const [asignados, setAsignados] = useState([]);
@@ -63,13 +65,13 @@ function GetAsignados() {
     const diasLaborables = diasHabiles(fechaRadicado);
 
     if (diasLaborables <= 5) {
-      return '#748E63'; // Verde
+      return 'success'; // Verde
     } else if (diasLaborables >= 6 && diasLaborables <= 9) {
-      return '#FFCD4B'; // Amarillo
+      return 'warning'; // Amarillo
     } else if (diasLaborables >= 10 && diasLaborables <= 12) {
-      return '#d43a00'; // Naranja
+      return 'info'; // Naranja
     } else if (diasLaborables >= 13) {
-      return '#BB2525'; // Rojo
+      return 'error'; // Rojo
     }
   };
 
@@ -110,7 +112,12 @@ function GetAsignados() {
                   </TableCell>
                   <TableCell align="left">{new Date(i.fecha_asignacion).toLocaleDateString()}</TableCell>
                   <TableCell>{i.id_usuario.username}</TableCell>
-                  <TableCell>{diasHabiles(new Date(i.id_radicado.fecha_radicado))}</TableCell>
+                  <TableCell align="center">
+                    <Stack direction="row" spacing={1} alignItems="center">
+                      <Dot color={getBackgroundColor(new Date(i.id_radicado.fecha_radicado))} size={15} />
+                      <Typography>{diasHabiles(new Date(i.id_radicado.fecha_radicado)) + ' Dias'}</Typography>
+                    </Stack>
+                  </TableCell>
                 </TableRow>
               ))
             )}

@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import axios from 'api/axios';
 import { Toaster, toast } from 'sonner';
 import { useForm } from 'react-hook-form';
+import PropTypes from 'prop-types';
 
 const style = {
   position: 'absolute',
@@ -119,3 +120,9 @@ function ModalRespuestas({ open, handleClose, data }) {
 }
 
 export default ModalRespuestas;
+
+ModalRespuestas.propTypes = {
+  open: PropTypes.bool,
+  data: PropTypes.func,
+  handleClose: PropTypes.func
+};

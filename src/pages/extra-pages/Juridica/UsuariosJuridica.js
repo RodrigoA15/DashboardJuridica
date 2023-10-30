@@ -84,7 +84,7 @@ function UsuariosJuridica({ pendiente }) {
   return (
     <div>
       <Toaster richColors position="top-center" />
-      <Box sx={{ display: 'flex', alignItems: 'center', minWidth: 120 }}>
+      <Box sx={{ alignItems: 'center' }}>
         <form onSubmit={onSubmit}>
           <div className="row d-flex">
             <div className="col-8">

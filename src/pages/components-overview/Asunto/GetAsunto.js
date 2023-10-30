@@ -45,5 +45,5 @@ function GetAsunto({ register, id_departamento, errors }) {
 export default GetAsunto;
 
 GetAsunto.propTypes = {
-  register: PropTypes.func.isRequired
+  register: PropTypes.func
 };

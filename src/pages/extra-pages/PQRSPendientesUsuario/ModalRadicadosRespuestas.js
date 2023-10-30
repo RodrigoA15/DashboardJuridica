@@ -8,6 +8,7 @@ import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import { toast } from 'sonner';
 import { useAuth } from 'context/authContext';
+import PropTypes from 'prop-types';
 
 const style = {
   position: 'absolute',
@@ -102,3 +103,9 @@ function ModalRadicadosRespuestas({ opens, handleCloses, respuestas }) {
 }
 
 export default ModalRadicadosRespuestas;
+
+ModalRadicadosRespuestas.propTypes = {
+  opens: PropTypes.bool,
+  respuestas: PropTypes.func,
+  handleCloses: PropTypes.func
+};

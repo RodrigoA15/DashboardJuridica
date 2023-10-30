@@ -4,6 +4,9 @@ import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow
 import UsuariosJuridica from './UsuariosJuridica';
 import { useAuth } from 'context/authContext';
 import Loader from 'pages/components-overview/Loader';
+import Dot from 'components/@extended/Dot';
+import { Stack } from '@mui/material';
+import { Typography } from '../../../../node_modules/@mui/material/index';
 
 function GetPendientes() {
   const [data, setData] = useState([]);
@@ -67,13 +70,13 @@ function GetPendientes() {
     const diasLaborables = diasHabiles(fechaRadicado);
 
     if (diasLaborables <= 5) {
-      return '#99B080'; // Verde
+      return 'success'; // Verde
     } else if (diasLaborables >= 6 && diasLaborables <= 9) {
-      return '#FFCD4B'; // Amarillo
+      return 'warning'; // Amarillo
     } else if (diasLaborables >= 10 && diasLaborables <= 12) {
-      return '#FF9B50'; // Naranja
+      return 'info'; // Naranja
     } else if (diasLaborables >= 13) {
-      return '#ff6666'; // Rojo
+      return 'error'; // Rojo
     }
   };
 
@@ -87,7 +90,7 @@ function GetPendientes() {
             <TableCell align="center">Asunto</TableCell>
             <TableCell align="center">Procedencia</TableCell>
             <TableCell align="center">Asignar Radicado</TableCell>
-            <TableCell align="center">Dias</TableCell>
+            <TableCell align="left">Estado</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -100,16 +103,7 @@ function GetPendientes() {
           ) : (
             data.map((pendiente) => (
               <TableRow key={pendiente._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell
-                  component="th"
-                  scope="row"
-                  align="center"
-                  style={{
-                    color: pendiente.id_asunto.nombre_asunto === 'TUTELA' ? 'black' : 'black',
-                    background:
-                      pendiente.id_asunto.nombre_asunto === 'TUTELA' ? '#ff6666' : getBackgroundColor(new Date(pendiente.fecha_radicado))
-                  }}
-                >
+                <TableCell component="th" scope="row" align="center">
                   <b>{pendiente.numero_radicado}</b>
                 </TableCell>
                 <TableCell align="center">{new Date(pendiente.fecha_radicado).toLocaleDateString('es-ES', { timeZone: 'UTC' })}</TableCell>
@@ -120,7 +114,12 @@ function GetPendientes() {
                 <TableCell align="center">
                   <UsuariosJuridica pendiente={pendiente} />
                 </TableCell>
-                <TableCell>{diasHabiles(new Date(pendiente.fecha_radicado))}</TableCell>
+                <TableCell align="center">
+                  <Stack direction="row" spacing={1} alignItems="center">
+                    <Dot color={getBackgroundColor(new Date(pendiente.fecha_radicado))} size={15} />
+                    <Typography>{diasHabiles(new Date(pendiente.fecha_radicado)) + ' Dias'}</Typography>
+                  </Stack>
+                </TableCell>
               </TableRow>
             ))
           )}

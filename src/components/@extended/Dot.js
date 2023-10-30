@@ -1,27 +1,27 @@
 import PropTypes from 'prop-types';
 
 // material-ui
-import { useTheme } from '@mui/material/styles';
 import { Box } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 const Dot = ({ color, size }) => {
   const theme = useTheme();
   let main;
   switch (color) {
     case 'secondary':
-      main = theme.palette.secondary.main;
+      main = '';
       break;
     case 'error':
-      main = theme.palette.error.main;
+      main = '#D95964';
       break;
     case 'warning':
-      main = theme.palette.warning.main;
+      main = '#FFEE58';
       break;
     case 'info':
-      main = theme.palette.info.main;
+      main = '#F29F05';
       break;
     case 'success':
-      main = theme.palette.success.main;
+      main = '#2BBF26';
       break;
     case 'primary':
     default:

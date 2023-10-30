@@ -7,6 +7,8 @@ import GetPendientes from './GetPendientes';
 import GetAsignados from './GetAsignados';
 import GetRespuesta from './GetRespuesta';
 import Preasignaciones from '../PQRSPreasignadas/Preasignaciones';
+import { List, ListItem, Stack, Typography } from '@mui/material';
+import Dot from 'components/@extended/Dot';
 
 // ==============================|| SAMPLE PAGE ||============================== //
 
@@ -18,6 +20,26 @@ const Juridica = () => {
 
   return (
     <Box sx={{ width: '100%', typography: 'body1' }}>
+      <List component="nav" aria-label="Horizontal List">
+        <ListItem sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <Stack direction="row" alignItems="center" sx={{ marginRight: 5 }}>
+            <Dot color="success" />
+            <Typography> 0-5 Dias</Typography>
+          </Stack>
+          <Stack direction="row" alignItems="center" sx={{ marginRight: 5 }}>
+            <Dot color="warning" />
+            <Typography> 6-9 Dias</Typography>
+          </Stack>
+          <Stack direction="row" alignItems="center" sx={{ marginRight: 5 }}>
+            <Dot color="info" />
+            <Typography> 10-12 Dias</Typography>
+          </Stack>
+          <Stack direction="row" alignItems="center">
+            <Dot color="error" />
+            <Typography> +13 Dias</Typography>
+          </Stack>
+        </ListItem>
+      </List>
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <TabList onChange={handleChange}>
