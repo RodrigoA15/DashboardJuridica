@@ -8,7 +8,7 @@ function AnalyticPQRSPendientes() {
 
   useEffect(() => {
     allRadicadosPendientes();
-    const time = setInterval(allRadicadosPendientes, 5000);
+    const time = setInterval(allRadicadosPendientes, 30000);
 
     return () => clearInterval(time);
   }, []);

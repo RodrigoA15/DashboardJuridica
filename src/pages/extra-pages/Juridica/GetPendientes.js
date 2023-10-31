@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'api/axios';
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination } from '@mui/material';
 import UsuariosJuridica from './UsuariosJuridica';
 import { useAuth } from 'context/authContext';
 import Loader from 'pages/components-overview/Loader';
@@ -13,6 +13,8 @@ function GetPendientes() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const { user } = useAuth();
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   useEffect(() => {
     getDataPendiente();
@@ -24,6 +26,15 @@ function GetPendientes() {
   useEffect(() => {
     diasHabiles(data);
   }, [data]);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
 
   const getDataPendiente = async () => {
     try {
@@ -81,51 +92,65 @@ function GetPendientes() {
   };
 
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 350 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Número Radicado</TableCell>
-            <TableCell align="center">Fecha Radicado</TableCell>
-            <TableCell align="center">Asunto</TableCell>
-            <TableCell align="center">Procedencia</TableCell>
-            <TableCell align="center">Asignar Radicado</TableCell>
-            <TableCell align="left">Estado</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {isLoading ? (
-            <Loader />
-          ) : error ? (
-            <TableRow key="error">
-              <TableCell colSpan={5}>{error}</TableCell>
+    <div>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 350 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Número Radicado</TableCell>
+              <TableCell align="center">Fecha Radicado</TableCell>
+              <TableCell align="center">Asunto</TableCell>
+              <TableCell align="center">Procedencia</TableCell>
+              <TableCell align="center">Asignar Radicado</TableCell>
+              <TableCell align="left">Estado</TableCell>
             </TableRow>
-          ) : (
-            data.map((pendiente) => (
-              <TableRow key={pendiente._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell component="th" scope="row" align="center">
-                  <b>{pendiente.numero_radicado}</b>
-                </TableCell>
-                <TableCell align="center">{new Date(pendiente.fecha_radicado).toLocaleDateString('es-ES', { timeZone: 'UTC' })}</TableCell>
-                <TableCell align="center">{pendiente.id_asunto.nombre_asunto}</TableCell>
-                <TableCell align="center">
-                  {pendiente.id_procedencia.nombre} {pendiente.id_procedencia.apellido}
-                </TableCell>
-                <TableCell align="center">
-                  <UsuariosJuridica pendiente={pendiente} />
-                </TableCell>
-                <TableCell align="center">
-                  <Stack direction="row" spacing={1} alignItems="center">
-                    <Dot color={getBackgroundColor(new Date(pendiente.fecha_radicado))} size={15} />
-                    <Typography>{diasHabiles(new Date(pendiente.fecha_radicado)) + ' Dias'}</Typography>
-                  </Stack>
-                </TableCell>
+          </TableHead>
+          <TableBody>
+            {isLoading ? (
+              <Loader />
+            ) : error ? (
+              <TableRow key="error">
+                <TableCell colSpan={5}>{error}</TableCell>
               </TableRow>
-            ))
-          )}
-        </TableBody>
-      </Table>
-    </TableContainer>
+            ) : (
+              data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((pendiente) => (
+                <TableRow key={pendiente._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  <TableCell component="th" scope="row" align="center">
+                    <b>{pendiente.numero_radicado}</b>
+                  </TableCell>
+                  <TableCell align="center">
+                    {new Date(pendiente.fecha_radicado).toLocaleDateString('es-ES', { timeZone: 'UTC' })}
+                  </TableCell>
+                  <TableCell align="center">{pendiente.id_asunto.nombre_asunto}</TableCell>
+                  <TableCell align="center">
+                    {pendiente.id_procedencia.nombre} {pendiente.id_procedencia.apellido}
+                  </TableCell>
+                  <TableCell align="center">
+                    <UsuariosJuridica pendiente={pendiente} />
+                  </TableCell>
+                  <TableCell align="center">
+                    <Stack direction="row" spacing={1} alignItems="center">
+                      <Dot color={getBackgroundColor(new Date(pendiente.fecha_radicado))} size={15} />
+                      <Typography>{diasHabiles(new Date(pendiente.fecha_radicado)) + ' Dias'}</Typography>
+                    </Stack>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        className="rowPage"
+        rowsPerPageOptions={[10, 25, 100]}
+        component="div"
+        count={data.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+    </div>
   );
 }
 

@@ -173,3 +173,27 @@
   align-self: flex-end;
   margin-bottom: 50px;
 }
+
+.css-yqjk4i-MuiTablePagination-selectLabel {
+  color: white;
+}
+
+.css-svbzvd-MuiSelect-select-MuiInputBase-input {
+  color: white;
+}
+
+.css-1u6dfzx-MuiTablePagination-displayedRows {
+  color: white;
+}
+
+.rowPage {
+  color: white;
+}
+
+.MuiTableCell-body{
+  border-bottom: 0.5rem px solid  #464141;
+}
+
+.buttonExcel{
+  
+}

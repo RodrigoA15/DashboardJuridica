@@ -9,7 +9,7 @@ function AnalyticPQRSRespondidas() {
   useEffect(() => {
     apiCountRespondidos();
 
-    const time = setInterval(apiCountRespondidos, 5000);
+    const time = setInterval(apiCountRespondidos, 30000);
 
     return () => clearInterval(time);
   }, []);

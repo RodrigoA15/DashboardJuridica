@@ -53,7 +53,7 @@ function ChartEntidad() {
   useEffect(() => {
     apiChartData();
 
-    const time = setInterval(apiChartData, 5000);
+    const time = setInterval(apiChartData, 30000);
 
     return () => clearInterval(time);
   }, []);

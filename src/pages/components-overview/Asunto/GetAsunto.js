@@ -23,7 +23,7 @@ function GetAsunto({ register, id_departamento, errors }) {
   return (
     <div>
       <select
-        className="form-select rounded-pill minimal-input-dark"
+        className="form-select rounded-pill minimal-input-dark mt-3"
         {...register('id_asunto', { required: 'Campo asunto es obligatorio' })}
       >
         <option value="">Seleccione un asunto</option>

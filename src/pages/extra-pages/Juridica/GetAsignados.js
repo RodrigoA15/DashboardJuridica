@@ -1,5 +1,5 @@
 import axios from 'api/axios';
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useAuth } from 'context/authContext';
 import { Stack, Typography } from '@mui/material';
@@ -10,6 +10,8 @@ function GetAsignados() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const { user } = useAuth();
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   useEffect(() => {
     {
@@ -19,6 +21,15 @@ function GetAsignados() {
       return () => clearInterval(intervalId);
     }
   }, [user]);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
 
   const apiAsignados = async () => {
     try {
@@ -98,7 +109,7 @@ function GetAsignados() {
                 <TableCell colSpan={5}>{error}</TableCell>
               </TableRow>
             ) : (
-              asignados.map((i) => (
+              asignados.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((i) => (
                 <TableRow key={i._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                   <TableCell component="th" scope="row">
                     {i.id_radicado.estado_radicado}
@@ -124,6 +135,16 @@ function GetAsignados() {
           </TableBody>
         </Table>
       </TableContainer>
+      <TablePagination
+        className="rowPage"
+        rowsPerPageOptions={[10, 25, 100]}
+        component="div"
+        count={asignados.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
     </div>
   );
 }

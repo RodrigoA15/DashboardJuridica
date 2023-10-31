@@ -1,11 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import axios from 'api/axios';
-import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination } from '@mui/material';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import { Toaster, toast } from 'sonner';
 import ModalReasignacion from './ModalReasignacion';
 import { useAuth } from 'context/authContext';
+import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
+import * as locales from '@mui/material/locale';
 
 function Preasignaciones() {
   const { user } = useAuth();
@@ -14,6 +16,9 @@ function Preasignaciones() {
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
   const [selectedData, setSelectedData] = useState(null);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [locale, setLocale] = useState('esES');
 
   useEffect(() => {
     {
@@ -24,6 +29,10 @@ function Preasignaciones() {
     }
   }, [user]);
 
+  const theme = useTheme();
+
+  const themeWithLocale = useMemo(() => createTheme(theme, locales[locale]), [locale, theme]);
+
   const handleOpen = (data) => {
     setSelectedData(data);
     setOpen(true);
@@ -32,6 +41,16 @@ function Preasignaciones() {
   const handleClose = () => {
     setSelectedData(null);
     setOpen(false);
+  };
+
+  const handleChangePage = (event, newPage, newValue) => {
+    setPage(newPage);
+    setLocale(newValue);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
   };
 
   const getAllPreasignaciones = async () => {
@@ -103,7 +122,7 @@ function Preasignaciones() {
                 <TableCell colSpan={5}>{error}</TableCell>
               </TableRow>
             ) : (
-              data.map((pre) => (
+              data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((pre) => (
                 <TableRow key={pre._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                   <TableCell component="th" scope="row">
                     {pre.numero_radicado}
@@ -125,6 +144,18 @@ function Preasignaciones() {
           </TableBody>
         </Table>
       </TableContainer>
+      <ThemeProvider theme={themeWithLocale}>
+        <TablePagination
+          className="rowPage"
+          rowsPerPageOptions={[10, 25, 100]}
+          component="div"
+          count={data.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </ThemeProvider>
       <ModalReasignacion open={open} handleClose={handleClose} data={selectedData} />
     </div>
   );

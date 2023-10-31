@@ -8,7 +8,7 @@ function AnalyticPQRSAsignadas() {
 
   useEffect(() => {
     apiDataAsignadas();
-    const time = setInterval(apiDataAsignadas, 5000);
+    const time = setInterval(apiDataAsignadas, 30000);
 
     return () => clearInterval(time);
   }, []);

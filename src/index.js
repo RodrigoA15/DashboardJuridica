@@ -20,6 +20,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle';
 //css
 import './index.css';
+//Datables
+
 //Provider
 import { AuthProvider } from 'context/authContext';
 import { Routes } from 'react-router-dom';

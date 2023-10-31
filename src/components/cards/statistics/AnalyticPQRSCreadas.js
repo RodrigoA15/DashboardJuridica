@@ -14,7 +14,7 @@ const AnalyticPQRSCreadas = () => {
   useEffect(() => {
     dataApi();
 
-    const time = setInterval(dataApi, 5000);
+    const time = setInterval(dataApi, 30000);
 
     return () => clearInterval(time);
   }, []);
