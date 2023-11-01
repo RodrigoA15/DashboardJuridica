@@ -12,8 +12,9 @@ function JsonToFileExcel() {
 
   const dataRadicadosJson = async () => {
     try {
-      const response = await axios.get('/radicados/radicadop');
+      const response = await axios.get('/radicados_respuestas_excel');
       setData(response.data);
+      console.log(data);
     } catch (error) {
       console.error('Error al obtener datos:', error);
     }
@@ -22,16 +23,19 @@ function JsonToFileExcel() {
   const downloadData = () => {
     return data.map((item) => {
       return {
-        numero_radicado: item.numero_radicado,
-        fecha_radicado: new Date(item.fecha_radicado).toLocaleDateString('es-ES', { timeZone: 'UTC' }),
-        cantidad_respuesta: item.cantidad_respuesta,
-        Procedencia: item.id_procedencia.nombre,
-        CanalEntrada: item.id_canal_entrada.nombre_canal,
-        Asunto: item.id_asunto.nombre_asunto,
-        Tipificacion: item.id_tipificacion.nombre_tipificacion,
-        Entidad: item.id_entidad.nombre_entidad,
-        Departamento: item.id_departamento.nombre_departamento,
-        EstadoRadicado: item.estado_radicado
+        numero_radicado: item.id_asignacion.id_radicado.numero_radicado,
+        fecha_radicado: new Date(item.id_asignacion.id_radicado.fecha_radicado).toLocaleDateString('es-CO', { timeZone: 'UTC' }),
+        cantidad_respuesta: item.id_asignacion.id_radicado.cantidad_respuesta,
+        Procedencia: item.id_asignacion.id_radicado.id_procedencia.nombre,
+        CanalEntrada: item.id_asignacion.id_radicado.id_canal_entrada.nombre_canal,
+        Asunto: item.id_asignacion.id_radicado.id_asunto.nombre_asunto,
+        Tipificacion: item.id_asignacion.id_radicado.id_tipificacion.nombre_tipificacion,
+        Entidad: item.id_asignacion.id_radicado.id_entidad.nombre_entidad,
+        Departamento: item.id_asignacion.id_radicado.id_departamento.nombre_departamento,
+        EstadoRadicado: item.id_asignacion.id_radicado.estado_radicado,
+        UsuarioEncargado: item.id_asignacion.id_usuario.username,
+        NumeroRespuestaRadicado: item.numero_radicado_respuesta,
+        FechaRespuesta: new Date(item.fechaRespuesta).toLocaleDateString('es-CO', { timeZone: 'UTC' })
       };
     });
   };

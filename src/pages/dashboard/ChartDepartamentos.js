@@ -4,8 +4,8 @@ import ReactApexChart from 'react-apexcharts';
 
 function ChartDepartamentos() {
   const today = new Date();
-  const fecha1 = new Date(today.getFullYear(), today.getMonth(), 1);
-  const fecha2 = new Date();
+  const fecha1 = new Date(today.getFullYear(), today.getMonth(), 1).toLocaleDateString('es-CO');
+  const fecha2 = new Date().toLocaleDateString('es-CO');
 
   const [fechaInicio, setFechaInicio] = useState(fecha1);
   const [fechaFin, setFechaFin] = useState(fecha2);
@@ -90,6 +90,7 @@ function ChartDepartamentos() {
           }
         }
       });
+      console.log(fecha1, fecha2);
     } catch (error) {
       console.log(error);
     }

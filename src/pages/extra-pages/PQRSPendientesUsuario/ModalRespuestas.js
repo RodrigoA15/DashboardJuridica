@@ -56,6 +56,7 @@ function ModalRespuestas({ open, handleClose, data }) {
       formData.append('numero_radicado_respuesta', numero_radicado_respuesta);
       formData.append('id_asignacion', data._id);
       formData.append('respuesta_pdf', num.respuesta_pdf[0]);
+      formData.append('fechaRespuesta', new Date().toLocaleDateString('es-CO'));
 
       const config = { headers: { 'Content-Type': 'multipart/form-data' } };
 

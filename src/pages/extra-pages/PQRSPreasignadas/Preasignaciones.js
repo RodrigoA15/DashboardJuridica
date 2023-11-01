@@ -127,7 +127,7 @@ function Preasignaciones() {
                   <TableCell component="th" scope="row">
                     {pre.numero_radicado}
                   </TableCell>
-                  <TableCell align="left">{new Date(pre.fecha_radicado).toLocaleDateString('es-ES', { timeZone: 'UTC' })}</TableCell>
+                  <TableCell align="left">{new Date(pre.fecha_radicado).toLocaleDateString('es-CO', { timeZone: 'UTC' })}</TableCell>
                   <TableCell align="left">{pre.id_asunto.nombre_asunto}</TableCell>
                   <TableCell align="left">{pre.id_departamento.nombre_departamento}</TableCell>
                   <TableCell align="center">

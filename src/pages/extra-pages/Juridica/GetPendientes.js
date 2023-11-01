@@ -119,7 +119,7 @@ function GetPendientes() {
                     <b>{pendiente.numero_radicado}</b>
                   </TableCell>
                   <TableCell align="center">
-                    {new Date(pendiente.fecha_radicado).toLocaleDateString('es-ES', { timeZone: 'UTC' })}
+                    {new Date(pendiente.fecha_radicado).toLocaleDateString('es-CO', { timeZone: 'UTC' })}
                   </TableCell>
                   <TableCell align="center">{pendiente.id_asunto.nombre_asunto}</TableCell>
                   <TableCell align="center">

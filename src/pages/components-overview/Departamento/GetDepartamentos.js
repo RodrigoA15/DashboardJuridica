@@ -29,7 +29,6 @@ function GetDepartamentos({ register, setIdDepartamento, id_departamento, errors
         ))}
       </select>
       <GetAsunto register={register} errors={errors} id_departamento={id_departamento} />
-      {id_departamento}
     </div>
   );
 }
