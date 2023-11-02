@@ -4,7 +4,7 @@ import ReactApexChart from 'react-apexcharts';
 
 function RadicadosChart() {
   const dia = new Date();
-  const fecha1 = new Date(dia.getFullYear(), dia.getMonth(), 1);
+  const fecha1 = new Date(dia.getFullYear(), dia.getMonth(), 0);
   const fecha2 = new Date();
   const [fechaInicio, setFechaInicio] = useState(fecha1);
   const [fechaFin, setFechaFin] = useState(fecha2);

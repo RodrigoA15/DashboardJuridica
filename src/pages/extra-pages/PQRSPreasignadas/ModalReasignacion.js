@@ -3,7 +3,10 @@ import Modal from '@mui/material/Modal';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import axios from 'api/axios';
-import { Button } from '@mui/material';
+import withReactContent from 'sweetalert2-react-content';
+import Swal from 'sweetalert2';
+import { useForm } from 'react-hook-form';
+import { useAuth } from 'context/authContext';
 
 const style = {
   position: 'absolute',
@@ -19,13 +22,26 @@ const style = {
 
 function ModalReasignacion({ open, handleClose, data }) {
   const [departamento, setDepartamento] = useState([]);
-  const [selectDepartamento, setSelectedDeparmento] = useState('');
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const {
+    register,
+    formState: { errors },
+    handleSubmit
+  } = useForm();
+
+  const { user } = useAuth();
+
+  const MySwal = withReactContent(Swal);
 
   useEffect(() => {
     getDepartamentos();
   }, []);
+
+  const onSubmit = handleSubmit((datos) => {
+    console.log(datos);
+    reasignacion(datos);
+  });
 
   const getDepartamentos = async () => {
     try {
@@ -43,14 +59,55 @@ function ModalReasignacion({ open, handleClose, data }) {
     }
   };
 
-  const reasignacion = async () => {
+  const reasignacion = async (datos) => {
+    const alerta = await MySwal.fire({
+      title: '¿Esta seguro de reasignar la solicitud?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Reasignar',
+      cancelButtonText: 'Cancelar',
+      customClass: {
+        container: 'swal-zindex'
+      }
+    });
+
+    if (alerta.isConfirmed) {
+      try {
+        await axios.put(`/radicados/reasignacion_departamento/${data._id}`, datos);
+        MySwal.fire({
+          title: 'Reasignado correctamente',
+          icon: 'success',
+          customClass: {
+            container: 'swal-zindex'
+          }
+        });
+        historialCambios();
+      } catch (error) {
+        MySwal.fire({
+          text: 'Ops error de servidor :(',
+          icon: 'success',
+          customClass: {
+            container: 'swal-zindex'
+          }
+        });
+      }
+    }
+  };
+
+  const historialCambios = async () => {
     try {
-      console.log(selectDepartamento);
-      await axios.put(`/radicados/reasignacion_departamento/${data._id}`, {
-        id_departamento: selectDepartamento
+      const datos = `El usuario ${user.username} reasigno "Rechazo" la solicitud asignada`;
+      await axios.post('/historial', {
+        observacion: datos
       });
     } catch (error) {
-      console.log(error);
+      MySwal.fire({
+        text: 'Ops error de servidor  :(',
+        icon: 'error',
+        customClass: {
+          container: 'swal-zindex'
+        }
+      });
     }
   };
 
@@ -67,21 +124,27 @@ function ModalReasignacion({ open, handleClose, data }) {
               <p colSpan={5}>{error}</p>
             </div>
           ) : (
-            <form>
+            <form onSubmit={onSubmit}>
               <div>
                 <h5>Seleccione departamento a reasignar</h5>
-                <select className="form-select rounded-pill minimal-input-dark" onChange={(e) => setSelectedDeparmento(e.target.value)}>
-                  <option>Seleccione un departamento</option>
+                <select
+                  className="form-select rounded-pill minimal-input-dark"
+                  {...register('id_departamento', { required: 'Seleccione un departamento' })}
+                >
+                  <option value="">Seleccione un departamento</option>
                   {departamento.map((i) => (
                     <option key={i._id} value={i._id}>
                       {i.nombre_departamento}
                     </option>
                   ))}
                 </select>
+                {errors.id_departamento && <span className="inputForm ">{errors.id_departamento.message}</span>}
               </div>
+              <button className="btn btn-outline-danger mt-3" type="submit">
+                Reasignar
+              </button>
             </form>
           )}
-          <Button onClick={() => reasignacion()}>Reasignar</Button>
         </Box>
       </Modal>
     </div>
