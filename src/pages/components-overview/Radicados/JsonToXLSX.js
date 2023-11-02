@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'api/axios';
-import { JsonToExcel } from 'react-json-to-excel';
 import CsvDownloadButton from 'react-json-to-csv';
+import ExportFromJson from 'export-from-json';
 
 function JsonToFileExcel() {
   const [data, setData] = useState([]);
+  const fileName = 'ReporteRadicados';
+  const exportType = ExportFromJson.types.xls;
 
   useEffect(() => {
     dataRadicadosJson();
@@ -53,10 +55,18 @@ function JsonToFileExcel() {
     }
   };
 
+  const fileExcel = async () => {
+    ExportFromJson({
+      data: downloadData(),
+      fileName,
+      exportType
+    });
+  };
+
   return (
     <div className="row">
       <div className="col mb-3">
-        <JsonToExcel title="Descargar Excel" data={downloadData()} fileName="ReporteRadicados" />
+        <button onClick={fileExcel}>Descargar</button>
       </div>
       <div className="col mb-3">
         <CsvDownloadButton
