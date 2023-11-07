@@ -174,7 +174,7 @@
   margin-bottom: 50px;
 }
 
-.css-yqjk4i-MuiTablePagination-selectLabel {
+/* .css-yqjk4i-MuiTablePagination-selectLabel {
   color: white;
 }
 
@@ -184,7 +184,7 @@
 
 .css-1u6dfzx-MuiTablePagination-displayedRows {
   color: white;
-}
+} */
 
 .rowPage {
   color: white;
@@ -194,6 +194,6 @@
   border-bottom: 0.5rem px solid  #464141;
 }
 
-.buttonExcel{
-  
+.form-label{
+  color: #262626;
 }

@@ -66,8 +66,9 @@ function Buscador({ setProcedencia }) {
   const PostProcedencia = async (data) => {
     try {
       await axios.post('/procedencia/procedencia', { ...data, numero_identificacion });
+      toast.success('Usuario registrado');
     } catch (error) {
-      console.log(error);
+      toast.error('Error al registrar el usuario');
     }
   };
 

@@ -59,6 +59,7 @@ function ModalRespuestas({ open, handleClose, data }) {
       formData.append('fechaRespuesta', new Date().toLocaleDateString('es-CO'));
 
       const config = { headers: { 'Content-Type': 'multipart/form-data' } };
+      console.log(formData.respuesta_pdf);
 
       await axios.post('/create_respuestas', formData, config);
       toast.success('Respuesta Agregada');

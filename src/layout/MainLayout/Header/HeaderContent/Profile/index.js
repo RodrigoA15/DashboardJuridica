@@ -81,7 +81,7 @@ const Profile = () => {
   };
 
   const iconBackColorOpen = 'grey.300';
-  console.log(user);
+
   return (
     <Box sx={{ flexShrink: 0, ml: 0.75 }}>
       <ButtonBase

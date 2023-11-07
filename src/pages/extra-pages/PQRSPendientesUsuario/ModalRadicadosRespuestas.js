@@ -39,6 +39,7 @@ function ModalRadicadosRespuestas({ opens, handleCloses, respuestas }) {
       const response = await axios.get(`/radicados_respuestas/${user.departamento}/${respuestas.id_radicado.numero_radicado}`);
       setRadicadosRpta(response.data);
       setCountRadicados(response.data.length);
+      console.log(response);
     } catch (error) {
       console.log(error);
     }
@@ -82,7 +83,7 @@ function ModalRadicadosRespuestas({ opens, handleCloses, respuestas }) {
                 radicadosRpta.map((i) => (
                   <div className="row mb-3" key={i._id}>
                     <ul>
-                      <li>{i.numero_radicado_respuesta}</li>
+                      <li className="form-label">{i.numero_radicado_respuesta}</li>
                     </ul>
                   </div>
                 ))}

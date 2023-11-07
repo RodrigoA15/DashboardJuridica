@@ -1,23 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, Link as RouterLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from 'context/authContext';
 
 // material-ui
-import {
-  Button,
-  Checkbox,
-  Divider,
-  FormControlLabel,
-  FormHelperText,
-  Grid,
-  Link,
-  IconButton,
-  InputAdornment,
-  InputLabel,
-  OutlinedInput,
-  Stack,
-  Typography
-} from '@mui/material';
+import { Button, FormHelperText, Grid, IconButton, InputAdornment, InputLabel, OutlinedInput, Stack } from '@mui/material';
 
 // third party
 import * as Yup from 'yup';
@@ -35,7 +21,7 @@ const AuthLogin = () => {
   const { signin, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
-  const [checked, setChecked] = useState(false);
+  // const [checked, setChecked] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -60,8 +46,8 @@ const AuthLogin = () => {
           submit: null
         }}
         validationSchema={Yup.object().shape({
-          email: Yup.string().email('Debe ser un correo electronico válido').max(255).required('Email is required'),
-          password: Yup.string().max(255).required('Password is required')
+          email: Yup.string().email('Debe ser un correo electronico válido').max(255).required('Correo es obligatorio'),
+          password: Yup.string().max(255).required('Contraseña es obligatorio')
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           try {
@@ -83,7 +69,7 @@ const AuthLogin = () => {
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <Stack spacing={1}>
-                  <InputLabel htmlFor="email-login">Email Address</InputLabel>
+                  <InputLabel htmlFor="email-login">Correo electronico</InputLabel>
                   <OutlinedInput
                     id="email-login"
                     type="email"
@@ -91,7 +77,7 @@ const AuthLogin = () => {
                     name="email"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    placeholder="Enter email address"
+                    placeholder="Ingrese correo electronico"
                     fullWidth
                     error={Boolean(touched.email && errors.email)}
                   />
@@ -104,7 +90,7 @@ const AuthLogin = () => {
               </Grid>
               <Grid item xs={12}>
                 <Stack spacing={1}>
-                  <InputLabel htmlFor="password-login">Password</InputLabel>
+                  <InputLabel htmlFor="password-login">Contraseña</InputLabel>
                   <OutlinedInput
                     fullWidth
                     error={Boolean(touched.password && errors.password)}
@@ -127,7 +113,7 @@ const AuthLogin = () => {
                         </IconButton>
                       </InputAdornment>
                     }
-                    placeholder="Enter password"
+                    placeholder="Ingrese contraseña"
                   />
                   {touched.password && errors.password && (
                     <FormHelperText error id="standard-weight-helper-text-password-login">
@@ -137,7 +123,7 @@ const AuthLogin = () => {
                 </Stack>
               </Grid>
 
-              <Grid item xs={12} sx={{ mt: -1 }}>
+              {/* <Grid item xs={12} sx={{ mt: -1 }}>
                 <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
                   <FormControlLabel
                     control={
@@ -155,7 +141,7 @@ const AuthLogin = () => {
                     Forgot Password?
                   </Link>
                 </Stack>
-              </Grid>
+              </Grid> */}
               {errors.submit && (
                 <Grid item xs={12}>
                   <FormHelperText error>{errors.submit}</FormHelperText>
@@ -164,16 +150,10 @@ const AuthLogin = () => {
               <Grid item xs={12}>
                 <AnimateButton>
                   <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
-                    Login
+                    iniciar Sesion
                   </Button>
                 </AnimateButton>
               </Grid>
-              <Grid item xs={12}>
-                <Divider>
-                  <Typography variant="caption"> Login with</Typography>
-                </Divider>
-              </Grid>
-              <Grid item xs={12}></Grid>
             </Grid>
           </form>
         )}

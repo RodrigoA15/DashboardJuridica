@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
 import { useAuth } from '../../../context/authContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,11 +6,9 @@ import { useNavigate } from 'react-router-dom';
 import {
   Box,
   Button,
-  Divider,
   FormControl,
   FormHelperText,
   Grid,
-  Link,
   IconButton,
   InputAdornment,
   InputLabel,
@@ -69,9 +66,9 @@ const AuthRegister = () => {
           submit: null
         }}
         validationSchema={Yup.object().shape({
-          username: Yup.string().max(255).required('Username is required'),
-          email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-          password: Yup.string().max(255).required('Password is required')
+          username: Yup.string().max(255).required('Username es obligatorio'),
+          email: Yup.string().email('Debe ser un correo valido').max(255).required('correo es obligatorio'),
+          password: Yup.string().max(255).required('Contraseña es obligatorio')
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           try {
@@ -116,7 +113,7 @@ const AuthRegister = () => {
 
               <Grid item xs={12}>
                 <Stack spacing={1}>
-                  <InputLabel htmlFor="email-signup">Email Address*</InputLabel>
+                  <InputLabel htmlFor="email-signup">Correo electronico*</InputLabel>
                   <OutlinedInput
                     fullWidth
                     error={Boolean(touched.email && errors.email)}
@@ -138,7 +135,7 @@ const AuthRegister = () => {
               </Grid>
               <Grid item xs={12}>
                 <Stack spacing={1}>
-                  <InputLabel htmlFor="password-signup">Password</InputLabel>
+                  <InputLabel htmlFor="password-signup">Contraseña</InputLabel>
                   <OutlinedInput
                     fullWidth
                     error={Boolean(touched.password && errors.password)}
@@ -186,18 +183,7 @@ const AuthRegister = () => {
                   </Grid>
                 </FormControl>
               </Grid>
-              <Grid item xs={12}>
-                <Typography variant="body2">
-                  By Signing up, you agree to our &nbsp;
-                  <Link variant="subtitle2" component={RouterLink} to="#">
-                    Terms of Service
-                  </Link>
-                  &nbsp; and &nbsp;
-                  <Link variant="subtitle2" component={RouterLink} to="#">
-                    Privacy Policy
-                  </Link>
-                </Typography>
-              </Grid>
+
               {errors.submit && (
                 <Grid item xs={12}>
                   <FormHelperText error>{errors.submit}</FormHelperText>
@@ -206,14 +192,9 @@ const AuthRegister = () => {
               <Grid item xs={12}>
                 <AnimateButton>
                   <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
-                    Create Account
+                    Registrarse
                   </Button>
                 </AnimateButton>
-              </Grid>
-              <Grid item xs={12}>
-                <Divider>
-                  <Typography variant="caption">Sign up with</Typography>
-                </Divider>
               </Grid>
             </Grid>
           </form>
