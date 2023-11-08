@@ -13,7 +13,8 @@ function Buscador({ setProcedencia }) {
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
+    reset
   } = useForm();
 
   const handleKeyPress = (e) => {
@@ -48,10 +49,13 @@ function Buscador({ setProcedencia }) {
       }
     } catch (error) {
       if (error.response && error.response.status === 404) {
-        toast.error('Usuario no  registrado');
+        toast.error('Usuario no  registrado', {
+          description: 'Llene los campos y registre la procedencia',
+          duration: 10000
+        });
         resetEntrada();
       } else {
-        console.log(error);
+        console.log(error.message);
       }
     }
   };
@@ -59,6 +63,7 @@ function Buscador({ setProcedencia }) {
   const onSubmit = handleSubmit((data) => {
     PostProcedencia(data);
     console.log(data);
+    reset();
   });
 
   //Data metodo post
@@ -66,9 +71,12 @@ function Buscador({ setProcedencia }) {
   const PostProcedencia = async (data) => {
     try {
       await axios.post('/procedencia/procedencia', { ...data, numero_identificacion });
-      toast.success('Usuario registrado');
+      toast.success('Usuario registrado', {
+        description: 'Por favor realice la búsqueda nuevamente',
+        duration: 10000
+      });
     } catch (error) {
-      toast.error('Error al registrar el usuario');
+      toast.error(error.response.data);
     }
   };
 
@@ -77,7 +85,7 @@ function Buscador({ setProcedencia }) {
       <Toaster position="top-right" richColors />
       <div className="row ">
         {/* Select */}
-        <h4>Informaci&oacute;n Procedencia</h4>
+        <h4>Informaci&oacute;n usuario</h4>
 
         {/* Buscador */}
         <div className="col-4 input-container">
@@ -85,7 +93,7 @@ function Buscador({ setProcedencia }) {
             size="small"
             id="search2"
             sx={{
-              width: '400px',
+              width: '500px',
               border: '1px solid black',
               borderRadius: '5px'
             }}
@@ -94,7 +102,7 @@ function Buscador({ setProcedencia }) {
                 <SearchOutlined />
               </InputAdornment>
             }
-            placeholder="Busca por numero de identificacion"
+            placeholder="Digite número de identificación y pulse enter para buscar"
             onChange={handleInputChange}
             onKeyDown={handleKeyPress}
           />
@@ -107,13 +115,13 @@ function Buscador({ setProcedencia }) {
               <div key={i._id} className="row">
                 <div className="col mb-3">
                   <label htmlFor="nombre" className="form-label h6">
-                    Nombre
+                    Nombres
                   </label>
                   <input type="text" className="form-control rounded-pill minimal-input-dark" id="nombre" value={i.nombre} readOnly />
                 </div>
                 <div className="col mb-3">
                   <label htmlFor="label" className="form-label h6">
-                    Apellido
+                    Apellidos
                   </label>
                   <input type="text" className="form-control rounded-pill minimal-input-dark" id="apellido" value={i.apellido} readOnly />
                 </div>
@@ -141,7 +149,7 @@ function Buscador({ setProcedencia }) {
                 </div>
                 <div className="col  mb-3">
                   <label htmlFor="nombre" className="form-label  h6">
-                    Nombre
+                    Nombres
                   </label>
                   <input
                     type="text"
@@ -154,7 +162,7 @@ function Buscador({ setProcedencia }) {
 
                 <div className="col mb-3">
                   <label htmlFor="label" className="form-label h6">
-                    Apellido
+                    Apellidos
                   </label>
                   <input
                     type="text"

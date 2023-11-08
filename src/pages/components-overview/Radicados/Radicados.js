@@ -7,7 +7,6 @@ import GetEntrada from '../CanalEntrada/GetEntrada';
 import Buscador from '../Procedencia/Buscador';
 import GetTipificacion from '../Tipificacion/GetTipificacion';
 import GetEntidad from '../Entidad/GetEntidad';
-import GetDepartamentos from '../Departamento/GetDepartamentos';
 import { useState } from 'react';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
@@ -20,8 +19,9 @@ function ComponentRadicados() {
     register,
     handleSubmit,
     formState: { errors },
-    reset
-  } = useForm();
+    reset,
+    watch
+  } = useForm({ mode: 'onChange' });
 
   const [procedencia, setProcedencia] = useState('');
   const [id_departamento, setIdDepartamento] = useState('');
@@ -44,7 +44,7 @@ function ComponentRadicados() {
       });
       reset();
     } catch (error) {
-      console.error('Error al crear radicado:', error);
+      console.error('Error al crear radicado:', error.response);
       const errorMessage = error.response?.data?.message || 'Error al crear radicado';
       MySwal.fire({
         title: 'Error',
@@ -74,6 +74,10 @@ function ComponentRadicados() {
                   required: {
                     value: true,
                     message: 'Número Radicado es obligatorio'
+                  },
+                  minLength: {
+                    value: 12,
+                    message: 'Número Radicado debe ser mayor a 12 caracteres'
                   }
                 })}
               />
@@ -92,6 +96,15 @@ function ComponentRadicados() {
                   required: {
                     value: true,
                     message: 'Fecha Radicado es obligatorio'
+                  },
+                  valueAsDate: true,
+
+                  validate: (value) => {
+                    const fecha_radicado = new Date(value).getMonth();
+                    const fecha_actual = new Date().getMonth();
+
+                    if (fecha_actual - fecha_radicado > 6)
+                      return 'Fecha invalida, las fechas de radicación no pueden ser mayores a 6 meses';
                   }
                 })}
               />
@@ -112,35 +125,15 @@ function ComponentRadicados() {
             </div>
           </div>
 
-          <div className="row mb-3">
-            <div className="mb-3 col">
-              <h4>Entidad</h4>
-
-              <GetEntidad register={register} errors={errors} />
-            </div>
-
-            <div className="mb-3 col">
-              <h4>Dirigido a </h4>
-
-              <GetDepartamentos
-                register={register}
-                setIdDepartamento={setIdDepartamento}
-                id_departamento={id_departamento}
-                errors={errors}
-              />
-            </div>
-
-            <div className="mb-3 col">
-              <h4>N&uacute;mero de respuestas</h4>
-              <input
-                className="form-control rounded-pill minimal-input-dark"
-                type="number"
-                {...register('cantidad_respuesta', {
-                  required: 'Cantidad de respuesta es obligatorio'
-                })}
-              />
-              {errors.cantidad_respuesta && <span className="inputForm">{errors.cantidad_respuesta.message}</span>}
-            </div>
+          <div>
+            <h4>Entidad</h4>
+            <GetEntidad
+              register={register}
+              errors={errors}
+              setIdDepartamento={setIdDepartamento}
+              id_departamento={id_departamento}
+              watch={watch}
+            />
           </div>
 
           <div className="row">
