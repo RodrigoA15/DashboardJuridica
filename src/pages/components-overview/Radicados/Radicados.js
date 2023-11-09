@@ -57,7 +57,7 @@ function ComponentRadicados() {
   return (
     <ComponentSkeleton>
       <MainCard title="Crear Radicados" className="border-card card-background">
-        <Buscador setProcedencia={setProcedencia} />
+        <Buscador setProcedencia={setProcedencia} watch={watch} />
         <form onSubmit={onSubmit}>
           {/* Radicados */}
           <div className="row mb-3">

@@ -14,8 +14,14 @@ function Buscador({ setProcedencia }) {
     register,
     handleSubmit,
     formState: { errors },
-    reset
-  } = useForm();
+    reset,
+    watch
+  } = useForm({
+    mode: 'onChange',
+    defaultValues: {
+      search: ''
+    }
+  });
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
@@ -32,12 +38,17 @@ function Buscador({ setProcedencia }) {
   const resetEntrada = () => {
     setEntrada(false);
   };
-  const GetidentificacionById = async () => {
+
+  const validacion = async () => {
     if (numero_identificacion.trim() === '') {
       toast.error('El termino busqueda no puede estar vacio');
     }
+  };
+
+  const GetidentificacionById = async () => {
+    validacion();
     try {
-      const response = await axios.get(`/procedencia/procedencia/${numero_identificacion}`);
+      const response = await axios.get(`/procedencia/procedencias/${numero_identificacion}`);
       if (response.data.length > 0) {
         setProcedenciaData(response.data);
         const procedenciaValue = response.data[0]._id;
@@ -61,8 +72,8 @@ function Buscador({ setProcedencia }) {
   };
 
   const onSubmit = handleSubmit((data) => {
+    validacion();
     PostProcedencia(data);
-    console.log(data);
     reset();
   });
 
@@ -90,6 +101,10 @@ function Buscador({ setProcedencia }) {
         {/* Buscador */}
         <div className="col-4 input-container">
           <OutlinedInput
+            {...register('search', {
+              required: 'El termino busqueda no puede estar vacio',
+              minLength: { value: 8, message: 'Número identificacion debe ser mayor a 8 caracteres' }
+            })}
             size="small"
             id="search2"
             sx={{
@@ -105,7 +120,9 @@ function Buscador({ setProcedencia }) {
             placeholder="Digite número de identificación y pulse enter para buscar"
             onChange={handleInputChange}
             onKeyDown={handleKeyPress}
+            required
           />
+          {errors.search && <span className="inputForm ">{errors.search.message}</span>}
         </div>
 
         {/* Campos de entrada*/}
@@ -189,16 +206,55 @@ function Buscador({ setProcedencia }) {
 
                     {errors.tipo_contacto && <span className="inputForm ">{errors.tipo_contacto.message}</span>}
                   </div>
-                  <div className="col">
-                    <input
-                      className="form-control rounded-pill minimal-input-dark"
-                      placeholder="Informaci&oacute;n de contacto"
-                      type="text"
-                      id="contacto"
-                      {...register('info_contacto', { required: 'Información de contacto es requerido' })}
-                    />
-                    {errors.info_contacto && <span className="inputForm ">{errors.info_contacto.message}</span>}
-                  </div>
+
+                  {watch('tipo_contacto') == 'direccion' && (
+                    <div className="col">
+                      <input
+                        className="form-control rounded-pill minimal-input-dark"
+                        placeholder="Direcci&oacute;n"
+                        type="text"
+                        id="direccion"
+                        {...register('direccion', { required: 'Información de contacto es requerido' })}
+                      />
+                      {errors.direccion && <span className="inputForm ">{errors.direccion.message}</span>}
+                    </div>
+                  )}
+
+                  {watch('tipo_contacto') == 'telefono' && (
+                    <div className="col">
+                      <input
+                        className="form-control rounded-pill minimal-input-dark"
+                        placeholder="Tel&eacute;fono"
+                        type="number"
+                        id="telefono"
+                        {...register('telefono', {
+                          required: 'Información de contacto es requerido',
+                          minLength: { value: 8, message: 'Número de teléfono  debe ser minimo 8 caracteres' },
+                          maxLength: { value: 12, message: 'Número de teléfono  debe ser maximo 12 caracteres' }
+                        })}
+                      />
+                      {errors.telefono && <span className="inputForm ">{errors.telefono.message}</span>}
+                    </div>
+                  )}
+
+                  {watch('tipo_contacto') == 'correo' && (
+                    <div className="col">
+                      <input
+                        className="form-control rounded-pill minimal-input-dark"
+                        placeholder="Correo electr&oacute;nico"
+                        type="email"
+                        id="correo"
+                        {...register('correo', {
+                          required: 'Información de contacto es requerido',
+                          pattern: {
+                            value: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
+                            message: 'Correo no valido, no cumple formato'
+                          }
+                        })}
+                      />
+                      {errors.correo && <span className="inputForm ">{errors.correo.message}</span>}
+                    </div>
+                  )}
                 </div>
               </div>
 
