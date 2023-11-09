@@ -3,15 +3,18 @@ import axios from 'api/axios';
 import PropTypes from 'prop-types';
 import GetAsunto from '../Asunto/GetAsunto';
 
-function GetDepartamentos({ register, setIdDepartamento, id_departamento, errors }) {
+function GetDepartamentos({ register, setIdDepartamento, id_departamento, errors, selectedEntityId }) {
   const [dataDepartamento, setDataDepartamento] = useState([]);
-  useEffect(() => {
-    listDepartamentos();
-  }, []);
 
-  const listDepartamentos = async () => {
+  useEffect(() => {
+    if (selectedEntityId) {
+      listDepartamentos(selectedEntityId);
+    }
+  }, [selectedEntityId]);
+
+  const listDepartamentos = async (entityId) => {
     try {
-      const response = await axios.get('/departamentos/departamento');
+      const response = await axios.get(`/departamentos/dptoentidad/${entityId}`);
       setDataDepartamento(response.data);
     } catch (error) {
       console.log(error);
@@ -33,8 +36,8 @@ function GetDepartamentos({ register, setIdDepartamento, id_departamento, errors
   );
 }
 
-export default GetDepartamentos;
-
 GetDepartamentos.propTypes = {
   register: PropTypes.func.isRequired
 };
+
+export default GetDepartamentos;

@@ -5,6 +5,7 @@ import GetDepartamentos from '../Departamento/GetDepartamentos';
 
 function GetEntidad({ register, errors, setIdDepartamento, id_departamento }) {
   const [dataEntidad, setDataEntidad] = useState([]);
+  const [idEntidadSeleccionada, setIdEntidadSeleccionada] = useState('');
 
   useEffect(() => {
     listEntidad();
@@ -28,6 +29,10 @@ function GetEntidad({ register, errors, setIdDepartamento, id_departamento }) {
           {...register('id_entidad', {
             required: 'Campo entidad es obligatorio'
           })}
+          onChange={(e) => {
+            setIdEntidadSeleccionada(e.target.value);
+            setIdDepartamento(e.target.value);
+          }}
         >
           <option value="">Seleccione la entidad</option>
           {dataEntidad.map((entidad) => (
@@ -41,8 +46,15 @@ function GetEntidad({ register, errors, setIdDepartamento, id_departamento }) {
 
       <div className="row">
         <div className="mb-3 col">
-          <h4>Dirigido a </h4>
-          <GetDepartamentos register={register} setIdDepartamento={setIdDepartamento} id_departamento={id_departamento} errors={errors} />
+          <h4>Dirigido a</h4>
+          <GetDepartamentos
+            register={register}
+            setIdDepartamento={setIdDepartamento}
+            id_departamento={id_departamento}
+            errors={errors}
+            dataEntidad={dataEntidad}
+            selectedEntityId={idEntidadSeleccionada}
+          />
         </div>
 
         <div className="mb-3 col">
@@ -70,8 +82,8 @@ function GetEntidad({ register, errors, setIdDepartamento, id_departamento }) {
   );
 }
 
-export default GetEntidad;
-
 GetEntidad.propTypes = {
   register: PropTypes.func.isRequired
 };
+
+export default GetEntidad;
