@@ -14,7 +14,7 @@ function GetRespuesta() {
 
   const apiGetRespuesta = async () => {
     if (numero_radicado.trim() === '') {
-      toast.error('Termino busqeuda no debe estar vacio');
+      toast.error('Termino busqueda no debe estar vacio');
       return;
     }
     try {

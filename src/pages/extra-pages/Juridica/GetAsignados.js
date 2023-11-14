@@ -47,7 +47,7 @@ function GetAsignados() {
   };
 
   const diasHabiles = (fecha_radicado) => {
-    let contador = 0;
+    let contador = -1;
     let fechaInicio = new Date(fecha_radicado);
     let fechaFin = new Date();
     let festivos = ['2023-10-06', '2023-10-05'];

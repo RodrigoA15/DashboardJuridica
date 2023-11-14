@@ -81,6 +81,7 @@ function ModalReasignacion({ open, handleClose, data }) {
             container: 'swal-zindex'
           }
         });
+        handleClose();
         historialCambios();
       } catch (error) {
         MySwal.fire({

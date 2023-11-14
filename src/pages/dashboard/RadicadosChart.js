@@ -66,7 +66,11 @@ function RadicadosChart() {
         }
       });
     } catch (error) {
-      console.error('Error al obtener datos del gráfico:', error);
+      if (error.response && error.response.status === 404) {
+        <h1>No hay Datos</h1>;
+      } else {
+        console.log(error);
+      }
     }
   };
 
