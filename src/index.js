@@ -43,6 +43,7 @@ root.render(
             <Route element={<ProtectedRoute />}>
               <Route path="radicados" element="" />
               <Route path="pqrs" element="" />
+              <Route path="admin" element="" />
             </Route>
           </Routes>
         </BrowserRouter>

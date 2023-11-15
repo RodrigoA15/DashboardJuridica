@@ -60,7 +60,7 @@ function ModalRadicadosRespuestas({ opens, handleCloses, respuestas }) {
       });
 
       if (alert.isConfirmed) {
-        await axios.put(`radicados/radicados/${id_radicado}`, {
+        await axios.put(`/radicados/radicados/${id_radicado}`, {
           estado_radicado: 'Respuesta'
         });
         toast.success('Respondido correctamente');

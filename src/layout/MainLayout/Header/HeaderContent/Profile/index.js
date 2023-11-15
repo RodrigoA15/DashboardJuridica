@@ -25,7 +25,7 @@ import ProfileTab from './ProfileTab';
 import SettingTab from './SettingTab';
 import { useAuth } from 'context/authContext';
 // assets
-import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
+import { LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { Navigate } from '../../../../../../node_modules/react-router-dom/dist/index';
 
@@ -170,10 +170,10 @@ const Profile = () => {
                                 textTransform: 'capitalize'
                               }}
                               icon={<UserOutlined style={{ marginBottom: 0, marginRight: '10px' }} />}
-                              label="Profile"
+                              label="Perfil"
                               {...a11yProps(0)}
                             />
-                            <Tab
+                            {/* <Tab
                               sx={{
                                 display: 'flex',
                                 flexDirection: 'row',
@@ -184,7 +184,7 @@ const Profile = () => {
                               icon={<SettingOutlined style={{ marginBottom: 0, marginRight: '10px' }} />}
                               label="Setting"
                               {...a11yProps(1)}
-                            />
+                            /> */}
                           </Tabs>
                         </Box>
                         <TabPanel value={value} index={0} dir={theme.direction}>

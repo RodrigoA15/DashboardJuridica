@@ -207,54 +207,56 @@ function Buscador({ setProcedencia }) {
                     {errors.tipo_contacto && <span className="inputForm ">{errors.tipo_contacto.message}</span>}
                   </div>
 
-                  {watch('tipo_contacto') == 'direccion' && (
-                    <div className="col">
-                      <input
-                        className="form-control rounded-pill minimal-input-dark"
-                        placeholder="Direcci&oacute;n"
-                        type="text"
-                        id="direccion"
-                        {...register('direccion', { required: 'Información de contacto es requerido' })}
-                      />
-                      {errors.direccion && <span className="inputForm ">{errors.direccion.message}</span>}
-                    </div>
-                  )}
+                  <div className="col">
+                    {watch('tipo_contacto') == 'direccion' && (
+                      <div>
+                        <input
+                          className="form-control rounded-pill minimal-input-dark"
+                          placeholder="Direcci&oacute;n"
+                          type="text"
+                          id="direccion"
+                          {...register('direccion', { required: 'Información de contacto es requerido' })}
+                        />
+                        {errors.direccion && <span className="inputForm ">{errors.direccion.message}</span>}
+                      </div>
+                    )}
 
-                  {watch('tipo_contacto') == 'telefono' && (
-                    <div className="col">
-                      <input
-                        className="form-control rounded-pill minimal-input-dark"
-                        placeholder="Tel&eacute;fono"
-                        type="number"
-                        id="telefono"
-                        {...register('telefono', {
-                          required: 'Información de contacto es requerido',
-                          minLength: { value: 8, message: 'Número de teléfono  debe ser minimo 8 caracteres' },
-                          maxLength: { value: 12, message: 'Número de teléfono  debe ser maximo 12 caracteres' }
-                        })}
-                      />
-                      {errors.telefono && <span className="inputForm ">{errors.telefono.message}</span>}
-                    </div>
-                  )}
+                    {watch('tipo_contacto') == 'telefono' && (
+                      <div className="col">
+                        <input
+                          className="form-control rounded-pill minimal-input-dark"
+                          placeholder="Tel&eacute;fono"
+                          type="number"
+                          id="telefono"
+                          {...register('telefono', {
+                            required: 'Información de contacto es requerido',
+                            minLength: { value: 8, message: 'Número de teléfono  debe ser minimo 8 caracteres' },
+                            maxLength: { value: 12, message: 'Número de teléfono  debe ser maximo 12 caracteres' }
+                          })}
+                        />
+                        {errors.telefono && <span className="inputForm ">{errors.telefono.message}</span>}
+                      </div>
+                    )}
 
-                  {watch('tipo_contacto') == 'correo' && (
-                    <div className="col">
-                      <input
-                        className="form-control rounded-pill minimal-input-dark"
-                        placeholder="Correo electr&oacute;nico"
-                        type="email"
-                        id="correo"
-                        {...register('correo', {
-                          required: 'Información de contacto es requerido',
-                          pattern: {
-                            value: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
-                            message: 'Correo no valido, no cumple formato'
-                          }
-                        })}
-                      />
-                      {errors.correo && <span className="inputForm ">{errors.correo.message}</span>}
-                    </div>
-                  )}
+                    {watch('tipo_contacto') == 'correo' && (
+                      <div className="col">
+                        <input
+                          className="form-control rounded-pill minimal-input-dark"
+                          placeholder="Correo electr&oacute;nico"
+                          type="email"
+                          id="correo"
+                          {...register('correo', {
+                            required: 'Información de contacto es requerido',
+                            pattern: {
+                              value: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
+                              message: 'Correo no valido, no cumple formato'
+                            }
+                          })}
+                        />
+                        {errors.correo && <span className="inputForm ">{errors.correo.message}</span>}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
 

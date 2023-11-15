@@ -77,7 +77,7 @@ const DashboardDefault = () => {
           <ChartEntidad />
         </MainCard>
         <Grid item>
-          <Typography variant="h5">Exportar Informacion Radicados</Typography>
+          <Typography variant="h5">Exportar Informacion Radicados </Typography>
         </Grid>
         <MainCard sx={{ mt: 2 }} content={false}>
           <Stack spacing={3}>
@@ -86,9 +86,6 @@ const DashboardDefault = () => {
                 <Stack>
                   <Typography variant="h5" noWrap>
                     Exportar Datos
-                  </Typography>
-                  <Typography variant="caption" color="secondary" noWrap>
-                    Exportar archivo radicados
                   </Typography>
                 </Stack>
               </Grid>

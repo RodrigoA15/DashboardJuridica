@@ -3,6 +3,7 @@ import dashboard from './dashboard';
 import utilities from './utilities';
 import support from './juridica';
 import pendientes from './pendientesUsuario';
+import admin from './admin';
 import { useAuth } from 'context/authContext';
 
 function GetMenuItems() {
@@ -11,7 +12,7 @@ function GetMenuItems() {
   if (user && user.role && user.role.nombre_rol) {
     if (user.role.nombre_rol === 'Coordinador') {
       return {
-        items: [dashboard, utilities, support, pendientes]
+        items: [dashboard, utilities, support, pendientes, admin]
       };
     } else {
       return {

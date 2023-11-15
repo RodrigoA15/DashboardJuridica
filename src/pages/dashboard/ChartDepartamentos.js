@@ -26,6 +26,14 @@ function ChartDepartamentos() {
       {
         name: 'Sistemas',
         data: []
+      },
+      {
+        name: 'Archivo',
+        data: []
+      },
+      {
+        name: 'Secretaria',
+        data: []
       }
     ],
     options: {
@@ -80,6 +88,12 @@ function ChartDepartamentos() {
           },
           {
             data: response.data.map((sistemas) => sistemas.SISTEMAS)
+          },
+          {
+            data: response.data.map((archivo) => archivo.ARCHIVO)
+          },
+          {
+            data: response.data.map((secretaria) => secretaria.SECRETARIA)
           }
         ],
         options: {
