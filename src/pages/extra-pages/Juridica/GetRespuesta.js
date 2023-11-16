@@ -20,7 +20,6 @@ function GetRespuesta() {
     try {
       const response = await axios.get(`/radicados_respuestas/${user.departamento}/${numero_radicado}`);
       setRespondidos(response.data);
-      console.log(user.departamento);
     } catch (error) {
       if (error.response && error.response.status === 404) {
         toast.error('No se encontraron resultados en la busqueda');

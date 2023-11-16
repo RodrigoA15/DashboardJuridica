@@ -1,177 +1,177 @@
 .errors {
-  color: red  !important;;
+  color: red !important;
 }
 
 .input-container {
-  position: relative  !important;
-  display: inline-block  !important;
+  position: relative !important;
+  display: inline-block !important;
 }
 
 .custom-input {
-  padding: 10px  !important;
-  border: 1px solid #ccc  !important;
-  border-radius: 4px  !important;
-  outline: none  !important;
+  padding: 10px !important;
+  border: 1px solid #ccc !important;
+  border-radius: 4px !important;
+  outline: none !important;
 }
 
 .custom-button {
-  position: relative  !important;
-  float: right  !important;
+  position: relative !important;
+  float: right !important;
 }
 
 .minimal-input-dark {
-  border: 1px solid #666  !important;
-  font-size: 14px  !important;
-  border-radius: 5px  !important;
+  border: 1px solid #666 !important;
+  font-size: 14px !important;
+  border-radius: 5px !important;
 }
 
 .minimal-input-dark:focus {
-  border-color: 4px #1890ff  !important;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2)  !important;
+  border-color: 4px #1890ff !important;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2) !important;
 }
 
 .border-card {
-  border-left: 2px solid #117dbf  !important;
+  border-left: 2px solid #117dbf !important;
 }
 
 .MuiAppBar-colorInherit {
-  background-color: #117dbf  !important;
+  background-color: #117dbf !important;
 }
 
 .swal-zindex {
-  z-index: 10000  !important;
+  z-index: 10000 !important;
 }
 
 .inputForm {
-  display: block  !important;
-  color: tomato  !important;
-  font-style: x-small  !important;
+  display: block !important;
+  color: tomato !important;
+  font-style: x-small !important;
 }
 
 /* Loader */
 .newtons-cradle {
-  --uib-size: 50px  !important;
-  --uib-speed: 1.2s  !important;
-  --uib-color: #474554  !important;
-  position: relative  !important;
-  display: flex  !important;
-  align-items: center  !important;
-  justify-content: center  !important;
-  width: var(--uib-size)  !important;
-  height: var(--uib-size)  !important;
+  --uib-size: 50px !important;
+  --uib-speed: 1.2s !important;
+  --uib-color: #474554 !important;
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: var(--uib-size) !important;
+  height: var(--uib-size) !important;
 }
 
 .newtons-cradle__dot {
-  position: relative  !important;
-  display: flex  !important;
-  align-items: center  !important;
-  height: 100%  !important;
-  width: 25%  !important;
-  transform-origin: center top  !important;
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  height: 100% !important;
+  width: 25% !important;
+  transform-origin: center top !important;
 }
 
 .newtons-cradle__dot::after {
-  content: ''  !important;
-  display: block  !important;
-  width: 100%  !important;
-  height: 25%  !important;
-  border-radius: 50%  !important;
-  background-color: var(--uib-color)  !important;
+  content: '' !important;
+  display: block !important;
+  width: 100% !important;
+  height: 25% !important;
+  border-radius: 50% !important;
+  background-color: var(--uib-color) !important;
 }
 
 .newtons-cradle__dot:first-child {
-  animation: swing var(--uib-speed) linear infinite  !important;
+  animation: swing var(--uib-speed) linear infinite !important;
 }
 
 .newtons-cradle__dot:last-child {
-  animation: swing2 var(--uib-speed) linear infinite  !important;
+  animation: swing2 var(--uib-speed) linear infinite !important;
 }
 
 @keyframes swing {
   0% {
-    transform: rotate(0deg)  !important;
-    animation-timing-function: ease-out  !important;
+    transform: rotate(0deg) !important;
+    animation-timing-function: ease-out !important;
   }
 
   25% {
-    transform: rotate(70deg)  !important;
-    animation-timing-function: ease-in  !important;
+    transform: rotate(70deg) !important;
+    animation-timing-function: ease-in !important;
   }
 
   50% {
-    transform: rotate(0deg)  !important;
-    animation-timing-function: linear  !important;
+    transform: rotate(0deg) !important;
+    animation-timing-function: linear !important;
   }
 }
 
 @keyframes swing2 {
   0% {
-    transform: rotate(0deg)  !important;
-    animation-timing-function: linear  !important;
+    transform: rotate(0deg) !important;
+    animation-timing-function: linear !important;
   }
 
   50% {
-    transform: rotate(0deg)  !important;
-    animation-timing-function: ease-out  !important;
+    transform: rotate(0deg) !important;
+    animation-timing-function: ease-out !important;
   }
 
   75% {
-    transform: rotate(-70deg)  !important;
-    animation-timing-function: ease-in  !important;
+    transform: rotate(-70deg) !important;
+    animation-timing-function: ease-in !important;
   }
 }
 
 /* Body */
 .siu1 {
-  background: #262626  !important;
-  color: white  !important;
+  background: #262626 !important;
+  color: white !important;
 }
 
 .css-8qynzz-MuiTypography-root {
-  color: white  !important;
+  color: white !important;
 }
 
 /* Card Creados */
 .card1 {
-  background: #5a96e3  !important;
-  border: none  !important;
-  color: white  !important;
+  background: #5a96e3 !important;
+  border: none !important;
+  color: white !important;
 }
 
 /* Card Respondidos */
 .card2 {
-  background: #99b080  !important;
-  border: none  !important;
-  color: white  !important;
+  background: #99b080 !important;
+  border: none !important;
+  color: white !important;
 }
 
 /* Card Asignados */
 .card3 {
-  background: #ff870a  !important;
-  border: none  !important;
-  color: white  !important;
+  background: #ff870a !important;
+  border: none !important;
+  color: white !important;
 }
 
 /* Card Creados */
 .card4 {
-  background: #ff6666  !important;
-  border: none  !important;
-  color: white  !important;
+  background: #ff6666 !important;
+  border: none !important;
+  color: white !important;
 }
 
 /* nombre componente */
 .css-1ndydts-MuiTypography-root {
-  color: white  !important
+  color: white !important;
 }
 
 /* Texto Tabs asignaciones-Pendientes-Asignados */
 .css-7ojolc-MuiButtonBase-root-MuiTab-root {
-  color: rgba(255, 255, 255, 0.945)  !important;
+  color: rgba(255, 255, 255, 0.945) !important;
 }
 
 .left-icon {
-  align-self: flex-end  !important;
-  margin-bottom: 50px  !important;  
+  align-self: flex-end !important;
+  margin-bottom: 50px !important;
 }
 
 /* .css-yqjk4i-MuiTablePagination-selectLabel {
@@ -187,13 +187,30 @@
 } */
 
 .rowPage {
-  color: white  !important;
+  color: white !important;
 }
 
-.MuiTableCell-body{
-  border-bottom: 0.5rem px solid  #464141  !important;
+.MuiTableCell-body {
+  border-bottom: 0.5rem px solid #464141 !important;
 }
 
-.form-label{
-  color: #262626  !important;
+.form-label {
+  color: #262626 !important;
+}
+
+/*  tabla admin */
+@keyframes blink {
+  0% {
+    background-color: transparent;
+  }
+  50% {
+    background-color: #ff6666;
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+.blinking {
+  animation: blink 3s infinite;
 }
