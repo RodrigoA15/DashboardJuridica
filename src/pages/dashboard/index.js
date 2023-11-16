@@ -52,6 +52,7 @@ const DashboardDefault = () => {
           </Box>
         </MainCard>
       </Grid>
+
       <Grid item xs={12} md={5} lg={4}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>

@@ -1,11 +1,11 @@
-import MainCard from 'components/MainCard';
-import ComponentSkeleton from 'pages/components-overview/ComponentSkeleton';
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material';
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Grid } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 import axios from 'api/axios';
 import { toast } from 'sonner';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import * as locales from '@mui/material/locale';
+import MainCard from 'components/MainCard';
+import EstadoDepartamento from './estadoDepartamentos';
 
 function AdminRadicados() {
   const [dataRadicados, setDataRadicados] = useState([]);
@@ -61,37 +61,35 @@ function AdminRadicados() {
   };
 
   return (
-    <ComponentSkeleton>
-      <MainCard>
-        <div className="row m-1">
-          <div className="col">
-            <input className="form-control" type="date" value={startDate} onChange={handleFechaInicio} />
-          </div>
-          <div className="col">
-            <input className="form-control" type="date" value={endDate} onChange={handleFechaFin} />
-          </div>
-          <div className="col">
-            <button className="btn btn-primary" onClick={() => apiDataRadicados()}>
-              Buscar
-            </button>
-          </div>
-        </div>
+    <Grid container rowSpacing={4.5} columnSpacing={2.75}>
+      <Grid item xs={12} md={7} lg={8}>
         <TableContainer component={Paper}>
+          <div className="row m-1">
+            <div className="col">
+              <input className="form-control" type="date" value={startDate} onChange={handleFechaInicio} />
+            </div>
+            <div className="col">
+              <input className="form-control" type="date" value={endDate} onChange={handleFechaFin} />
+            </div>
+            <div className="col">
+              <button className="btn btn-primary" onClick={() => apiDataRadicados()}>
+                Buscar
+              </button>
+            </div>
+          </div>
           <Table sx={{ minWidth: 350 }} aria-label="simple table">
             <TableHead>
               <TableRow>
                 <TableCell>Numero Radicado</TableCell>
                 <TableCell>Fecha Radicado</TableCell>
                 <TableCell>Cantidad Respuesta</TableCell>
-                <TableCell>Procedencia</TableCell>
+                {/* <TableCell>Procedencia</TableCell> */}
                 <TableCell>Canal Entrada</TableCell>
                 <TableCell>Asunto</TableCell>
                 <TableCell>Tipificacion</TableCell>
                 <TableCell>Entidad</TableCell>
                 <TableCell>Area Encargada</TableCell>
                 <TableCell>Estado Radicado</TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -109,7 +107,7 @@ function AdminRadicados() {
                       {data.fecha_radicado}
                     </TableCell>
                     <TableCell>{data.cantidad_respuesta}</TableCell>
-                    <TableCell>{data.id_procedencia.nombre}</TableCell>
+                    {/* <TableCell>{data.id_procedencia.nombre}</TableCell> */}
                     <TableCell>{data.id_canal_entrada.nombre_canal}</TableCell>
                     <TableCell className={data.id_asunto.nombre_asunto === 'TUTELA' ? 'blinking' : ''}>
                       {data.id_asunto.nombre_asunto}
@@ -136,8 +134,14 @@ function AdminRadicados() {
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </ThemeProvider>
-      </MainCard>
-    </ComponentSkeleton>
+      </Grid>
+
+      <Grid item xs={12} md={5} lg={4}>
+        <MainCard sx={{ mt: 2 }} content={false}>
+          <EstadoDepartamento />
+        </MainCard>
+      </Grid>
+    </Grid>
   );
 }
 
