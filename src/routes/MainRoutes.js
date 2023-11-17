@@ -5,6 +5,7 @@ import MainLayout from 'layout/MainLayout';
 import Juridica from 'pages/extra-pages/Juridica/Juridica';
 import PendientesUsuario from 'pages/extra-pages/PQRSPendientesUsuario/PendientesUsuario';
 import AdminRadicados from 'pages/admin/index';
+import UsuariosQX from 'pages/admin/UsuariosQX/index';
 // render - dashboard
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
 
@@ -45,6 +46,10 @@ const MainRoutes = {
     {
       path: 'radicadosAdmin',
       element: <AdminRadicados />
+    },
+    {
+      path: 'usuariosqx',
+      element: <UsuariosQX />
     }
   ]
 };

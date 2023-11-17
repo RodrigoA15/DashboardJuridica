@@ -1,8 +1,10 @@
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import GroupIcon from '@mui/icons-material/Group';
 
 //Icons
 const icons = {
-  AdminPanelSettingsIcon
+  AdminPanelSettingsIcon,
+  GroupIcon
 };
 
 const admin = {
@@ -16,6 +18,13 @@ const admin = {
       type: 'item',
       url: '/radicadosAdmin',
       icon: icons.AdminPanelSettingsIcon
+    },
+    {
+      id: 'usuariosqx',
+      title: 'UsuariosQX',
+      type: 'item',
+      url: '/usuariosqx',
+      icon: icons.GroupIcon
     }
   ]
 };

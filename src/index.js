@@ -44,6 +44,7 @@ root.render(
               <Route path="radicados" element="" />
               <Route path="pqrs" element="" />
               <Route path="admin" element="" />
+              <Route path="usuariosqx" element="" />
             </Route>
           </Routes>
         </BrowserRouter>
