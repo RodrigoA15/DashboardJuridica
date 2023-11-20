@@ -23,7 +23,7 @@ function GetEntidad({ register, errors, setIdDepartamento, id_departamento }) {
 
   return (
     <div className="row">
-      <div className="col-6">
+      <div className="col-6 mb-3">
         <select
           className="form-select rounded-pill minimal-input-dark"
           {...register('id_entidad', {
@@ -46,7 +46,9 @@ function GetEntidad({ register, errors, setIdDepartamento, id_departamento }) {
 
       <div className="row">
         <div className="mb-3 col">
-          <h4>Dirigido a</h4>
+          <label htmlFor="label" className="form-label h6">
+            Dirigido a
+          </label>
           <GetDepartamentos
             register={register}
             setIdDepartamento={setIdDepartamento}
@@ -58,7 +60,9 @@ function GetEntidad({ register, errors, setIdDepartamento, id_departamento }) {
         </div>
 
         <div className="mb-3 col">
-          <h4>N&uacute;mero de respuestas</h4>
+          <label htmlFor="label" className="form-label h6">
+            N&uacute;mero de respuestas
+          </label>
           <input
             className="form-control rounded-pill minimal-input-dark"
             type="number"

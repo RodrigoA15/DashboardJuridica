@@ -99,7 +99,7 @@ function Buscador({ setProcedencia }) {
         <h4>Informaci&oacute;n usuario</h4>
 
         {/* Buscador */}
-        <div className="col-4 input-container">
+        <div className="col-4 input-container mb-2">
           <OutlinedInput
             {...register('search', {
               required: 'El termino busqueda no puede estar vacio',
@@ -152,8 +152,11 @@ function Buscador({ setProcedencia }) {
             <form onSubmit={onSubmit}>
               <div className="row">
                 <div className="col-4">
+                  <label htmlFor="label" className="form-label h6">
+                    Seleccione tipo de identificaci&oacute;n
+                  </label>
                   <select
-                    className="form-select mt-4 rounded-pill minimal-input-dark"
+                    className="form-select  rounded-pill minimal-input-dark"
                     {...register('tipo_identificacion', { required: 'Tipo identificación es requerido' })}
                   >
                     <option value="">Seleccione tipo de identificaci&oacute;n</option>
@@ -192,6 +195,10 @@ function Buscador({ setProcedencia }) {
 
                 <div className="row">
                   <div className="col">
+                    <label htmlFor="label" className="form-label h6">
+                      Seleccione una opci&oacute;n de contacto
+                    </label>
+
                     <select
                       className="form-select  rounded-pill minimal-input-dark"
                       {...register('tipo_contacto', {
@@ -207,7 +214,7 @@ function Buscador({ setProcedencia }) {
                     {errors.tipo_contacto && <span className="inputForm ">{errors.tipo_contacto.message}</span>}
                   </div>
 
-                  <div className="col">
+                  <div className="col mt-4">
                     {watch('tipo_contacto') == 'direccion' && (
                       <div>
                         <input

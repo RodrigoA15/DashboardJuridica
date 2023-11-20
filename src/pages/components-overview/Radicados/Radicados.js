@@ -114,19 +114,25 @@ function ComponentRadicados() {
 
           <div className="row mb-3">
             <div className="mb-3 col">
-              <h4>Canal entrada</h4>
+              <label htmlFor="label" className="form-label h6">
+                Canal entrada
+              </label>
               <GetEntrada register={register} errors={errors} />
             </div>
 
             <div className="mb-3 col">
-              <h4>Tipificaci&oacute;n</h4>
+              <label htmlFor="label" className="form-label h6">
+                Tipificaci&oacute;n
+              </label>
 
               <GetTipificacion register={register} errors={errors} />
             </div>
           </div>
 
           <div>
-            <h4>Entidad</h4>
+            <label htmlFor="label" className="form-label h6">
+              Entidad
+            </label>
             <GetEntidad
               register={register}
               errors={errors}
