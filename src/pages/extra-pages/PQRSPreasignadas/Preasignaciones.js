@@ -105,8 +105,8 @@ function Preasignaciones() {
         <Table sx={{ minWidth: 350 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Número Radicado</TableCell>
-              <TableCell align="left">Fecha Radicado</TableCell>
+              <TableCell>Número radicado</TableCell>
+              <TableCell align="left">Fecha radicado</TableCell>
               <TableCell align="left">Asunto</TableCell>
               <TableCell align="left">Departamento</TableCell>
               <TableCell align="center">Acciones</TableCell>

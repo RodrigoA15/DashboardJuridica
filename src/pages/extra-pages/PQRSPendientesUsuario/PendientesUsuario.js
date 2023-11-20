@@ -115,9 +115,9 @@ function PendientesUsuario() {
         <Table sx={{ minWidth: 350 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Número Radicado</TableCell>
-              <TableCell align="left">Fecha Radicado</TableCell>
-              <TableCell align="left">Fecha Asignacion</TableCell>
+              <TableCell>Número radicado</TableCell>
+              <TableCell align="left">Fecha radicado</TableCell>
+              <TableCell align="left">Fecha asignacion</TableCell>
               <TableCell align="left">Respuestas estimadas</TableCell>
               <TableCell align="center">Dias</TableCell>
               <TableCell align="center">Acciones</TableCell>

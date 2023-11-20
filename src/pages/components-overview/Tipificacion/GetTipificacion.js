@@ -26,7 +26,7 @@ function GetTipificacion({ register, errors }) {
           required: 'Tipificación es obligatorio'
         })}
       >
-        <option value="">Seleccione Tipificaci&oacute;n</option>
+        <option value="">Seleccione tipificaci&oacute;n</option>
         {dataTipicacion &&
           dataTipicacion.map((i) => (
             <option key={i._id} value={i._id}>

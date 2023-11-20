@@ -153,10 +153,10 @@ function Buscador({ setProcedencia }) {
               <div className="row">
                 <div className="col-4">
                   <select
-                    className="form-select mt-4 rounded-pill"
+                    className="form-select mt-4 rounded-pill minimal-input-dark"
                     {...register('tipo_identificacion', { required: 'Tipo identificación es requerido' })}
                   >
-                    <option value="">Seleccione tipo de Identificaci&oacute;n</option>
+                    <option value="">Seleccione tipo de identificaci&oacute;n</option>
                     <option value="CC">Cedula de ciudadania</option>
                     <option value="CE">Cedula de extranjeria</option>
                     <option value="PEP">Permiso Especial De Permanencia</option>

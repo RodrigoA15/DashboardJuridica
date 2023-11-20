@@ -78,7 +78,7 @@ const DashboardDefault = () => {
           <ChartEntidad />
         </MainCard>
         <Grid item>
-          <Typography variant="h5">Exportar Informacion Radicados </Typography>
+          <Typography variant="h5">Exportar informacion radicados </Typography>
         </Grid>
         <MainCard sx={{ mt: 2 }} content={false}>
           <Stack spacing={3}>
@@ -100,7 +100,7 @@ const DashboardDefault = () => {
       <Grid item xs={12} md={7} lg={8}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
-            <Typography variant="h5">Canales de Entrada</Typography>
+            <Typography variant="h5">Canales de entrada</Typography>
           </Grid>
         </Grid>
         <MainCard sx={{ mt: 1.75 }}>

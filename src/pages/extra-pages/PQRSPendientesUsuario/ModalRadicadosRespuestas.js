@@ -64,6 +64,7 @@ function ModalRadicadosRespuestas({ opens, handleCloses, respuestas }) {
           estado_radicado: 'Respuesta'
         });
         toast.success('Respondido correctamente');
+        handleCloses();
       } else {
         toast.error('No se respondio la peticion');
       }

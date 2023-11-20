@@ -97,11 +97,11 @@ function GetPendientes() {
         <Table sx={{ minWidth: 350 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Número Radicado</TableCell>
-              <TableCell align="center">Fecha Radicado</TableCell>
+              <TableCell>Número radicado</TableCell>
+              <TableCell align="center">Fecha radicado</TableCell>
               <TableCell align="center">Asunto</TableCell>
               <TableCell align="center">Procedencia</TableCell>
-              <TableCell align="center">Asignar Radicado</TableCell>
+              <TableCell align="center">Asignar radicado</TableCell>
               <TableCell align="left">Estado</TableCell>
             </TableRow>
           </TableHead>

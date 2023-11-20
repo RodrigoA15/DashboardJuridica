@@ -56,13 +56,14 @@ function ModalRespuestas({ open, handleClose, data }) {
       formData.append('numero_radicado_respuesta', numero_radicado_respuesta);
       formData.append('id_asignacion', data._id);
       formData.append('respuesta_pdf', num.respuesta_pdf[0]);
-      formData.append('fechaRespuesta', new Date().toLocaleDateString('es-CO'));
+      formData.append('fechaRespuesta', new Date());
 
       const config = { headers: { 'Content-Type': 'multipart/form-data' } };
       console.log(formData.respuesta_pdf);
 
       await axios.post('/create_respuestas', formData, config);
       toast.success('Respuesta Agregada');
+      handleClose();
     } catch (error) {
       toast.error('error de servidor');
       console.log(error);

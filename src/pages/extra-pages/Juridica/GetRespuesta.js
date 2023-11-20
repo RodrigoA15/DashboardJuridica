@@ -47,10 +47,10 @@ function GetRespuesta() {
         <Table sx={{ minWidth: 350 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Número Radicado</TableCell>
+              <TableCell>Número radicado</TableCell>
               <TableCell align="left">Asunto</TableCell>
               <TableCell align="left">Responsable</TableCell>
-              <TableCell>Número Radicado respuestas</TableCell>
+              <TableCell>Número radicado respuestas</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

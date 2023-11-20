@@ -93,8 +93,8 @@ function GetAsignados() {
           <TableHead>
             <TableRow>
               <TableCell>Estado</TableCell>
-              <TableCell>Fecha Radicado</TableCell>
-              <TableCell align="left">Fecha Asignacion</TableCell>
+              <TableCell>Fecha radicado</TableCell>
+              <TableCell align="left">Fecha asignacion</TableCell>
               <TableCell align="left">Responsable</TableCell>
               <TableCell align="left">Dias</TableCell>
             </TableRow>

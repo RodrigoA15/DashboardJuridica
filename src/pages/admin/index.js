@@ -80,16 +80,16 @@ function AdminRadicados() {
           <Table sx={{ minWidth: 350 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Numero Radicado</TableCell>
-                <TableCell>Fecha Radicado</TableCell>
-                <TableCell>Cantidad Respuesta</TableCell>
+                <TableCell>Numero radicado</TableCell>
+                <TableCell>Fecha radicado</TableCell>
+                <TableCell>Cantidad respuesta</TableCell>
                 {/* <TableCell>Procedencia</TableCell> */}
-                <TableCell>Canal Entrada</TableCell>
+                <TableCell>Canal entrada</TableCell>
                 <TableCell>Asunto</TableCell>
                 <TableCell>Tipificacion</TableCell>
                 <TableCell>Entidad</TableCell>
-                <TableCell>Area Encargada</TableCell>
-                <TableCell>Estado Radicado</TableCell>
+                <TableCell>Area encargada</TableCell>
+                <TableCell>Estado radicado</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

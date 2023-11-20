@@ -61,7 +61,7 @@ function ComponentRadicados() {
         <form onSubmit={onSubmit}>
           {/* Radicados */}
           <div className="row mb-3">
-            <h4>Informaci&oacute;n Radicado</h4>
+            <h4>Informaci&oacute;n radicado</h4>
             <div className="mb-3 col">
               <label htmlFor="label" className="form-label h6">
                 N&uacute;mero radicado
@@ -86,7 +86,7 @@ function ComponentRadicados() {
 
             <div className="mb-3 col">
               <label htmlFor="fecha" className="form-label h6">
-                Fecha Radicado
+                Fecha radicado
               </label>
               <input
                 type="date"
@@ -114,7 +114,7 @@ function ComponentRadicados() {
 
           <div className="row mb-3">
             <div className="mb-3 col">
-              <h4>Canal Entrada</h4>
+              <h4>Canal entrada</h4>
               <GetEntrada register={register} errors={errors} />
             </div>
 
