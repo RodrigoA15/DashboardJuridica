@@ -151,13 +151,13 @@ function Buscador({ setProcedencia }) {
               <div className="row">
                 <div className="col-4">
                   <label htmlFor="label" className="form-label h6">
-                    Seleccione tipo de identificaci&oacute;n
+                    Tipo documento
                   </label>
                   <select
                     className="form-select  rounded-pill minimal-input-dark"
                     {...register('tipo_identificacion', { required: 'Tipo identificación es requerido' })}
                   >
-                    <option value="">Seleccione tipo de identificaci&oacute;n</option>
+                    <option value="">Seleccione...</option>
                     <option value="CC">Cedula de ciudadania</option>
                     <option value="CE">Cedula de extranjeria</option>
                     <option value="PEP">Permiso Especial De Permanencia</option>
@@ -178,7 +178,7 @@ function Buscador({ setProcedencia }) {
                   {errors.nombre && <span className="inputForm ">{errors.nombre.message}</span>}
                 </div>
 
-                <div className="col mb-3">
+                <div className="col mb-4">
                   <label htmlFor="label" className="form-label h6">
                     Apellidos
                   </label>
@@ -203,7 +203,7 @@ function Buscador({ setProcedencia }) {
                         required: 'Tipo contacto es obligatorio'
                       })}
                     >
-                      <option value="">Seleccione una opci&oacute;n de contacto</option>
+                      <option value="">Seleccione...</option>
                       <option value="direccion">Dirección</option>
                       <option value="telefono">Teléfono</option>
                       <option value="correo">Correo Electrónico</option>
@@ -227,7 +227,7 @@ function Buscador({ setProcedencia }) {
                     )}
 
                     {watch('tipo_contacto') == 'telefono' && (
-                      <div className="col">
+                      <div>
                         <input
                           className="form-control rounded-pill minimal-input-dark"
                           placeholder="Tel&eacute;fono"
@@ -244,7 +244,7 @@ function Buscador({ setProcedencia }) {
                     )}
 
                     {watch('tipo_contacto') == 'correo' && (
-                      <div className="col">
+                      <div>
                         <input
                           className="form-control rounded-pill minimal-input-dark"
                           placeholder="Correo electr&oacute;nico"
@@ -262,6 +262,7 @@ function Buscador({ setProcedencia }) {
                       </div>
                     )}
                   </div>
+                  <div className="col"></div>
                 </div>
               </div>
 

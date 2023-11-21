@@ -8,11 +8,7 @@ function ProtectedRoute() {
   if (!loading && !isAuthenticated) return <Navigate to="/login" replace />;
   if (!user.departamento) {
     setIsAuthenticated(false);
-    return (
-      <div>
-        <Navigate to="/login" replace /> ;
-      </div>
-    );
+    return <Navigate to="/login" replace />;
   }
   console.log(user);
   return <Outlet />;

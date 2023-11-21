@@ -27,11 +27,11 @@ const Juridica = () => {
             <Typography> 0-5 Dias</Typography>
           </Stack>
           <Stack direction="row" alignItems="center" sx={{ marginRight: 5 }}>
-            <Dot color="warning" />
+            <Dot color="warning" className="m-1" />
             <Typography> 6-9 Dias</Typography>
           </Stack>
           <Stack direction="row" alignItems="center" sx={{ marginRight: 5 }}>
-            <Dot color="info" />
+            <Dot color="info" sx={{ margin: 5 }} />
             <Typography> 10-12 Dias</Typography>
           </Stack>
           <Stack direction="row" alignItems="center">
