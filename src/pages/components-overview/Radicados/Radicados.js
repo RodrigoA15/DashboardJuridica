@@ -10,7 +10,7 @@ import GetEntidad from '../Entidad/GetEntidad';
 import { useState } from 'react';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import { Button } from '../../../../node_modules/@mui/material/index';
+import { Button, Grid } from '../../../../node_modules/@mui/material/index';
 
 // ===============================|| CUSTOM - SHADOW BOX ||=============================== //
 
@@ -56,116 +56,121 @@ function ComponentRadicados() {
 
   return (
     <ComponentSkeleton>
-      <MainCard title="Crear Radicados" className="border-card card-background">
-        <Buscador setProcedencia={setProcedencia} watch={watch} />
-        <form onSubmit={onSubmit}>
-          {/* Radicados */}
-          <div className="row mb-3">
-            <h4>Informaci&oacute;n radicado</h4>
-            <div className="mb-3 col">
-              <label htmlFor="label" className="form-label h6">
-                N&uacute;mero radicado
-              </label>
-              <input
-                type="number"
-                className="form-control rounded-pill minimal-input-dark"
-                id="radicados"
-                {...register('numero_radicado', {
-                  required: {
-                    value: true,
-                    message: 'Número Radicado es obligatorio'
-                  },
-                  minLength: {
-                    value: 12,
-                    message: 'Número Radicado debe ser mayor a 12 caracteres'
-                  }
-                })}
-              />
-              {errors.numero_radicado && <span className="inputForm ">{errors.numero_radicado.message}</span>}
-            </div>
+      <Grid container spacing={2} justifyContent="center">
+        <Grid item xs={12} md={7} lg={8}>
+          <MainCard className="border-card card-background">
+            <Buscador setProcedencia={setProcedencia} watch={watch} />
+            <hr />
+            <form onSubmit={onSubmit}>
+              {/* Radicados */}
+              <div className="row mb-3">
+                <h4>Informaci&oacute;n radicado</h4>
+                <div className="mb-3 col">
+                  <label htmlFor="label" className="form-label h6">
+                    N&uacute;mero radicado*
+                  </label>
+                  <input
+                    type="number"
+                    className="form-control rounded-pill minimal-input-dark"
+                    id="radicados"
+                    {...register('numero_radicado', {
+                      required: {
+                        value: true,
+                        message: 'Número Radicado es obligatorio'
+                      },
+                      minLength: {
+                        value: 12,
+                        message: 'Número Radicado debe ser mayor a 12 caracteres'
+                      }
+                    })}
+                  />
+                  {errors.numero_radicado && <span className="inputForm ">{errors.numero_radicado.message}</span>}
+                </div>
 
-            <div className="mb-3 col">
-              <label htmlFor="fecha" className="form-label h6">
-                Fecha radicado
-              </label>
-              <input
-                type="date"
-                className="form-control rounded-pill minimal-input-dark"
-                id="fecha"
-                {...register('fecha_radicado', {
-                  required: {
-                    value: true,
-                    message: 'Fecha Radicado es obligatorio'
-                  },
-                  valueAsDate: true,
+                <div className="mb-3 col">
+                  <label htmlFor="fecha" className="form-label h6">
+                    Fecha radicado*
+                  </label>
+                  <input
+                    type="date"
+                    className="form-control rounded-pill minimal-input-dark"
+                    id="fecha"
+                    {...register('fecha_radicado', {
+                      required: {
+                        value: true,
+                        message: 'Fecha Radicado es obligatorio'
+                      },
+                      valueAsDate: true,
 
-                  validate: (value) => {
-                    const fecha_radicado = new Date(value).getMonth();
-                    const fecha_actual = new Date().getMonth();
+                      validate: (value) => {
+                        const fecha_radicado = new Date(value).getMonth();
+                        const fecha_actual = new Date().getMonth();
 
-                    if (fecha_actual - fecha_radicado > 6)
-                      return 'Fecha invalida, las fechas de radicación no pueden ser mayores a 6 meses';
-                  }
-                })}
-              />
-              {errors.fecha_radicado && <span className="inputForm ">{errors.fecha_radicado.message}</span>}
-            </div>
-          </div>
-
-          <div className="row mb-3">
-            <div className="mb-3 col">
-              <label htmlFor="label" className="form-label h6">
-                Canal entrada
-              </label>
-              <GetEntrada register={register} errors={errors} />
-            </div>
-
-            <div className="mb-3 col">
-              <label htmlFor="label" className="form-label h6">
-                Tipificaci&oacute;n
-              </label>
-
-              <GetTipificacion register={register} errors={errors} />
-            </div>
-          </div>
-
-          <div>
-            <label htmlFor="label" className="form-label h6">
-              Entidad
-            </label>
-            <GetEntidad
-              register={register}
-              errors={errors}
-              setIdDepartamento={setIdDepartamento}
-              id_departamento={id_departamento}
-              watch={watch}
-            />
-          </div>
-
-          <div className="row">
-            <div className="col-2 mb-2">
-              <Button variant="text" className="m-3" onClick={() => setCheck((prevCheck) => !prevCheck)}>
-                {check ? 'Cancelar Observación' : 'Agregar Observación'}
-              </Button>
-            </div>
-            {check && (
-              <div className="mb-3 col-4">
-                <label htmlFor="observaciones">Observaciones</label>
-                <textarea
-                  className="form-control minimal-input-dark"
-                  placeholder="Observaciones Radicado"
-                  disabled={!check}
-                  {...register('observaciones_radicado')}
-                ></textarea>
+                        if (fecha_actual - fecha_radicado > 6)
+                          return 'Fecha invalida, las fechas de radicación no pueden ser mayores a 6 meses';
+                      }
+                    })}
+                  />
+                  {errors.fecha_radicado && <span className="inputForm ">{errors.fecha_radicado.message}</span>}
+                </div>
               </div>
-            )}
-          </div>
 
-          <button type="submit" className="btn btn-success">
-            Registrar
-          </button>
-        </form>
-      </MainCard>
+              <div className="row mb-3">
+                <div className="mb-3 col">
+                  <label htmlFor="label" className="form-label h6">
+                    Canal entrada*
+                  </label>
+                  <GetEntrada register={register} errors={errors} />
+                </div>
+
+                <div className="mb-3 col">
+                  <label htmlFor="label" className="form-label h6">
+                    Tipificaci&oacute;n*
+                  </label>
+
+                  <GetTipificacion register={register} errors={errors} />
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="label" className="form-label h6">
+                  Entidad
+                </label>
+                <GetEntidad
+                  register={register}
+                  errors={errors}
+                  setIdDepartamento={setIdDepartamento}
+                  id_departamento={id_departamento}
+                  watch={watch}
+                />
+              </div>
+
+              <div className="row">
+                <div className="col-2 mb-2">
+                  <Button variant="text" className="m-3" onClick={() => setCheck((prevCheck) => !prevCheck)}>
+                    {check ? 'Cancelar Observación' : 'Agregar Observación'}
+                  </Button>
+                </div>
+                {check && (
+                  <div className="mb-3 col-4">
+                    <label htmlFor="observaciones">Observaciones*</label>
+                    <textarea
+                      className="form-control minimal-input-dark"
+                      placeholder="Observaciones Radicado"
+                      disabled={!check}
+                      {...register('observaciones_radicado')}
+                    ></textarea>
+                  </div>
+                )}
+              </div>
+
+              <button type="submit" className="btn btn-success">
+                Registrar
+              </button>
+            </form>
+          </MainCard>
+        </Grid>
+      </Grid>
     </ComponentSkeleton>
   );
 }

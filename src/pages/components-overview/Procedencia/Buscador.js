@@ -99,7 +99,7 @@ function Buscador({ setProcedencia }) {
         <h4>Informaci&oacute;n usuario</h4>
 
         {/* Buscador */}
-        <div className="col-4 input-container mb-2">
+        <div className="col-4 input-container mb-4">
           <OutlinedInput
             {...register('search', {
               required: 'El termino busqueda no puede estar vacio',
@@ -108,9 +108,7 @@ function Buscador({ setProcedencia }) {
             size="small"
             id="search2"
             sx={{
-              width: '500px',
-              border: '1px solid black',
-              borderRadius: '5px'
+              width: '430px'
             }}
             startAdornment={
               <InputAdornment position="start" sx={{ mr: -0.5 }}>

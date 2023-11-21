@@ -47,7 +47,7 @@ function GetEntidad({ register, errors, setIdDepartamento, id_departamento }) {
       <div className="row">
         <div className="mb-3 col">
           <label htmlFor="label" className="form-label h6">
-            Dirigido a
+            Dirigido a*
           </label>
           <GetDepartamentos
             register={register}
@@ -61,7 +61,7 @@ function GetEntidad({ register, errors, setIdDepartamento, id_departamento }) {
 
         <div className="mb-3 col">
           <label htmlFor="label" className="form-label h6">
-            N&uacute;mero de respuestas
+            N&uacute;mero de respuestas*
           </label>
           <input
             className="form-control rounded-pill minimal-input-dark"

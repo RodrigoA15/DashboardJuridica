@@ -37,7 +37,7 @@ const AuthRegister = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isAuthenticated) navigate('/dashboard/default');
+    if (isAuthenticated) navigate('/login');
   }, [isAuthenticated]);
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);

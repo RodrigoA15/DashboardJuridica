@@ -33,7 +33,7 @@ const AuthLogin = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/radicados');
+      navigate('/dashboard/default');
     }
   }, [isAuthenticated]);
 

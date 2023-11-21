@@ -25,7 +25,6 @@
 
 .minimal-input-dark:focus {
   border-color: 4px #1890ff !important;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2) !important;
 }
 
 .border-card {
@@ -121,13 +120,12 @@
 
 /* Body */
 .siu1 {
-  background: #262626 !important;
-  color: white !important;
+  background: #f5f5f5 !important;
 }
 
-.css-8qynzz-MuiTypography-root {
+/* .css-8qynzz-MuiTypography-root {
   color: white !important;
-}
+} */
 
 /* Card Creados */
 .card1 {
@@ -158,14 +156,14 @@
 }
 
 /* nombre componente */
-.css-1ndydts-MuiTypography-root {
+/* .css-1ndydts-MuiTypography-root {
   color: white !important;
-}
+} */
 
 /* Texto Tabs asignaciones-Pendientes-Asignados */
-.css-7ojolc-MuiButtonBase-root-MuiTab-root {
+/* .css-7ojolc-MuiButtonBase-root-MuiTab-root {
   color: rgba(255, 255, 255, 0.945) !important;
-}
+} */
 
 .left-icon {
   align-self: flex-end !important;
@@ -192,9 +190,9 @@
   border-bottom: 0.5rem px solid #464141 !important;
 }
 
-.form-label {
+/* .form-label {
   color: #262626 !important;
-}
+} */
 
 /*  tabla admin */
 @keyframes blink {
@@ -211,4 +209,9 @@
 
 .blinking {
   animation: blink 3s infinite;
+}
+
+hr {
+  background-color: #117dbf;
+  height: 3px;
 }

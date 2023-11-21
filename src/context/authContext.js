@@ -51,6 +51,7 @@ export const AuthProvider = ({ children }) => {
       if (!cookies.token) {
         setIsAuthenticated(false);
         setLoading(false);
+        console.log(cookies);
         return setUser(null);
       }
 
@@ -84,7 +85,8 @@ export const AuthProvider = ({ children }) => {
         logout,
         loading,
         user,
-        isAuthenticated
+        isAuthenticated,
+        setIsAuthenticated
       }}
     >
       {children}
