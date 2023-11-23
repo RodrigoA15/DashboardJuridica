@@ -74,7 +74,7 @@ function GetEntidad({ register, errors, setIdDepartamento, id_departamento }) {
               },
 
               max: {
-                value: 20,
+                value: 200,
                 message: 'Cantidad respuesta debe ser maximo 20 respuestas'
               }
             })}

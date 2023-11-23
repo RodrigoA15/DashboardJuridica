@@ -49,7 +49,8 @@ function JsonToFileExcel() {
         Tipificacion: data.id_tipificacion.nombre_tipificacion,
         Entidad: data.id_entidad.nombre_entidad,
         AreaEncargada: data.id_departamento.nombre_departamento,
-        Estado_radicado: data.estado_radicado
+        Estado_radicado: data.estado_radicado,
+        Observaciones: data.observaciones_radicado
       };
     });
   };
