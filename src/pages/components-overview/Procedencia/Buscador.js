@@ -41,7 +41,7 @@ function Buscador({ setProcedencia }) {
 
   const validacion = async () => {
     if (numero_identificacion.trim() === '') {
-      toast.error('El termino busqueda no puede estar vacio');
+      toast.error('El término búsqueda no puede estar vacío');
     }
   };
 

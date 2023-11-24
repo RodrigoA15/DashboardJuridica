@@ -30,7 +30,7 @@ function AnalyticDesacatos() {
     <div>
       <Toaster position="top-right" richColors expand={true} offset="80px" />
 
-      <MainCard contentSX={{ p: 2.25 }} className={countTutelas > 0 ? 'blinking' : 'card2'}>
+      <MainCard contentSX={{ p: 2.25 }} className={countTutelas > 0 ? 'blinking' : 'card1'}>
         <Stack spacing={0.5}>
           <Typography variant="h6" color="textSecondary">
             Desacatos

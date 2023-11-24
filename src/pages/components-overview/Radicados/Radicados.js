@@ -76,7 +76,7 @@ function ComponentRadicados() {
                     {...register('numero_radicado', {
                       required: {
                         value: true,
-                        message: 'Número Radicado es obligatorio'
+                        message: 'Número radicado es obligatorio'
                       },
                       minLength: {
                         value: 12,
@@ -98,7 +98,7 @@ function ComponentRadicados() {
                     {...register('fecha_radicado', {
                       required: {
                         value: true,
-                        message: 'Fecha Radicado es obligatorio'
+                        message: 'Fecha radicado es obligatorio'
                       },
                       valueAsDate: true,
 
