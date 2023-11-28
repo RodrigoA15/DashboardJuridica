@@ -31,7 +31,6 @@ function JsonToFileExcel() {
     try {
       const response = await axios.get('/radicados_respuestas_excel');
       setData(response.data);
-      console.log(response);
     } catch (error) {
       console.error('Error al obtener datos:', error);
     }
@@ -77,7 +76,7 @@ function JsonToFileExcel() {
         Entidad: item.id_asignacion.id_radicado.id_entidad.nombre_entidad,
         Departamento: item.id_asignacion.id_radicado.id_departamento.nombre_departamento,
         EstadoRadicado: item.id_asignacion.id_radicado.estado_radicado,
-        UsuarioEncargado: item.id_asignacion.id_usuario.username,
+        UsuarioEncargado: item.id_asignacion.id_usuario ? item.id_asignacion.id_usuario.username : 'No se encontro el usuario',
         NumeroRespuestaRadicado: item.numero_radicado_respuesta,
         FechaRespuesta: new Date(item.fechaRespuesta).toLocaleDateString('es-CO', { timeZone: 'UTC' })
       };

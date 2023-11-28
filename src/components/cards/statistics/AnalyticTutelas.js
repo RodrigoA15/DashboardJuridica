@@ -20,7 +20,7 @@ function AnalyticTutelas() {
       if (error.response && error.response.status != 404) {
         setError(error.response.data);
       } else {
-        toast.error('Error de servidor');
+        toast.error('No hay tutelas');
       }
       console.log(error);
     }

@@ -17,10 +17,11 @@ function AnalyticDesacatos() {
       setData(response.data);
     } catch (error) {
       if (error.response && error.response.status === 404) {
-        toast.error('No hay tutelas');
+        toast.error('No hay Desacatos');
       } else {
         toast.error('Error de servidor');
       }
+      console.log(error);
     }
   };
 
