@@ -103,11 +103,19 @@ function ComponentRadicados() {
                       valueAsDate: true,
 
                       validate: (value) => {
+                        const añoactual = new Date().getFullYear();
+                        const añoReq = new Date(value).getFullYear();
                         const fecha_radicado = new Date(value).getMonth();
                         const fecha_actual = new Date().getMonth();
 
-                        if (fecha_actual - fecha_radicado > 6)
-                          return 'Fecha invalida, las fechas de radicación no pueden ser mayores a 6 meses';
+                        if (fecha_actual - fecha_radicado > 6) {
+                          return 'Fecha inválida, las fechas de radicación no pueden ser mayores a 6 meses';
+                        } else if (añoReq > añoactual) {
+                          return 'Fecha inválida, la fecha de radicación no pueden ser mayores a la fecha actual';
+                        }
+
+                        console.log(añoactual);
+                        console.log(añoReq);
                       }
                     })}
                   />
