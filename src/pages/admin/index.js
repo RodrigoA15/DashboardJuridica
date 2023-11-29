@@ -109,7 +109,7 @@ function AdminRadicados() {
                     <TableCell>{data.cantidad_respuesta}</TableCell>
                     {/* <TableCell>{data.id_procedencia.nombre}</TableCell> */}
                     <TableCell>{data.id_canal_entrada.nombre_canal}</TableCell>
-                    <TableCell className={data.id_asunto.nombre_asunto === 'TUTELA' ? 'blinking' : ''}>
+                    <TableCell className={data.id_asunto.nombre_asunto === 'Tutela' ? 'blinking' : ''}>
                       {data.id_asunto.nombre_asunto}
                     </TableCell>
                     <TableCell>{data.id_tipificacion.nombre_tipificacion}</TableCell>
