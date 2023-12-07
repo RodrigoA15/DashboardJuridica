@@ -7,13 +7,15 @@ import axios from 'api/axios';
 import { Toaster, toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import PropTypes from 'prop-types';
+import PDFViewer from './PDFViewer';
+import { useState } from 'react';
 
 const style = {
   position: 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  width: 600,
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
@@ -27,6 +29,8 @@ function ModalRespuestas({ open, handleClose, data }) {
     handleSubmit,
     reset
   } = useForm();
+  const [url, setUrl] = useState('');
+  const [urlFile, setUrlFile] = useState('');
   const MySwal = withReactContent(Swal);
 
   const onSubmit = handleSubmit(async (num) => {
@@ -55,18 +59,24 @@ function ModalRespuestas({ open, handleClose, data }) {
       const formData = new FormData();
       formData.append('numero_radicado_respuesta', numero_radicado_respuesta);
       formData.append('id_asignacion', data._id);
-      formData.append('respuesta_pdf', num.respuesta_pdf[0]);
+      formData.append('respuesta_pdf', urlFile[0]);
       formData.append('fechaRespuesta', new Date());
 
       const config = { headers: { 'Content-Type': 'multipart/form-data' } };
-      console.log(formData.respuesta_pdf);
 
       await axios.post('/create_respuestas', formData, config);
       toast.success('Respuesta Agregada');
       handleClose();
     } catch (error) {
       toast.error('error de servidor');
-      console.log(error);
+    }
+  };
+
+  const onChange = (e) => {
+    const files = e.target.files;
+    if (files.length > 0) {
+      setUrl(URL.createObjectURL(files[0]));
+      setUrlFile(files);
     }
   };
 
@@ -98,20 +108,10 @@ function ModalRespuestas({ open, handleClose, data }) {
                 <label className="form-label" htmlFor="NoRadicado">
                   Archivo
                 </label>
-                <input
-                  name="respuesta_pdf"
-                  className="form-control rounded-pill"
-                  accept=".pdf"
-                  type="file"
-                  {...register('respuesta_pdf', {
-                    required: {
-                      value: true,
-                      message: 'Este campo es obligatorio'
-                    }
-                  })}
-                />
-                {errors.respuesta_pdf && <span className="inputForm ">{errors.respuesta_pdf.message}</span>}
+                <input name="respuesta_pdf" className="form-control rounded-pill" accept=".pdf" type="file" onChange={onChange} />
               </div>
+
+              {url && <PDFViewer url={url} />}
 
               <Button type="submit">Responder</Button>
             </form>

@@ -7,7 +7,6 @@ import axios from 'api/axios';
 import { useAuth } from 'context/authContext';
 import ModalRespuestas from './ModalRespuestas';
 import ModalRadicadosRespuestas from './ModalRadicadosRespuestas';
-import DiasHabiles from '../DiasHabiles';
 
 function PendientesUsuario() {
   const { user } = useAuth();
@@ -87,8 +86,6 @@ function PendientesUsuario() {
 
       fechaInicio.setDate(fechaInicio.getDate() + 1);
     }
-
-    console.log('Días laborables:', contador);
 
     return contador;
   };
@@ -179,7 +176,6 @@ function PendientesUsuario() {
       </TableContainer>
       <ModalRespuestas open={openModal} handleClose={handleClose} data={selectedData} />
       <ModalRadicadosRespuestas opens={openRespuestasModal} handleCloses={handleCloseR} respuestas={selectedRespuesta} />
-      <DiasHabiles />
     </div>
   );
 }
