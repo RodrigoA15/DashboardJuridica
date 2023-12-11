@@ -5,10 +5,11 @@ import { useForm } from 'react-hook-form';
 import axios from 'api/axios';
 import { Toaster, toast } from 'sonner';
 import { Button } from '@mui/material';
+import PropTypes from 'prop-types';
 
-function Juzgados() {
+function Juzgados({ setNameCourt, nameCourt }) {
   const [courtsData, setCourtsData] = useState([]);
-  const [nameCourt, setNameCourt] = useState('');
+
   const [found, setFound] = useState(false);
 
   const dataApiCourts = async () => {
@@ -33,7 +34,6 @@ function Juzgados() {
     <div className="row">
       <Toaster position="top-right" richColors />
       <div className="col-2">
-        <h5>Informaci&oacute;n entidad jur&iacute;dica</h5>
         <OutlinedInput
           {...register('search', {
             required: 'El termino busqueda no puede estar vacio'
@@ -61,13 +61,7 @@ function Juzgados() {
           <div>
             {courtsData.map((court) => (
               <div key={court.RUNT_ENTE}>
-                <input
-                  type="text"
-                  className="form-control rounded-pill minimal-input-dark"
-                  id="nombre"
-                  value={court.DESC_ENTE_JURIDICO}
-                  readOnly
-                />
+                <input type="text" className="form-control rounded-pill minimal-input-dark" id="nombre" value={court.ENTIDAD} readOnly />
               </div>
             ))}
           </div>
@@ -78,3 +72,8 @@ function Juzgados() {
 }
 
 export default Juzgados;
+
+Juzgados.proTypes = {
+  setNameCourt: PropTypes.func.isRequired,
+  nameCourt: PropTypes.func.isRequired
+};

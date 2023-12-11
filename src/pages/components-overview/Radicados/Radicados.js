@@ -25,6 +25,7 @@ function ComponentRadicados() {
 
   const [procedencia, setProcedencia] = useState('');
   const [id_departamento, setIdDepartamento] = useState('');
+  const [nameCourt, setNameCourt] = useState('');
   const [check, setCheck] = useState(false);
 
   const MySwal = withReactContent(Swal);
@@ -36,7 +37,13 @@ function ComponentRadicados() {
 
   const createRadicado = async (data) => {
     try {
-      const datos = { ...data, id_procedencia: procedencia, estado_radicado: 'Pre-asignacion', id_departamento };
+      const datos = {
+        ...data,
+        id_procedencia: procedencia,
+        estado_radicado: 'Pre-asignacion',
+        id_departamento,
+        juzgado: nameCourt || 'N/A'
+      };
       await axios.post(`/radicados/radicados`, datos);
       MySwal.fire({
         title: 'Creado correctamente',
@@ -59,7 +66,7 @@ function ComponentRadicados() {
       <Grid container spacing={2} justifyContent="center">
         <Grid item xs={12} md={7} lg={8}>
           <MainCard className="border-card card-background">
-            <Buscador setProcedencia={setProcedencia} watch={watch} />
+            <Buscador setProcedencia={setProcedencia} watch={watch} setNameCourt={setNameCourt} nameCourt={nameCourt} />
             <hr />
             <form onSubmit={onSubmit}>
               {/* Radicados */}
@@ -111,11 +118,8 @@ function ComponentRadicados() {
                         if (fecha_actual - fecha_radicado > 6) {
                           return 'Fecha inválida, las fechas de radicación no pueden ser mayores a 6 meses';
                         } else if (añoReq > añoactual) {
-                          return 'Fecha inválida, la fecha de radicación no pueden ser mayores a la fecha actual';
+                          return 'Fecha inválida, la fecha de radicación no pueden ser mayor a la fecha actual';
                         }
-
-                        console.log(añoactual);
-                        console.log(añoReq);
                       }
                     })}
                   />

@@ -49,7 +49,8 @@ function JsonToFileExcel() {
         Entidad: data.id_entidad.nombre_entidad,
         AreaEncargada: data.id_departamento.nombre_departamento,
         Estado_radicado: data.estado_radicado,
-        Observaciones: data.observaciones_radicado
+        Observaciones: data.observaciones_radicado,
+        Juzgados: data.juzgado[0].nombreJuzgado || 'N/A'
       };
     });
   };
