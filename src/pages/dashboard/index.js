@@ -16,6 +16,7 @@ import JsonToFileExcel from 'pages/components-overview/Radicados/JsonToXLSX';
 import ChartDepartamentos from './ChartDepartamentos';
 import AnalyticDesacatos from 'components/cards/statistics/AnalyticDesacatos';
 import AnalyticTutelas from 'components/cards/statistics/AnalyticTutelas';
+import AnalyticCourts from 'components/cards/statistics/AnalyticCourts';
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
@@ -45,6 +46,10 @@ const DashboardDefault = () => {
 
       <Grid item xs={12} sm={6} md={4} lg={3}>
         <AnalyticDesacatos />
+      </Grid>
+
+      <Grid item xs={12} sm={6} md={4} lg={3}>
+        <AnalyticCourts />
       </Grid>
 
       <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
