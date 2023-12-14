@@ -142,7 +142,7 @@ function Buscador({ setProcedencia, setNameCourt, nameCourt }) {
                     <input type="text" className="form-control rounded-pill minimal-input-dark" id="apellido" value={i.apellido} readOnly />
                   </div>
 
-                  <div className="col">
+                  <div>
                     {i.numero_identificacion === 102968664 && (
                       <div>
                         <label htmlFor="nombre" className="form-label h6">
