@@ -37,7 +37,10 @@ export const AuthProvider = ({ children }) => {
       setUser(res.data);
       console.log(res);
     } catch (error) {
-      setError(error.response.data.message);
+      if (error) {
+        setError(error.response.data.message);
+      }
+      return;
     }
   };
 
