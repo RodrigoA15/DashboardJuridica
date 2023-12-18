@@ -148,7 +148,7 @@ function Buscador({ setProcedencia, setNameCourt, nameCourt }) {
                         <label htmlFor="nombre" className="form-label h6">
                           Entidad juridica
                         </label>
-                        <Juzgados setNameCourt={setNameCourt} nameCourt={nameCourt}/>
+                        <Juzgados setNameCourt={setNameCourt} nameCourt={nameCourt} />
                       </div>
                     )}
                   </div>
@@ -294,7 +294,7 @@ function Buscador({ setProcedencia, setNameCourt, nameCourt }) {
 
 export default Buscador;
 
-Buscador.proTypes = {
+Buscador.propTypes = {
   setProcedencia: PropTypes.func.isRequired,
   setNameCourt: PropTypes.func.isRequired,
   nameCourt: PropTypes.func.isRequired

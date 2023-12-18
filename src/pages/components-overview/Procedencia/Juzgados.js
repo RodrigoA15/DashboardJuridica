@@ -91,8 +91,8 @@ function Juzgados({ setNameCourt, nameCourt }) {
         {found && (
           <div>
             {courtsData.map((court) => (
-              <div className="row mt-3">
-                <div className="col" key={court.RUNT_ENTE}>
+              <div className="row mt-3" key={court.RUNT_ENTE}>
+                <div className="col">
                   <input
                     type="text"
                     className="form-control rounded-pill minimal-input-dark"
@@ -134,7 +134,7 @@ function Juzgados({ setNameCourt, nameCourt }) {
 
 export default Juzgados;
 
-Juzgados.proTypes = {
+Juzgados.propTypes = {
   setNameCourt: PropTypes.object.isRequired,
   nameCourt: PropTypes.object.isRequired
 };
