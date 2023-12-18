@@ -108,6 +108,6 @@ export default ModalRadicadosRespuestas;
 
 ModalRadicadosRespuestas.propTypes = {
   opens: PropTypes.bool,
-  respuestas: PropTypes.func,
+  respuestas: PropTypes.object,
   handleCloses: PropTypes.func
 };

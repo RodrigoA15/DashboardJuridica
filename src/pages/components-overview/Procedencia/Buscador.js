@@ -297,5 +297,5 @@ export default Buscador;
 Buscador.propTypes = {
   setProcedencia: PropTypes.func.isRequired,
   setNameCourt: PropTypes.func.isRequired,
-  nameCourt: PropTypes.func.isRequired
+  nameCourt: PropTypes.string.isRequired
 };

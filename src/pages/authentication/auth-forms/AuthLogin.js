@@ -18,7 +18,7 @@ import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 // ============================|| FIREBASE - LOGIN ||============================ //
 
 const AuthLogin = () => {
-  const { signin, isAuthenticated } = useAuth();
+  const { signin, isAuthenticated, error } = useAuth();
   const navigate = useNavigate();
 
   // const [checked, setChecked] = useState(false);
@@ -86,6 +86,9 @@ const AuthLogin = () => {
                       {errors.email}
                     </FormHelperText>
                   )}
+                  <FormHelperText error id="standard-weight-helper-text-email-login">
+                    {error}
+                  </FormHelperText>
                 </Stack>
               </Grid>
               <Grid item xs={12}>
@@ -120,6 +123,9 @@ const AuthLogin = () => {
                       {errors.password}
                     </FormHelperText>
                   )}
+                  <FormHelperText error id="standard-weight-helper-text-email-login">
+                    {error}
+                  </FormHelperText>
                 </Stack>
               </Grid>
 

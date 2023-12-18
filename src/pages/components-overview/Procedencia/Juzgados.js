@@ -136,5 +136,5 @@ export default Juzgados;
 
 Juzgados.propTypes = {
   setNameCourt: PropTypes.object.isRequired,
-  nameCourt: PropTypes.object.isRequired
+  nameCourt: PropTypes.string.isRequired
 };

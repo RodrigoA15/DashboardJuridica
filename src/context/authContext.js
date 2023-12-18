@@ -18,6 +18,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   const signup = async (user) => {
     try {
@@ -34,8 +35,9 @@ export const AuthProvider = ({ children }) => {
       const res = await login(user);
       setIsAuthenticated(true);
       setUser(res.data);
+      console.log(res);
     } catch (error) {
-      console.log(error);
+      setError(error.response.data.message);
     }
   };
 
@@ -86,7 +88,8 @@ export const AuthProvider = ({ children }) => {
         loading,
         user,
         isAuthenticated,
-        setIsAuthenticated
+        setIsAuthenticated,
+        error
       }}
     >
       {children}
