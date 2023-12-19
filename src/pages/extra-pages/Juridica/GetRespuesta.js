@@ -6,6 +6,7 @@ import { useAuth } from 'context/authContext';
 import { useState } from 'react';
 import { toast } from '../../../../node_modules/sonner/dist/index';
 import { Toaster } from '../../../../node_modules/sonner/dist/index';
+import PDFViewerAnswers from './PDFViewerAnswers';
 
 function GetRespuesta() {
   const [respondidos, setRespondidos] = useState([]);
@@ -51,6 +52,7 @@ function GetRespuesta() {
               <TableCell align="left">Asunto</TableCell>
               <TableCell align="left">Responsable</TableCell>
               <TableCell>Número radicado respuestas</TableCell>
+              <TableCell>Archivo Cargado</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -62,6 +64,7 @@ function GetRespuesta() {
                 <TableCell align="left">{i.id_asignacion.id_radicado.id_asunto.nombre_asunto}</TableCell>
                 <TableCell align="left">{i.id_asignacion.id_usuario.username}</TableCell>
                 <TableCell align="left">{i.numero_radicado_respuesta}</TableCell>
+                <PDFViewerAnswers dataAnswer={i} />
               </TableRow>
             ))}
           </TableBody>
