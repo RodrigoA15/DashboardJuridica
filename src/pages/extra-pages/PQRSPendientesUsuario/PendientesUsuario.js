@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button } from '@mui/material';
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, IconButton } from '@mui/material';
+import DoneIcon from '@mui/icons-material/Done';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import AddIcon from '@mui/icons-material/Add';
 import { Toaster } from 'sonner';
@@ -18,6 +19,7 @@ function PendientesUsuario() {
   const [selectedRespuesta, setSelectedRespuesta] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
+  const [contador, setContador] = useState({});
 
   useEffect(() => {
     {
@@ -66,6 +68,13 @@ function PendientesUsuario() {
     setOpenRespuestasModal(false);
   };
 
+  const countAnswers = (pendiente) => {
+    setContador((prevContador) => ({
+      ...prevContador,
+      [pendiente.id_radicado._id]: (prevContador[pendiente.id_radicado._id] || 0) + 1
+    }));
+  };
+
   const diasHabiles = (fecha_radicado) => {
     let contador = 0;
     let fechaInicio = new Date(fecha_radicado);
@@ -101,6 +110,20 @@ function PendientesUsuario() {
       return '#d43a00'; // Naranja
     } else if (diasLaborables >= 13) {
       return '#BB2525'; // Rojo
+    }
+  };
+
+  const updateCount = async (pendiente) => {
+    try {
+      const id_radicado = pendiente.id_radicado._id;
+      const cantidad = pendiente.id_radicado.cantidad_respuesta + (contador[id_radicado] || 0);
+      await axios.put(`/radicados/updateQuantity/${id_radicado}`, { cantidad_respuesta: cantidad });
+      setContador((prevContador) => ({
+        ...prevContador,
+        [id_radicado]: 0
+      }));
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -148,7 +171,16 @@ function PendientesUsuario() {
                           {formatDate(pendiente.id_radicado.fecha_radicado)}
                         </TableCell>
                         <TableCell align="left">{formatDate(pendiente.fecha_asignacion)}</TableCell>
-                        <TableCell align="left">{pendiente.id_radicado.cantidad_respuesta}</TableCell>
+                        <TableCell align="left">
+                          {pendiente.id_radicado.cantidad_respuesta}
+                           {/* - {contador[pendiente.id_radicado._id] || 0} */}
+                          <IconButton onClick={() => countAnswers(pendiente)}>
+                            <AddIcon />
+                          </IconButton>
+                          <IconButton onClick={() => updateCount(pendiente)}>
+                            <DoneIcon />
+                          </IconButton>
+                        </TableCell>
                         <TableCell>{diasHabiles(new Date(pendiente.id_radicado.fecha_radicado))}</TableCell>
                         <TableCell align="center">
                           <Button color="primary" startIcon={<AddIcon />} onClick={() => handleOpen(pendiente)}>

@@ -1,5 +1,6 @@
 import { Viewer, Worker } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
+import PropTypes from 'prop-types';
 
 function PDFViewer({ url }) {
   return (
@@ -39,3 +40,7 @@ function PDFViewer({ url }) {
 }
 
 export default PDFViewer;
+
+PDFViewer.propTypes = {
+  url: PropTypes.object.isRequired
+};

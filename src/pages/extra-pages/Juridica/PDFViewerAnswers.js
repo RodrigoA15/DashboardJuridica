@@ -1,6 +1,4 @@
-// import { Viewer, Worker } from '@react-pdf-viewer/core';
-// import '@react-pdf-viewer/core/lib/styles/index.css';
-
+import PropTypes from 'prop-types';
 function PDFViewerAnswers({ dataAnswer }) {
   return (
     <div>
@@ -12,3 +10,7 @@ function PDFViewerAnswers({ dataAnswer }) {
 }
 
 export default PDFViewerAnswers;
+
+PDFViewerAnswers.propTypes = {
+  dataAnswer: PropTypes.object.isRequired
+};
