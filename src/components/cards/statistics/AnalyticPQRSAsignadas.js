@@ -2,6 +2,7 @@ import MainCard from 'components/MainCard';
 import { useEffect, useState } from 'react';
 import { Grid, Stack, Typography } from '@mui/material/index';
 import axios from 'api/axios';
+import { Toaster, toast } from 'sonner';
 
 function AnalyticPQRSAsignadas() {
   const [count, setCount] = useState(0);
@@ -18,11 +19,17 @@ function AnalyticPQRSAsignadas() {
       const response = await axios.get('/radicados/radicados_asignados');
       setCount(response.data.length);
     } catch (error) {
-      console.log(error);
+      if (error.response && error.response.status === 404) {
+        toast.error('No hay PQRS asignadas');
+      } else {
+        toast.error('Error en cantidad de asignaciones');
+      }
     }
   };
   return (
     <MainCard contentSX={{ p: 2.25 }} className="card3">
+      <Toaster position="top-right" richColors expand={true} offset="80px" />
+
       <Stack spacing={0.5}>
         <Typography variant="h6" color="textSecondary">
           PQRS Asignadas

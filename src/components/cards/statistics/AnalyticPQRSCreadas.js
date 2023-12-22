@@ -5,6 +5,7 @@ import { Grid, Stack, Typography } from '@mui/material';
 import MainCard from 'components/MainCard';
 import axios from 'api/axios';
 import { useEffect, useState } from 'react';
+import { Toaster, toast } from 'sonner';
 
 // ==============================|| STATISTICS - ECOMMERCE CARD  ||============================== //
 
@@ -25,11 +26,17 @@ const AnalyticPQRSCreadas = () => {
       const countResponse = response.data.length;
       setCount(countResponse);
     } catch (error) {
-      console.log(error);
+      if (error.response && error.response.status === 404) {
+        toast.error('No hay PQRS creadas');
+      } else {
+        toast.error('Error en cantidad de PQRS creadas');
+      }
     }
   };
   return (
     <MainCard contentSX={{ p: 2.25 }} className="card1">
+      <Toaster position="top-right" richColors expand={true} offset="80px" />
+
       <Stack spacing={0.5}>
         <Typography variant="h6" color="textSecondary">
           PQRS Creadas

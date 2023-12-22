@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import Juzgados from './Juzgados';
 
-function Buscador({ setProcedencia, setNameCourt, nameCourt }) {
+function Buscador({ setProcedencia, setNameCourt, nameCourt, setJuzgados }) {
   const [numero_identificacion, setNumero_identificacion] = useState('');
   const [procedenciaData, setProcedenciaData] = useState([]);
   const [entrada, setEntrada] = useState(false);
@@ -148,7 +148,7 @@ function Buscador({ setProcedencia, setNameCourt, nameCourt }) {
                         <label htmlFor="nombre" className="form-label h6">
                           Entidad juridica
                         </label>
-                        <Juzgados setNameCourt={setNameCourt} nameCourt={nameCourt} />
+                        <Juzgados setNameCourt={setNameCourt} nameCourt={nameCourt} setJuzgados={setJuzgados} />
                       </div>
                     )}
                   </div>
@@ -296,6 +296,7 @@ export default Buscador;
 
 Buscador.propTypes = {
   setProcedencia: PropTypes.func.isRequired,
+  setJuzgados: PropTypes.func.isRequired,
   setNameCourt: PropTypes.func.isRequired,
   nameCourt: PropTypes.string.isRequired
 };

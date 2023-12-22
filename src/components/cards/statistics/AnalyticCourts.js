@@ -17,7 +17,7 @@ function AnalyticCourts() {
       setCourtData(response.data);
     } catch (error) {
       if (error.response && error.response.status === 404) {
-        toast.warning('No se encontraron peticiones por entidades juridicas');
+        toast.error('No se encontraron peticiones por entidades juridicas');
       } else {
         toast.error('Error en contador entidades juridicas');
       }

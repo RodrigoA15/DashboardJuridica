@@ -26,13 +26,13 @@ function ComponentRadicados() {
   const [procedencia, setProcedencia] = useState('');
   const [id_departamento, setIdDepartamento] = useState('');
   const [nameCourt, setNameCourt] = useState('');
+  const [juzgado, setJuzgados] = useState(null);
   const [check, setCheck] = useState(false);
 
   const MySwal = withReactContent(Swal);
 
   const onSubmit = handleSubmit((data) => {
     createRadicado(data);
-    console.log(data);
   });
 
   const createRadicado = async (data) => {
@@ -42,7 +42,7 @@ function ComponentRadicados() {
         id_procedencia: procedencia,
         estado_radicado: 'Pre-asignacion',
         id_departamento,
-        juzgado: nameCourt || 'N/A'
+        juzgado
       };
       await axios.post(`/radicados/radicados`, datos);
       MySwal.fire({
@@ -66,7 +66,13 @@ function ComponentRadicados() {
       <Grid container spacing={2} justifyContent="center">
         <Grid item xs={12} md={7} lg={8}>
           <MainCard className="border-card card-background">
-            <Buscador setProcedencia={setProcedencia} watch={watch} setNameCourt={setNameCourt} nameCourt={nameCourt} />
+            <Buscador
+              setProcedencia={setProcedencia}
+              watch={watch}
+              setNameCourt={setNameCourt}
+              nameCourt={nameCourt}
+              setJuzgados={setJuzgados}
+            />
             <hr />
             <form onSubmit={onSubmit}>
               {/* Radicados */}

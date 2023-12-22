@@ -19,9 +19,8 @@ function AnalyticDesacatos() {
       if (error.response && error.response.status === 404) {
         toast.error('No hay Desacatos');
       } else {
-        toast.error('Error de servidor');
+        toast.error('Error en cantidad de Desacatos');
       }
-      console.log(error);
     }
   };
 
