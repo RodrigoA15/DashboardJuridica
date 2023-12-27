@@ -104,7 +104,7 @@ function Buscador({ setProcedencia, setNameCourt, nameCourt, setJuzgados }) {
             <OutlinedInput
               {...register('search', {
                 required: 'El termino busqueda no puede estar vacio',
-                minLength: { value: 8, message: 'Número identificacion debe ser mayor a 8 caracteres' }
+                minLength: { value: 6, message: 'Número identificacion debe ser mayor a 6 caracteres' }
               })}
               size="small"
               id="search2"
