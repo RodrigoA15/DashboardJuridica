@@ -33,7 +33,7 @@ function GetAsignados() {
 
   const apiAsignados = async () => {
     try {
-      const response = await axios.get(`/asignaciones/${user.departamento}`);
+      const response = await axios.get(`/asignaciones/${user.departamento._id}`);
       setAsignados(response.data);
       setIsLoading(false);
     } catch (error) {
@@ -66,9 +66,6 @@ function GetAsignados() {
 
       fechaInicio.setDate(fechaInicio.getDate() + 1);
     }
-
-    console.log('Días laborables:', contador);
-
     return contador;
   };
 

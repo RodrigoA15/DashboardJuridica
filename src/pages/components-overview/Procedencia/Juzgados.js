@@ -147,6 +147,7 @@ function Juzgados({ setNameCourt, nameCourt, setJuzgados }) {
                     readOnly
                   />
                 </div>
+
                 <div className="col">
                   <input
                     type="text"

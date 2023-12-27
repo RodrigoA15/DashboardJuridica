@@ -38,7 +38,7 @@ function GetPendientes() {
 
   const getDataPendiente = async () => {
     try {
-      const response = await axios.get(`/radicados/depjuridica_radicados/${user.departamento}`);
+      const response = await axios.get(`/radicados/depjuridica_radicados/${user.departamento._id}`);
       setData(response.data);
       setIsLoading(false);
     } catch (error) {
@@ -71,9 +71,6 @@ function GetPendientes() {
 
       fechaInicio.setDate(fechaInicio.getDate() + 1);
     }
-
-    console.log('Días laborables:', contador);
-
     return contador;
   };
 

@@ -55,7 +55,7 @@ function Preasignaciones() {
 
   const getAllPreasignaciones = async () => {
     try {
-      const response = await axios.get(`/preasignados/${user.departamento}`);
+      const response = await axios.get(`/preasignados/${user.departamento._id}`);
       setData(response.data);
       setIsLoading(false);
     } catch (error) {

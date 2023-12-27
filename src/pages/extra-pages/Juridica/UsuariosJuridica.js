@@ -26,7 +26,7 @@ function UsuariosJuridica({ pendiente }) {
 
   const apiUsuarios = async () => {
     try {
-      const response = await axios.get(`/departamentos/usuarios_departamento/${user.departamento}`);
+      const response = await axios.get(`/departamentos/usuarios_departamento/${user.departamento._id}`);
       setUsers(response.data);
     } catch (error) {
       toast.error('Error al cargar usuarios');

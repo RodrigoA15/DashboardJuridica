@@ -19,7 +19,7 @@ function GetRespuesta() {
       return;
     }
     try {
-      const response = await axios.get(`/radicados_respuestas/${user.departamento}/${numero_radicado}`);
+      const response = await axios.get(`/radicados_respuestas/${user.departamento._id}/${numero_radicado}`);
       setRespondidos(response.data);
     } catch (error) {
       if (error.response && error.response.status === 404) {

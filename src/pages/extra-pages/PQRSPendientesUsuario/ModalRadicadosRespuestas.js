@@ -36,7 +36,7 @@ function ModalRadicadosRespuestas({ opens, handleCloses, respuestas }) {
 
   const apiRadicadosRespuesta = async () => {
     try {
-      const response = await axios.get(`/radicados_respuestas/${user.departamento}/${respuestas.id_radicado.numero_radicado}`);
+      const response = await axios.get(`/radicados_respuestas/${user.departamento._id}/${respuestas.id_radicado.numero_radicado}`);
       setRadicadosRpta(response.data);
       setCountRadicados(response.data.length);
       console.log(response);

@@ -32,7 +32,7 @@ function PendientesUsuario() {
 
   const apiDataUser = async () => {
     try {
-      const response = await axios.get(`/asignaciones/${user.departamento}`);
+      const response = await axios.get(`/asignaciones/${user.departamento._id}`);
       setUsers(response.data);
       setIsLoading(false);
       setIsPendiente(response.data.some((pendiente) => user.email === pendiente.id_usuario.email));
@@ -173,13 +173,19 @@ function PendientesUsuario() {
                         <TableCell align="left">{formatDate(pendiente.fecha_asignacion)}</TableCell>
                         <TableCell align="left">
                           {pendiente.id_radicado.cantidad_respuesta}
-                           {/* - {contador[pendiente.id_radicado._id] || 0} */}
-                          <IconButton onClick={() => countAnswers(pendiente)}>
-                            <AddIcon />
-                          </IconButton>
-                          <IconButton onClick={() => updateCount(pendiente)}>
-                            <DoneIcon />
-                          </IconButton>
+                          {/* Add answers for departament Legal */}
+                          {user && user.departamento && user.departamento.nombre_departamento === 'Juridica' && (
+                            <>
+                              <IconButton onClick={() => countAnswers(pendiente)}>
+                                <AddIcon />
+                              </IconButton>
+                              <IconButton onClick={() => updateCount(pendiente)}>
+                                <DoneIcon />
+                              </IconButton>
+                            </>
+                          )}
+
+                          {/* End Added answers Legal */}
                         </TableCell>
                         <TableCell>{diasHabiles(new Date(pendiente.id_radicado.fecha_radicado))}</TableCell>
                         <TableCell align="center">
