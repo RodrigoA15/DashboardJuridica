@@ -97,6 +97,7 @@ function GetPendientes() {
               <TableCell>Número radicado</TableCell>
               <TableCell align="center">Fecha radicado</TableCell>
               <TableCell align="center">Asunto</TableCell>
+              <TableCell align="center">Observaciones</TableCell>
               <TableCell align="center">Procedencia</TableCell>
               <TableCell align="center">Asignar radicado</TableCell>
               <TableCell align="left">Estado</TableCell>
@@ -119,6 +120,7 @@ function GetPendientes() {
                     {new Date(pendiente.fecha_radicado).toLocaleDateString('es-CO', { timeZone: 'UTC' })}
                   </TableCell>
                   <TableCell align="center">{pendiente.id_asunto.nombre_asunto}</TableCell>
+                  <TableCell align="center">{pendiente.observaciones_radicado}</TableCell>
                   <TableCell align="center">
                     {pendiente.id_procedencia.nombre} {pendiente.id_procedencia.apellido}
                   </TableCell>

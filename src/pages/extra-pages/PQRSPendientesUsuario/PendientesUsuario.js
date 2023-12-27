@@ -138,6 +138,7 @@ function PendientesUsuario() {
               <TableCell>Número radicado</TableCell>
               <TableCell align="left">Fecha radicado</TableCell>
               <TableCell align="left">Fecha asignacion</TableCell>
+              <TableCell align="left">Observaciones</TableCell>
               <TableCell align="left">Respuestas estimadas</TableCell>
               <TableCell align="center">Dias</TableCell>
               <TableCell align="center">Acciones</TableCell>
@@ -171,6 +172,7 @@ function PendientesUsuario() {
                           {formatDate(pendiente.id_radicado.fecha_radicado)}
                         </TableCell>
                         <TableCell align="left">{formatDate(pendiente.fecha_asignacion)}</TableCell>
+                        <TableCell>{pendiente.id_radicado.observaciones_radicado}</TableCell>
                         <TableCell align="left">
                           {pendiente.id_radicado.cantidad_respuesta}
                           {/* Add answers for departament Legal */}

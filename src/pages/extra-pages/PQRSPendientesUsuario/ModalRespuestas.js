@@ -126,6 +126,6 @@ export default ModalRespuestas;
 
 ModalRespuestas.propTypes = {
   open: PropTypes.bool,
-  data: PropTypes.object.isRequired,
+  data: PropTypes.object,
   handleClose: PropTypes.func
 };
