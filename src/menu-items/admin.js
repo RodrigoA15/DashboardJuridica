@@ -1,10 +1,12 @@
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import GroupIcon from '@mui/icons-material/Group';
+import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 
 //Icons
 const icons = {
   AdminPanelSettingsIcon,
-  GroupIcon
+  GroupIcon,
+  BusinessCenterIcon
 };
 
 const admin = {
@@ -25,6 +27,13 @@ const admin = {
       type: 'item',
       url: '/usuariosqx',
       icon: icons.GroupIcon
+    },
+    {
+      id: 'asuntos',
+      title: 'Asuntos',
+      type: 'item',
+      url: 'asuntosAdmin',
+      icon: icons.BusinessCenterIcon
     }
   ]
 };

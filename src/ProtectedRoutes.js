@@ -10,7 +10,6 @@ function ProtectedRoute() {
     setIsAuthenticated(false);
     return <Navigate to="/login" replace />;
   }
-  console.log(user);
   return <Outlet />;
 }
 

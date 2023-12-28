@@ -7,6 +7,7 @@ import PendientesUsuario from 'pages/extra-pages/PQRSPendientesUsuario/Pendiente
 import AdminRadicados from 'pages/admin/index';
 import UsuariosQX from 'pages/admin/UsuariosQX/index';
 import PDFViewer from 'pages/extra-pages/PQRSPendientesUsuario/PDFViewer';
+import Index from 'pages/admin/Asunto/index';
 // render - dashboard
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
 
@@ -55,6 +56,10 @@ const MainRoutes = {
     {
       path: 'pdfPQRS',
       element: <PDFViewer />
+    },
+    {
+      path: 'asuntosAdmin',
+      element: <Index />
     }
   ]
 };
