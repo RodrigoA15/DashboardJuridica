@@ -104,7 +104,7 @@ function Buscador({ setProcedencia, setNameCourt, nameCourt, setJuzgados }) {
             <OutlinedInput
               {...register('search', {
                 required: 'El termino busqueda no puede estar vacio',
-                minLength: { value: 6, message: 'Número identificacion debe ser mayor a 6 caracteres' }
+                minLength: { value: 2, message: 'Número identificacion debe ser mayor a 6 caracteres' }
               })}
               size="small"
               id="search2"
@@ -143,7 +143,7 @@ function Buscador({ setProcedencia, setNameCourt, nameCourt, setJuzgados }) {
                   </div>
 
                   <div>
-                    {i.numero_identificacion === 102968664 && (
+                    {i.numero_identificacion === 12345 && (
                       <div>
                         <label htmlFor="nombre" className="form-label h6">
                           Entidad juridica
