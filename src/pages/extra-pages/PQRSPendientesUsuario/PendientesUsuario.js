@@ -21,6 +21,8 @@ function PendientesUsuario() {
   const [error, setError] = useState('');
   const [contador, setContador] = useState({});
 
+  const [filtro, setFiltro] = useState('');
+
   useEffect(() => {
     {
       user && apiDataUser();
@@ -30,6 +32,7 @@ function PendientesUsuario() {
     }
   }, [user]);
 
+  //TODO consumo de api asignaciones
   const apiDataUser = async () => {
     try {
       const response = await axios.get(`/asignaciones/${user.departamento._id}`);
@@ -68,6 +71,7 @@ function PendientesUsuario() {
     setOpenRespuestasModal(false);
   };
 
+  //TODO Contador de respuestas cargadas (Modal)
   const countAnswers = (pendiente) => {
     setContador((prevContador) => ({
       ...prevContador,
@@ -75,8 +79,9 @@ function PendientesUsuario() {
     }));
   };
 
+  //TODO contador de dias habiles
   const diasHabiles = (fecha_radicado) => {
-    let contador = 0;
+    let contador = -1;
     let fechaInicio = new Date(fecha_radicado);
     let fechaFin = new Date();
     let festivos = ['2023-10-06', '2023-10-05'];
@@ -99,6 +104,7 @@ function PendientesUsuario() {
     return contador;
   };
 
+  //TODO colores de las alertas por dia habil
   const getBackgroundColor = (fechaRadicado) => {
     const diasLaborables = diasHabiles(fechaRadicado);
 
@@ -113,6 +119,7 @@ function PendientesUsuario() {
     }
   };
 
+  //TODO Actualizar contador respuestas estimadas
   const updateCount = async (pendiente) => {
     try {
       const id_radicado = pendiente.id_radicado._id;
@@ -127,9 +134,20 @@ function PendientesUsuario() {
     }
   };
 
+  //TODO Buscador
+  const filteredPendientes = users.filter((pendiente) => pendiente.id_radicado.numero_radicado.includes(filtro));
+
   return (
     <div>
       <Toaster position="top-right" richColors expand={true} offset="80px" />
+
+      <input
+        className="form-control w-25 mb-3"
+        type="number"
+        placeholder="Buscar..."
+        value={filtro}
+        onChange={(e) => setFiltro(e.target.value)}
+      />
 
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 350 }} aria-label="simple table">
@@ -155,7 +173,7 @@ function PendientesUsuario() {
               </TableRow>
             ) : (
               <>
-                {users.map((pendiente) => {
+                {filteredPendientes.map((pendiente) => {
                   const isCurrentUserPendiente = user.email === pendiente.id_usuario.email;
                   return (
                     isCurrentUserPendiente && (
@@ -175,7 +193,7 @@ function PendientesUsuario() {
                         <TableCell>{pendiente.id_radicado.observaciones_radicado}</TableCell>
                         <TableCell align="left">
                           {pendiente.id_radicado.cantidad_respuesta}
-                          {/* Add answers for departament Legal */}
+                          {/* Agregar respuestas Juridica */}
                           {user && user.departamento && user.departamento.nombre_departamento === 'Juridica' && (
                             <>
                               <IconButton onClick={() => countAnswers(pendiente)}>
@@ -187,7 +205,7 @@ function PendientesUsuario() {
                             </>
                           )}
 
-                          {/* End Added answers Legal */}
+                          {/*  */}
                         </TableCell>
                         <TableCell>{diasHabiles(new Date(pendiente.id_radicado.fecha_radicado))}</TableCell>
                         <TableCell align="center">
