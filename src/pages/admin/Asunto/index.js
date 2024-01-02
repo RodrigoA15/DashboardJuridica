@@ -1,12 +1,49 @@
-import React from 'react';
-import { Grid } from '../../../../node_modules/@mui/material/index';
+import React, { useEffect, useState } from 'react';
 import ListaAsuntos from './listaAsuntos';
+//Material UI >>
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { Grid } from '@mui/material';
+//Axios
+import axios from 'api/axios';
 
 function Index() {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const apiDataAsuntos = async () => {
+      try {
+        const response = await axios.get('/asunto/asunto');
+        setData(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    apiDataAsuntos();
+  }, []);
   return (
-    <Grid container rowSpacing={4.5} columnSpacing={2.75}>
+    <Grid container spacing={2} justifyContent="center">
       <Grid item xs={12} md={7} lg={8}>
-        <ListaAsuntos />
+        <TableContainer component={Paper}>
+          <Table aria-label="collapsible table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Asuntos por área</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {data.map((row) => (
+                <ListaAsuntos key={row.nombre_departamento} row={row} />
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </Grid>
     </Grid>
   );

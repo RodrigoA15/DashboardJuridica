@@ -1,75 +1,65 @@
-import { useEffect, useMemo, useState } from 'react';
-import ListSubheader from '@mui/material/ListSubheader';
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Collapse from '@mui/material/Collapse';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
-import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
-import axios from 'api/axios';
+import React, { Fragment, useState } from 'react';
+import { Box, Collapse, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import PropTypes from 'prop-types';
+import BorderColorIcon from '@mui/icons-material/BorderColor';
+import DeleteIcon from '@mui/icons-material/Delete';
 
-export default function ListaAsuntos() {
-  const [openAreas, setOpenAreas] = useState([]);
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    apiDataAsuntos();
-  }, []);
-
-  const handleClick = (areaIndex) => {
-    setOpenAreas((prevOpenAreas) => {
-      const newOpenAreas = [...prevOpenAreas];
-      newOpenAreas[areaIndex] = !newOpenAreas[areaIndex];
-      return newOpenAreas;
-    });
-  };
-
-  const apiDataAsuntos = async () => {
-    try {
-      const response = await axios.get('/asunto/asunto');
-      setData(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useMemo(() => {
-    apiDataAsuntos();
-  }, []);
+function ListaAsuntos({ row }) {
+  const [open, setOpen] = useState(false);
 
   return (
-    <List
-      sx={{ width: '100%', maxWidth: 560, bgcolor: 'background.paper' }}
-      component="nav"
-      aria-labelledby="nested-list-subheader"
-      subheader={
-        <ListSubheader component="div" id="nested-list-subheader">
-          Asuntos por área
-        </ListSubheader>
-      }
-    >
-      {data.map((area, index) => (
-        <div key={area.nombre_departamento}>
-          <ListItemButton onClick={() => handleClick(index)}>
-            <ListItemText primary={area.nombre_departamento} />
-            {openAreas[index] ? <ExpandLess /> : <ExpandMore />}
-          </ListItemButton>
-          <Collapse in={openAreas[index]} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              {area.asuntos.map((asunto) => (
-                <ListItemButton key={asunto._id} sx={{ pl: 4 }}>
-                  <ListItemIcon>
-                    <FiberManualRecordIcon />
-                  </ListItemIcon>
-                  <ListItemText primary={asunto.nombre_asunto} />
-                </ListItemButton>
-              ))}
-            </List>
+    <Fragment>
+      <TableHead>
+        <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
+          <TableCell>
+            <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
+              {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+            </IconButton>
+          </TableCell>
+          <TableCell>{row.nombre_departamento}</TableCell>
+        </TableRow>
+      </TableHead>
+
+      <TableRow>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <Box sx={{ margin: 1 }}>
+              <Table size="small" aria-label="purchases">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Nombre Asunto</TableCell>
+                    <TableCell>Acciones</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {row.asuntos.map((asunto) => (
+                    <TableRow key={asunto._id}>
+                      <TableCell>{asunto.nombre_asunto}</TableCell>
+                      <TableCell>
+                        <IconButton color="warning" title="Editar">
+                          <BorderColorIcon />
+                        </IconButton>
+                        <IconButton color="error" title="Eliminar">
+                          <DeleteIcon />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Box>
           </Collapse>
-        </div>
-      ))}
-    </List>
+        </TableCell>
+      </TableRow>
+    </Fragment>
   );
 }
+
+export default ListaAsuntos;
+
+ListaAsuntos.propTypes = {
+  row: PropTypes.object
+};
