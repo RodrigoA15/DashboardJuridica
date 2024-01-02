@@ -14,6 +14,7 @@ import axios from 'api/axios';
 
 function Index() {
   const [data, setData] = useState([]);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const apiDataAsuntos = async () => {
@@ -21,7 +22,11 @@ function Index() {
         const response = await axios.get('/asunto/asunto');
         setData(response.data);
       } catch (error) {
-        console.log(error);
+        if (error.response && error.response.status === 404) {
+          setError('No se encontraron Asuntos');
+        } else {
+          setError('Error de servidor');
+        }
       }
     };
 
@@ -38,9 +43,15 @@ function Index() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data.map((row) => (
-                <ListaAsuntos key={row.nombre_departamento} row={row} />
-              ))}
+              {error ? (
+                <p>{error}</p>
+              ) : (
+                <>
+                  {data.map((row) => (
+                    <ListaAsuntos key={row.nombre_departamento} row={row} />
+                  ))}
+                </>
+              )}
             </TableBody>
           </Table>
         </TableContainer>
