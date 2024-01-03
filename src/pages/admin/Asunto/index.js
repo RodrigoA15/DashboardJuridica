@@ -11,6 +11,7 @@ import Paper from '@mui/material/Paper';
 import { Grid } from '@mui/material';
 //Axios
 import axios from 'api/axios';
+import Entidades from '../Entidad/index';
 
 function Index() {
   const [data, setData] = useState([]);
@@ -33,8 +34,8 @@ function Index() {
     apiDataAsuntos();
   }, []);
   return (
-    <Grid container spacing={2} justifyContent="center">
-      <Grid item xs={12} md={7} lg={8}>
+    <Grid container spacing={2}>
+      <Grid item xs={12} md={7} lg={8} justifyContent="start">
         <TableContainer component={Paper}>
           <Table aria-label="collapsible table">
             <TableHead>
@@ -55,6 +56,9 @@ function Index() {
             </TableBody>
           </Table>
         </TableContainer>
+      </Grid>
+      <Grid item justifyContent="end">
+        <Entidades />
       </Grid>
     </Grid>
   );
