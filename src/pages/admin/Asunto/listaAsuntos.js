@@ -10,14 +10,18 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { Toaster, toast } from 'sonner';
 import axios from 'api/axios';
+import Updateasunto from './update';
+import Button from '@mui/material/Button';
 
 function ListaAsuntos({ row }) {
   const [open, setOpen] = useState(false);
+  //Estado para el ID del asunto a actualizar
+  const [asuntoId, setAsuntoId] = useState(null);
+  //SwetAlert
+  const MySwal = withReactContent(Swal);
 
   const deletedAsunto = async ({ _id }) => {
     try {
-      console.log(_id);
-      const MySwal = withReactContent(Swal);
       const alert = await MySwal.fire({
         title: '¿Está seguro de eliminar el asunto?',
         icon: 'question',
@@ -60,14 +64,18 @@ function ListaAsuntos({ row }) {
                   <TableRow>
                     <TableCell>Nombre Asunto</TableCell>
                     <TableCell>Acciones</TableCell>
+                    <TableCell>
+                      <Button variant="text">Agregar asunto</Button>
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {row.asuntos.map((asunto) => (
                     <TableRow key={asunto._id}>
-                      <TableCell>{asunto.nombre_asunto}</TableCell>
+                      {/* Componente Actualizar Asunto */}
+                      <Updateasunto asuntoId={asuntoId} setAsuntoId={setAsuntoId} asunto={asunto} />
                       <TableCell>
-                        <IconButton color="warning" title="Editar">
+                        <IconButton color="warning" title="Editar" onClick={() => setAsuntoId(asunto._id)}>
                           <BorderColorIcon />
                         </IconButton>
 
