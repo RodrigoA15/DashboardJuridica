@@ -1,24 +1,31 @@
 import React, { Fragment, useState } from 'react';
 import { Box, Collapse, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
-import IconButton from '@mui/material/IconButton';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import PropTypes from 'prop-types';
-import BorderColorIcon from '@mui/icons-material/BorderColor';
-import DeleteIcon from '@mui/icons-material/Delete';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { Toaster, toast } from 'sonner';
 import axios from 'api/axios';
+//Componentes
+import Crearasunto from './create';
 import Updateasunto from './update';
-import Button from '@mui/material/Button';
+//Icons
+import AddIcon from '@mui/icons-material/Add';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import BorderColorIcon from '@mui/icons-material/BorderColor';
+import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from '@mui/material/IconButton';
 
 function ListaAsuntos({ row }) {
   const [open, setOpen] = useState(false);
+  const [openPost, setOpenPost] = useState(false);
   //Estado para el ID del asunto a actualizar
   const [asuntoId, setAsuntoId] = useState(null);
+  //Estado agregar asunto
+
   //SwetAlert
   const MySwal = withReactContent(Swal);
+  const valueDP = row._id;
 
   const deletedAsunto = async ({ _id }) => {
     try {
@@ -62,23 +69,26 @@ function ListaAsuntos({ row }) {
               <Table size="small" aria-label="purchases">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Nombre Asunto</TableCell>
-                    <TableCell>Acciones</TableCell>
-                    <TableCell>
-                      <Button variant="text">Agregar asunto</Button>
+                    <TableCell align="center">Nombre Asunto</TableCell>
+                    <TableCell align="center">Acciones</TableCell>
+                    <TableCell align="center">
+                      <IconButton size="medium" onClick={() => setOpenPost(!openPost)}>
+                        <AddIcon /> Agregar asunto
+                      </IconButton>
                     </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
+                  {/* Componente crear asunto */}
+                  <Crearasunto valueDP={valueDP} openPost={openPost} />
                   {row.asuntos.map((asunto) => (
                     <TableRow key={asunto._id}>
                       {/* Componente Actualizar Asunto */}
                       <Updateasunto asuntoId={asuntoId} setAsuntoId={setAsuntoId} asunto={asunto} />
-                      <TableCell>
+                      <TableCell align="center">
                         <IconButton color="warning" title="Editar" onClick={() => setAsuntoId(asunto._id)}>
                           <BorderColorIcon />
                         </IconButton>
-
                         <IconButton color="error" title="Eliminar" onClick={() => deletedAsunto(asunto)}>
                           <DeleteIcon />
                         </IconButton>
