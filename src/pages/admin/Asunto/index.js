@@ -12,6 +12,7 @@ import { Grid } from '@mui/material';
 //Axios
 import axios from 'api/axios';
 import Entidades from '../Entidad/index';
+import { Typography } from '@mui/material';
 
 function Index() {
   const [data, setData] = useState([]);
@@ -36,6 +37,8 @@ function Index() {
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} md={7} lg={8} justifyContent="start">
+        <Typography variant="h5">Asuntos</Typography>
+
         <TableContainer component={Paper}>
           <Table aria-label="collapsible table">
             <TableHead>
@@ -58,6 +61,7 @@ function Index() {
         </TableContainer>
       </Grid>
       <Grid item justifyContent="end">
+        <Typography variant="h5">Entidad</Typography>
         <Entidades />
       </Grid>
     </Grid>

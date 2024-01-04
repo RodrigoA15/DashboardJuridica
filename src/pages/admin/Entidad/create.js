@@ -7,9 +7,13 @@ import { Toaster, toast } from 'sonner';
 function CrearEntidad() {
   const [nombreEntidad, setNombreEntidad] = useState('');
   const MySwal = withReactContent(Swal);
+  const [error, setError] = useState('');
 
   const createEntidad = async () => {
     try {
+      if (!nombreEntidad) {
+        return setError('Nombre entidad es obligatorio');
+      }
       const alert = await MySwal.fire({
         title: '¿Está seguro de crear la entidad?',
         icon: 'question',
@@ -22,20 +26,30 @@ function CrearEntidad() {
         await axios.post('/entidad/entidad', {
           nombre_entidad: nombreEntidad
         });
+        toast.success('Entidad creada');
       } else {
         toast.error('Cancelado');
       }
     } catch (error) {
-      console.log(error);
+      toast.error('Error al crear la entidad', { description: 'Error de servidor' });
     }
   };
 
+  const handleCreateEntidad = (e) => {
+    const inputValue = e.target.value;
+    setNombreEntidad(inputValue);
+
+    if (inputValue.trim() !== '') {
+      setError('');
+    }
+  };
   return (
     <>
       <Toaster position="top-right" richColors expand={true} offset="80px" />
       <div className="row m-3">
         <div className="col-8">
-          <input className="form-control width=100px" placeholder="Nombre entidad" onChange={(e) => setNombreEntidad(e.target.value)} />
+          <input className="form-control width=100px" placeholder="Nombre entidad" onChange={handleCreateEntidad} />
+          <span className="errors">{error}</span>
         </div>
         <div className="col">
           <button className="btn btn-success" onClick={() => createEntidad()}>

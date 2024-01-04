@@ -30,6 +30,7 @@ function UpdateEntidad({ id, setId }) {
       toast.error('No se pudo actualizar la entidad', { description: 'Error de servidor ' });
     }
   };
+
   return (
     <div>
       <input className="form-control" type="text" onChange={(e) => setNombreEntidad(e.target.value)} />
@@ -46,6 +47,6 @@ function UpdateEntidad({ id, setId }) {
 export default UpdateEntidad;
 
 UpdateEntidad.propTypes = {
-  id: PropTypes.func,
+  id: PropTypes.string,
   setId: PropTypes.func
 };

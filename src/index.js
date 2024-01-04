@@ -47,6 +47,7 @@ root.render(
               <Route path="usuariosqx" element="" />
               <Route path="dashboard/default" element="" />
               <Route path="/asuntosAdmin" element />
+              <Route path="canalesAdmin" element />
             </Route>
           </Routes>
         </BrowserRouter>
