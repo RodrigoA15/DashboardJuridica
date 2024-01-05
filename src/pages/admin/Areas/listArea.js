@@ -4,7 +4,9 @@ import { TableCell, TableRow } from '@mui/material';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { IconButton } from '@mui/material';
-function ListArea() {
+import PropTypes from 'prop-types';
+
+function ListArea({ toast }) {
   const [areas, setAreas] = useState([]);
 
   useEffect(() => {
@@ -45,3 +47,7 @@ function ListArea() {
 }
 
 export default ListArea;
+
+ListArea.propTypes = {
+  toast: PropTypes.func
+};

@@ -16,7 +16,7 @@ function IndexArea() {
         </TableHead>
         <TableBody>
           <CrearArea toast={toast} />
-          <ListArea />
+          <ListArea toast={toast} />
         </TableBody>
       </Table>
     </TableContainer>
