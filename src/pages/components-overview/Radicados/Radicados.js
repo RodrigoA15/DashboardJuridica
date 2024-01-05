@@ -125,7 +125,7 @@ function ComponentRadicados() {
 
                         if (diferenciaMeses > 6) {
                           return 'Fecha inválida, las fechas de radicación no pueden ser mayores a 6 meses';
-                        } else if (fechaRadicado.getFullYear() > fechaActual.getFullYear()) {
+                        } else if (fechaRadicado > fechaActual) {
                           return 'Fecha inválida, la fecha de radicación no puede ser mayor a la fecha actual';
                         }
                         // Retorna undefined si la fecha es válida

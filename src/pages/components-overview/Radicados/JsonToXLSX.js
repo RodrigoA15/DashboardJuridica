@@ -71,7 +71,9 @@ function JsonToFileExcel() {
         fecha_radicado: new Date(item.id_asignacion.id_radicado.fecha_radicado).toLocaleDateString('es-CO', { timeZone: 'UTC' }),
         cantidad_respuesta: item.id_asignacion.id_radicado.cantidad_respuesta,
         Procedencia: item.id_asignacion.id_radicado.id_procedencia.nombre,
-        CanalEntrada: item.id_asignacion.id_radicado.id_canal_entrada.nombre_canal,
+        CanalEntrada: item.id_asignacion.id_radicado.id_canal_entrada
+          ? item.id_asignacion.id_radicado.id_canal_entrada.nombre_canal
+          : 'Canal no encontrado',
         Asunto: item.id_asignacion.id_radicado.id_asunto ? item.id_asignacion.id_radicado.id_asunto.nombre_asunto : 'Asunto no encontrado',
         Tipificacion: item.id_asignacion.id_radicado.id_tipificacion.nombre_tipificacion,
         Entidad: item.id_asignacion.id_radicado.id_entidad.nombre_entidad,
