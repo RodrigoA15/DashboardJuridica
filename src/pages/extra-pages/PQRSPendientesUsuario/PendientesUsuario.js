@@ -20,7 +20,6 @@ function PendientesUsuario() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
   const [contador, setContador] = useState({});
-
   const [filtro, setFiltro] = useState('');
 
   useEffect(() => {
@@ -84,7 +83,7 @@ function PendientesUsuario() {
     let contador = -1;
     let fechaInicio = new Date(fecha_radicado);
     let fechaFin = new Date();
-    let festivos = ['2023-10-06', '2023-10-05'];
+    let festivos = ['2024-01-01', '2024-01-02'];
 
     while (fechaInicio <= fechaFin) {
       const diaSemana = fechaInicio.getDay();
@@ -155,6 +154,7 @@ function PendientesUsuario() {
             <TableRow>
               <TableCell>Número radicado</TableCell>
               <TableCell align="left">Fecha radicado</TableCell>
+              <TableCell>Asunto</TableCell>
               <TableCell align="left">Fecha asignacion</TableCell>
               <TableCell align="left">Observaciones</TableCell>
               <TableCell align="left">Respuestas estimadas</TableCell>
@@ -189,6 +189,7 @@ function PendientesUsuario() {
                         >
                           {formatDate(pendiente.id_radicado.fecha_radicado)}
                         </TableCell>
+                        <TableCell>{pendiente.id_radicado.id_asunto ? pendiente.id_radicado.id_asunto.nombre_asunto : 'N/A'}</TableCell>
                         <TableCell align="left">{formatDate(pendiente.fecha_asignacion)}</TableCell>
                         <TableCell>{pendiente.id_radicado.observaciones_radicado}</TableCell>
                         <TableCell align="left">
