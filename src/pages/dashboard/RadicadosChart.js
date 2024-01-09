@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'api/axios';
 import ReactApexChart from 'react-apexcharts';
+import { Toaster, toast } from 'sonner';
 
 function RadicadosChart() {
   const dia = new Date();
@@ -8,6 +9,7 @@ function RadicadosChart() {
   const fecha2 = new Date();
   const [fechaInicio, setFechaInicio] = useState(fecha1);
   const [fechaFin, setFechaFin] = useState(fecha2);
+  const [error, setError] = useState(null);
 
   const [chartData, setChartData] = useState({
     series: [
@@ -67,9 +69,9 @@ function RadicadosChart() {
       });
     } catch (error) {
       if (error.response && error.response.status === 404) {
-        <h1>No hay Datos</h1>;
+        setError('No se encontraron respuestas ');
       } else {
-        console.log(error);
+        toast.error('No se pudo cargar la información', { description: 'error de servidor' });
       }
     }
   };
@@ -92,6 +94,8 @@ function RadicadosChart() {
 
   return (
     <div id="chart">
+      <Toaster position="top-right" richColors expand={true} offset="80px" />
+
       <div className="row m-1">
         <div className="col">
           <input className="form-control" type="date" onChange={handleFechaInicio} />
@@ -105,7 +109,11 @@ function RadicadosChart() {
           </button>
         </div>
       </div>
-      <ReactApexChart options={chartData.options} series={chartData.series} type="line" height={350} />
+      {error !== null ? (
+        <div className="error-message">{error}</div>
+      ) : (
+        <ReactApexChart options={chartData.options} series={chartData.series} type="line" height={350} />
+      )}
     </div>
   );
 }

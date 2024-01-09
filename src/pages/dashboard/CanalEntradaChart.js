@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'api/axios';
 import ReactApexChart from 'react-apexcharts';
+import { Toaster, toast } from 'sonner';
 
 function CanalEntradaChart() {
   const fecha = new Date();
@@ -95,7 +96,11 @@ function CanalEntradaChart() {
         }
       });
     } catch (error) {
-      console.log(error);
+      if (error.response && error.response.status === 404) {
+        toast.error('No se encontraron radicados por canales de entrada');
+      } else {
+        toast.error('No se pudo cargar la información', { description: 'error de servidor' });
+      }
     }
   };
 
@@ -109,6 +114,8 @@ function CanalEntradaChart() {
 
   return (
     <div>
+      <Toaster position="top-right" richColors expand={true} offset="80px" />
+
       <div className="row m-1">
         <div className="col">
           <input className="form-control" type="date" value={fechaInicio} onChange={handleFechaInicio} />

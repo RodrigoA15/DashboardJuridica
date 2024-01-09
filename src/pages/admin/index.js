@@ -104,7 +104,7 @@ function AdminRadicados() {
                       {data.numero_radicado}
                     </TableCell>
                     <TableCell component="th" scope="row">
-                      {new Date(data.fecha_radicado).toLocaleDateString('es-CO')}
+                      {new Date(data.fecha_radicado).toLocaleDateString('es-ES', { timeZone: 'UTC' })}
                     </TableCell>
                     <TableCell>{data.cantidad_respuesta}</TableCell>
                     {/* <TableCell>{data.id_procedencia.nombre}</TableCell> */}

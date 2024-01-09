@@ -223,4 +223,8 @@ hr {
   color: white;
 }
 
-
+.error-message {
+  text-align: center;
+  color: red; /* Puedes ajustar el color según tu diseño */
+  margin-top: 10px; /* Ajusta el margen superior según sea necesario */
+}

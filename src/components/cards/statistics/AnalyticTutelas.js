@@ -22,7 +22,6 @@ function AnalyticTutelas() {
       } else {
         toast.success('No hay tutelas');
       }
-      console.log(error);
     }
   };
 

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'api/axios';
 import ReactApexChart from 'react-apexcharts';
+import { Toaster, toast } from 'sonner';
 
 function ChartEntidad() {
   const fecha = new Date();
@@ -8,6 +9,7 @@ function ChartEntidad() {
   const dateEndMonth = new Date();
   const [fechaInicio, setFechaInicio] = useState(dateFirstMonth);
   const [fechaFin, setFechaFin] = useState(dateEndMonth);
+  const [error, setError] = useState(null);
 
   const [chartData, setChartData] = useState({
     series: [
@@ -84,7 +86,11 @@ function ChartEntidad() {
         }
       });
     } catch (error) {
-      console.log(error);
+      if (error.response && error.response.status === 404) {
+        setError('No se encontraron  radicados por entidad');
+      } else {
+        toast.error('No se pudo cargar la información', { description: 'error de servidor' });
+      }
     }
   };
 
@@ -98,6 +104,8 @@ function ChartEntidad() {
 
   return (
     <div id="chart">
+      <Toaster position="top-right" richColors expand={true} offset="80px" />
+
       <div className="row m-1">
         <div className="col">
           <input className="form-control" type="date" value={fechaInicio} onChange={handleFechaInicio} />
@@ -111,7 +119,11 @@ function ChartEntidad() {
           </button>
         </div>
       </div>
-      <ReactApexChart options={chartData.options} series={chartData.series} type="area" height={350} />
+      {error !== null ? (
+        <div className="error-message">{error}</div>
+      ) : (
+        <ReactApexChart options={chartData.options} series={chartData.series} type="line" height={350} />
+      )}
     </div>
   );
 }

@@ -1,13 +1,10 @@
 // material-ui
 import { Grid, Stack, Typography } from '@mui/material';
-
 // project import
 import MainCard from 'components/MainCard';
 import axios from 'api/axios';
 import { useEffect, useState } from 'react';
 import { Toaster, toast } from 'sonner';
-
-// ==============================|| STATISTICS - ECOMMERCE CARD  ||============================== //
 
 const AnalyticPQRSCreadas = () => {
   const [count, setCount] = useState(0);

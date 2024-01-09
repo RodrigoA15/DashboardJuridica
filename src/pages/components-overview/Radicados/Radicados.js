@@ -28,6 +28,7 @@ function ComponentRadicados() {
   const [nameCourt, setNameCourt] = useState('');
   const [juzgado, setJuzgados] = useState(null);
   const [check, setCheck] = useState(false);
+  const [errorData, setError] = useState(null);
 
   const MySwal = withReactContent(Swal);
 
@@ -51,11 +52,12 @@ function ComponentRadicados() {
       });
       reset();
     } catch (error) {
-      console.error('Error al crear radicado:', error.response);
+      setError(error.response.data);
+      console.error('Error al crear radicado:', errorData);
       const errorMessage = error.response?.data?.message || 'Error al crear radicado';
       MySwal.fire({
         title: 'Error',
-        text: errorMessage,
+        text: errorData || errorMessage,
         icon: 'error'
       });
     }

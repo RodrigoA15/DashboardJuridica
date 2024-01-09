@@ -100,7 +100,6 @@ function Juzgados({ setNameCourt, nameCourt, setJuzgados }) {
       toast.success('Registrado correctamente');
     } catch (error) {
       toast.error('No se pudo registrar');
-      console.log(error);
     }
   };
 

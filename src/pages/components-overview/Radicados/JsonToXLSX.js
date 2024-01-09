@@ -3,7 +3,7 @@ import axios from 'api/axios';
 import CsvDownloadButton from 'react-json-to-csv';
 import ExportFromJson from 'export-from-json';
 import { toast } from 'sonner';
-import { Toaster } from '../../../../node_modules/sonner/dist/index';
+import { Toaster } from 'sonner';
 
 function JsonToFileExcel() {
   const [data, setData] = useState([]);
