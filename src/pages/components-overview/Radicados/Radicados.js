@@ -54,10 +54,10 @@ function ComponentRadicados() {
     } catch (error) {
       setError(error.response.data);
       console.error('Error al crear radicado:', errorData);
-      const errorMessage = error.response?.data?.message || 'Error al crear radicado';
+      // const errorMessage = error.response?.data?.message || 'Error al crear radicado';
       MySwal.fire({
         title: 'Error',
-        text: errorData || errorMessage,
+        text: errorData,
         icon: 'error'
       });
     }
