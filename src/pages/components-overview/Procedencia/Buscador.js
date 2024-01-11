@@ -174,6 +174,8 @@ function Buscador({ setProcedencia, setNameCourt, nameCourt, setJuzgados }) {
                       <option value="CE">Cedula de extranjeria</option>
                       <option value="PEP">Permiso Especial De Permanencia</option>
                       <option value="PPT">Permiso Proteccion Temporal</option>
+                      <option value="NIT">NIT</option>
+                      <option value="OTRO">Otro</option>
                     </select>
                     {errors.tipo_identificacion && <span className="inputForm ">{errors.tipo_identificacion.message}</span>}
                   </div>

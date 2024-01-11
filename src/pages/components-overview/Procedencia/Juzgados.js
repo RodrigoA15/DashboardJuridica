@@ -43,6 +43,7 @@ function Juzgados({ setNameCourt, nameCourt, setJuzgados }) {
               className="form-control rounded-pill minimal-input-dark"
               id="nombre"
               onChange={(e) => setNameCourt(e.target.value.toUpperCase())}
+              required
             />
           </div>
           <div className="col">
