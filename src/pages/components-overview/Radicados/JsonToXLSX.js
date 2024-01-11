@@ -40,14 +40,14 @@ function JsonToFileExcel() {
     return allData.map((data) => {
       return {
         Numero_radicado: data.numero_radicado,
-        Fecha_radicado: new Date(data.fecha_radicado).toLocaleDateString('es-CO'),
+        Fecha_radicado: new Date(data.fecha_radicado).toLocaleDateString('es-ES', { timeZone: 'UTC' }),
         Cantidad_respuesta: data.cantidad_respuesta,
         Procedencia: data.id_procedencia.nombre,
-        CanalEntrada: data.id_canal_entrada.nombre_canal,
-        Asunto: data.id_asunto.nombre_asunto,
-        Tipificacion: data.id_tipificacion.nombre_tipificacion,
-        Entidad: data.id_entidad.nombre_entidad,
-        AreaEncargada: data.id_departamento.nombre_departamento,
+        CanalEntrada: data.id_canal_entrada ? data.id_canal_entrada.nombre_canal : 'No se encontro el canal de entrada',
+        Asunto: data.id_asunto ? data.id_asunto.nombre_asunto : 'No se encontro el asunto',
+        Tipificacion: data.id_tipificacion ? data.id_tipificacion.nombre_tipificacion : 'No se encontro la tipificacion',
+        Entidad: data.id_entidad ? data.id_entidad.nombre_entidad : 'No se encontro la entidad',
+        AreaEncargada: data.id_departamento ? data.id_departamento.nombre_departamento : 'No se encontro el área',
         Estado_radicado: data.estado_radicado,
         Observaciones: data.observaciones_radicado,
         Juzgados: data.juzgado ? data.juzgado.desc_ente_juridico : 'N/A'

@@ -4,6 +4,7 @@ import { Button } from '@mui/material';
 import PropTypes from 'prop-types';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
+import { useAuth } from 'context/authContext';
 
 function Juzgados({ setNameCourt, nameCourt, setJuzgados }) {
   const [validation, setValidation] = useState('');
@@ -12,6 +13,7 @@ function Juzgados({ setNameCourt, nameCourt, setJuzgados }) {
   const [municipio, setMunicipio] = useState('');
   const [registerEntity, setRegisterEntity] = useState(false);
   const Myswal = withReactContent(Swal);
+  const { user } = useAuth();
 
   useEffect(() => {
     setDescripcion(nameCourt);
@@ -63,6 +65,28 @@ function Juzgados({ setNameCourt, nameCourt, setJuzgados }) {
     }
   };
 
+  const historialCambios = async () => {
+    try {
+      const datos = `El usuario ${user.username} creo la entidad juridica: ${descripcion} del municipio de ${municipio}`;
+      await axios.post('/historial', {
+        observacion: datos
+      });
+    } catch (error) {
+      MySwal.fire({
+        text: 'Ops error de servidor  :(',
+        icon: 'error',
+        customClass: {
+          container: 'swal-zindex'
+        }
+      });
+    }
+  };
+
+  const handleOnClick = () => {
+    historialCambios();
+    registerEntityApi();
+  };
+
   return (
     <div>
       <div className="row mt-3">
@@ -97,7 +121,7 @@ function Juzgados({ setNameCourt, nameCourt, setJuzgados }) {
         <div className="d-flex flex-column align-items-center">
           <input className="form-control mb-3" value={descripcion} readOnly />
           <input className="form-control mb-3" value={municipio} readOnly />
-          <button className="btn btn-success" onClick={() => registerEntityApi()}>
+          <button className="btn btn-success" onClick={handleOnClick}>
             Registrar
           </button>
         </div>
