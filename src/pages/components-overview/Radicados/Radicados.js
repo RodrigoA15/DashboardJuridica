@@ -10,7 +10,7 @@ import GetEntidad from '../Entidad/GetEntidad';
 import { useState } from 'react';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import { Button, Grid } from '../../../../node_modules/@mui/material/index';
+import { Button, Grid } from '@mui/material';
 
 // ===============================|| CUSTOM - SHADOW BOX ||=============================== //
 
@@ -50,6 +50,7 @@ function ComponentRadicados() {
         icon: 'success'
       });
       reset();
+      setJuzgados(null);
     } catch (error) {
       setError(error.response.data);
       console.error('Error al crear radicado:', errorData);
