@@ -54,6 +54,7 @@ function Juzgados({ setNameCourt, nameCourt, setJuzgados }) {
           text: 'Entidad creada correctamente',
           icon: 'success'
         });
+        dataApiCourtsMongo();
       } else {
         await Myswal.fire({
           text: 'Cancelado',

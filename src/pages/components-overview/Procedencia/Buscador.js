@@ -87,6 +87,7 @@ function Buscador({ setProcedencia, setNameCourt, nameCourt, setJuzgados }) {
         description: 'Por favor realice la búsqueda nuevamente',
         duration: 10000
       });
+      GetidentificacionById();
     } catch (error) {
       toast.error(error.response.data);
     }
