@@ -12,8 +12,6 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { Button, Grid } from '@mui/material';
 
-// ===============================|| CUSTOM - SHADOW BOX ||=============================== //
-
 function ComponentRadicados() {
   const {
     register,
@@ -29,7 +27,6 @@ function ComponentRadicados() {
   const [juzgado, setJuzgados] = useState(null);
   const [check, setCheck] = useState(false);
   const [errorData, setError] = useState(null);
-  // const [validate, setValidate] = useState(false);
   const MySwal = withReactContent(Swal);
   const onSubmit = handleSubmit((data) => {
     createRadicado(data);

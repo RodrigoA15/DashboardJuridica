@@ -72,7 +72,7 @@ function Juzgados({ setNameCourt, nameCourt, setJuzgados }) {
         observacion: datos
       });
     } catch (error) {
-      MySwal.fire({
+      Myswal.fire({
         text: 'Ops error de servidor  :(',
         icon: 'error',
         customClass: {

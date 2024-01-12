@@ -1,32 +1,33 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import axios from 'api/axios';
 import { useAuth } from 'context/authContext';
 
 import { useState } from 'react';
-import { toast } from '../../../../node_modules/sonner/dist/index';
-import { Toaster } from '../../../../node_modules/sonner/dist/index';
 import PDFViewerAnswers from './PDFViewerAnswers';
 
 function GetRespuesta() {
   const [respondidos, setRespondidos] = useState([]);
+  const [error, setError] = useState('');
+  const [filtro, setFiltro] = useState('');
   const { user } = useAuth();
-  const [numero_radicado, setNumeroRadicado] = useState('');
+
+  useEffect(() => {
+    apiGetRespuesta();
+  }, []);
 
   const apiGetRespuesta = async () => {
-    if (numero_radicado.trim() === '') {
-      toast.error('Termino busqueda no debe estar vacio');
-      return;
-    }
     try {
-      const response = await axios.get(`/radicados_respuestas/${user.departamento._id}/${numero_radicado}`);
+      const response = await axios.get(`/respuestasArea/${user.departamento._id}`);
       setRespondidos(response.data);
     } catch (error) {
       if (error.response && error.response.status === 404) {
-        toast.error('No se encontraron resultados en la busqueda');
+        setError('No se encontraron resultados en la busqueda');
       }
     }
   };
+
+  const filteredAnswers = respondidos.filter((answer) => answer.id_asignacion.id_radicado.numero_radicado.includes(filtro));
 
   return (
     <div>
@@ -35,7 +36,8 @@ function GetRespuesta() {
           className="form-control w-25"
           type="text"
           placeholder="Buscar Respuestas"
-          onChange={(e) => setNumeroRadicado(e.target.value)}
+          value={filtro}
+          onChange={(e) => setFiltro(e.target.value)}
         />
         <div className="col-4">
           <button className="btn btn-primary" onClick={apiGetRespuesta}>
@@ -43,7 +45,6 @@ function GetRespuesta() {
           </button>
         </div>
       </div>
-      <Toaster position="top-right" richColors />
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 350 }} aria-label="simple table">
           <TableHead>
@@ -56,17 +57,25 @@ function GetRespuesta() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {respondidos.map((i) => (
-              <TableRow key={i._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell component="th" scope="row">
-                  {i.id_asignacion.id_radicado.numero_radicado}
-                </TableCell>
-                <TableCell align="left">{i.id_asignacion.id_radicado.id_asunto.nombre_asunto}</TableCell>
-                <TableCell align="left">{i.id_asignacion.id_usuario.username}</TableCell>
-                <TableCell align="left">{i.numero_radicado_respuesta}</TableCell>
-                <PDFViewerAnswers dataAnswer={i} />
+            {error ? (
+              <TableRow key="error">
+                <TableCell colSpan={5}>{error}</TableCell>
               </TableRow>
-            ))}
+            ) : (
+              <>
+                {filteredAnswers.map((i) => (
+                  <TableRow key={i._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell component="th" scope="row">
+                      {i.id_asignacion.id_radicado.numero_radicado}
+                    </TableCell>
+                    <TableCell align="left">{i.id_asignacion.id_radicado.id_asunto.nombre_asunto}</TableCell>
+                    <TableCell align="left">{i.id_asignacion.id_usuario.username}</TableCell>
+                    <TableCell align="left">{i.numero_radicado_respuesta}</TableCell>
+                    <PDFViewerAnswers dataAnswer={i} />
+                  </TableRow>
+                ))}
+              </>
+            )}
           </TableBody>
         </Table>
       </TableContainer>
