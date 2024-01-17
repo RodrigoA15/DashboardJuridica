@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import React, { useEffect, useMemo } from 'react';
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination } from '@mui/material';
 import axios from 'api/axios';
 import { useAuth } from 'context/authContext';
-
+import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
+import * as locales from '@mui/material/locale';
 import { useState } from 'react';
 import PDFViewerAnswers from './PDFViewerAnswers';
 
@@ -11,10 +12,17 @@ function GetRespuesta() {
   const [error, setError] = useState('');
   const [filtro, setFiltro] = useState('');
   const { user } = useAuth();
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [locale, setLocale] = useState('esES');
 
   useEffect(() => {
     apiGetRespuesta();
   }, []);
+
+  const theme = useTheme();
+
+  const themeWithLocale = useMemo(() => createTheme(theme, locales[locale]), [locale, theme]);
 
   const apiGetRespuesta = async () => {
     try {
@@ -25,6 +33,16 @@ function GetRespuesta() {
         setError('No se encontraron resultados en la busqueda');
       }
     }
+  };
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+    setLocale(newValue);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
   };
 
   const filteredAnswers = respondidos.filter((answer) => answer.id_asignacion.id_radicado.numero_radicado.includes(filtro));
@@ -63,7 +81,7 @@ function GetRespuesta() {
               </TableRow>
             ) : (
               <>
-                {filteredAnswers.map((i) => (
+                {filteredAnswers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((i) => (
                   <TableRow key={i._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                     <TableCell component="th" scope="row">
                       {i.id_asignacion.id_radicado.numero_radicado}
@@ -79,6 +97,18 @@ function GetRespuesta() {
           </TableBody>
         </Table>
       </TableContainer>
+      <ThemeProvider theme={themeWithLocale}>
+        <TablePagination
+          className="rowPage"
+          rowsPerPageOptions={[10, 25, 100]}
+          component="div"
+          count={respondidos.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </ThemeProvider>
     </div>
   );
 }
