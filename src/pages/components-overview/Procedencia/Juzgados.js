@@ -21,7 +21,9 @@ function Juzgados({ setNameCourt, nameCourt, setJuzgados }) {
 
   const dataApiCourtsMongo = async () => {
     try {
-      const response = await axios.get(`/listEntitiesbyid/${descripcion}/${municipio}`);
+      const trimmedMunicipio = municipio.trim();
+      const trimmedDescripcion = descripcion.trim();
+      const response = await axios.get(`/listEntitiesbyid/${trimmedDescripcion}/${trimmedMunicipio}`);
       const id_juzgado = response.data.response._id;
       setJuzgados(id_juzgado);
       setRegisterEntity(false);
