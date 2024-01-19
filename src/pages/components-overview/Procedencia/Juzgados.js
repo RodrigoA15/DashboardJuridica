@@ -39,21 +39,28 @@ function Juzgados({ setNameCourt, nameCourt, setJuzgados }) {
   const registerEntityApi = async () => {
     try {
       const alert = await Myswal.fire({
-        text: '¿Está seguro de crear la entidad juridica?',
+        text: '¿Está seguro de crear la entidad jurídica?',
         icon: 'question',
         showCancelButton: true,
         confirmButtonText: 'Sí, crear',
         cancelButtonText: 'Cancelar'
       });
+
       if (alert.isConfirmed) {
+        // Elimina espacios en blanco al principio y al final de las cadenas
+        const trimmedDescripcion = descripcion.trim();
+        const trimmedMunicipio = municipio.trim();
+
         await axios.post('/createEntity', {
-          desc_ente_juridico: descripcion,
-          municipio: municipio
+          desc_ente_juridico: trimmedDescripcion,
+          municipio: trimmedMunicipio
         });
+
         await Myswal.fire({
           text: 'Entidad creada correctamente',
           icon: 'success'
         });
+
         dataApiCourtsMongo();
       } else {
         await Myswal.fire({
