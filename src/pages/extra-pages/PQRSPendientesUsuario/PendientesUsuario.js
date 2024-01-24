@@ -156,6 +156,7 @@ function PendientesUsuario() {
               <TableCell align="left">Fecha radicado</TableCell>
               <TableCell>Asunto</TableCell>
               <TableCell align="left">Fecha asignacion</TableCell>
+              <TableCell align="left">Procedencia</TableCell>
               <TableCell align="left">Observaciones</TableCell>
               <TableCell align="left">Respuestas estimadas</TableCell>
               <TableCell align="center">Dias</TableCell>
@@ -191,6 +192,9 @@ function PendientesUsuario() {
                         </TableCell>
                         <TableCell>{pendiente.id_radicado.id_asunto ? pendiente.id_radicado.id_asunto.nombre_asunto : 'N/A'}</TableCell>
                         <TableCell align="left">{formatDate(pendiente.fecha_asignacion)}</TableCell>
+                        <TableCell align="left">
+                          {pendiente.id_radicado.id_procedencia.nombre} {pendiente.id_radicado.id_procedencia.apellido}
+                        </TableCell>
                         <TableCell>{pendiente.id_radicado.observaciones_radicado}</TableCell>
                         <TableCell align="left">
                           {pendiente.id_radicado.cantidad_respuesta}
