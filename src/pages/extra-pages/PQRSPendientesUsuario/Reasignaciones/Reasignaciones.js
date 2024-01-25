@@ -3,6 +3,9 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 //Props
 import PropTypes from 'prop-types';
+import Areas from './Areas';
+import { useState } from 'react';
+import Entidades from './Entidades';
 
 //Estilos modal
 const style = {
@@ -18,11 +21,17 @@ const style = {
 };
 
 function Reasignaciones({ open, close }) {
+  //Todo capturar errores
+  const [error, setError] = useState('');
+  const [selectArea, setSelectArea] = useState('');
   return (
     <div>
       <Modal open={open} onClose={close} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
         <Box sx={style}>
-          <p>Coming soon...</p>
+          <form>
+            <Entidades setError={setError} />
+            <Areas error={error} setError={setError} selectArea={selectArea} setSelectArea={setSelectArea} />
+          </form>
         </Box>
       </Modal>
     </div>

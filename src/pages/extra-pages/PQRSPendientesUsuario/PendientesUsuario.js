@@ -9,7 +9,7 @@ import axios from 'api/axios';
 import { useAuth } from 'context/authContext';
 import ModalRespuestas from './ModalRespuestas';
 import ModalRadicadosRespuestas from './ModalRadicadosRespuestas';
-import Reasignaciones from './Reasignaciones';
+import Reasignaciones from './Reasignaciones/Reasignaciones';
 
 function PendientesUsuario() {
   const { user } = useAuth();
