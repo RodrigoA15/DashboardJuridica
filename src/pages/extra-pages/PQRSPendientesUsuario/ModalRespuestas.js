@@ -79,7 +79,7 @@ function ModalRespuestas({ open, handleClose, data }) {
       setUrlFile(files);
     }
   };
-
+  console.log(url);
   return (
     <div>
       <Toaster position="top-right" richColors expand={true} offset="80px" />
