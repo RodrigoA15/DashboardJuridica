@@ -108,6 +108,7 @@ function Preasignaciones() {
               <TableCell>Número radicado</TableCell>
               <TableCell align="left">Fecha radicado</TableCell>
               <TableCell align="left">Asunto</TableCell>
+              <TableCell align="left">Correo electrónico</TableCell>
               <TableCell>Observaciones</TableCell>
               <TableCell align="left">Departamento</TableCell>
               <TableCell align="center">Acciones</TableCell>
@@ -130,6 +131,8 @@ function Preasignaciones() {
                   </TableCell>
                   <TableCell align="left">{new Date(pre.fecha_radicado).toLocaleDateString('es-CO', { timeZone: 'UTC' })}</TableCell>
                   <TableCell align="left">{pre.id_asunto.nombre_asunto}</TableCell>
+                  <TableCell align="left">{pre.id_procedencia.correo ? pre.id_procedencia.correo : 'No registra'}</TableCell>
+
                   <TableCell align="left">{pre.observaciones_radicado}</TableCell>
                   <TableCell align="left">{pre.id_departamento.nombre_departamento}</TableCell>
                   <TableCell align="center">
