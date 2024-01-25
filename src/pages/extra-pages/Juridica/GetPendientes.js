@@ -15,6 +15,7 @@ function GetPendientes() {
   const { user } = useAuth();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [filtro, setFiltro] = useState('');
 
   useEffect(() => {
     getDataPendiente();
@@ -88,8 +89,23 @@ function GetPendientes() {
     }
   };
 
+  const filterpendientes = data.filter((pendiente) => pendiente.numero_radicado.includes(filtro));
   return (
     <div>
+      <div className="row m-1 mb-3">
+        <input
+          className="form-control w-25"
+          type="text"
+          placeholder="Buscar Respuestas"
+          value={filtro}
+          onChange={(e) => setFiltro(e.target.value)}
+        />
+        <div className="col-4">
+          <button className="btn btn-primary" onClick={getDataPendiente}>
+            Buscar
+          </button>
+        </div>
+      </div>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 350 }} aria-label="simple table">
           <TableHead>
@@ -111,7 +127,7 @@ function GetPendientes() {
                 <TableCell colSpan={5}>{error}</TableCell>
               </TableRow>
             ) : (
-              data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((pendiente) => (
+              filterpendientes.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((pendiente) => (
                 <TableRow key={pendiente._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                   <TableCell component="th" scope="row" align="center">
                     <b>{pendiente.numero_radicado}</b>

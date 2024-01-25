@@ -19,6 +19,7 @@ function Preasignaciones() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [locale, setLocale] = useState('esES');
+  const [filtro, setFiltro] = useState('');
 
   useEffect(() => {
     {
@@ -98,9 +99,25 @@ function Preasignaciones() {
     }
   };
 
+  const filterPreasignaciones = data.filter((pre) => pre.numero_radicado.includes(filtro));
+
   return (
     <div>
       <Toaster position="top-right" richColors expand={true} offset="80px" />
+      <div className="row m-1 mb-3">
+        <input
+          className="form-control w-25"
+          type="text"
+          placeholder="Buscar Respuestas"
+          value={filtro}
+          onChange={(e) => setFiltro(e.target.value)}
+        />
+        <div className="col-4">
+          <button className="btn btn-primary" onClick={getAllPreasignaciones}>
+            Buscar
+          </button>
+        </div>
+      </div>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 350 }} aria-label="simple table">
           <TableHead>
@@ -124,7 +141,7 @@ function Preasignaciones() {
                 <TableCell colSpan={5}>{error}</TableCell>
               </TableRow>
             ) : (
-              data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((pre) => (
+              filterPreasignaciones.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((pre) => (
                 <TableRow key={pre._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                   <TableCell component="th" scope="row">
                     {pre.numero_radicado}
