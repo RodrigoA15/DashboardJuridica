@@ -3,11 +3,13 @@ import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow
 import DoneIcon from '@mui/icons-material/Done';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import AddIcon from '@mui/icons-material/Add';
+import SendIcon from '@mui/icons-material/Send';
 import { Toaster } from 'sonner';
 import axios from 'api/axios';
 import { useAuth } from 'context/authContext';
 import ModalRespuestas from './ModalRespuestas';
 import ModalRadicadosRespuestas from './ModalRadicadosRespuestas';
+import Reasignaciones from './Reasignaciones';
 
 function PendientesUsuario() {
   const { user } = useAuth();
@@ -21,6 +23,8 @@ function PendientesUsuario() {
   const [error, setError] = useState('');
   const [contador, setContador] = useState({});
   const [filtro, setFiltro] = useState('');
+  //Modal Reasignacion
+  const [openReasignacion, setOpenReasignacion] = useState(false);
 
   useEffect(() => {
     {
@@ -68,6 +72,15 @@ function PendientesUsuario() {
   const handleCloseR = () => {
     setSelectedRespuesta(null);
     setOpenRespuestasModal(false);
+  };
+
+  //TODO modal reasignaciones
+  const handleOpenReasignacion = () => {
+    setOpenReasignacion(true);
+  };
+
+  const handleCloseReasignacion = () => {
+    setOpenReasignacion(false);
   };
 
   //TODO Contador de respuestas cargadas (Modal)
@@ -220,6 +233,9 @@ function PendientesUsuario() {
                           <Button color="secondary" startIcon={<VisibilityIcon />} onClick={() => handleOpenR(pendiente)}>
                             Ver Respuestas
                           </Button>
+                          <Button startIcon={<SendIcon />} onClick={() => handleOpenReasignacion()}>
+                            Reasignación
+                          </Button>
                         </TableCell>
                       </TableRow>
                     )
@@ -239,6 +255,7 @@ function PendientesUsuario() {
       </TableContainer>
       <ModalRespuestas open={openModal} handleClose={handleClose} data={selectedData} />
       <ModalRadicadosRespuestas opens={openRespuestasModal} handleCloses={handleCloseR} respuestas={selectedRespuesta} />
+      <Reasignaciones close={handleCloseReasignacion} open={openReasignacion} />
     </div>
   );
 }
