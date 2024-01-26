@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'api/axios';
+import Areas from './Areas';
+import PropTypes from 'prop-types';
 
-function Entidades({ setError }) {
+function Entidades({ selectArea, setSelectArea, setSelectEntidad, selectEntidad }) {
   const [entidades, setEntidades] = useState([]);
 
   useEffect(() => {
@@ -13,12 +15,13 @@ function Entidades({ setError }) {
       const response = await axios.get('/entidad/entidad');
       setEntidades(response.data);
     } catch (error) {
-      setError('No se encontrarón entidades');
+      console.log('No se encontrarón entidades');
     }
   };
+
   return (
     <div>
-      <select className="form-select">
+      <select className="form-select" onChange={(e) => setSelectEntidad(e.target.value)}>
         <option value="">Seleccione entidad</option>
         {entidades.map((entidad) => (
           <option key={entidad._id} value={entidad._id}>
@@ -26,8 +29,17 @@ function Entidades({ setError }) {
           </option>
         ))}
       </select>
+      <Areas selectArea={selectArea} setSelectArea={setSelectArea} selectEntidad={selectEntidad} />
     </div>
   );
 }
 
 export default Entidades;
+
+Entidades.propTypes = {
+  setError: PropTypes.func,
+  selectArea: PropTypes.string,
+  setSelectArea: PropTypes.func,
+  setSelectEntidad: PropTypes.func,
+  selectEntidad: PropTypes.string
+};

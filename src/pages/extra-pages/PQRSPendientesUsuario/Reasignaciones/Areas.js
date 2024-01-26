@@ -1,25 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'api/axios';
-import UsuariosQX from './UsuariosQX';
 
-function Areas({ setError, setSelectArea, selectArea }) {
+function Areas({ setSelectArea, selectEntidad }) {
   //Todo estado api
   const [areas, setAreas] = useState([]);
 
   useEffect(() => {
     getAllAreas();
-  }, []);
+  }, [selectEntidad]);
 
   const getAllAreas = async () => {
     try {
-      const response = await axios.get('/departamentos/departamento');
+      const response = await axios.get(`/departamentos/dptoentidad/${selectEntidad}`);
       setAreas(response.data);
     } catch (error) {
       if (error.response && error.response.status === 404) {
-        setError('No se encontraron áreas');
+        console.log('No se encontraron áreas');
       }
     }
   };
+
   return (
     <div>
       <select className="form-select" onChange={(e) => setSelectArea(e.target.value)}>
@@ -30,7 +30,6 @@ function Areas({ setError, setSelectArea, selectArea }) {
           </option>
         ))}
       </select>
-      <UsuariosQX setError={setError} selectArea={selectArea} />
     </div>
   );
 }

@@ -4,7 +4,6 @@ import DoneIcon from '@mui/icons-material/Done';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import AddIcon from '@mui/icons-material/Add';
 import SendIcon from '@mui/icons-material/Send';
-import { Toaster } from 'sonner';
 import axios from 'api/axios';
 import { useAuth } from 'context/authContext';
 import ModalRespuestas from './ModalRespuestas';
@@ -22,9 +21,10 @@ function PendientesUsuario() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
   const [contador, setContador] = useState({});
-  const [filtro, setFiltro] = useState('');
   //Modal Reasignacion
   const [openReasignacion, setOpenReasignacion] = useState(false);
+  const [selectedAsignacion, setSelectedAsignacion] = useState(null);
+  const [filtro, setFiltro] = useState('');
 
   useEffect(() => {
     {
@@ -75,11 +75,13 @@ function PendientesUsuario() {
   };
 
   //TODO modal reasignaciones
-  const handleOpenReasignacion = () => {
+  const handleOpenReasignacion = (asignacion) => {
+    setSelectedAsignacion(asignacion);
     setOpenReasignacion(true);
   };
 
   const handleCloseReasignacion = () => {
+    setSelectedAsignacion(null);
     setOpenReasignacion(false);
   };
 
@@ -151,8 +153,6 @@ function PendientesUsuario() {
 
   return (
     <div>
-      <Toaster position="top-right" richColors expand={true} offset="80px" />
-
       <input
         className="form-control w-25 mb-3"
         type="number"
@@ -233,7 +233,7 @@ function PendientesUsuario() {
                           <Button color="secondary" startIcon={<VisibilityIcon />} onClick={() => handleOpenR(pendiente)}>
                             Ver Respuestas
                           </Button>
-                          <Button startIcon={<SendIcon />} onClick={() => handleOpenReasignacion()}>
+                          <Button startIcon={<SendIcon />} onClick={() => handleOpenReasignacion(pendiente)}>
                             Reasignación
                           </Button>
                         </TableCell>
@@ -255,7 +255,7 @@ function PendientesUsuario() {
       </TableContainer>
       <ModalRespuestas open={openModal} handleClose={handleClose} data={selectedData} />
       <ModalRadicadosRespuestas opens={openRespuestasModal} handleCloses={handleCloseR} respuestas={selectedRespuesta} />
-      <Reasignaciones close={handleCloseReasignacion} open={openReasignacion} />
+      <Reasignaciones open={openReasignacion} close={handleCloseReasignacion} asignaciones={selectedAsignacion} />
     </div>
   );
 }

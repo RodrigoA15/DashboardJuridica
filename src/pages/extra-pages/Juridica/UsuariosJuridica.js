@@ -49,7 +49,6 @@ function UsuariosJuridica({ pendiente }) {
         actualizacionEstado();
         toast.success('Asignado Correctamente');
       }
-      console.log(data);
     } catch (error) {
       toast.error('Error de servidor');
       console.log(error);
@@ -72,7 +71,8 @@ function UsuariosJuridica({ pendiente }) {
       const datos = {
         ...data,
         id_radicado: pendiente._id,
-        fecha_asignacion: new Date()
+        fecha_asignacion: new Date(),
+        estado_asignacion: 'abierto'
       };
       await axios.post(`/asignacion`, datos);
     } catch (error) {
