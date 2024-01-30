@@ -58,7 +58,7 @@ const DashboardDefault = () => {
       <Grid item xs={12} md={7} lg={8}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
-            <Typography variant="h5">Radicados por mes</Typography>
+            <Typography variant="h5">Respuestas por mes</Typography>
           </Grid>
         </Grid>
         <MainCard content={false} sx={{ mt: 1.5 }}>

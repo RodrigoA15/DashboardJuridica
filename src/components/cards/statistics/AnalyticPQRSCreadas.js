@@ -19,7 +19,7 @@ const AnalyticPQRSCreadas = () => {
 
   const dataApi = async () => {
     try {
-      const response = await axios.get('radicados/radicados');
+      const response = await axios.get('radicados/pqrsMovit');
       const countResponse = response.data.length;
       setCount(countResponse);
     } catch (error) {
@@ -36,7 +36,7 @@ const AnalyticPQRSCreadas = () => {
 
       <Stack spacing={0.5}>
         <Typography variant="h6" color="textSecondary">
-          PQRS Creadas
+          PQRS creadas Movit
         </Typography>
         <Grid container alignItems="center">
           <Grid item>
@@ -49,4 +49,5 @@ const AnalyticPQRSCreadas = () => {
     </MainCard>
   );
 };
+
 export default AnalyticPQRSCreadas;
