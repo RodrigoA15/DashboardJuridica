@@ -150,7 +150,6 @@ function PendientesUsuario() {
 
   //TODO Buscador
   const filteredPendientes = users.filter((pendiente) => pendiente.id_radicado.numero_radicado.includes(filtro));
-
   return (
     <div>
       <input
@@ -187,60 +186,62 @@ function PendientesUsuario() {
               </TableRow>
             ) : (
               <>
-                {filteredPendientes.map((pendiente) => {
-                  const isCurrentUserPendiente = user.email === pendiente.id_usuario.email;
-                  return (
-                    isCurrentUserPendiente && (
-                      <TableRow key={pendiente._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                        <TableCell component="th" scope="row">
-                          {pendiente.id_radicado.numero_radicado}
-                        </TableCell>
-                        <TableCell
-                          align="left"
-                          style={{
-                            background: getBackgroundColor(new Date(pendiente.id_radicado.fecha_radicado))
-                          }}
-                        >
-                          {formatDate(pendiente.id_radicado.fecha_radicado)}
-                        </TableCell>
-                        <TableCell>{pendiente.id_radicado.id_asunto ? pendiente.id_radicado.id_asunto.nombre_asunto : 'N/A'}</TableCell>
-                        <TableCell align="left">{formatDate(pendiente.fecha_asignacion)}</TableCell>
-                        <TableCell align="left">
-                          {pendiente.id_radicado.id_procedencia.nombre} {pendiente.id_radicado.id_procedencia.apellido}
-                        </TableCell>
-                        <TableCell>{pendiente.id_radicado.observaciones_radicado}</TableCell>
-                        <TableCell align="left">
-                          {pendiente.id_radicado.cantidad_respuesta}
-                          {/* Agregar respuestas Juridica */}
-                          {user && user.departamento && user.departamento.nombre_departamento === 'Juridica' && (
-                            <>
-                              <IconButton onClick={() => countAnswers(pendiente)}>
-                                <AddIcon />
-                              </IconButton>
-                              <IconButton onClick={() => updateCount(pendiente)}>
-                                <DoneIcon />
-                              </IconButton>
-                            </>
-                          )}
+                {filteredPendientes
+                  .sort((a, b) => new Date(a.id_radicado.fecha_radicado) - new Date(b.id_radicado.fecha_radicado))
+                  .map((pendiente) => {
+                    const isCurrentUserPendiente = user.email === pendiente.id_usuario.email;
+                    return (
+                      isCurrentUserPendiente && (
+                        <TableRow key={pendiente._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                          <TableCell component="th" scope="row">
+                            {pendiente.id_radicado.numero_radicado}
+                          </TableCell>
+                          <TableCell
+                            align="left"
+                            style={{
+                              background: getBackgroundColor(new Date(pendiente.id_radicado.fecha_radicado))
+                            }}
+                          >
+                            {formatDate(pendiente.id_radicado.fecha_radicado)}
+                          </TableCell>
+                          <TableCell>{pendiente.id_radicado.id_asunto ? pendiente.id_radicado.id_asunto.nombre_asunto : 'N/A'}</TableCell>
+                          <TableCell align="left">{formatDate(pendiente.fecha_asignacion)}</TableCell>
+                          <TableCell align="left">
+                            {pendiente.id_radicado.id_procedencia.nombre} {pendiente.id_radicado.id_procedencia.apellido}
+                          </TableCell>
+                          <TableCell>{pendiente.id_radicado.observaciones_radicado}</TableCell>
+                          <TableCell align="left">
+                            {pendiente.id_radicado.cantidad_respuesta}
+                            {/* Agregar respuestas Juridica */}
+                            {user && user.departamento && user.departamento.nombre_departamento === 'Juridica' && (
+                              <>
+                                <IconButton onClick={() => countAnswers(pendiente)}>
+                                  <AddIcon />
+                                </IconButton>
+                                <IconButton onClick={() => updateCount(pendiente)}>
+                                  <DoneIcon />
+                                </IconButton>
+                              </>
+                            )}
 
-                          {/*  */}
-                        </TableCell>
-                        <TableCell>{diasHabiles(new Date(pendiente.id_radicado.fecha_radicado))}</TableCell>
-                        <TableCell align="center">
-                          <Button color="primary" startIcon={<AddIcon />} onClick={() => handleOpen(pendiente)}>
-                            Agregar Respuesta
-                          </Button>
-                          <Button color="secondary" startIcon={<VisibilityIcon />} onClick={() => handleOpenR(pendiente)}>
-                            Ver Respuestas
-                          </Button>
-                          <Button startIcon={<SendIcon />} onClick={() => handleOpenReasignacion(pendiente)}>
-                            Reasignación
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    )
-                  );
-                })}
+                            {/*  */}
+                          </TableCell>
+                          <TableCell>{diasHabiles(new Date(pendiente.id_radicado.fecha_radicado))}</TableCell>
+                          <TableCell align="center">
+                            <Button color="primary" startIcon={<AddIcon />} onClick={() => handleOpen(pendiente)}>
+                              Agregar Respuesta
+                            </Button>
+                            <Button color="secondary" startIcon={<VisibilityIcon />} onClick={() => handleOpenR(pendiente)}>
+                              Ver Respuestas
+                            </Button>
+                            <Button startIcon={<SendIcon />} onClick={() => handleOpenReasignacion(pendiente)}>
+                              Reasignación
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      )
+                    );
+                  })}
                 {!isPendiente && (
                   <TableRow key="no-pendiente" sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                     <TableCell colSpan={3}>
