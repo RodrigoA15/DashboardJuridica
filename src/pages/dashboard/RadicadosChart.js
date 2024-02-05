@@ -51,7 +51,7 @@ function RadicadosChart() {
     try {
       const creados = await axios.get(`/radicados/cantidad_creados/${fechaInicio}/${fechaFin}`);
       const response = await axios.get(`/radicados/chart_radicados/${fechaInicio}/${fechaFin}`);
-      const fechaRadicado = response.data.map((item) => new Date(item.fecha_radicado).toLocaleDateString('es-ES', { timeZone: 'UTC' }));
+      const fechaRadicado = response.data.map((item) => new Date(item.fecha_radicado).toLocaleDateString());
       const fechaCreados = creados.data.map((item) => new Date(item.fecha_radicado).toLocaleDateString('es-ES', { timeZone: 'UTC' }));
 
       setChartData({
@@ -67,7 +67,8 @@ function RadicadosChart() {
           ...chartData.options,
           xaxis: {
             type: 'datetime',
-            categories: fechaRadicado.concat(fechaCreados)
+            categories: fechaCreados,
+            fechaRadicado
           }
         }
       });
