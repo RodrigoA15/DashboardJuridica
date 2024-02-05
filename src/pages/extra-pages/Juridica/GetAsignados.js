@@ -90,6 +90,7 @@ function GetAsignados() {
           <TableHead>
             <TableRow>
               <TableCell>Estado</TableCell>
+              <TableCell>Número radicado</TableCell>
               <TableCell>Fecha radicado</TableCell>
               <TableCell align="left">Fecha asignacion</TableCell>
               <TableCell align="left">Responsable</TableCell>
@@ -111,6 +112,7 @@ function GetAsignados() {
                   <TableCell component="th" scope="row">
                     {i.id_radicado.estado_radicado}
                   </TableCell>
+                  <TableCell>{i.id_radicado.numero_radicado}</TableCell>
                   <TableCell
                     style={{
                       background: getBackgroundColor(new Date(i.id_radicado.fecha_radicado))
