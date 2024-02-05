@@ -16,6 +16,10 @@ function RadicadosChart() {
       {
         name: 'Radicados',
         data: []
+      },
+      {
+        name: 'Respuesta',
+        data: []
       }
     ],
     options: {
@@ -50,20 +54,25 @@ function RadicadosChart() {
 
   const apiChartRadicados = async () => {
     try {
+      const creados = await axios.get(`/radicados/cantidad_creados/${fechaInicio}/${fechaFin}`);
       const response = await axios.get(`/radicados/chart_radicados/${fechaInicio}/${fechaFin}`);
       const fechaRadicado = response.data.map((item) => item.fecha_radicado);
+      const fechaCreados = creados.data.map((item) => item.fecha_radicado);
 
       setChartData({
         series: [
+          {
+            data: creados.data.map((item) => item.NUM_RADICADOS)
+          },
           {
             data: response.data.map((item) => item.NUM_RADICADOS)
           }
         ],
         options: {
-          ...chartData.options.xaxis,
+          ...chartData.options,
           xaxis: {
             type: 'datetime',
-            categories: fechaRadicado
+            categories: fechaRadicado.concat(fechaCreados)
           }
         }
       });
@@ -72,6 +81,7 @@ function RadicadosChart() {
         setError('No se encontraron respuestas ');
       } else {
         toast.error('No se pudo cargar la información', { description: 'error de servidor' });
+        console.log(error);
       }
     }
   };
