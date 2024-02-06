@@ -9,6 +9,7 @@ import UsuariosQX from 'pages/admin/UsuariosQX/index';
 import PDFViewer from 'pages/extra-pages/PQRSPendientesUsuario/PDFViewer';
 import Index from 'pages/admin/Asunto/index';
 import IndexCE from 'pages/admin/CanalEntrada/index';
+import IndexResumen from 'pages/admin/Resumen/index';
 // render - dashboard
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
 
@@ -65,6 +66,10 @@ const MainRoutes = {
     {
       path: 'canalesAdmin',
       element: <IndexCE />
+    },
+    {
+      path: 'resumenAdmin',
+      element: <IndexResumen />
     }
   ]
 };

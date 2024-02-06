@@ -2,13 +2,15 @@ import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import GroupIcon from '@mui/icons-material/Group';
 import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import SendIcon from '@mui/icons-material/Send';
+import DescriptionIcon from '@mui/icons-material/Description';
 
 //Icons
 const icons = {
   AdminPanelSettingsIcon,
   GroupIcon,
   BusinessCenterIcon,
-  SendIcon
+  SendIcon,
+  DescriptionIcon
 };
 
 const admin = {
@@ -43,6 +45,13 @@ const admin = {
       type: 'item',
       url: 'canalesAdmin',
       icon: icons.SendIcon
+    },
+    {
+      id: 'resumen',
+      title: 'Resumen',
+      type: 'item',
+      url: '/resumenAdmin',
+      icon: icons.DescriptionIcon
     }
   ]
 };
