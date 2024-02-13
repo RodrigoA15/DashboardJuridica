@@ -1,6 +1,7 @@
 import MainCard from 'components/MainCard';
 import { Grid, Typography } from '@mui/material';
 import ChartEntidadAdmin from './chart';
+import EnhancedTable from './TablePruebaSlect';
 
 function IndexResumen() {
   return (
@@ -23,7 +24,9 @@ function IndexResumen() {
             <Typography variant="h5">Resumen</Typography>
           </Grid>
         </Grid>
-        <MainCard content={false} sx={{ mt: 1.5 }}></MainCard>
+        <MainCard content={false} sx={{ mt: 1.5 }}>
+          <EnhancedTable />
+        </MainCard>
       </Grid>
     </Grid>
   );
