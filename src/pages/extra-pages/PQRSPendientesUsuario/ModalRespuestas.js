@@ -28,7 +28,7 @@ function ModalRespuestas({ open, handleClose, data }) {
     formState: { errors },
     handleSubmit,
     reset
-  } = useForm();
+  } = useForm({ mode: 'onChange' });
   const [url, setUrl] = useState('');
   const [urlFile, setUrlFile] = useState('');
   const MySwal = withReactContent(Swal);
@@ -68,11 +68,11 @@ function ModalRespuestas({ open, handleClose, data }) {
       toast.success('Respuesta Agregada');
       handleClose();
     } catch (error) {
-      toast.error('error de servidor');
+      toast.error(error.response.data);
     }
   };
 
-  const onChange = (e) => {
+  const onChangeFile = (e) => {
     const files = e.target.files;
     if (files.length > 0) {
       setUrl(URL.createObjectURL(files[0]));
@@ -89,7 +89,7 @@ function ModalRespuestas({ open, handleClose, data }) {
             <form onSubmit={onSubmit} encType="multipart/form-data">
               <div className="mb-3">
                 <label className="form-label" htmlFor="NoRadicado">
-                  Numero Radicado
+                  Número radicado respuesta
                 </label>
                 <input
                   className="form-control rounded-pill"
@@ -98,6 +98,10 @@ function ModalRespuestas({ open, handleClose, data }) {
                     required: {
                       value: true,
                       message: 'Este campo es obligatorio'
+                    },
+                    minLength: {
+                      value: 12,
+                      message: 'Número radicado respuesta debe ser minimo 12 carácteres'
                     }
                   })}
                 />
@@ -108,7 +112,19 @@ function ModalRespuestas({ open, handleClose, data }) {
                 <label className="form-label" htmlFor="NoRadicado">
                   Archivo
                 </label>
-                <input name="respuesta_pdf" className="form-control rounded-pill" accept=".pdf" type="file" onChange={onChange} />
+                <input
+                  className="form-control rounded-pill"
+                  accept=".pdf"
+                  type="file"
+                  {...register('respuesta_pdf', {
+                    onChange: onChangeFile,
+                    required: {
+                      value: true,
+                      message: 'Este campo es obligatorio'
+                    }
+                  })}
+                />
+                {errors.respuesta_pdf && <span className="inputForm ">{errors.respuesta_pdf.message}</span>}
               </div>
 
               {url && <PDFViewer url={url} />}

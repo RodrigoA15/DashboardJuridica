@@ -91,8 +91,8 @@ function ComponentRadicados() {
                         message: 'Número radicado es obligatorio'
                       },
                       minLength: {
-                        value: 12,
-                        message: 'Número Radicado debe ser mayor a 12 caracteres'
+                        value: 14,
+                        message: 'Número Radicado debe ser mayor igual a 14 caracteres'
                       }
                     })}
                   />
