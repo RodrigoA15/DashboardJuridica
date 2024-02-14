@@ -3,8 +3,12 @@ import axios from 'api/axios';
 import ReactApexChart from 'react-apexcharts';
 
 function ChartEntidadAdmin() {
-  const [fechaInicio, setFechaInicio] = useState('');
-  const [fechaFin, setFechaFin] = useState('');
+  const fecha = new Date();
+  const dateFirstMonth = new Date(fecha.getFullYear(), fecha.getMonth(), 1);
+  const dateEndMonth = new Date();
+
+  const [fechaInicio, setFechaInicio] = useState(dateFirstMonth);
+  const [fechaFin, setFechaFin] = useState(dateEndMonth);
 
   const [data, setData] = useState({
     series: [
