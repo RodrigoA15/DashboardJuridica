@@ -8,6 +8,9 @@ import { Toaster, toast } from 'sonner';
 
 const AnalyticPQRSCreadas = () => {
   const [count, setCount] = useState(0);
+  const fecha = new Date();
+  const dateFirstMonth = new Date(fecha.getFullYear(), fecha.getMonth(), 1);
+  const dateEndMonth = new Date();
 
   useEffect(() => {
     dataApi();
@@ -19,7 +22,7 @@ const AnalyticPQRSCreadas = () => {
 
   const dataApi = async () => {
     try {
-      const response = await axios.get('radicados/pqrsMovit');
+      const response = await axios.get(`/radicados/pqrsMovit/${dateFirstMonth}/${dateEndMonth}`);
       const countResponse = response.data.length;
       setCount(countResponse);
     } catch (error) {
