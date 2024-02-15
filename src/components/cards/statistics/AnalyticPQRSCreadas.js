@@ -9,7 +9,7 @@ import { Toaster, toast } from 'sonner';
 const AnalyticPQRSCreadas = () => {
   const [count, setCount] = useState(0);
   const fecha = new Date();
-  const dateFirstMonth = new Date(fecha.getFullYear(), fecha.getMonth(), 1);
+  const dateFirstMonth = new Date(fecha.getFullYear(), fecha.getMonth(), 0);
   const dateEndMonth = new Date();
 
   useEffect(() => {
