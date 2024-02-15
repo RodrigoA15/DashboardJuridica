@@ -6,7 +6,7 @@ import axios from 'api/axios';
 import { useEffect, useState } from 'react';
 import { Toaster, toast } from 'sonner';
 
-const AnalyticPQRSCreadas = () => {
+const AnalyticPQRSSecretaria = () => {
   const [count, setCount] = useState(0);
   const fecha = new Date();
   const dateFirstMonth = new Date(fecha.getFullYear(), fecha.getMonth(), 1);
@@ -23,7 +23,7 @@ const AnalyticPQRSCreadas = () => {
     try {
       const response = await axios.get(`/entidad/entidadt/${dateFirstMonth}/${dateEndMonth}`);
       const responseData = response.data[0]; // Acceder al primer objeto del array
-      const movitCount = responseData.Movit; // Obtener el valor de 'Movit' del objeto
+      const movitCount = responseData.Secretaria; // Obtener el valor de 'Movit' del objeto
       setCount(movitCount); // Actualizar el estado 'count'
     } catch (error) {
       if (error.response && error.response.status === 404) {
@@ -35,12 +35,12 @@ const AnalyticPQRSCreadas = () => {
   };
 
   return (
-    <MainCard contentSX={{ p: 2.25 }} className="card1">
+    <MainCard contentSX={{ p: 2.25 }} className="cardSecretaria">
       <Toaster position="top-right" richColors expand={true} offset="80px" />
 
       <Stack spacing={0.5}>
         <Typography variant="h6" color="textSecondary">
-          PQRS creadas concesión tránsito
+          PQRS creadas Secretaria
         </Typography>
         <Grid container alignItems="center">
           <Grid item>
@@ -54,4 +54,4 @@ const AnalyticPQRSCreadas = () => {
   );
 };
 
-export default AnalyticPQRSCreadas;
+export default AnalyticPQRSSecretaria;
