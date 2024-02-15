@@ -9,72 +9,63 @@ import { Toaster, toast } from 'sonner';
 import { useAuth } from 'context/authContext';
 import { useForm } from 'react-hook-form';
 
-function UsuariosJuridica({ pendiente }) {
+function UsuariosJuridica({ dataRadicados }) {
   const [users, setUsers] = useState([]);
+  const [usuario, setUsuario] = useState('');
   const { user } = useAuth();
   const {
     register,
     formState: { errors },
     handleSubmit
   } = useForm();
-
+  const MySwal = withReactContent(Swal);
   useEffect(() => {
     if (user) {
       apiUsuarios();
     }
   }, [user]);
 
+  const onSubmit = handleSubmit(async () => {
+    const alert = await MySwal.fire({
+      title: '¿Está seguro de asignar el radicado?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Si, modificar',
+      cancelButtonText: 'Cancelar'
+    });
+    if (alert.isConfirmed) {
+      asignar();
+      actualizacionEstado();
+    }
+  });
+
   const apiUsuarios = async () => {
     try {
-      const response = await axios.get(`/departamentos/usuarios_departamento/${user.departamento._id}`);
+      const departamentoId = user.departamento._id;
+      const response = await axios.get(`/departamentos/usuarios_departamento/${departamentoId}`);
       setUsers(response.data);
     } catch (error) {
       toast.error('Error al cargar usuarios');
       console.log(error);
     }
   };
-  const onSubmit = handleSubmit(async (data) => {
-    try {
-      const MySwal = withReactContent(Swal);
-      const result = await MySwal.fire({
-        title: '¿Está seguro de asignar el radicado?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'Si, modificar',
-        cancelButtonText: 'Cancelar'
-      });
-
-      if (result.isConfirmed) {
-        asignar(data);
-        actualizacionEstado();
-        toast.success('Asignado Correctamente');
-      }
-    } catch (error) {
-      toast.error('Error de servidor');
-      console.log(error);
-    }
-  });
 
   const actualizacionEstado = async () => {
     try {
-      await axios.put(`/radicados/radicados/${pendiente._id}`, {
-        estado_radicado: 'Asignados'
-      });
+      await axios.put(`/radicados/radicados`, { _id: dataRadicados });
+      toast.success('Estado actualizado correctamente');
     } catch (error) {
       toast.error('Error al actualizar estado');
-      console.log(error);
+      console.error(error);
     }
   };
 
-  const asignar = async (data) => {
+  const asignar = async () => {
     try {
-      const datos = {
-        ...data,
-        id_radicado: pendiente._id,
-        fecha_asignacion: new Date(),
-        estado_asignacion: 'abierto'
-      };
-      await axios.post(`/asignacion`, datos);
+      const dataPrueba = dataRadicados.map((i) => {
+        return { id_usuario: usuario, fecha_asignacion: new Date(), estado_asignacion: 'abierto', id_radicado: i };
+      });
+      await axios.post(`/asignacion`, dataPrueba);
     } catch (error) {
       toast.error('Error al asignar');
       console.log(error);
@@ -86,9 +77,18 @@ function UsuariosJuridica({ pendiente }) {
       <Toaster richColors position="top-center" />
       <Box sx={{ alignItems: 'center' }}>
         <form onSubmit={onSubmit}>
-          <div className="row d-flex">
-            <div className="col-8">
-              <select className="form-select" {...register('id_usuario', { required: 'Seleccione un usuario' })}>
+          <div className="d-flex align-items-center">
+            <div className="flex-grow-1">
+              <select
+                className="form-select"
+                {...register('id_usuario', {
+                  required: {
+                    value: true,
+                    message: 'Seleccione un usuario'
+                  },
+                  onChange: (e) => setUsuario(e.target.value)
+                })}
+              >
                 <option value="">Seleccione un usuario</option>
                 {users.map((usuario) => (
                   <option key={usuario._id} value={usuario._id}>
@@ -98,11 +98,15 @@ function UsuariosJuridica({ pendiente }) {
               </select>
               {errors.id_usuario && <span className="inputForm">{errors.id_usuario.message}</span>}
             </div>
-            <div className="col-4 justify-content-center">
-              <Button className="ms-5" variant="outlined" type="submit">
-                Asignar
-              </Button>
-            </div>
+            {dataRadicados.length > 0 ? (
+              <div>
+                <Button type="submit" className="ms-3" variant="outlined">
+                  Asignar
+                </Button>
+              </div>
+            ) : (
+              <h6>Seleccione una petición</h6>
+            )}
           </div>
         </form>
       </Box>
@@ -111,7 +115,7 @@ function UsuariosJuridica({ pendiente }) {
 }
 
 UsuariosJuridica.propTypes = {
-  pendiente: PropTypes.object.isRequired
+  dataRadicados: PropTypes.array
 };
 
 export default UsuariosJuridica;

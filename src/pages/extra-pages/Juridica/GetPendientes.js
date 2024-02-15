@@ -85,12 +85,6 @@ const headCells = [
     label: 'Procedencia'
   },
   {
-    id: 'Asignacion',
-    numeric: true,
-    disablePadding: false,
-    label: 'Asignar radicado'
-  },
-  {
     id: 'estado',
     numeric: false,
     disablePadding: false,
@@ -313,22 +307,28 @@ export default function GetPendientes() {
   );
 
   const filterpendientes = visibleRows.filter((pendiente) => pendiente.numero_radicado.includes(filtro));
-
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
         <EnhancedTableToolbar numSelected={selected.length} />
         <div className="row m-1 mb-3">
-          <input
-            className="form-control w-25"
-            type="text"
-            placeholder="Buscar Respuestas"
-            value={filtro}
-            onChange={(e) => setFiltro(e.target.value)}
-          />
+          <div className="col">
+            <input
+              className="form-control"
+              type="text"
+              placeholder="Buscar Respuestas"
+              value={filtro}
+              onChange={(e) => setFiltro(e.target.value)}
+            />
+          </div>
+          <div className="col">
+            <UsuariosJuridica dataRadicados={selected} />
+          </div>
         </div>
+
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size={dense ? 'small' : 'medium'}>
+            ;
             <EnhancedTableHead
               numSelected={selected.length}
               order={order}
@@ -379,9 +379,6 @@ export default function GetPendientes() {
                         {row.id_procedencia.nombre} {row.id_procedencia.apellido}
                       </TableCell>
 
-                      <TableCell align="center">
-                        <UsuariosJuridica pendiente={row} />
-                      </TableCell>
                       <TableCell align="right">
                         <Stack direction="row" spacing={1} alignItems="center">
                           <Dot color={getBackgroundColor(new Date(row.fecha_radicado))} size={15} />
