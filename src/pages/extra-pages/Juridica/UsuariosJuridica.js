@@ -35,7 +35,6 @@ function UsuariosJuridica({ dataRadicados }) {
     });
     if (alert.isConfirmed) {
       asignar();
-      actualizacionEstado();
     }
   });
 
@@ -65,7 +64,12 @@ function UsuariosJuridica({ dataRadicados }) {
       const dataPrueba = dataRadicados.map((i) => {
         return { id_usuario: usuario, fecha_asignacion: new Date(), estado_asignacion: 'abierto', id_radicado: i };
       });
-      await axios.post(`/asignacion`, dataPrueba);
+      const data = await axios.post(`/asignacion`, dataPrueba);
+      if (data) {
+        actualizacionEstado();
+      } else {
+        toast.error('No se creo la asignacion');
+      }
     } catch (error) {
       toast.error('Error al asignar');
       console.log(error);
