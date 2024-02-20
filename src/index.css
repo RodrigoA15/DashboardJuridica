@@ -148,11 +148,16 @@
   color: white !important;
 }
 
-/* Card Creados */
+/* Card Pendientes */
 .card4 {
-  background: #ff6666 !important;
+  background: #86A789 !important;
   border: none !important;
   color: white !important;
+}
+/* Card secretaria */
+.cardSecretaria{
+  background: #82A0D8;
+  color: black;
 }
 
 /* nombre componente */
@@ -225,11 +230,7 @@ hr {
 
 .error-message {
   text-align: center;
-  color: red; /* Puedes ajustar el color según tu diseño */
-  margin-top: 10px; /* Ajusta el margen superior según sea necesario */
+  color: red; 
+  margin-top: 10px; 
 }
 
-.cardSecretaria{
-  background: #82A0D8;
-  color: black;
-}

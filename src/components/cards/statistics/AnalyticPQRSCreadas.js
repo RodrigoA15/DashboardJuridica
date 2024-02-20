@@ -19,6 +19,22 @@ const AnalyticPQRSCreadas = () => {
 
     return () => clearInterval(time);
   }, []);
+
+  const mesActual = new Date();
+  const meses = [
+    'Enero',
+    'Febrero',
+    'Marzo',
+    'Abril',
+    'Mayo',
+    'Junio',
+    'Julio',
+    'Agosto',
+    'Setiembre',
+    'Octubre',
+    'Noviembre',
+    'Diciembre'
+  ];
   const dataApi = async () => {
     try {
       const response = await axios.get(`/entidad/entidadt/${dateFirstMonth}/${dateEndMonth}`);
@@ -40,7 +56,7 @@ const AnalyticPQRSCreadas = () => {
 
       <Stack spacing={0.5}>
         <Typography variant="h6" color="textSecondary">
-          PQRS creadas concesión tránsito
+          PQRS creadas concesión tránsito - {meses[mesActual.getMonth()]}
         </Typography>
         <Grid container alignItems="center">
           <Grid item>
