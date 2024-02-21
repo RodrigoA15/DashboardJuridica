@@ -25,7 +25,7 @@ function GetAsignados() {
     }
   }, [user]);
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = (newPage) => {
     setPage(newPage);
   };
 

@@ -286,7 +286,7 @@ function PendientesUsuario() {
         className="rowPage"
         rowsPerPageOptions={[50, 100, 200]}
         component="div"
-        count={filteredPendientes.length}
+        count={users.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}

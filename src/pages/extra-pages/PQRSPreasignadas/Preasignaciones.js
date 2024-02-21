@@ -156,7 +156,7 @@ function Preasignaciones() {
                     <Button className="card2 " size="small" variant="contained" onClick={() => updateStatePreasignacion(pre)}>
                       Aceptar
                     </Button>
-                    <Button className="card4 ms-3" size="small" variant="contained" onClick={() => handleOpen(pre)}>
+                    <Button className="errors ms-3" size="small" variant="contained" onClick={() => handleOpen(pre)}>
                       Rechazar
                     </Button>
                   </TableCell>
