@@ -29,6 +29,7 @@ function EstadoDepartamento() {
           <option value="Detección electrónica infractores">DEI</option>
           <option value="Juridica">Juridica</option>
           <option value="Registro municipal de infractores">RMI</option>
+          <option value="Front office">Front office</option>
         </select>
       </div>
       <Table>

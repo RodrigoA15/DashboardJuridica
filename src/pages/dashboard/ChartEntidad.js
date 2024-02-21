@@ -5,7 +5,7 @@ import { Toaster, toast } from 'sonner';
 
 function ChartEntidad() {
   const fecha = new Date();
-  const dateFirstMonth = new Date(fecha.getFullYear(), fecha.getMonth(), 1);
+  const dateFirstMonth = new Date(fecha.getFullYear(), fecha.getMonth(), 0);
   const dateEndMonth = new Date();
   const [fechaInicio, setFechaInicio] = useState(dateFirstMonth);
   const [fechaFin, setFechaFin] = useState(dateEndMonth);
