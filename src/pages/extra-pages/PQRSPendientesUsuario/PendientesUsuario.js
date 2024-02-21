@@ -35,9 +35,10 @@ function PendientesUsuario() {
   //Modal Reasignacion
   const [openReasignacion, setOpenReasignacion] = useState(false);
   const [selectedAsignacion, setSelectedAsignacion] = useState(null);
+  //Buscador
   const [filtro, setFiltro] = useState('');
   //Paginacion
-  const [rowsPerPage, setRowsPerPage] = useState(50);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
 
   useEffect(() => {
@@ -279,12 +280,9 @@ function PendientesUsuario() {
           </TableBody>
         </Table>
       </TableContainer>
-      <ModalRespuestas open={openModal} handleClose={handleClose} data={selectedData} />
-      <ModalRadicadosRespuestas opens={openRespuestasModal} handleCloses={handleCloseR} respuestas={selectedRespuesta} />
-      <Reasignaciones open={openReasignacion} close={handleCloseReasignacion} asignaciones={selectedAsignacion} />
       <TablePagination
         className="rowPage"
-        rowsPerPageOptions={[50, 100, 200]}
+        rowsPerPageOptions={[10, 100, 200]}
         component="div"
         count={users.length}
         rowsPerPage={rowsPerPage}
@@ -292,6 +290,9 @@ function PendientesUsuario() {
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
+      <ModalRespuestas open={openModal} handleClose={handleClose} data={selectedData} />
+      <ModalRadicadosRespuestas opens={openRespuestasModal} handleCloses={handleCloseR} respuestas={selectedRespuesta} />
+      <Reasignaciones open={openReasignacion} close={handleCloseReasignacion} asignaciones={selectedAsignacion} />
     </div>
   );
 }
