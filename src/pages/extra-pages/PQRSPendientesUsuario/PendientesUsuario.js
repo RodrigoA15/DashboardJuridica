@@ -1,5 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, IconButton } from '@mui/material';
+import {
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Button,
+  IconButton,
+  TablePagination
+} from '@mui/material';
 import DoneIcon from '@mui/icons-material/Done';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import AddIcon from '@mui/icons-material/Add';
@@ -25,6 +36,9 @@ function PendientesUsuario() {
   const [openReasignacion, setOpenReasignacion] = useState(false);
   const [selectedAsignacion, setSelectedAsignacion] = useState(null);
   const [filtro, setFiltro] = useState('');
+  //Paginacion
+  const [rowsPerPage, setRowsPerPage] = useState(50);
+  const [page, setPage] = useState(0);
 
   useEffect(() => {
     {
@@ -52,6 +66,16 @@ function PendientesUsuario() {
     }
   };
 
+  //TODO paginator>>>
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+  //END paginator
   const formatDate = (date) => new Date(date).toLocaleDateString('es-ES', { timeZone: 'UTC' });
 
   const handleOpen = (data) => {
@@ -188,6 +212,7 @@ function PendientesUsuario() {
               <>
                 {filteredPendientes
                   .sort((a, b) => new Date(a.id_radicado.fecha_radicado) - new Date(b.id_radicado.fecha_radicado))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((pendiente) => {
                     const isCurrentUserPendiente = user.email === pendiente.id_usuario.email;
                     return (
@@ -257,6 +282,16 @@ function PendientesUsuario() {
       <ModalRespuestas open={openModal} handleClose={handleClose} data={selectedData} />
       <ModalRadicadosRespuestas opens={openRespuestasModal} handleCloses={handleCloseR} respuestas={selectedRespuesta} />
       <Reasignaciones open={openReasignacion} close={handleCloseReasignacion} asignaciones={selectedAsignacion} />
+      <TablePagination
+        className="rowPage"
+        rowsPerPageOptions={[50, 100, 200]}
+        component="div"
+        count={filteredPendientes.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
     </div>
   );
 }

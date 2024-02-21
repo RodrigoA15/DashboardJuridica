@@ -10,8 +10,11 @@ function GetAsignados() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const { user } = useAuth();
+  //Paginator
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  //Buscador
+  const [filtro, setFiltro] = useState('');
 
   useEffect(() => {
     {
@@ -83,8 +86,18 @@ function GetAsignados() {
     }
   };
 
+  //Buscador
+  const filterAsignados = asignados.filter((asignado) => asignado.id_radicado.numero_radicado.includes(filtro));
+
   return (
     <div>
+      <input
+        className="form-control w-25 mb-3"
+        type="number"
+        placeholder="Buscar..."
+        value={filtro}
+        onChange={(e) => setFiltro(e.target.value)}
+      />
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 350 }} aria-label="simple table">
           <TableHead>
@@ -107,7 +120,7 @@ function GetAsignados() {
                 <TableCell colSpan={5}>{error}</TableCell>
               </TableRow>
             ) : (
-              asignados.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((i) => (
+              filterAsignados.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((i) => (
                 <TableRow key={i._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                   <TableCell component="th" scope="row">
                     {i.id_radicado.estado_radicado}
