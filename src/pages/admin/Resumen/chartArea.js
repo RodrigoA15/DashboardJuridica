@@ -43,10 +43,12 @@ function ChartArea() {
       const categories = radicadosData.map((item) => item.departamento);
 
       const unionGraficas = [
+        // Radicados sin responder
         {
           name: 'Radicados',
           data: radicadosData.map((item) => item.radicados)
         },
+        //Radicados con respuesta
         {
           name: 'Respuestas',
           data: respuestasData.map((item) => item.radicados)
