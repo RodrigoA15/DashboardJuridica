@@ -25,12 +25,20 @@ function AnalyticDesacatos() {
   };
 
   const countTutelas = data.filter((asuntos) => asuntos.id_asunto.tipo_asunto === '3').length;
+  const alertTutelas = data.filter((asuntos) => asuntos.id_asunto.tipo_asunto === '3');
 
+  const alertDesacatos = async () => {
+    const dataDesacatos = alertTutelas.map((i) => {
+      return i.numero_radicado;
+    });
+
+    alert(dataDesacatos);
+  };
   return (
     <div>
       <Toaster position="top-right" richColors expand={true} offset="80px" />
 
-      <MainCard contentSX={{ p: 2.25 }} className={countTutelas > 0 ? 'blinking' : 'card1'}>
+      <MainCard contentSX={{ p: 2.25 }} className={countTutelas > 0 ? 'blinking' : 'card1'} onClick={() => alertDesacatos()}>
         <Stack spacing={0.5}>
           <Typography variant="h6" color="textSecondary">
             Desacatos

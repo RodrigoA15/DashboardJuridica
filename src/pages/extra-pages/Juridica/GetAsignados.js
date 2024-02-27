@@ -87,13 +87,17 @@ function GetAsignados() {
   };
 
   //Buscador
-  const filterAsignados = asignados.filter((asignado) => asignado.id_radicado.numero_radicado.includes(filtro));
+  const filterAsignados = asignados.filter((asignado) => {
+    return !asignado.id_radicado.numero_radicado.includes(filtro)
+      ? asignado.id_usuario.username.includes(filtro)
+      : 'No se encontrarón resultados';
+  });
 
   return (
     <div>
       <input
         className="form-control w-25 mb-3"
-        type="number"
+        type="text"
         placeholder="Buscar..."
         value={filtro}
         onChange={(e) => setFiltro(e.target.value)}
