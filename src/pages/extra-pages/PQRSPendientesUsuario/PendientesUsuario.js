@@ -8,18 +8,24 @@ import {
   TableHead,
   TableRow,
   Button,
-  IconButton,
-  TablePagination
+  TablePagination,
+  TextField,
+  IconButton
 } from '@mui/material';
-import DoneIcon from '@mui/icons-material/Done';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import AddIcon from '@mui/icons-material/Add';
-import SendIcon from '@mui/icons-material/Send';
 import axios from 'api/axios';
 import { useAuth } from 'context/authContext';
+//Componentes
 import ModalRespuestas from './ModalRespuestas';
 import ModalRadicadosRespuestas from './ModalRadicadosRespuestas';
 import Reasignaciones from './Reasignaciones/Reasignaciones';
+//Sweet Alert
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+//icons
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import AddIcon from '@mui/icons-material/Add';
+import SendIcon from '@mui/icons-material/Send';
+import EditIcon from '@mui/icons-material/Edit';
 
 function PendientesUsuario() {
   const { user } = useAuth();
@@ -31,7 +37,6 @@ function PendientesUsuario() {
   const [selectedRespuesta, setSelectedRespuesta] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
-  const [contador, setContador] = useState({});
   //Modal Reasignacion
   const [openReasignacion, setOpenReasignacion] = useState(false);
   const [selectedAsignacion, setSelectedAsignacion] = useState(null);
@@ -40,7 +45,8 @@ function PendientesUsuario() {
   //Paginacion
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
-
+  //Input actualizar contador respuesta
+  const [count, setCount] = useState(1);
   useEffect(() => {
     {
       user && apiDataUser();
@@ -110,14 +116,6 @@ function PendientesUsuario() {
     setOpenReasignacion(false);
   };
 
-  //TODO Contador de respuestas cargadas (Modal)
-  const countAnswers = (pendiente) => {
-    setContador((prevContador) => ({
-      ...prevContador,
-      [pendiente.id_radicado._id]: (prevContador[pendiente.id_radicado._id] || 0) + 1
-    }));
-  };
-
   //TODO contador de dias habiles
   const diasHabiles = (fecha_radicado) => {
     let contador = -1;
@@ -161,13 +159,19 @@ function PendientesUsuario() {
   //TODO Actualizar contador respuestas estimadas
   const updateCount = async (pendiente) => {
     try {
-      const id_radicado = pendiente.id_radicado._id;
-      const cantidad = pendiente.id_radicado.cantidad_respuesta + (contador[id_radicado] || 0);
-      await axios.put(`/radicados/updateQuantity/${id_radicado}`, { cantidad_respuesta: cantidad });
-      setContador((prevContador) => ({
-        ...prevContador,
-        [id_radicado]: 0
-      }));
+      const MySwal = withReactContent(Swal);
+      const alerta = await MySwal.fire({
+        title: '¿Estas seguro de actualizar el contador de respuestas estimadas?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#99b080',
+        confirmButtonText: 'Si, Actualizar!'
+      });
+
+      if (alerta.isConfirmed) {
+        const id_radicado = pendiente.id_radicado._id;
+        await axios.put(`/radicados/updateQuantity/${id_radicado}`, { cantidad_respuesta: count });
+      }
     } catch (error) {
       console.log(error);
     }
@@ -241,15 +245,18 @@ function PendientesUsuario() {
                             {/* Agregar respuestas Juridica */}
                             {user && user.departamento && user.departamento.nombre_departamento === 'Juridica' && (
                               <>
-                                <IconButton onClick={() => countAnswers(pendiente)}>
-                                  <AddIcon />
-                                </IconButton>
+                                <TextField
+                                  className="ml-2"
+                                  id="outlined-number"
+                                  type="number"
+                                  size="small"
+                                  onChange={(e) => setCount(e.target.value)}
+                                />
                                 <IconButton onClick={() => updateCount(pendiente)}>
-                                  <DoneIcon />
+                                  <EditIcon />
                                 </IconButton>
                               </>
                             )}
-
                             {/*  */}
                           </TableCell>
                           <TableCell>{diasHabiles(new Date(pendiente.id_radicado.fecha_radicado))}</TableCell>

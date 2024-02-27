@@ -233,4 +233,7 @@ hr {
   color: red; 
   margin-top: 10px; 
 }
-
+/* input contador respuesta */
+.MuiTextField-root{
+  width: 60px;
+}
