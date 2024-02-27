@@ -166,7 +166,7 @@ function EnhancedTableToolbar(props) {
         </Typography>
       ) : (
         <Typography sx={{ flex: '1 1 100%' }} variant="h6" id="tableTitle" component="div">
-          !Pronto¡ asignación masiva de peticiones...
+          Asignación masiva de peticiones
         </Typography>
       )}
 
@@ -330,7 +330,6 @@ export default function GetPendientes() {
 
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size={dense ? 'small' : 'medium'}>
-            ;
             <EnhancedTableHead
               numSelected={selected.length}
               order={order}
