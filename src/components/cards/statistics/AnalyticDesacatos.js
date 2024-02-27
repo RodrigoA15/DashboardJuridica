@@ -29,11 +29,12 @@ function AnalyticDesacatos() {
 
   const alertDesacatos = async () => {
     const dataDesacatos = alertTutelas.map((i) => {
-      return i.numero_radicado;
+      return `${i.numero_radicado} - ${i.estado_radicado}`;
     });
 
-    alert(dataDesacatos);
+    alert(dataDesacatos.join('\n'));
   };
+
   return (
     <div>
       <Toaster position="top-right" richColors expand={true} offset="80px" />

@@ -30,10 +30,10 @@ function AnalyticTutelas() {
 
   const alertTutelas = async () => {
     const dataDesacatos = dataTutelas.map((i) => {
-      return i.numero_radicado;
+      return `${i.numero_radicado} - ${i.estado_radicado}`;
     });
 
-    alert(dataDesacatos);
+    alert(dataDesacatos.join('\n'));
   };
 
   return (

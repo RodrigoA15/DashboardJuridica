@@ -109,6 +109,7 @@ function GetAsignados() {
               <TableCell>Estado</TableCell>
               <TableCell>Número radicado</TableCell>
               <TableCell>Fecha radicado</TableCell>
+              <TableCell>Asunto</TableCell>
               <TableCell align="left">Fecha asignacion</TableCell>
               <TableCell align="left">Responsable</TableCell>
               <TableCell align="left">Dias</TableCell>
@@ -137,6 +138,7 @@ function GetAsignados() {
                   >
                     {new Date(i.id_radicado.fecha_radicado).toLocaleDateString('es-ES', { timeZone: 'UTC' })}
                   </TableCell>
+                  <TableCell align="left">{i.id_radicado.id_asunto.nombre_asunto}</TableCell>
                   <TableCell align="left">{new Date(i.fecha_asignacion).toLocaleDateString()}</TableCell>
                   <TableCell>{i.id_usuario.username}</TableCell>
                   <TableCell align="center">

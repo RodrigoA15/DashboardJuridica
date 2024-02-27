@@ -306,7 +306,9 @@ export default function GetPendientes() {
     [order, orderBy, page, rowsPerPage, dataApi]
   );
 
-  const filterpendientes = visibleRows.filter((pendiente) => pendiente.numero_radicado.includes(filtro));
+  const filterpendientes = visibleRows.filter((pendiente) =>
+    !pendiente.numero_radicado.includes(filtro) ? pendiente.id_asunto.nombre_asunto.includes(filtro) : 'No se encontraron resultados'
+  );
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>

@@ -99,7 +99,9 @@ function Preasignaciones() {
     }
   };
 
-  const filterPreasignaciones = data.filter((pre) => pre.numero_radicado.includes(filtro));
+  const filterPreasignaciones = data.filter((pre) =>
+    !pre.numero_radicado.includes(filtro) ? pre.id_asunto.nombre_asunto.includes(filtro) : 'No se encontraron resultados en la busqueda'
+  );
 
   return (
     <div>
