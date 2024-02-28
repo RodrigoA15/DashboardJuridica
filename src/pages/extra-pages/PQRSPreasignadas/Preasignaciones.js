@@ -79,7 +79,7 @@ function EnhancedTableToolbar(props) {
         </Typography>
       ) : (
         <Typography sx={{ flex: '1 1 100%' }} variant="h6" id="tableTitle" component="div">
-          Asignación masiva de peticiones
+          <h6>Nota: Módulo rechazar petición deshabilitado temporalmente</h6>
         </Typography>
       )}
 
@@ -248,7 +248,7 @@ function Preasignaciones() {
                   <Button className="card2 " size="small" variant="contained" onClick={() => updateStatePreasignacion(selected)}>
                     Aceptar
                   </Button>
-                  <Button className="card4 ms-3" size="small" variant="contained" onClick={() => handleOpen(selected)}>
+                  <Button className="card4 ms-3" size="small" variant="contained" onClick={() => handleOpen(selected)} disabled={true}>
                     Rechazar
                   </Button>
                 </>

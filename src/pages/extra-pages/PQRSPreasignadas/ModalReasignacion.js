@@ -39,7 +39,6 @@ function ModalReasignacion({ open, handleClose, data }) {
   }, []);
 
   const onSubmit = handleSubmit((datos) => {
-    console.log(datos);
     reasignacion(datos);
   });
 
