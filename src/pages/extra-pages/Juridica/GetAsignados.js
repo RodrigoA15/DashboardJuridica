@@ -1,9 +1,11 @@
 import axios from 'api/axios';
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useAuth } from 'context/authContext';
 import { Stack, Typography } from '@mui/material';
 import Dot from 'components/@extended/Dot';
+import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
+import * as locales from '@mui/material/locale';
 
 function GetAsignados() {
   const [asignados, setAsignados] = useState([]);
@@ -13,6 +15,7 @@ function GetAsignados() {
   //Paginator
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [locale, setLocale] = useState('esES');
   //Buscador
   const [filtro, setFiltro] = useState('');
 
@@ -25,15 +28,18 @@ function GetAsignados() {
     }
   }, [user]);
 
-  const handleChangePage = (newPage) => {
+  //Paginacion
+  const theme = useTheme();
+  const themeWithLocale = useMemo(() => createTheme(theme, locales[locale]), [locale, theme]);
+  const handleChangePage = (event, newPage, newValue) => {
     setPage(newPage);
+    setLocale(newValue);
   };
-
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-
+  //
   const apiAsignados = async () => {
     try {
       const response = await axios.get(`/asignaciones/${user.departamento._id}`);
@@ -153,16 +159,18 @@ function GetAsignados() {
           </TableBody>
         </Table>
       </TableContainer>
-      <TablePagination
-        className="rowPage"
-        rowsPerPageOptions={[10, 25, 100]}
-        component="div"
-        count={asignados.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
+      <ThemeProvider theme={themeWithLocale}>
+        <TablePagination
+          className="rowPage"
+          rowsPerPageOptions={[10, 25, 100]}
+          component="div"
+          count={asignados.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </ThemeProvider>
     </div>
   );
 }

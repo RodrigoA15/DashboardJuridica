@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   Paper,
   Table,
@@ -26,6 +26,9 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import AddIcon from '@mui/icons-material/Add';
 import SendIcon from '@mui/icons-material/Send';
 import EditIcon from '@mui/icons-material/Edit';
+//Paginacion
+import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
+import * as locales from '@mui/material/locale';
 
 function PendientesUsuario() {
   const { user } = useAuth();
@@ -45,6 +48,8 @@ function PendientesUsuario() {
   //Paginacion
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
+  const [locale, setLocale] = useState('esES');
+
   //Input actualizar contador respuesta
   const [count, setCount] = useState(1);
   useEffect(() => {
@@ -74,13 +79,15 @@ function PendientesUsuario() {
   };
 
   //TODO paginator>>>
+  const theme = useTheme();
+  const themeWithLocale = useMemo(() => createTheme(theme, locales[locale]), [locale, theme]);
+  const handleChangePage = (event, newPage, newValue) => {
+    setPage(newPage);
+    setLocale(newValue);
+  };
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
-  };
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
   };
   //END paginator
   const formatDate = (date) => new Date(date).toLocaleDateString('es-ES', { timeZone: 'UTC' });
@@ -287,16 +294,18 @@ function PendientesUsuario() {
           </TableBody>
         </Table>
       </TableContainer>
-      <TablePagination
-        className="rowPage"
-        rowsPerPageOptions={[10, 100, 200]}
-        component="div"
-        count={users.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
+      <ThemeProvider theme={themeWithLocale}>
+        <TablePagination
+          className="rowPage"
+          rowsPerPageOptions={[10, 100, 200]}
+          component="div"
+          count={users.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </ThemeProvider>
       <ModalRespuestas open={openModal} handleClose={handleClose} data={selectedData} />
       <ModalRadicadosRespuestas opens={openRespuestasModal} handleCloses={handleCloseR} respuestas={selectedRespuesta} />
       <Reasignaciones open={openReasignacion} close={handleCloseReasignacion} asignaciones={selectedAsignacion} />

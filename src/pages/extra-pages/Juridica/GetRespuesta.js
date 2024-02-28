@@ -35,7 +35,7 @@ function GetRespuesta() {
     }
   };
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = (event, newPage, newValue) => {
     setPage(newPage);
     setLocale(newValue);
   };

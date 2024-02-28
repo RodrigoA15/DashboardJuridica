@@ -125,10 +125,18 @@ function Preasignaciones() {
     }
   }, [user]);
 
+  //Paginacion
   const theme = useTheme();
-
   const themeWithLocale = useMemo(() => createTheme(theme, locales[locale]), [locale, theme]);
-
+  const handleChangePage = (event, newPage, newValue) => {
+    setPage(newPage);
+    setLocale(newValue);
+  };
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+  //
   const handleOpen = (data) => {
     setSelectedData(data);
     setOpen(true);
@@ -137,16 +145,6 @@ function Preasignaciones() {
   const handleClose = () => {
     setSelectedData(null);
     setOpen(false);
-  };
-
-  const handleChangePage = (event, newPage, newValue) => {
-    setPage(newPage);
-    setLocale(newValue);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
   };
 
   const getAllPreasignaciones = async () => {
