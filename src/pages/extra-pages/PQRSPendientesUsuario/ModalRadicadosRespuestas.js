@@ -77,7 +77,7 @@ function ModalRadicadosRespuestas({ opens, handleCloses, respuestas }) {
     <div>
       <Toaster position="top-right" richColors expand={true} offset="80px" />
       <Modal open={opens} onClose={handleCloses} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
-        <Box sx={style}>
+        <Box sx={style} className="scrollbarAnswers">
           {respuestas && (
             <>
               {radicadosRpta &&

@@ -237,3 +237,9 @@ hr {
 .MuiTextField-root{
   width: 60px;
 }
+
+.scrollbarAnswers{
+  height: 600px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
