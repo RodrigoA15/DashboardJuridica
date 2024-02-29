@@ -14,7 +14,7 @@ function ChartEntidad() {
   const [chartData, setChartData] = useState({
     series: [
       {
-        name: 'Movit',
+        name: 'Concesión tránsito',
         data: []
       },
       {

@@ -62,6 +62,7 @@ EnhancedTableHead.propTypes = {
 
 function EnhancedTableToolbar(props) {
   const { numSelected } = props;
+  const emoji = '\u{1F60E}';
 
   return (
     <Toolbar
@@ -79,7 +80,7 @@ function EnhancedTableToolbar(props) {
         </Typography>
       ) : (
         <Typography sx={{ flex: '1 1 100%' }} variant="h6" id="tableTitle" component="div">
-          <h6>Nota: Módulo rechazar petición deshabilitado temporalmente</h6>
+          <h6>Nota: Módulo habilitado para aceptar y rechazar radicados masivamente {emoji} </h6>
         </Typography>
       )}
 
