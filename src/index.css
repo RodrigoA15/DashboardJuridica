@@ -136,7 +136,7 @@
 
 /* Card Respondidos */
 .card2 {
-  background: #99b080 !important;
+  background: #7ED7C1 !important;
   border: none !important;
   color: white !important;
 }
@@ -150,7 +150,7 @@
 
 /* Card Pendientes */
 .card4 {
-  background: #ff6666  !important;
+  background: #C69774  !important;
   border: none !important;
   color: white !important;
 }
@@ -158,6 +158,12 @@
 .cardSecretaria{
   background: #82A0D8;
   color: black;
+}
+
+.cardEntidad {
+  background: #99b080 !important;
+  border: none !important;
+  color: white !important;
 }
 
 /* nombre componente */

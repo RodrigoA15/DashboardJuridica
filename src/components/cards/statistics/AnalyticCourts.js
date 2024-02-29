@@ -27,7 +27,7 @@ function AnalyticCourts() {
     <div>
       <Toaster position="top-right" richColors expand={true} offset="80px" />
 
-      <MainCard contentSX={{ p: 2.25 }} className="card2">
+      <MainCard contentSX={{ p: 2.25 }} className="cardEntidad">
         <Stack spacing={0.5}>
           <Typography style={{ margin: 'auto' }} variant="h6" color="textSecondary">
             PQRS Entidades Juridicas
