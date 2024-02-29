@@ -72,7 +72,10 @@ function ModalReasignacion({ open, handleClose, data }) {
 
     if (alerta.isConfirmed) {
       try {
-        await axios.put(`/radicados/reasignacion_departamento/${data._id}`, datos);
+        await axios.put(`/radicados/reasignacion_departamento`, {
+          _id: data,
+          id_departamento: datos.id_departamento
+        });
         MySwal.fire({
           title: 'Reasignado correctamente',
           icon: 'success',
@@ -85,7 +88,7 @@ function ModalReasignacion({ open, handleClose, data }) {
       } catch (error) {
         MySwal.fire({
           text: 'Ops error de servidor :(',
-          icon: 'success',
+          icon: 'error',
           customClass: {
             container: 'swal-zindex'
           }

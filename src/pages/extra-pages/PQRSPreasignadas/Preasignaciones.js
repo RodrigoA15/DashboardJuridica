@@ -116,6 +116,7 @@ function Preasignaciones() {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [locale, setLocale] = useState('esES');
   const [filtro, setFiltro] = useState('');
+
   useEffect(() => {
     {
       user && getAllPreasignaciones();
@@ -222,7 +223,6 @@ function Preasignaciones() {
   const filterPreasignaciones = data.filter((pre) =>
     !pre.numero_radicado.includes(filtro) ? pre.id_asunto.nombre_asunto.includes(filtro) : 'No se encontraron resultados en la busqueda'
   );
-
   return (
     <Box>
       <Paper>
@@ -248,7 +248,7 @@ function Preasignaciones() {
                   <Button className="card2 " size="small" variant="contained" onClick={() => updateStatePreasignacion(selected)}>
                     Aceptar
                   </Button>
-                  <Button className="card4 ms-3" size="small" variant="contained" onClick={() => handleOpen(selected)} disabled={true}>
+                  <Button className="card4 ms-3" size="small" variant="contained" onClick={() => handleOpen(selected)}>
                     Rechazar
                   </Button>
                 </>
