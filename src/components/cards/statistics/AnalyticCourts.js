@@ -29,11 +29,11 @@ function AnalyticCourts() {
 
       <MainCard contentSX={{ p: 2.25 }} className="card2">
         <Stack spacing={0.5}>
-          <Typography variant="h6" color="textSecondary">
+          <Typography style={{ margin: 'auto' }} variant="h6" color="textSecondary">
             PQRS Entidades Juridicas
           </Typography>
           <Grid container alignItems="center">
-            <Grid item>
+            <Grid item style={{ margin: 'auto' }}>
               <Typography variant="h3" color="inherit">
                 {courtData.map((count) => count.total)}
               </Typography>

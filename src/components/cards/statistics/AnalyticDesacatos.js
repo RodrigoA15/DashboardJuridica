@@ -41,11 +41,11 @@ function AnalyticDesacatos() {
 
       <MainCard contentSX={{ p: 2.25 }} className={countTutelas > 0 ? 'blinking' : 'card1'} onClick={() => alertDesacatos()}>
         <Stack spacing={0.5}>
-          <Typography variant="h6" color="textSecondary">
+          <Typography style={{ margin: 'auto' }} variant="h6" color="textSecondary">
             Desacatos
           </Typography>
           <Grid container alignItems="center">
-            <Grid item>
+            <Grid item style={{ margin: 'auto' }}>
               <Typography variant="h3" color="inherit">
                 {countTutelas}
               </Typography>

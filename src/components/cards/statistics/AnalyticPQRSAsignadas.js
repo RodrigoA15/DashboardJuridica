@@ -31,11 +31,11 @@ function AnalyticPQRSAsignadas() {
       <Toaster position="top-right" richColors expand={true} offset="80px" />
 
       <Stack spacing={0.5}>
-        <Typography variant="h6" color="textSecondary">
+        <Typography style={{ margin: 'auto' }} variant="h6" color="textSecondary">
           PQRS Asignadas
         </Typography>
         <Grid container alignItems="center">
-          <Grid item>
+          <Grid item style={{ margin: 'auto' }}>
             <Typography variant="h3" color="inherit">
               {count}
             </Typography>

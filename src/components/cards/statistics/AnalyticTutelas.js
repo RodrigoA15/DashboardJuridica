@@ -42,14 +42,14 @@ function AnalyticTutelas() {
 
       <MainCard contentSX={{ p: 2.25 }} className={countTutelas > 0 ? 'blinking' : 'card2'} onClick={() => alertTutelas()}>
         <Stack spacing={0.5}>
-          <Typography variant="h6" color="textSecondary">
+          <Typography style={{ margin: 'auto' }} variant="h6" color="textSecondary">
             Tutelas
           </Typography>
           <Grid container alignItems="center">
             {error ? (
               <Grid item>{error}</Grid>
             ) : (
-              <Grid item>
+              <Grid item style={{ margin: 'auto' }}>
                 <Typography variant="h3" color="inherit">
                   {countTutelas}
                 </Typography>

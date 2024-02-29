@@ -31,11 +31,11 @@ function AnalyticPQRSPendientes() {
 
       <MainCard contentSX={{ p: 2.25 }} className="card4">
         <Stack spacing={0.5}>
-          <Typography variant="h6" color="textSecondary">
+          <Typography style={{ margin: 'auto' }} variant="h6" color="textSecondary">
             PQRS Pendientes
           </Typography>
           <Grid container alignItems="center">
-            <Grid item>
+            <Grid item style={{ margin: 'auto' }}>
               <Typography variant="h3" color="inherit">
                 {count}
               </Typography>
