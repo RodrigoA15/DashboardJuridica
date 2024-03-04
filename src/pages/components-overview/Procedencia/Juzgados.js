@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import { useAuth } from 'context/authContext';
+import Departaments from './departaments';
 
 function Juzgados({ setNameCourt, nameCourt, setJuzgados }) {
   const [validation, setValidation] = useState('');
@@ -21,7 +22,7 @@ function Juzgados({ setNameCourt, nameCourt, setJuzgados }) {
 
   const dataApiCourtsMongo = async () => {
     try {
-      const trimmedMunicipio = municipio.trim();
+      const trimmedMunicipio = municipio.label.trim();
       const trimmedDescripcion = descripcion.trim();
       const response = await axios.get(`/listEntitiesbyid/${trimmedDescripcion}/${trimmedMunicipio}`);
       const id_juzgado = response.data.response._id;
@@ -51,7 +52,7 @@ function Juzgados({ setNameCourt, nameCourt, setJuzgados }) {
       if (alert.isConfirmed) {
         // Elimina espacios en blanco al principio y al final de las cadenas
         const trimmedDescripcion = descripcion.trim();
-        const trimmedMunicipio = municipio.trim();
+        const trimmedMunicipio = municipio.label.trim();
 
         await axios.post('/createEntity', {
           desc_ente_juridico: trimmedDescripcion,
@@ -77,7 +78,7 @@ function Juzgados({ setNameCourt, nameCourt, setJuzgados }) {
 
   const historialCambios = async () => {
     try {
-      const datos = `El usuario ${user.username} creo la entidad juridica: ${descripcion} del municipio de ${municipio}`;
+      const datos = `El usuario ${user.username} creo la entidad juridica: ${descripcion} del municipio de ${municipio.label}`;
       await axios.post('/historial', {
         observacion: datos
       });
@@ -114,23 +115,17 @@ function Juzgados({ setNameCourt, nameCourt, setJuzgados }) {
         </div>
         <div className="col">
           <label className="form-label h6" htmlFor="municipio">
-            Municipio
+            Departamento y municipio
           </label>
-          <input
-            type="text"
-            className="form-control rounded-pill minimal-input-dark"
-            id="nombre"
-            onChange={(e) => setMunicipio(e.target.value.toUpperCase())}
-            required
-          />
+          <Departaments setMunicipio={setMunicipio} />
         </div>
         <span className="errors">{validation}</span>
-        {!municipio ? <span className="errors">Municipio es requerido</span> : <Button onClick={dataApiCourtsMongo}>Buscar</Button>}
+        {!municipio.label ? <span className="errors">Municipio es requerido</span> : <Button onClick={dataApiCourtsMongo}>Buscar</Button>}
       </div>
       {registerEntity && (
         <div className="d-flex flex-column align-items-center">
           <input className="form-control mb-3" value={descripcion} readOnly />
-          <input className="form-control mb-3" value={municipio} readOnly />
+          <input className="form-control mb-3" value={municipio.label} readOnly />
           <button className="btn btn-success" onClick={handleOnClick}>
             Registrar
           </button>
