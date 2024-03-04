@@ -12,7 +12,7 @@ function EstadoDepartamento() {
   const apiDataEstados = async () => {
     try {
       const response = await axios.get('/radicados/estadoDepartamento');
-      setEstados(response.data[0]);
+      setEstados(response.data);
     } catch (error) {
       console.log(error);
     }
