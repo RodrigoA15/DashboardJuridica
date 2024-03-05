@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import { useAuth } from 'context/authContext';
-import Departaments from './departaments';
+import Cities from './cities';
 
 function Juzgados({ setNameCourt, nameCourt, setJuzgados }) {
   const [validation, setValidation] = useState('');
@@ -115,9 +115,9 @@ function Juzgados({ setNameCourt, nameCourt, setJuzgados }) {
         </div>
         <div className="col">
           <label className="form-label h6" htmlFor="municipio">
-            Departamento y municipio
+            Municipio
           </label>
-          <Departaments setMunicipio={setMunicipio} />
+          <Cities setMunicipio={setMunicipio} municipio={municipio} />
         </div>
         <span className="errors">{validation}</span>
         {!municipio.label ? <span className="errors">Municipio es requerido</span> : <Button onClick={dataApiCourtsMongo}>Buscar</Button>}
