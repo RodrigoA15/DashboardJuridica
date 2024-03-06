@@ -6,10 +6,13 @@ import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import { useAuth } from 'context/authContext';
 import Cities from './cities';
+import AsyncSelect from 'react-select/async';
 
 function Juzgados({ setNameCourt, nameCourt, setJuzgados }) {
   const [validation, setValidation] = useState('');
   //Crear entes juridcos manuales
+  const [data, setData] = React.useState([]);
+
   const [descripcion, setDescripcion] = useState('');
   const [municipio, setMunicipio] = useState('');
   const [registerEntity, setRegisterEntity] = useState(false);
@@ -17,13 +20,23 @@ function Juzgados({ setNameCourt, nameCourt, setJuzgados }) {
   const { user } = useAuth();
 
   useEffect(() => {
+    apiDataEntidad();
     setDescripcion(nameCourt);
   }, [nameCourt]);
+
+  const apiDataEntidad = async () => {
+    try {
+      const response = await axios.get('/listEntities');
+      setData(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const dataApiCourtsMongo = async () => {
     try {
       const trimmedMunicipio = municipio.label.trim();
-      const trimmedDescripcion = descripcion.trim();
+      const trimmedDescripcion = nameCourt.label.trim();
       const response = await axios.get(`/listEntitiesbyid/${trimmedDescripcion}/${trimmedMunicipio}`);
       const id_juzgado = response.data.response._id;
       setJuzgados(id_juzgado);
@@ -98,6 +111,21 @@ function Juzgados({ setNameCourt, nameCourt, setJuzgados }) {
     registerEntityApi();
   };
 
+  const filterColors = (inputValue) => {
+    return data
+      .filter((i) => i.desc_ente_juridico.toLowerCase().includes(inputValue.toLowerCase()))
+      .map((i) => ({
+        label: i.desc_ente_juridico,
+        value: i._id
+      }));
+  };
+
+  const loadOptions = (inputValue, callback) => {
+    setTimeout(() => {
+      callback(filterColors(inputValue));
+    }, 1000);
+  };
+
   return (
     <div>
       <div className="row mt-3">
@@ -105,12 +133,13 @@ function Juzgados({ setNameCourt, nameCourt, setJuzgados }) {
           <label className="form-label h6" htmlFor="desc_entidad">
             Nombre Entidad
           </label>
-          <input
-            type="text"
-            className="form-control rounded-pill minimal-input-dark"
-            id="nombre"
-            onChange={(e) => setNameCourt(e.target.value.toUpperCase())}
-            required
+          <AsyncSelect
+            className="basic-single"
+            classNamePrefix="select"
+            cacheOptions
+            loadOptions={loadOptions}
+            onChange={setNameCourt}
+            isClearable={true}
           />
         </div>
         <div className="col">
@@ -124,7 +153,7 @@ function Juzgados({ setNameCourt, nameCourt, setJuzgados }) {
       </div>
       {registerEntity && (
         <div className="d-flex flex-column align-items-center">
-          <input className="form-control mb-3" value={descripcion} readOnly />
+          <input className="form-control mb-3" value={nameCourt.label} readOnly />
           <input className="form-control mb-3" value={municipio.label} readOnly />
           <button className="btn btn-success" onClick={handleOnClick}>
             Registrar
