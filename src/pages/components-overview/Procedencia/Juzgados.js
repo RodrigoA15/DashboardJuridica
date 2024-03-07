@@ -64,7 +64,7 @@ function Juzgados({ setNameCourt, nameCourt, setJuzgados }) {
 
       if (alert.isConfirmed) {
         // Elimina espacios en blanco al principio y al final de las cadenas
-        const trimmedDescripcion = descripcion.trim();
+        const trimmedDescripcion = nameCourt.label.trim();
         const trimmedMunicipio = municipio.label.trim();
 
         await axios.post('/createEntity', {
