@@ -45,6 +45,7 @@ function ChartDepartamentos() {
       dataLabels: {
         enabled: false
       },
+      colors: ['#008DDA', '#38E54D', '#FFC700', '#B31312', '#7752FE', '#F86F03'],
       stroke: {
         curve: 'smooth'
       },
