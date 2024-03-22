@@ -32,7 +32,6 @@ function Reasignaciones({ open, close, asignaciones }) {
   const [selectEntidad, setSelectEntidad] = useState('');
   const [observacion, setObservacion] = useState('');
   const { user } = useAuth();
-
   const MySwal = withReactContent(Swal);
   //Actualizar modelo radicados
   const updateRadicados = async () => {
@@ -48,6 +47,8 @@ function Reasignaciones({ open, close, asignaciones }) {
           estado_radicado: 'Pre-asignacion',
           observaciones_radicado: message
         });
+        toast.success('Reasigando correctamente');
+        close();
       }
     } catch (error) {
       toast.error('Error Sucedio algo al realizar la reasignacion');
