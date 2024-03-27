@@ -56,24 +56,21 @@ function GetAsignados() {
   };
 
   const diasHabiles = (fecha_radicado) => {
-    let contador = -1;
-    let fechaInicio = new Date(fecha_radicado);
-    let fechaFin = new Date();
+    let contador = 0;
     let festivos = ['2024-03-25', '2024-03-28', '2024-03-29'];
+    let fechaInicio = new Date(fecha_radicado);
+    let fechaCalculo = new Date(fechaInicio);
+    fechaCalculo.setDate(fechaCalculo.getDate() + 1);
+    let fechaFin = new Date();
 
-    while (fechaInicio <= fechaFin) {
-      const diaSemana = fechaInicio.getDay();
-      const fechaActual = fechaInicio.toISOString().split('T')[0];
-      const lunes = 1;
-      const viernes = 5;
+    while (fechaCalculo <= fechaFin) {
+      const diaSemana = fechaCalculo.getDay();
 
-      if (diaSemana >= lunes && diaSemana <= viernes) {
-        if (!festivos.includes(fechaActual)) {
-          contador++;
-        }
+      if (diaSemana !== 5 && diaSemana !== 6 && !festivos.includes(fechaCalculo.toISOString().slice(0, 10))) {
+        contador++;
       }
 
-      fechaInicio.setDate(fechaInicio.getDate() + 1);
+      fechaCalculo.setDate(fechaCalculo.getDate() + 1);
     }
     return contador;
   };
@@ -82,9 +79,9 @@ function GetAsignados() {
     const diasLaborables = diasHabiles(fechaRadicado);
 
     if (diasLaborables <= 5) {
-      return 'success'; // Verde
+      return 'success'; // 0-5
     } else if (diasLaborables >= 6 && diasLaborables <= 9) {
-      return 'warning'; // Amarillo
+      return 'warning'; // 6-10
     } else if (diasLaborables >= 10 && diasLaborables <= 12) {
       return 'info'; // Naranja
     } else if (diasLaborables >= 13) {
