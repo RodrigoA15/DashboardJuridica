@@ -59,7 +59,7 @@ function GetAsignados() {
     let contador = -1;
     let fechaInicio = new Date(fecha_radicado);
     let fechaFin = new Date();
-    let festivos = ['2023-10-06', '2023-10-05'];
+    let festivos = ['2024-03-25', '2024-03-28', '2024-03-29'];
 
     while (fechaInicio <= fechaFin) {
       const diaSemana = fechaInicio.getDay();

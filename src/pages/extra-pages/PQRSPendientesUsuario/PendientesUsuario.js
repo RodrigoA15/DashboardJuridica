@@ -128,7 +128,7 @@ function PendientesUsuario() {
     let contador = -1;
     let fechaInicio = new Date(fecha_radicado);
     let fechaFin = new Date();
-    let festivos = ['2024-01-01', '2024-01-02'];
+    let festivos = ['2024-03-25', '2024-03-28', '2024-03-29'];
 
     while (fechaInicio <= fechaFin) {
       const diaSemana = fechaInicio.getDay();

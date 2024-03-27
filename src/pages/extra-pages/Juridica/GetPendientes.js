@@ -220,7 +220,7 @@ export default function GetPendientes() {
 
   const diasHabiles = (fecha_radicado) => {
     let contador = 0;
-    let festivos = ['2023-10-06', '2023-10-05'];
+    let festivos = ['2024-03-25', '2024-03-28', '2024-03-29'];
     let fechaInicio = new Date(fecha_radicado);
     let fechaCalculo = new Date(fechaInicio);
     fechaCalculo.setDate(fechaCalculo.getDate() + 1);

@@ -40,7 +40,7 @@ function AnalyticTutelas() {
     <div>
       <Toaster position="top-right" richColors expand={true} offset="80px" />
 
-      <MainCard contentSX={{ p: 2.25 }} className={countTutelas > 0 ? 'blinking' : 'card2'} onClick={() => alertTutelas()}>
+      <MainCard contentSX={{ p: 2.25 }} className={countTutelas > 0 ? 'blinking' : 'cardTutelas'} onClick={() => alertTutelas()}>
         <Stack spacing={0.5}>
           <Typography style={{ margin: 'auto' }} variant="h6" color="textSecondary">
             Tutelas
