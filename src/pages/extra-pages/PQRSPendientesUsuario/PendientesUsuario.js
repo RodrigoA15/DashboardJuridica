@@ -14,6 +14,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import AddIcon from '@mui/icons-material/Add';
 import SendIcon from '@mui/icons-material/Send';
 import EditIcon from '@mui/icons-material/Edit';
+import useDiasHabiles from 'hooks/useDate';
 
 function PendientesUsuario() {
   const { user } = useAuth();
@@ -33,6 +34,8 @@ function PendientesUsuario() {
 
   //Input actualizar contador respuesta
   const [count, setCount] = useState(1);
+  const { diasHabiles } = useDiasHabiles();
+
   useEffect(() => {
     {
       user && apiDataUser();
@@ -90,31 +93,6 @@ function PendientesUsuario() {
   const handleCloseReasignacion = () => {
     setSelectedAsignacion(null);
     setOpenReasignacion(false);
-  };
-
-  //TODO contador de dias habiles
-  const diasHabiles = (fecha_radicado) => {
-    let contador = -1;
-    let fechaInicio = new Date(fecha_radicado);
-    let fechaFin = new Date();
-    let festivos = ['2024-03-25', '2024-03-28', '2024-03-29'];
-
-    while (fechaInicio <= fechaFin) {
-      const diaSemana = fechaInicio.getDay();
-      const fechaActual = fechaInicio.toISOString().split('T')[0];
-      const lunes = 1;
-      const viernes = 5;
-
-      if (diaSemana >= lunes && diaSemana <= viernes) {
-        if (!festivos.includes(fechaActual)) {
-          contador++;
-        }
-      }
-
-      fechaInicio.setDate(fechaInicio.getDate() + 1);
-    }
-
-    return contador;
   };
 
   //TODO colores de las alertas por dia habil

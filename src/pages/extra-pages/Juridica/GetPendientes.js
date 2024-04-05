@@ -26,6 +26,7 @@ import UsuariosJuridica from 'pages/extra-pages/Juridica/UsuariosJuridica';
 import { Stack } from '@mui/material';
 import Dot from 'components/@extended/Dot';
 import { useAuth } from 'context/authContext';
+import useDiasHabiles from 'hooks/useDate';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -201,6 +202,7 @@ export default function GetPendientes() {
   const [dataApi, setDataApi] = React.useState([]);
   const { user } = useAuth();
   const [filtro, setFiltro] = React.useState('');
+  const { diasHabiles } = useDiasHabiles();
 
   React.useEffect(() => {
     dataApiRest();
@@ -216,26 +218,6 @@ export default function GetPendientes() {
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const diasHabiles = (fecha_radicado) => {
-    let contador = 0;
-    let festivos = ['2024-03-25', '2024-03-28', '2024-03-29'];
-    let fechaInicio = new Date(fecha_radicado);
-    let fechaCalculo = new Date(fechaInicio);
-    fechaCalculo.setDate(fechaCalculo.getDate() + 1);
-    let fechaFin = new Date();
-
-    while (fechaCalculo <= fechaFin) {
-      const diaSemana = fechaCalculo.getDay();
-
-      if (diaSemana !== 5 && diaSemana !== 6 && !festivos.includes(fechaCalculo.toISOString().slice(0, 10))) {
-        contador++;
-      }
-
-      fechaCalculo.setDate(fechaCalculo.getDate() + 1);
-    }
-    return contador;
   };
 
   const getBackgroundColor = (fechaRadicado) => {

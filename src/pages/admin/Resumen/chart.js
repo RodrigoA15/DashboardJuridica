@@ -12,7 +12,7 @@ function ChartEntidadAdmin() {
   const [data, setData] = useState({
     series: [
       {
-        name: 'Movit',
+        name: 'Concesion TTO',
         data: []
       },
       {
