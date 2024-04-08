@@ -8,7 +8,8 @@ import { Toaster, toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import PropTypes from 'prop-types';
 import PDFViewer from './PDFViewer';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
+import { useDropzone } from 'react-dropzone';
 
 const style = {
   position: 'absolute',
@@ -31,6 +32,12 @@ function ModalRespuestas({ open, handleClose, data }) {
   } = useForm({ mode: 'onChange' });
   const [url, setUrl] = useState('');
   const [urlFile, setUrlFile] = useState('');
+  const onDrop = useCallback((acceptedFiles) => {
+    setUrl(URL.createObjectURL(acceptedFiles[0]));
+    setUrlFile(acceptedFiles[0]);
+  }, []);
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+
   const MySwal = withReactContent(Swal);
 
   const onSubmit = handleSubmit(async (num) => {
@@ -59,7 +66,7 @@ function ModalRespuestas({ open, handleClose, data }) {
       const formData = new FormData();
       formData.append('numero_radicado_respuesta', numero_radicado_respuesta);
       formData.append('id_asignacion', data._id);
-      formData.append('respuesta_pdf', urlFile[0]);
+      formData.append('respuesta_pdf', urlFile);
       formData.append('fechaRespuesta', new Date());
 
       const config = { headers: { 'Content-Type': 'multipart/form-data' } };
@@ -69,14 +76,6 @@ function ModalRespuestas({ open, handleClose, data }) {
       handleClose();
     } catch (error) {
       toast.error(error.response.data);
-    }
-  };
-
-  const onChangeFile = (e) => {
-    const files = e.target.files;
-    if (files.length > 0) {
-      setUrl(URL.createObjectURL(files[0]));
-      setUrlFile(files);
     }
   };
 
@@ -108,23 +107,23 @@ function ModalRespuestas({ open, handleClose, data }) {
                 {errors.numero_radicado_respuesta && <span className="inputForm ">{errors.numero_radicado_respuesta.message}</span>}
               </div>
 
-              <div className="mb-3">
+              <div
+                className="mb-3"
+                {...getRootProps()}
+                style={{
+                  background: '#e3e3e3',
+                  padding: '20px'
+                }}
+              >
                 <label className="form-label" htmlFor="NoRadicado">
                   Archivo
                 </label>
-                <input
-                  className="form-control rounded-pill"
-                  accept=".pdf"
-                  type="file"
-                  {...register('respuesta_pdf', {
-                    onChange: onChangeFile,
-                    required: {
-                      value: true,
-                      message: 'Este campo es obligatorio'
-                    }
-                  })}
-                />
-                {errors.respuesta_pdf && <span className="inputForm ">{errors.respuesta_pdf.message}</span>}
+                <input className="form-control rounded-pill" {...getInputProps()} />
+                {isDragActive ? (
+                  <p>Suelte el archivo aqui...</p>
+                ) : (
+                  <p>Arrastre y suelte algunos archivos aquí o haga clic para seleccionar archivos</p>
+                )}
               </div>
 
               {url && <PDFViewer url={url} />}

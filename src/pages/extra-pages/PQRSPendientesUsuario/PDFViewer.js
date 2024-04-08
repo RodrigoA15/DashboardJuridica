@@ -51,5 +51,5 @@ function PDFViewer({ url }) {
 export default PDFViewer;
 
 PDFViewer.propTypes = {
-  url: PropTypes.object
+  url: PropTypes.string
 };

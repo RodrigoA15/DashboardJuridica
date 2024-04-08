@@ -39,7 +39,6 @@ function ModalRadicadosRespuestas({ opens, handleCloses, respuestas }) {
       const response = await axios.get(`/radicados_respuestas/${user.departamento._id}/${respuestas.id_radicado.numero_radicado}`);
       setRadicadosRpta(response.data);
       setCountRadicados(response.data.length);
-      console.log(response);
     } catch (error) {
       console.log(error);
     }
