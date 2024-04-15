@@ -64,7 +64,9 @@ function ChartEntidad() {
     try {
       const secretaria = await axios.get(`/radicados/chart_entidad2/${fechaInicio}/${fechaFin}`);
       // const movit = await axios.get('/radicados/chart_entidad');
-      const formattedDates = secretaria.data.map((item) => new Date(item.fecha_radicado).toLocaleDateString('es-ES', { timeZone: 'UTC' }));
+      const formattedDates = secretaria.data.map((item) =>
+        new Date(item.fecha_radicado).toLocaleDateString('es-ES', { timeZone: 'UTC', day: 'numeric' })
+      );
       // const fechas = await axios.get('/radicados/chart_fecha');
       // const formattedDates = fechas.data.map((data) => new Date(data.fecha_radicado).toLocaleDateString('es-ES', { timeZone: 'UTC' }));
 

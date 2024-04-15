@@ -74,7 +74,7 @@ function ChartDepartamentos() {
     try {
       const response = await axios.get(`/radicados/chartdepartamentos/${fechaInicio}/${fechaFin}`);
       const fecha = response.data.map((departamento) =>
-        new Date(departamento.fecha_radicado).toLocaleDateString('es-ES', { timeZone: 'UTC' })
+        new Date(departamento.fecha_radicado).toLocaleDateString('es-ES', { timeZone: 'UTC', day: 'numeric' })
       );
 
       setData({

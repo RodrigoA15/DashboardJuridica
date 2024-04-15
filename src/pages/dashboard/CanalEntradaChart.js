@@ -70,7 +70,9 @@ function CanalEntradaChart() {
   const dataCanalesChart = async () => {
     try {
       const response = await axios.get(`/radicados/chart_canal/${fechaInicio}/${fechaFin}`);
-      const fecha = response.data.map((canal) => new Date(canal.fecha_radicado).toLocaleDateString('es-ES', { timeZone: 'UTC' }));
+      const fecha = response.data.map((canal) =>
+        new Date(canal.fecha_radicado).toLocaleDateString('es-ES', { timeZone: 'UTC', day: 'numeric' })
+      );
 
       setChartData({
         series: [
