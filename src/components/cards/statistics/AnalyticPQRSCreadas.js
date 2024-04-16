@@ -5,7 +5,7 @@ import MainCard from 'components/MainCard';
 import axios from 'api/axios';
 import { useEffect, useState } from 'react';
 import { Toaster, toast } from 'sonner';
-
+import { meses } from 'data/meses';
 const AnalyticPQRSCreadas = () => {
   const [count, setCount] = useState(0);
   const fecha = new Date();
@@ -21,20 +21,7 @@ const AnalyticPQRSCreadas = () => {
   }, []);
 
   const mesActual = new Date();
-  const meses = [
-    'Enero',
-    'Febrero',
-    'Marzo',
-    'Abril',
-    'Mayo',
-    'Junio',
-    'Julio',
-    'Agosto',
-    'Setiembre',
-    'Octubre',
-    'Noviembre',
-    'Diciembre'
-  ];
+
   const dataApi = async () => {
     try {
       const response = await axios.get(`/entidad/entidadt/${dateFirstMonth}/${dateEndMonth}`);

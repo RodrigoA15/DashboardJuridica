@@ -3,9 +3,9 @@ import MainCard from 'components/MainCard';
 import { Grid, Stack, Typography } from '@mui/material';
 import axios from 'api/axios';
 import { Toaster, toast } from 'sonner';
-
+import { meses } from 'data/meses';
 function AnalyticPQRSRespondidas() {
-  const [count, setCount] = useState(0);
+  const [answers, setAnswers] = useState([]);
 
   useEffect(() => {
     apiCountRespondidos();
@@ -13,9 +13,8 @@ function AnalyticPQRSRespondidas() {
 
   const apiCountRespondidos = async () => {
     try {
-      const response = await axios.get('/radicados/radicado_respuestas');
-      const contador = response.data.length;
-      setCount(contador);
+      const response = await axios.get('/answer_month');
+      setAnswers(response.data);
     } catch (error) {
       if (error.response && error.response.status === 404) {
         toast.error('No se encontraron radicados respondidos');
@@ -25,6 +24,7 @@ function AnalyticPQRSRespondidas() {
     }
   };
 
+  const mes = new Date().getMonth();
   return (
     <div>
       <Toaster position="top-right" richColors expand={true} offset="80px" />
@@ -32,12 +32,12 @@ function AnalyticPQRSRespondidas() {
       <MainCard contentSX={{ p: 2.25 }} className="card2">
         <Stack spacing={0.5}>
           <Typography style={{ margin: 'auto' }} variant="h6" color="textSecondary">
-            PQRS Respondidas
+            PQRS Respondidas - {meses[mes]}
           </Typography>
           <Grid container alignItems="center">
             <Grid item style={{ margin: 'auto' }}>
               <Typography variant="h3" color="inherit">
-                {count}
+                {answers.map((answer) => answer.count)}
               </Typography>
             </Grid>
           </Grid>

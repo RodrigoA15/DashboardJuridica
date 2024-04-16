@@ -68,11 +68,11 @@ function ModalRespuestas({ open, handleClose, data }) {
       formData.append('id_asignacion', data._id);
       formData.append('respuesta_pdf', urlFile);
       formData.append('fechaRespuesta', new Date());
-
       const config = { headers: { 'Content-Type': 'multipart/form-data' } };
 
       await axios.post('/create_respuestas', formData, config);
       toast.success('Respuesta Agregada');
+      setUrl('');
       handleClose();
     } catch (error) {
       toast.error(error.response.data);
@@ -106,7 +106,6 @@ function ModalRespuestas({ open, handleClose, data }) {
                 />
                 {errors.numero_radicado_respuesta && <span className="inputForm ">{errors.numero_radicado_respuesta.message}</span>}
               </div>
-
               <div
                 className="mb-3"
                 {...getRootProps()}
@@ -125,10 +124,15 @@ function ModalRespuestas({ open, handleClose, data }) {
                   <p>Arrastre y suelte algunos archivos aquí o haga clic para seleccionar archivos</p>
                 )}
               </div>
-
               {url && <PDFViewer url={url} />}
 
-              <Button type="submit">Responder</Button>
+              {urlFile ? (
+                <Button className="btn btn-success mt-4" type="submit">
+                  Responder
+                </Button>
+              ) : (
+                <span className="inputForm">Todos los campos son abligatorios</span>
+              )}
             </form>
           )}
         </Box>
