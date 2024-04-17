@@ -13,7 +13,7 @@ function AnalyticPQRSPendientes() {
 
   const allRadicadosPendientes = async () => {
     try {
-      const response = await axios.get('/radicados/radicados_pendientes');
+      const response = await axios.get('/radicados/radicados_sinasignar');
       const contador = response.data.length;
       setCount(contador);
     } catch (error) {
@@ -32,7 +32,7 @@ function AnalyticPQRSPendientes() {
       <MainCard contentSX={{ p: 2.25 }} className="card4">
         <Stack spacing={0.5}>
           <Typography style={{ margin: 'auto' }} variant="h6" color="textSecondary">
-            PQRS Pendientes
+            PQRS sin asignar
           </Typography>
           <Grid container alignItems="center">
             <Grid item style={{ margin: 'auto' }}>
