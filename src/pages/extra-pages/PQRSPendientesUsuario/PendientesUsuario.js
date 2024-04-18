@@ -39,11 +39,8 @@ function PendientesUsuario() {
   useEffect(() => {
     {
       user && apiDataUser();
-
-      const intervalId = setInterval(apiDataUser, 5000);
-      return () => clearInterval(intervalId);
     }
-  }, [user]);
+  }, [user, users]);
 
   //TODO consumo de api asignaciones
   const apiDataUser = async () => {

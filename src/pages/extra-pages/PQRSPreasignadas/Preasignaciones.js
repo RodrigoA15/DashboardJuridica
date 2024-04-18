@@ -121,11 +121,8 @@ function Preasignaciones() {
   useEffect(() => {
     {
       user && getAllPreasignaciones();
-
-      const intervalId = setInterval(getAllPreasignaciones, 5000);
-      return () => clearInterval(intervalId);
     }
-  }, [user]);
+  }, [user, data]);
 
   //Paginacion
   const theme = useTheme();
