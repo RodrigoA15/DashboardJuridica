@@ -40,6 +40,9 @@ function PendientesUsuario() {
     {
       user && apiDataUser();
     }
+
+    const intervalId = setInterval(apiDataUser, 5000);
+    return () => clearInterval(intervalId);
   }, [user]);
 
   //TODO consumo de api asignaciones
