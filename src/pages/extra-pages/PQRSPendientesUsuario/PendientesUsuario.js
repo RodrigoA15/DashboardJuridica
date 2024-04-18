@@ -40,7 +40,7 @@ function PendientesUsuario() {
     {
       user && apiDataUser();
     }
-  }, [user, users]);
+  }, [user]);
 
   //TODO consumo de api asignaciones
   const apiDataUser = async () => {

@@ -122,7 +122,7 @@ function Preasignaciones() {
     {
       user && getAllPreasignaciones();
     }
-  }, [user, data]);
+  }, [user]);
 
   //Paginacion
   const theme = useTheme();
