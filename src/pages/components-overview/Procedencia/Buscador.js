@@ -103,9 +103,18 @@ function Buscador({ setProcedencia, setNameCourt, nameCourt, setJuzgados }) {
           {/* Buscador */}
           <div className="col-4 input-container mb-4">
             <OutlinedInput
+              type="number"
+              placeholder="Digite número de identificación y pulse enter para buscar"
               {...register('search', {
-                required: 'El termino busqueda no puede estar vacio',
-                minLength: { value: 2, message: 'Número identificacion debe ser mayor a 6 caracteres' }
+                required: { value: true, message: 'El termino busqueda no puede estar vacio' },
+
+                validate: (value) => {
+                  if (value.length < 6) {
+                    return 'Número de identificación debe ser mayor igual a 6 caracteres';
+                  } else if (value.length === 7 || value.length === 9) {
+                    return 'Número de identificación debe ser iguales a 6, 8 y 10 caracteres';
+                  }
+                }
               })}
               size="small"
               id="search2"
@@ -117,7 +126,6 @@ function Buscador({ setProcedencia, setNameCourt, nameCourt, setJuzgados }) {
                   <SearchOutlined />
                 </InputAdornment>
               }
-              placeholder="Digite número de identificación y pulse enter para buscar"
               onChange={handleInputChange}
               onKeyDown={handleKeyPress}
               required

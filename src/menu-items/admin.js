@@ -45,13 +45,6 @@ const admin = {
       type: 'item',
       url: 'canalesAdmin',
       icon: icons.SendIcon
-    },
-    {
-      id: 'resumen',
-      title: 'Resumen',
-      type: 'item',
-      url: '/resumenAdmin',
-      icon: icons.DescriptionIcon
     }
   ]
 };
