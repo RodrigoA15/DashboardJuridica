@@ -36,7 +36,12 @@ function ModalRespuestas({ open, handleClose, data }) {
     setUrl(URL.createObjectURL(acceptedFiles[0]));
     setUrlFile(acceptedFiles[0]);
   }, []);
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: {
+      'text/pdf': ['.pdf']
+    }
+  });
 
   const MySwal = withReactContent(Swal);
 
@@ -121,7 +126,7 @@ function ModalRespuestas({ open, handleClose, data }) {
                 {isDragActive ? (
                   <p>Suelte el archivo aqui...</p>
                 ) : (
-                  <p>Arrastre y suelte algunos archivos aquí o haga clic para seleccionar archivos</p>
+                  <p>Arrastre y suelte archivo PDF aquí o haga clic para selecciona archivo</p>
                 )}
               </div>
               {url && <PDFViewer url={url} />}
