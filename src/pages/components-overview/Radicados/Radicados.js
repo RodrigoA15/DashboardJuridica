@@ -50,7 +50,6 @@ function ComponentRadicados() {
       setJuzgados(null);
     } catch (error) {
       setError(error.response.data);
-      console.error('Error al crear radicado:', errorData);
       // const errorMessage = error.response?.data?.message || 'Error al crear radicado';
       MySwal.fire({
         title: 'Error',
@@ -184,10 +183,15 @@ function ComponentRadicados() {
                   </div>
                 )}
               </div>
-
-              <button type="submit" className="btn btn-success">
-                Registrar
-              </button>
+              {procedencia === '6579e6f0d99b6ec78c8ca264' && juzgado === null ? (
+                <button type="submit" className="btn btn-success" disabled>
+                  Registrar
+                </button>
+              ) : (
+                <button type="submit" className="btn btn-success">
+                  Registrar
+                </button>
+              )}
             </form>
           </MainCard>
         </Grid>

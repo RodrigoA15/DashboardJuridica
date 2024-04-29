@@ -91,7 +91,7 @@ function Juzgados({ setNameCourt, nameCourt, setJuzgados }) {
 
   const historialCambios = async () => {
     try {
-      const datos = `El usuario ${user.username} creo la entidad juridica: ${descripcion} del municipio de ${municipio.label}`;
+      const datos = `El usuario ${user.username} creo la entidad juridica: ${descripcion.label} del municipio de ${municipio.label}`;
       await axios.post('/historial', {
         observacion: datos
       });
@@ -140,6 +140,7 @@ function Juzgados({ setNameCourt, nameCourt, setJuzgados }) {
             loadOptions={loadOptions}
             onChange={setNameCourt}
             isClearable={true}
+            noOptionsMessage={({ inputValue }) => (!inputValue ? '...' : `No hay ${inputValue}`)}
           />
         </div>
         <div className="col">

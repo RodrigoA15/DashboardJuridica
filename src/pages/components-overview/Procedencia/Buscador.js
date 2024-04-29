@@ -109,7 +109,7 @@ function Buscador({ setProcedencia, setNameCourt, nameCourt, setJuzgados }) {
                 required: { value: true, message: 'El termino busqueda no puede estar vacio' },
 
                 validate: (value) => {
-                  if (value.length < 6) {
+                  if (value.length < 5) {
                     return 'Número de identificación debe ser mayor igual a 6 caracteres';
                   } else if (value.length === 7 || value.length === 9) {
                     return 'Número de identificación debe ser iguales a 6, 8 y 10 caracteres';
