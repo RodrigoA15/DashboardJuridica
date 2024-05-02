@@ -111,8 +111,8 @@ function Buscador({ setProcedencia, setNameCourt, nameCourt, setJuzgados }) {
                 validate: (value) => {
                   if (value.length < 5) {
                     return 'Número de identificación debe ser mayor igual a 6 caracteres';
-                  } else if (value.length === 7 || value.length === 9) {
-                    return 'Número de identificación debe ser iguales a 6, 8 y 10 caracteres';
+                  } else if (value.length === 9) {
+                    return 'Número de identificación debe ser iguales a 6, 7, 8 y 10 caracteres';
                   }
                 }
               })}
