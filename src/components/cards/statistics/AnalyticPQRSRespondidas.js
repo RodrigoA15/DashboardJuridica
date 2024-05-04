@@ -13,7 +13,7 @@ function AnalyticPQRSRespondidas() {
 
   const apiCountRespondidos = async () => {
     try {
-      const response = await axios.get('/answer_month');
+      const response = await axios.get('/answer/answer_month');
       setAnswers(response.data);
     } catch (error) {
       if (error.response && error.response.status === 404) {

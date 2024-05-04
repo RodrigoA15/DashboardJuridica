@@ -26,7 +26,7 @@ function GetRespuesta() {
 
   const apiGetRespuesta = async () => {
     try {
-      const response = await axios.get(`/respuestasArea/${user.departamento._id}`);
+      const response = await axios.get(`/answer/respuestasArea/${user.departamento._id}`);
       setRespondidos(response.data);
     } catch (error) {
       if (error.response && error.response.status === 404) {

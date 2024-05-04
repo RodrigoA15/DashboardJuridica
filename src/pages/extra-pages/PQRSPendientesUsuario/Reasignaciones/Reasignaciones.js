@@ -29,7 +29,7 @@ function Reasignaciones({ open, close, asignaciones }) {
   //Todo capturar errores
   const [error, setError] = useState('');
   const [selectArea, setSelectArea] = useState('');
-  const [selectEntidad, setSelectEntidad] = useState('');
+  const [selectEntidad, setSelectEntidad] = useState(null);
   const [observacion, setObservacion] = useState('');
   const { user } = useAuth();
   const MySwal = withReactContent(Swal);
@@ -59,7 +59,7 @@ function Reasignaciones({ open, close, asignaciones }) {
     try {
       if (asignaciones) {
         console.log(asignaciones._id);
-        await axios.put(`/updateAsignacion/${asignaciones._id}`, {
+        await axios.put(`/assigned/${asignaciones._id}`, {
           estado_asignacion: 'cerrado'
         });
       }

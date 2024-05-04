@@ -48,7 +48,7 @@ function PendientesUsuario() {
   //TODO consumo de api asignaciones
   const apiDataUser = async () => {
     try {
-      const response = await axios.get(`/asignaciones/${user.departamento._id}`);
+      const response = await axios.get(`/assigned/${user.departamento._id}`);
       setUsers(response.data);
       setIsLoading(false);
       setIsPendiente(response.data.some((pendiente) => user.email === pendiente.id_usuario.email));

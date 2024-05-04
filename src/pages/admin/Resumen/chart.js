@@ -47,7 +47,7 @@ function ChartEntidadAdmin() {
 
   const dataEntidades = async () => {
     try {
-      const response = await axios.get(`/entidad/entidadt/${fechaInicio}/${fechaFin}`);
+      const response = await axios.get(`/entity/entidadt/${fechaInicio}/${fechaFin}`);
       setData({
         series: [
           {

@@ -44,7 +44,7 @@ function ModalReasignacion({ open, handleClose, data }) {
 
   const getDepartamentos = async () => {
     try {
-      const response = await axios.get('/departamentos/departamento');
+      const response = await axios.get('/area');
       setDepartamento(response.data);
       setIsLoading(false);
     } catch (error) {
@@ -100,7 +100,7 @@ function ModalReasignacion({ open, handleClose, data }) {
   const historialCambios = async () => {
     try {
       const datos = `El usuario ${user.username} reasigno "Rechazo" la solicitud asignada`;
-      await axios.post('/historial', {
+      await axios.post('/history', {
         observacion: datos
       });
     } catch (error) {

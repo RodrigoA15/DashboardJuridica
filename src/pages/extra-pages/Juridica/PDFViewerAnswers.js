@@ -4,7 +4,7 @@ function PDFViewerAnswers({ dataAnswer }) {
   return (
     <>
       <a
-        href={`http://192.168.28.74:4000/api/pdf-viewer-answer/${dataAnswer._id}`}
+        href={`http://192.168.28.74:4000/api/v2/answer/pdf-viewer-answer/${dataAnswer._id}`}
         target="_blank"
         rel="noreferrer"
         title="Ver archivo PDF"

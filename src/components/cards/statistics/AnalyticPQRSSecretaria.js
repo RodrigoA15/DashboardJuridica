@@ -24,7 +24,7 @@ const AnalyticPQRSSecretaria = () => {
 
   const dataApi = async () => {
     try {
-      const response = await axios.get(`/entidad/entidadt/${dateFirstMonth}/${dateEndMonth}`);
+      const response = await axios.get(`/entity/entidadt/${dateFirstMonth}/${dateEndMonth}`);
       const responseData = response.data[0]; // Acceder al primer objeto del array
       const movitCount = responseData.Secretaria; // Obtener el valor de 'Movit' del objeto
       setCount(movitCount); // Actualizar el estado 'count'

@@ -20,7 +20,7 @@ function ListCanales({ toast }) {
 
   const dataCanales = async () => {
     try {
-      const response = await axios.get('/canal/canal');
+      const response = await axios.get('/channel');
       setCanales(response.data);
     } catch (error) {
       if (error.response && error.response.status === 404) {
@@ -42,7 +42,7 @@ function ListCanales({ toast }) {
       });
 
       if (alert.isConfirmed) {
-        await axios.delete(`/canal/canal/${_id}`);
+        await axios.delete(`/channel/${_id}`);
         toast.success('Eliminado');
       } else {
         toast.error('Cancelado');

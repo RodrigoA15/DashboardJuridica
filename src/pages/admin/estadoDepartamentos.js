@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '../../../node_modules/@mui/material/index';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import axios from 'api/axios';
 function EstadoDepartamento() {
   const [estados, setEstados] = useState([]);

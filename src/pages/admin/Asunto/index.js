@@ -21,7 +21,7 @@ function Index() {
   useEffect(() => {
     const apiDataAsuntos = async () => {
       try {
-        const response = await axios.get('/asunto/asunto');
+        const response = await axios.get('/affair');
         setData(response.data);
       } catch (error) {
         if (error.response && error.response.status === 404) {

@@ -11,7 +11,7 @@ function GetTipificacion({ register, errors }) {
 
   const listTipificacion = async () => {
     try {
-      const response = await axios.get('/tipificacion/tipificacion');
+      const response = await axios.get('/typification');
       setDataTipificacion(response.data);
     } catch (error) {
       console.log(error);

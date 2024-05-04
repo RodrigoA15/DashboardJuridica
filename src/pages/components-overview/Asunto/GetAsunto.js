@@ -13,7 +13,7 @@ function GetAsunto({ register, id_departamento, errors }) {
 
   const listaAsuntos = async () => {
     try {
-      const response = await axios.get(`asunto/asuntos_departamento/${id_departamento}`);
+      const response = await axios.get(`/affair/asuntos_departamento/${id_departamento}`);
       setDataAsunto(response.data);
     } catch (error) {
       console.log(error);

@@ -48,6 +48,7 @@ root.render(
               <Route path="dashboard/default" element="" />
               <Route path="/asuntosAdmin" element />
               <Route path="canalesAdmin" element />
+              <Route path="/pendientes" element />
             </Route>
           </Routes>
         </BrowserRouter>

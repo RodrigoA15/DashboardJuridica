@@ -26,7 +26,7 @@ function Juzgados({ setNameCourt, nameCourt, setJuzgados }) {
 
   const apiDataEntidad = async () => {
     try {
-      const response = await axios.get('/listEntities');
+      const response = await axios.get('/legal');
       setData(response.data);
     } catch (error) {
       console.log(error);
@@ -37,7 +37,7 @@ function Juzgados({ setNameCourt, nameCourt, setJuzgados }) {
     try {
       const trimmedMunicipio = municipio.label.trim();
       const trimmedDescripcion = nameCourt.label.trim();
-      const response = await axios.get(`/listEntitiesbyid/${trimmedDescripcion}/${trimmedMunicipio}`);
+      const response = await axios.get(`/legal/${trimmedDescripcion}/${trimmedMunicipio}`);
       const id_juzgado = response.data.response._id;
       setJuzgados(id_juzgado);
       setRegisterEntity(false);
@@ -67,7 +67,7 @@ function Juzgados({ setNameCourt, nameCourt, setJuzgados }) {
         const trimmedDescripcion = nameCourt.label.trim();
         const trimmedMunicipio = municipio.label.trim();
 
-        await axios.post('/createEntity', {
+        await axios.post('/legal', {
           desc_ente_juridico: trimmedDescripcion,
           municipio: trimmedMunicipio
         });
@@ -92,7 +92,7 @@ function Juzgados({ setNameCourt, nameCourt, setJuzgados }) {
   const historialCambios = async () => {
     try {
       const datos = `El usuario ${user.username} creo la entidad juridica: ${descripcion.label} del municipio de ${municipio.label}`;
-      await axios.post('/historial', {
+      await axios.post('/history', {
         observacion: datos
       });
     } catch (error) {

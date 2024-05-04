@@ -44,7 +44,7 @@ function GetAsignados() {
   //
   const apiAsignados = async () => {
     try {
-      const response = await axios.get(`/asignaciones/${user.departamento._id}`);
+      const response = await axios.get(`/assigned/${user.departamento._id}`);
       setAsignados(response.data);
       setIsLoading(false);
     } catch (error) {

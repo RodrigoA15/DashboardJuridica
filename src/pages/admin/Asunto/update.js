@@ -21,7 +21,7 @@ function Updateasunto({ asuntoId, setAsuntoId, asunto }) {
       });
 
       if (alert.isConfirmed) {
-        await axios.put(`/asunto/asunto/${_id}`, {
+        await axios.put(`/affair/${_id}`, {
           nombre_asunto: nombre_asunto
         });
         toast.success('Actualizado');

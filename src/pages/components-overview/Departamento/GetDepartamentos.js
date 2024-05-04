@@ -14,7 +14,7 @@ function GetDepartamentos({ register, setIdDepartamento, id_departamento, errors
 
   const listDepartamentos = async (entityId) => {
     try {
-      const response = await axios.get(`/departamentos/dptoentidad/${entityId}`);
+      const response = await axios.get(`/area/dptoentidad/${entityId}`);
       setDataDepartamento(response.data);
     } catch (error) {
       console.log(error);

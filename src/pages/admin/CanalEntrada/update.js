@@ -35,7 +35,7 @@ function ActualizarCanal({ open, handleClose, data }) {
       });
 
       if (alert.isConfirmed) {
-        await axios.put(`/canal/canal/${data._id}`, {
+        await axios.put(`/channel/${data._id}`, {
           nombre_canal: nombreCanal
         });
         toast.success('Actualizado correctamente');

@@ -15,7 +15,7 @@ function ListArea({ toast }) {
 
   const apiAreasData = async () => {
     try {
-      const response = await axios.get('/departamentos/departamento');
+      const response = await axios.get('/area');
       setAreas(response.data);
     } catch (error) {
       if (error.response && error.response.status === 404) {

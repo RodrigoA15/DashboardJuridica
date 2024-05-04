@@ -13,7 +13,7 @@ function AnalyticCourts() {
 
   const apiDataCourt = async () => {
     try {
-      const response = await axios.get('/countreqcourts');
+      const response = await axios.get('/legal/countreqcourts');
       setCourtData(response.data);
     } catch (error) {
       if (error.response && error.response.status === 404) {

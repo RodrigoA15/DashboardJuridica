@@ -13,7 +13,7 @@ function GetEntidad({ register, errors, setIdDepartamento, id_departamento }) {
 
   const listEntidad = async () => {
     try {
-      const response = await axios.get('/entidad/entidad');
+      const response = await axios.get('/entity');
       const data = response.data;
       setDataEntidad(data);
     } catch (error) {

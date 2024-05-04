@@ -12,7 +12,7 @@ function Entidades({ selectArea, setSelectArea, setSelectEntidad, selectEntidad 
 
   const getAllEntidades = async () => {
     try {
-      const response = await axios.get('/entidad/entidad');
+      const response = await axios.get('/entity');
       setEntidades(response.data);
     } catch (error) {
       console.log('No se encontrarón entidades');

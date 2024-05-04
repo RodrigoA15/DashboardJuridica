@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Toaster, toast } from 'sonner';
 import axios from 'api/axios';
 import ModalUsuarios from './modalUsuarios';
 function TableUsers() {
@@ -13,9 +14,8 @@ function TableUsers() {
 
   const apiUsersQx = async () => {
     try {
-      const response = await axios.get('/usuariosQX');
+      const response = await axios.get('/usersQX');
       setUsers(response.data);
-      console.log(response.data);
     } catch (error) {
       toast.error('error de servidor');
     }
@@ -33,6 +33,7 @@ function TableUsers() {
 
   return (
     <div>
+      <Toaster position="top-right" richColors expand={true} offset="80px" />
       <TableContainer component={Paper}>
         <Table>
           <TableHead>

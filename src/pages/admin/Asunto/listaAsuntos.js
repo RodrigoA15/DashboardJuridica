@@ -38,7 +38,7 @@ function ListaAsuntos({ row }) {
       });
 
       if (alert.isConfirmed) {
-        await axios.delete(`/asunto/asunto/${_id}`);
+        await axios.delete(`/affair/${_id}`);
         toast.success('Eliminado correctamente');
       } else {
         toast.error('Cancelado');

@@ -34,8 +34,8 @@ function ChartArea() {
 
   const fetchData = async () => {
     try {
-      const radicadosResponse = await axios.get('/radicadosAreas');
-      const respuestasResponse = await axios.get('/radicadosAreasRespuestas');
+      const radicadosResponse = await axios.get('/chartAdmin/radicadosAreas');
+      const respuestasResponse = await axios.get('/chartAdmin/radicadosAreasRespuestas');
 
       const radicadosData = radicadosResponse.data;
       const respuestasData = respuestasResponse.data;

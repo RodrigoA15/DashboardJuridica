@@ -41,7 +41,7 @@ function UsuariosJuridica({ dataRadicados }) {
   const apiUsuarios = async () => {
     try {
       const departamentoId = user.departamento._id;
-      const response = await axios.get(`/departamentos/usuarios_departamento/${departamentoId}`);
+      const response = await axios.get(`/area/usuarios_departamento/${departamentoId}`);
       setUsers(response.data);
     } catch (error) {
       toast.error('Error al cargar usuarios');
@@ -51,7 +51,7 @@ function UsuariosJuridica({ dataRadicados }) {
 
   const actualizacionEstado = async () => {
     try {
-      await axios.put(`/radicados/radicados`, { _id: dataRadicados });
+      await axios.put(`/radicados`, { _id: dataRadicados });
       toast.success('Estado actualizado correctamente');
     } catch (error) {
       toast.error('Error al actualizar estado');
@@ -64,7 +64,7 @@ function UsuariosJuridica({ dataRadicados }) {
       const dataPrueba = dataRadicados.map((i) => {
         return { id_usuario: usuario, fecha_asignacion: new Date(), estado_asignacion: 'abierto', id_radicado: i };
       });
-      const data = await axios.post(`/asignacion`, dataPrueba);
+      const data = await axios.post(`/assigned`, dataPrueba);
       if (data) {
         actualizacionEstado();
       } else {

@@ -22,7 +22,7 @@ function CrearArea({ toast }) {
 
   const dataApiEntidad = async () => {
     try {
-      const response = await axios.get('/entidad/entidad');
+      const response = await axios.get('/entity');
       setEntidad(response.data);
     } catch (error) {
       console.log(error);
@@ -46,7 +46,7 @@ function CrearArea({ toast }) {
       });
 
       if (alert.isConfirmed) {
-        await axios.post('departamentos/departamento', {
+        await axios.post('/area', {
           id_entidad: idEntidad,
           nombre_departamento: nombreArea
         });

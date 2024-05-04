@@ -24,7 +24,7 @@ function Crearasunto({ openPost, valueDP }) {
       });
 
       if (alert.isConfirmed) {
-        await axios.post('/asunto/asunto', {
+        await axios.post('/affair', {
           id_departamento: valueDP,
           nombre_asunto: nombre_asunto
         });

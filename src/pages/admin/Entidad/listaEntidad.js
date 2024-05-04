@@ -22,7 +22,7 @@ function ListaEntidad() {
 
   const getEntidades = async () => {
     try {
-      const response = await axios.get('/entidad/entidad');
+      const response = await axios.get('/entity');
       setEntidad(response.data);
     } catch (error) {
       if (error.response && error.response.status === 404) {
@@ -44,7 +44,7 @@ function ListaEntidad() {
       });
 
       if (alert.isConfirmed) {
-        await axios.delete(`/entidad/entidad/${_id}`);
+        await axios.delete(`/entity/${_id}`);
       } else {
         toast.error('Cancelado');
       }

@@ -30,7 +30,7 @@ function ModalUsuarios({ open, handleClose, data }) {
 
   const apiDataDepartamentos = async () => {
     try {
-      const response = await axios.get('/departamentos/departamento');
+      const response = await axios.get('/area');
       setDataDepartamento(response.data);
     } catch (error) {
       if (error.response && error.response.status === 404) {
@@ -43,7 +43,7 @@ function ModalUsuarios({ open, handleClose, data }) {
 
   const apiDataRoles = async () => {
     try {
-      const response = await axios.get('/roles/role');
+      const response = await axios.get('/role');
       setDataRoles(response.data);
     } catch (error) {
       if (error.response && error.response.status === 404) {
@@ -79,7 +79,7 @@ function ModalUsuarios({ open, handleClose, data }) {
           siu.role = roles;
         }
 
-        await axios.put(`/updusuariosQX/${data._id}`, siu);
+        await axios.put(`/usersQX/${data._id}`, siu);
 
         handleClose();
         toast.success('Asignado Correctamente');

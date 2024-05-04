@@ -11,7 +11,7 @@ function GetEntrada({ register, errors }) {
 
   const apiGetEntrada = async () => {
     try {
-      const response = await axios.get('canal/canal');
+      const response = await axios.get('/channel');
       setEntrada(response.data);
     } catch (error) {
       console.error('Error fetching data:', error);

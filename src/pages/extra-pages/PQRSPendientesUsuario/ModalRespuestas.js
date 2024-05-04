@@ -75,7 +75,7 @@ function ModalRespuestas({ open, handleClose, data }) {
       formData.append('fechaRespuesta', new Date());
       const config = { headers: { 'Content-Type': 'multipart/form-data' } };
 
-      await axios.post('/create_respuestas', formData, config);
+      await axios.post('/answer', formData, config);
       toast.success('Respuesta Agregada');
       setUrl('');
       handleClose();

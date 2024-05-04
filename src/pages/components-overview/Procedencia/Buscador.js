@@ -49,7 +49,7 @@ function Buscador({ setProcedencia, setNameCourt, nameCourt, setJuzgados }) {
   const GetidentificacionById = async () => {
     validacion();
     try {
-      const response = await axios.get(`/procedencia/procedencias/${numero_identificacion}`);
+      const response = await axios.get(`/origin/${numero_identificacion}`);
       if (response.data.length > 0) {
         setProcedenciaData(response.data);
         const procedenciaValue = response.data[0]._id;
@@ -82,7 +82,7 @@ function Buscador({ setProcedencia, setNameCourt, nameCourt, setJuzgados }) {
 
   const PostProcedencia = async (data) => {
     try {
-      await axios.post('/procedencia/procedencia', { ...data, numero_identificacion });
+      await axios.post('/origin', { ...data, numero_identificacion });
       toast.success('Usuario registrado', {
         description: 'Por favor realice la búsqueda nuevamente',
         duration: 10000

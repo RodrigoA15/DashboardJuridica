@@ -34,7 +34,7 @@ function ChartEstados() {
 
   const apiRadicadosEstados = async () => {
     try {
-      const radicadoEstados = await axios.get('/radicadosAreasEstados');
+      const radicadoEstados = await axios.get('/chartAdmin/radicadosAreasEstados');
       const radicadosResponse = radicadoEstados.data;
 
       const categories = radicadosResponse.map((area) => area.departamento);

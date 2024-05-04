@@ -23,7 +23,7 @@ function CrearEntidad() {
       });
 
       if (alert.isConfirmed) {
-        await axios.post('/entidad/entidad', {
+        await axios.post('/entity', {
           nombre_entidad: nombreEntidad
         });
         toast.success('Entidad creada');

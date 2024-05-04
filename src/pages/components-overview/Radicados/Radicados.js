@@ -41,7 +41,7 @@ function ComponentRadicados() {
         id_departamento,
         juzgado
       };
-      await axios.post(`/radicados/radicados`, datos);
+      await axios.post(`/radicados`, datos);
       MySwal.fire({
         title: 'Creado correctamente',
         icon: 'success'

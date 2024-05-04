@@ -22,7 +22,7 @@ function CrearCanal({ toast }) {
       });
 
       if (alert.isConfirmed) {
-        await axios.post('/canal/canal', {
+        await axios.post('/channel', {
           nombre_canal: nombreCanal
         });
         toast.success('Canal creado correctamente');

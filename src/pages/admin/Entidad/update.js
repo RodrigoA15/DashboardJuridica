@@ -19,7 +19,7 @@ function UpdateEntidad({ id, setId }) {
       });
 
       if ((await alert).isConfirmed) {
-        await axios.put(`/entidad/entidad/${id}`, {
+        await axios.put(`/entity/${id}`, {
           nombre_entidad: nombreEntidad
         });
         toast.success('Actualizado correctamente');

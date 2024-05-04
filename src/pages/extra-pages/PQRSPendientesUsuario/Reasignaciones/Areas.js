@@ -11,7 +11,7 @@ function Areas({ setSelectArea, selectEntidad }) {
 
   const getAllAreas = async () => {
     try {
-      const response = await axios.get(`/departamentos/dptoentidad/${selectEntidad}`);
+      const response = await axios.get(`/area/dptoentidad/${selectEntidad}`);
       setAreas(response.data);
     } catch (error) {
       if (error.response && error.response.status === 404) {
@@ -22,14 +22,16 @@ function Areas({ setSelectArea, selectEntidad }) {
 
   return (
     <div>
-      <select className="form-select" onChange={(e) => setSelectArea(e.target.value)}>
-        <option value="">Seleccione área</option>
-        {areas.map((area) => (
-          <option key={area._id} value={area._id}>
-            {area.nombre_departamento}
-          </option>
-        ))}
-      </select>
+      {selectEntidad != null && (
+        <select className="form-select" onChange={(e) => setSelectArea(e.target.value)}>
+          <option value="">Seleccione área</option>
+          {areas.map((area) => (
+            <option key={area._id} value={area._id}>
+              {area.nombre_departamento}
+            </option>
+          ))}
+        </select>
+      )}
     </div>
   );
 }
