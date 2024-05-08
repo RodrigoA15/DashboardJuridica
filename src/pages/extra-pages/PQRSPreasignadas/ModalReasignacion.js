@@ -72,7 +72,7 @@ function ModalReasignacion({ open, handleClose, data }) {
 
     if (alerta.isConfirmed) {
       try {
-        await axios.put(`/radicados/reasignacion_departamento`, {
+        await axios.put(`/radicados/rm/reasignacion_departamento`, {
           _id: data,
           id_departamento: datos.id_departamento
         });

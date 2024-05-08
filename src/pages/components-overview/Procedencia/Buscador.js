@@ -179,6 +179,7 @@ function Buscador({ setProcedencia, setNameCourt, nameCourt, setJuzgados }) {
                       {...register('tipo_identificacion', { required: 'Tipo identificación es requerido' })}
                     >
                       <option value="">Seleccione...</option>
+                      <option value="TI">Tarjeta de identidad</option>
                       <option value="CC">Cedula de ciudadania</option>
                       <option value="CE">Cedula de extranjeria</option>
                       <option value="PEP">Permiso Especial De Permanencia</option>
