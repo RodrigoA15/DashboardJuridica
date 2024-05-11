@@ -20,9 +20,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle';
 //css
 import './index.css';
-//Datables
-
+//Primereact styles
+import 'primereact/resources/themes/lara-light-indigo/theme.css'; //theme
+import 'primereact/resources/primereact.min.css'; //core css
 //Provider
+import { PrimeReactProvider } from 'primereact/api';
 import { AuthProvider } from 'context/authContext';
 import { Routes } from 'react-router-dom';
 import { Route } from 'react-router-dom';
@@ -35,25 +37,27 @@ const container = document.getElementById('root');
 const root = createRoot(container); // createRoot(container!) if you use TypeScript
 root.render(
   <StrictMode>
-    <ReduxProvider store={store}>
-      <AuthProvider>
-        <BrowserRouter>
-          <App />
-          <Routes>
-            <Route element={<ProtectedRoute />}>
-              <Route path="radicados" element="" />
-              <Route path="pqrs" element="" />
-              <Route path="admin" element="" />
-              <Route path="usuariosqx" element="" />
-              <Route path="dashboard/default" element="" />
-              <Route path="/asuntosAdmin" element />
-              <Route path="canalesAdmin" element />
-              <Route path="/pendientes" element />
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </AuthProvider>
-    </ReduxProvider>
+    <PrimeReactProvider>
+      <ReduxProvider store={store}>
+        <AuthProvider>
+          <BrowserRouter>
+            <App />
+            <Routes>
+              <Route element={<ProtectedRoute />}>
+                <Route path="radicados" element="" />
+                <Route path="pqrs" element="" />
+                <Route path="admin" element="" />
+                <Route path="usuariosqx" element="" />
+                <Route path="dashboard/default" element="" />
+                <Route path="/asuntosAdmin" element />
+                <Route path="canalesAdmin" element />
+                <Route path="/pendientes" element />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </AuthProvider>
+      </ReduxProvider>
+    </PrimeReactProvider>
   </StrictMode>
 );
 reportWebVitals();

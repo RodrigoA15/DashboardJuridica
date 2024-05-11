@@ -84,7 +84,7 @@ function UsuariosJuridica({ dataRadicados }) {
           <div className="d-flex align-items-center">
             <div className="flex-grow-1">
               <select
-                className="form-select"
+                className="form-select inputUser"
                 {...register('id_usuario', {
                   required: {
                     value: true,
@@ -102,14 +102,12 @@ function UsuariosJuridica({ dataRadicados }) {
               </select>
               {errors.id_usuario && <span className="inputForm">{errors.id_usuario.message}</span>}
             </div>
-            {dataRadicados.length > 0 ? (
+            {dataRadicados.length > 0 && (
               <div>
                 <Button type="submit" className="ms-3" variant="outlined">
                   Asignar
                 </Button>
               </div>
-            ) : (
-              <h6>Seleccione una petición</h6>
             )}
           </div>
         </form>

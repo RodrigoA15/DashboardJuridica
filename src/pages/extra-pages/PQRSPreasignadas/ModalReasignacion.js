@@ -159,5 +159,5 @@ export default ModalReasignacion;
 ModalReasignacion.propTypes = {
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
-  data: PropTypes.object
+  data: PropTypes.array
 };

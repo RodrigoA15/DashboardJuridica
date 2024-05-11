@@ -210,7 +210,6 @@ function PendientesUsuario() {
                                 </IconButton>
                               </>
                             )}
-                            {/*  */}
                           </TableCell>
                           <TableCell>{diasHabiles(new Date(pendiente.id_radicado.fecha_radicado))}</TableCell>
                           <TableCell align="center">

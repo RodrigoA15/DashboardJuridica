@@ -1,3 +1,4 @@
+
 .errors {
   color: red !important;
 }
@@ -133,4 +134,17 @@ hr {
 
 .css-138jxl3{
   color: white;
+}
+
+.inputUser{
+background-color:#fff;
+border-radius:6px;
+border-style:solid;
+border-width:1px;
+box-shadow: #c7d2fe 0px 0px 0px 3.2px;
+color:#4b5563;
+display:inline-block;
+font-family:Inter var;
+line-height:25.12px;
+padding:2px
 }
