@@ -57,9 +57,9 @@ function GetAsignados() {
 
     const hola = classNames('rounded-pill justify-content-center align-items-center text-center font-weight-bold', {
       'bg-success bg-gradient text-dark': diasLaborables <= 5,
-      'bg-warning text-dark-900': diasLaborables >= 6 && diasLaborables <= 9,
-      'bg-info text-dark': diasLaborables >= 10 && diasLaborables <= 12,
-      'bg-danger bg-gradient text-dark': diasLaborables > 13
+      'bg-warning text-dark': diasLaborables >= 6 && diasLaborables <= 9,
+      'dias text-dark': diasLaborables >= 10 && diasLaborables <= 12,
+      'bg-danger bg-gradient text-dark': diasLaborables >= 13
     });
 
     return <div className={hola}>{diasLaborables}</div>;
