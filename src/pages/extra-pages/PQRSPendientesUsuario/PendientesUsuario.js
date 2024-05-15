@@ -163,13 +163,13 @@ function PendientesUsuario() {
             />
           </div>
           <div className="col-3">
-            <h6>Respuestas: 5</h6>
+            <h6>Respuestas: -</h6>
           </div>
           <div className="col-3">
-            <h6>Respuestas total: 26</h6>
+            <h6>Respuestas total: -</h6>
           </div>
           <div className="col-3">
-            <h6>Respuestas total área: 58</h6>
+            <h6>Respuestas total área: -</h6>
           </div>
         </div>
       </>
