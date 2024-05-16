@@ -20,6 +20,7 @@ import { classNames } from 'primereact/utils';
 import { IconButton, Tooltip } from '../../../../node_modules/@mui/material/index';
 import { FilterMatchMode, FilterOperator } from 'primereact/api';
 import { InputText } from 'primereact/inputtext';
+import { AllAnswers, AnswersByArea, AnswersByUser } from './Totals';
 
 function PendientesUsuario() {
   const { user } = useAuth();
@@ -163,13 +164,13 @@ function PendientesUsuario() {
             />
           </div>
           <div className="col-3">
-            <h6>Respuestas: -</h6>
+            <AnswersByUser />
           </div>
           <div className="col-3">
-            <h6>Respuestas total: -</h6>
+            <AllAnswers />
           </div>
           <div className="col-3">
-            <h6>Respuestas total área: -</h6>
+            <AnswersByArea />
           </div>
         </div>
       </>
