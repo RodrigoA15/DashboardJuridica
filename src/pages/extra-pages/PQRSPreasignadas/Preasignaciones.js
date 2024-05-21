@@ -43,6 +43,9 @@ function Preasignaciones() {
     {
       user && getAllPreasignaciones();
     }
+
+    const intervalId = setInterval(getAllPreasignaciones, 5000);
+    return () => clearInterval(intervalId);
   }, [user]);
 
   //Abrir modal

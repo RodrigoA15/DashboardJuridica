@@ -1,9 +1,19 @@
 import { useEffect, useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+import { Dropdown } from 'primereact/dropdown';
 import axios from 'api/axios';
 function EstadoDepartamento() {
   const [estados, setEstados] = useState([]);
   const [filtro, setFiltro] = useState('');
+  const areas = [
+    { area: 'Archivo' },
+    { area: 'Detección electrónica infractores' },
+    { area: 'Juridica' },
+    { area: 'Registro municipal de infractores' },
+    { area: 'Front office' },
+    { area: 'Secretaria' }
+  ];
 
   useEffect(() => {
     apiDataEstados();
@@ -18,37 +28,23 @@ function EstadoDepartamento() {
     }
   };
 
-  const filterData = estados.filter((area) => area.departamento.includes(filtro));
+  const filterData = estados.filter((area) => area.departamento === filtro.area);
+  const renderHeader = () => {
+    return (
+      <div className="card flex justify-content-center">
+        <Dropdown value={filtro} onChange={(e) => setFiltro(e.value)} options={areas} optionLabel="area" placeholder="Seleccione un área" />
+      </div>
+    );
+  };
+
+  const header = renderHeader();
 
   return (
-    <TableContainer>
-      <div className="row m-1 mb-3">
-        <select className="form-select" onChange={(e) => setFiltro(e.target.value)}>
-          <option value="">Seleccione área</option>
-          <option value="Archivo">Archivo</option>
-          <option value="Detección electrónica infractores">DEI</option>
-          <option value="Juridica">Juridica</option>
-          <option value="Registro municipal de infractores">RMI</option>
-          <option value="Front office">Front office</option>
-        </select>
-      </div>
-      <Table>
-        <TableHead>
-          <TableCell>Área</TableCell>
-          <TableCell>Estado</TableCell>
-          <TableCell>Cantidad</TableCell>
-        </TableHead>
-        <TableBody>
-          {filterData.map((i) => (
-            <TableRow key={i._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-              <TableCell>{i.departamento}</TableCell>
-              <TableCell>{i.estado}</TableCell>
-              <TableCell>{i.count}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <DataTable value={filterData} dataKey="index" header={header} emptyMessage="No se encontraron resultados">
+      <Column field="departamento" header="Área" />
+      <Column field="estado" header="Estado" />
+      <Column field="count" header="Cantidad" />
+    </DataTable>
   );
 }
 

@@ -33,6 +33,9 @@ export default function GetPendientes() {
 
   useEffect(() => {
     dataApiRest();
+
+    const intervalId = setInterval(dataApiRest, 5000);
+    return () => clearInterval(intervalId);
   }, []);
 
   const dataApiRest = async () => {
@@ -46,7 +49,6 @@ export default function GetPendientes() {
 
   const getBackgroundColor = (rowData) => {
     const diasLaborables = diasHabiles(rowData.fecha_radicado);
-
     const hola = classNames('rounded-pill justify-content-center align-items-center text-center font-weight-bold', {
       'bg-success bg-gradient text-dark': diasLaborables <= 5,
       'bg-warning text-dark-900': diasLaborables >= 6 && diasLaborables <= 9,

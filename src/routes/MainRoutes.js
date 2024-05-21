@@ -4,12 +4,12 @@ import Loadable from 'components/Loadable';
 import MainLayout from 'layout/MainLayout';
 import Juridica from 'pages/extra-pages/Juridica/Juridica';
 import PendientesUsuario from 'pages/extra-pages/PQRSPendientesUsuario/PendientesUsuario';
-import AdminRadicados from 'pages/admin/index';
 import UsuariosQX from 'pages/admin/UsuariosQX/index';
 import PDFViewer from 'pages/extra-pages/PQRSPendientesUsuario/PDFViewer';
 import Index from 'pages/admin/Asunto/index';
 import IndexCE from 'pages/admin/CanalEntrada/index';
 import IndexResumen from 'pages/admin/Resumen/index';
+import TabViewComponent from 'pages/admin/index';
 // render - dashboard
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
 
@@ -49,7 +49,7 @@ const MainRoutes = {
     },
     {
       path: 'radicadosAdmin',
-      element: <AdminRadicados />
+      element: <TabViewComponent />
     },
     {
       path: 'usuariosqx',

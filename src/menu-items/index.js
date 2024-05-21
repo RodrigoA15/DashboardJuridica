@@ -12,7 +12,7 @@ function GetMenuItems() {
   if (user && user.role && user.role.nombre_rol) {
     if (user.role.nombre_rol === 'Coordinador') {
       return {
-        items: [dashboard, support, pendientes]
+        items: [dashboard, support, pendientes, utilities]
       };
     } else if (user.role.nombre_rol === 'admin') {
       return {

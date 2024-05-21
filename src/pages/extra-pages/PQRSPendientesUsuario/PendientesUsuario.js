@@ -17,7 +17,7 @@ import useDiasHabiles from 'hooks/useDate';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { classNames } from 'primereact/utils';
-import { IconButton, Tooltip } from '../../../../node_modules/@mui/material/index';
+import { IconButton, Tooltip } from '@mui/material';
 import { FilterMatchMode, FilterOperator } from 'primereact/api';
 import { InputText } from 'primereact/inputtext';
 import { AllAnswers, AnswersByArea, AnswersByUser } from './Totals';

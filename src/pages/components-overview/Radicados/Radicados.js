@@ -11,7 +11,7 @@ import { useState } from 'react';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { Button, Grid } from '@mui/material';
-
+import { useAuth } from 'context/authContext';
 function ComponentRadicados() {
   const {
     register,
@@ -20,7 +20,7 @@ function ComponentRadicados() {
     reset,
     watch
   } = useForm({ mode: 'onChange' });
-
+  const { user } = useAuth();
   const [procedencia, setProcedencia] = useState('');
   const [id_departamento, setIdDepartamento] = useState('');
   const [nameCourt, setNameCourt] = useState('');
@@ -59,6 +59,7 @@ function ComponentRadicados() {
     }
   };
 
+  const shouldDisableButton = (procedencia === '6579e6f0d99b6ec78c8ca264' && juzgado === null) || user.role.nombre_rol !== 'Radicador';
   return (
     <ComponentSkeleton>
       <Grid container spacing={2} justifyContent="center">
@@ -183,15 +184,9 @@ function ComponentRadicados() {
                   </div>
                 )}
               </div>
-              {procedencia === '6579e6f0d99b6ec78c8ca264' && juzgado === null ? (
-                <button type="submit" className="btn btn-success" disabled>
-                  Registrar
-                </button>
-              ) : (
-                <button type="submit" className="btn btn-success">
-                  Registrar
-                </button>
-              )}
+              <button type="submit" className="btn btn-success" disabled={shouldDisableButton}>
+                Registrar
+              </button>
             </form>
           </MainCard>
         </Grid>
