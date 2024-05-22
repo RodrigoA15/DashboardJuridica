@@ -1,6 +1,7 @@
 // import { Toaster } from 'sonner';
 import axios from 'api/axios';
 import { useState } from 'react';
+import { Button } from '@mui/material';
 function JsonToFileExcel() {
   const [archivo, setArchivo] = useState(null);
 
@@ -21,9 +22,9 @@ function JsonToFileExcel() {
 
   return (
     <div>
-      <button className="btn btn-success" onClick={descargarArchivo}>
-        Descargar excel
-      </button>
+      <Button className="bg-success" variant="contained" onClick={descargarArchivo}>
+        Radicados-asignados
+      </Button>
       {/* Mostrar el archivo si está disponible */}
       {archivo && (
         <a href={archivo} download="radicados.xlsx">

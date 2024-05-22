@@ -208,6 +208,13 @@ function PendientesUsuario() {
     );
   };
 
+  const formatoFechaRadicados = (rowData) => {
+    return new Date(rowData.id_radicado.fecha_radicado).toLocaleDateString('es-ES', { timeZone: 'UTC' });
+  };
+
+  const formatoFechaAsignacion = (rowData) => {
+    return new Date(rowData.fecha_asignacion).toLocaleDateString('es-ES', { timeZone: 'UTC' });
+  };
   return (
     <div className="card">
       <DataTable
@@ -218,14 +225,16 @@ function PendientesUsuario() {
         paginator
         rows={5}
         rowsPerPageOptions={[5, 10, 25, 50]}
+        paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
+        currentPageReportTemplate="{first} a {last} de {totalRecords}"
         header={header}
         filters={filters}
         onFilter={(e) => setFilters(e.filters)}
       >
         <Column field="id_radicado.numero_radicado" header="Número radicado" />
-        <Column field="id_radicado.fecha_radicado" sortable header="Fecha radicado" />
+        <Column field="id_radicado.fecha_radicado" sortable header="Fecha radicado" body={formatoFechaRadicados} />
         <Column field="id_radicado.id_asunto.nombre_asunto" sortable header="Asunto" />
-        <Column field="fecha_asignacion" sortable header="Fecha asignación" />
+        <Column field="fecha_asignacion" sortable header="Fecha asignación" body={formatoFechaAsignacion} />
         <Column field="id_radicado.id_procedencia.nombre" header="Procedencia" />
         <Column field="id_radicado.observaciones_radicado" header="Observaciones" />
         <Column field="id_radicado.cantidad_respuesta" sortable header="Respuestas estimadas" />

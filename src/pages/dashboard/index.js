@@ -18,6 +18,7 @@ import AnalyticDesacatos from 'components/cards/statistics/AnalyticDesacatos';
 import AnalyticTutelas from 'components/cards/statistics/AnalyticTutelas';
 import AnalyticCourts from 'components/cards/statistics/AnalyticCourts';
 import AnalyticPQRSSecretaria from 'components/cards/statistics/AnalyticPQRSSecretaria';
+import RadicadosExcel from 'pages/components-overview/Radicados/radicadosExcel';
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
@@ -111,7 +112,14 @@ const DashboardDefault = () => {
                 </Stack>
               </Grid>
             </Grid>
-            <JsonToFileExcel />
+            <div className="row m-3">
+              <div className="col-6">
+                <JsonToFileExcel />
+              </div>
+              <div className="col-6">
+                <RadicadosExcel />
+              </div>
+            </div>
           </Stack>
         </MainCard>
       </Grid>
