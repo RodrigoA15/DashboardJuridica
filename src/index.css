@@ -51,12 +51,16 @@
 .card1 {
   background: #5a96e3 !important;
   border: none !important;
+  color: white !important;
+
 }
 
 /* Card Respondidos */
 .card2 {
   background: #9DBC98 !important;
   border: none !important;
+  color: white !important;
+
 }
 
 /* Card Asignados */
@@ -70,19 +74,27 @@
 .card4 {
   background: #F46060  !important;
   border: none !important;
+  color: white !important;
+
 }
 /* Card secretaria */
 .cardSecretaria{
   background: #82A0D8;
+  color: white !important;
+
 }
 
 .cardEntidad {
   background: #9DBC98 !important;
   border: none !important;
+  color: white !important;
+
 }
 
 .cardTutelas{
-  background: #0cb6eb
+  background: #0cb6eb;
+  color: white !important;
+
 }
 
 .left-icon {
@@ -128,14 +140,6 @@ hr {
   overflow-y: scroll;
 }
 
-.css-1yzv0e3{
-  color: white;
-}
-
-.css-138jxl3{
-  color: white;
-}
-
 .inputUser{
 background-color:#fff;
 border-radius:6px;
@@ -151,4 +155,13 @@ padding:2px
 
 .dias{
   background: #ffa33c !important;
+}
+
+/* Fuente cards */
+.css-14n8fpx{ 
+  color: white !important;
+}
+
+.css-ccyz7s{
+  color: white !important;
 }
