@@ -22,8 +22,8 @@ function GetEntidad({ register, errors, setIdDepartamento, id_departamento }) {
   };
 
   return (
-    <div className="row">
-      <div className="col-6 mb-3">
+    <div>
+      <div className="mb-3">
         <select
           className="form-select rounded-pill minimal-input-dark"
           {...register('id_entidad', {
@@ -34,7 +34,7 @@ function GetEntidad({ register, errors, setIdDepartamento, id_departamento }) {
             setIdDepartamento(e.target.value);
           }}
         >
-          <option value="">Seleccione la entidad</option>
+          <option value="">Seleccione entidad</option>
           {dataEntidad.map((entidad) => (
             <option key={entidad._id} value={entidad._id}>
               {entidad.nombre_entidad}
@@ -44,44 +44,14 @@ function GetEntidad({ register, errors, setIdDepartamento, id_departamento }) {
         {errors.id_entidad && <span className="inputForm">{errors.id_entidad.message}</span>}
       </div>
 
-      <div className="row">
-        <div className="mb-3 col">
-          <label htmlFor="label" className="form-label h6">
-            Dirigido a*
-          </label>
-          <GetDepartamentos
-            register={register}
-            setIdDepartamento={setIdDepartamento}
-            id_departamento={id_departamento}
-            errors={errors}
-            dataEntidad={dataEntidad}
-            selectedEntityId={idEntidadSeleccionada}
-          />
-        </div>
-
-        <div className="mb-3 col">
-          <label htmlFor="label" className="form-label h6">
-            N&uacute;mero de respuestas*
-          </label>
-          <input
-            className="form-control rounded-pill minimal-input-dark"
-            type="number"
-            {...register('cantidad_respuesta', {
-              required: 'Cantidad de respuesta es obligatorio',
-              min: {
-                value: 1,
-                message: 'Cantidad respuesta debe ser minimo 1 respuesta'
-              },
-
-              max: {
-                value: 200,
-                message: 'Cantidad respuesta debe ser maximo 20 respuestas'
-              }
-            })}
-          />
-          {errors.cantidad_respuesta && <span className="inputForm">{errors.cantidad_respuesta.message}</span>}
-        </div>
-      </div>
+      <GetDepartamentos
+        register={register}
+        setIdDepartamento={setIdDepartamento}
+        id_departamento={id_departamento}
+        errors={errors}
+        dataEntidad={dataEntidad}
+        selectedEntityId={idEntidadSeleccionada}
+      />
     </div>
   );
 }

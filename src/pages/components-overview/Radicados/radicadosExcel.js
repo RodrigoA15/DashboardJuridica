@@ -29,7 +29,7 @@ function RadicadosExcel() {
       Asunto: item.id_asunto.nombre_asunto,
       Tipificacion: item.id_tipificacion.nombre_tipificacion,
       Entidad: item.id_entidad.nombre_entidad === 'Movit' ? 'EMTEL' : item.id_entidad.nombre_entidad,
-      Area: item.id_departamento.nombre_departamento,
+      Area: item.id_departamento ? item.id_departamento.nombre_departamento : 'NA',
       'Estado radicado': item.estado_radicado
     };
   });

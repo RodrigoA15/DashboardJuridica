@@ -22,16 +22,21 @@ function GetDepartamentos({ register, setIdDepartamento, id_departamento, errors
   };
 
   return (
-    <div>
-      <select className="form-select rounded-pill minimal-input-dark" onChange={(e) => setIdDepartamento(e.target.value)}>
-        <option>Seleccione un departamento</option>
-        {dataDepartamento.map((i) => (
-          <option key={i._id} value={i._id}>
-            {i.nombre_departamento}
-          </option>
-        ))}
-      </select>
-      <GetAsunto register={register} errors={errors} id_departamento={id_departamento} />
+    <div className="row">
+      <div className="col-6">
+        <select className="form-select rounded-pill minimal-input-dark" onChange={(e) => setIdDepartamento(e.target.value)}>
+          <option>Seleccione un departamento</option>
+          {dataDepartamento.map((i) => (
+            <option key={i._id} value={i._id}>
+              {i.nombre_departamento}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="col-6">
+        <GetAsunto register={register} errors={errors} id_departamento={id_departamento} />
+      </div>
     </div>
   );
 }
