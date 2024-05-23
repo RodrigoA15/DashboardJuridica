@@ -1,5 +1,5 @@
 // material-ui
-import logo from '../../assets/images/auth/LogoConcesion.png';
+import logo from '../../assets/images/auth/LogoConcesion.webp';
 
 /**
  * if you want to use image instead of <svg> uncomment following.
@@ -19,7 +19,7 @@ const Logo = () => {
      *<img src={logo} alt="Mantis" width="100" />
      *
      */
-    <img src={logo} alt="Consecion" width="100" />
+    <img src={logo} alt="Consecion" width="60%" height="60%" />
   );
 };
 

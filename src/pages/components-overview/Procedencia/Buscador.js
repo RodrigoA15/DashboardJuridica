@@ -142,13 +142,27 @@ function Buscador({ setProcedencia, setNameCourt, nameCourt, setJuzgados }) {
                     <label htmlFor="nombre" className="form-label h6">
                       Nombres
                     </label>
-                    <input type="text" className="form-control rounded-pill minimal-input-dark" id="nombre" value={i.nombre} readOnly />
+                    <input
+                      aria-label="nombres"
+                      type="text"
+                      className="form-control rounded-pill minimal-input-dark"
+                      id="nombre"
+                      value={i.nombre}
+                      readOnly
+                    />
                   </div>
                   <div className="col mb-3">
                     <label htmlFor="label" className="form-label h6">
                       Apellidos
                     </label>
-                    <input type="text" className="form-control rounded-pill minimal-input-dark" id="apellido" value={i.apellido} readOnly />
+                    <input
+                      type="text"
+                      className="form-control rounded-pill minimal-input-dark"
+                      id="apellido"
+                      value={i.apellido}
+                      aria-label="apellidos"
+                      readOnly
+                    />
                   </div>
 
                   <div>
@@ -175,6 +189,7 @@ function Buscador({ setProcedencia, setNameCourt, nameCourt, setJuzgados }) {
                       Tipo documento
                     </label>
                     <select
+                      id="tipo"
                       className="form-select  rounded-pill minimal-input-dark"
                       {...register('tipo_identificacion', { required: 'Tipo identificación es requerido' })}
                     >
@@ -222,6 +237,7 @@ function Buscador({ setProcedencia, setNameCourt, nameCourt, setJuzgados }) {
                       </label>
 
                       <select
+                        id="contacto"
                         className="form-select  rounded-pill minimal-input-dark"
                         {...register('tipo_contacto', {
                           required: 'Tipo contacto es obligatorio'

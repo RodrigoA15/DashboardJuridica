@@ -82,6 +82,7 @@ function ComponentRadicados() {
                   N&uacute;mero radicado*
                 </label>
                 <input
+                  aria-label="radicados"
                   type="number"
                   className="form-control rounded-pill minimal-input-dark"
                   id="radicados"
@@ -104,6 +105,7 @@ function ComponentRadicados() {
                   Fecha radicado*
                 </label>
                 <input
+                  aria-label="Search"
                   type="date"
                   className="form-control rounded-pill minimal-input-dark"
                   id="fecha"
