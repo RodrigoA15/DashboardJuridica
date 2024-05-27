@@ -10,8 +10,11 @@ import { ButtonGroup, IconButton, Tooltip } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { useAuth } from 'context/authContext';
+import ModalAdmin from './modalAdmin';
 function ConsultaRadicados() {
   const [radicado, setRadicado] = useState([]);
+  const [visible, setVisible] = useState(false);
+  const [data, setData] = useState('');
   const { user } = useAuth();
   const {
     register,
@@ -29,6 +32,11 @@ function ConsultaRadicados() {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleOPenButton = (rowData) => {
+    setVisible(true);
+    setData(rowData);
   };
 
   const renderHeader = () => {
@@ -53,12 +61,12 @@ function ConsultaRadicados() {
     );
   };
 
-  const buttonsGroup = () => {
+  const buttonsGroup = (rowData) => {
     return (
       <div>
         <ButtonGroup aria-label="Basic button group">
           <Tooltip title="Editar radicado" placement="top-start">
-            <IconButton aria-label="edit" color="warning">
+            <IconButton aria-label="edit" color="warning" onClick={() => handleOPenButton(rowData)}>
               <EditIcon />
             </IconButton>
           </Tooltip>
@@ -94,6 +102,7 @@ function ConsultaRadicados() {
         <Column field="estado_radicado" header="Estado" />
         {user.role.nombre_rol === 'admin' && <Column header="Acciones" body={buttonsGroup} />}
       </DataTable>
+      <ModalAdmin visible={visible} setVisible={setVisible} data={data} />
     </div>
   );
 }

@@ -9,7 +9,7 @@ import PDFViewer from 'pages/extra-pages/PQRSPendientesUsuario/PDFViewer';
 import Index from 'pages/admin/Asunto/index';
 import IndexCE from 'pages/admin/CanalEntrada/index';
 import IndexResumen from 'pages/admin/Resumen/index';
-import TabViewComponent from 'pages/admin/index';
+import TabViewComponent from 'pages/admin/Radicados/index';
 // render - dashboard
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
 
