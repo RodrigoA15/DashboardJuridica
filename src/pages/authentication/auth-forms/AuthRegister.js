@@ -90,7 +90,7 @@ const AuthRegister = () => {
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <Stack spacing={1}>
-                  <InputLabel htmlFor="username-signup">UserName*</InputLabel>
+                  <InputLabel htmlFor="username-signup">Nombre usuario*</InputLabel>
                   <OutlinedInput
                     id="username-login"
                     type="username"
@@ -98,7 +98,7 @@ const AuthRegister = () => {
                     name="username"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    placeholder="Rodrigo"
+                    placeholder="Ingrese primer nombre y primer apellido"
                     fullWidth
                     error={Boolean(touched.username && errors.username)}
                   />

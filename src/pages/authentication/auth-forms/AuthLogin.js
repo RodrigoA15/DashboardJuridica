@@ -41,12 +41,12 @@ const AuthLogin = () => {
     <>
       <Formik
         initialValues={{
-          email: '',
+          username: '',
           password: '',
           submit: null
         }}
         validationSchema={Yup.object().shape({
-          email: Yup.string().email('Debe ser un correo electronico válido').max(255).required('Correo es obligatorio'),
+          username: Yup.string().max(255).required('Nombre usuario es obligatorio'),
           password: Yup.string().max(255).required('Contraseña es obligatorio')
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
@@ -69,21 +69,21 @@ const AuthLogin = () => {
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <Stack spacing={1}>
-                  <InputLabel htmlFor="email-login">Correo electronico</InputLabel>
+                  <InputLabel htmlFor="username-login">Nombre usuario</InputLabel>
                   <OutlinedInput
-                    id="email-login"
-                    type="email"
-                    value={values.email}
-                    name="email"
+                    id="username-login"
+                    type="text"
+                    value={values.username}
+                    name="username"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    placeholder="Ingrese correo electronico"
+                    placeholder="Ingrese nombre de usuario (Pedro.perez)"
                     fullWidth
-                    error={Boolean(touched.email && errors.email)}
+                    error={Boolean(touched.username && errors.username)}
                   />
-                  {touched.email && errors.email && (
+                  {touched.username && errors.username && (
                     <FormHelperText error id="standard-weight-helper-text-email-login">
-                      {errors.email}
+                      {errors.username}
                     </FormHelperText>
                   )}
                   <FormHelperText error id="standard-weight-helper-text-email-login">

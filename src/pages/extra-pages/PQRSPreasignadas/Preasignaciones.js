@@ -120,7 +120,7 @@ function Preasignaciones() {
               Aceptar
             </Button>
 
-            <Button className="card4 ms-3" size="small" variant="contained" onClick={() => handleOpen(selectedData)}>
+            <Button className="card4 ms-3" size="small" variant="contained" onClick={() => handleOpen(selectedData)} disabled>
               Rechazar
             </Button>
           </>
