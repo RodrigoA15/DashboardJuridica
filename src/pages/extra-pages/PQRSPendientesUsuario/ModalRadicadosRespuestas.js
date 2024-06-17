@@ -44,7 +44,18 @@ function ModalRadicadosRespuestas({ opens, handleCloses, respuestas }) {
     }
   };
 
-  const updateEstadoRespondido = async (id_radicado) => {
+  const updateEstadoAsignacion = async (asignaciones) => {
+    try {
+      console.log(asignaciones._id);
+      await axios.put(`/assigned/${asignaciones._id}`, {
+        estado_asignacion: 'cerrado'
+      });
+    } catch (error) {
+      console.log('No se pudo actualizar');
+    }
+  };
+
+  const updateEstadoRespondido = async (respuestas) => {
     try {
       const MySwal = withReactContent(Swal);
       const alert = await MySwal.fire({
@@ -59,10 +70,11 @@ function ModalRadicadosRespuestas({ opens, handleCloses, respuestas }) {
       });
 
       if (alert.isConfirmed) {
-        await axios.put(`/radicados/${id_radicado}`, {
+        await axios.put(`/radicados/${respuestas.id_radicado._id}`, {
           estado_radicado: 'Respuesta'
         });
         toast.success('Respondido correctamente');
+        updateEstadoAsignacion(respuestas);
         handleCloses();
       } else {
         toast.error('No se respondio la peticion');
@@ -90,7 +102,7 @@ function ModalRadicadosRespuestas({ opens, handleCloses, respuestas }) {
               <Button
                 variant="contained"
                 color="success"
-                onClick={() => updateEstadoRespondido(respuestas.id_radicado._id)}
+                onClick={() => updateEstadoRespondido(respuestas)}
                 disabled={respuestas.id_radicado.cantidad_respuesta !== countRadicados}
               >
                 Responder

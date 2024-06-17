@@ -56,7 +56,6 @@ export const AuthProvider = ({ children }) => {
       if (!cookies.token) {
         setIsAuthenticated(false);
         setLoading(false);
-        console.log(cookies);
         return setUser(null);
       }
 
