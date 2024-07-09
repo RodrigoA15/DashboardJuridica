@@ -94,6 +94,7 @@ function UsuariosJuridica({ dataRadicados }) {
                 })}
               >
                 <option value="">Seleccione un usuario</option>
+                {user.departamento.nombre_departamento === 'Juridica' && <option value="66707ccb09551288ee467ea1">Daniella Dorado</option>}
                 {users.map((usuario) => (
                   <option key={usuario._id} value={usuario._id}>
                     {usuario.username}
