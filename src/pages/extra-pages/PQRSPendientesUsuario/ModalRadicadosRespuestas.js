@@ -7,7 +7,6 @@ import Button from '@mui/material/Button';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import { toast } from 'sonner';
-import { useAuth } from 'context/authContext';
 import PropTypes from 'prop-types';
 
 const style = {
@@ -25,7 +24,6 @@ const style = {
 function ModalRadicadosRespuestas({ opens, handleCloses, respuestas }) {
   const [radicadosRpta, setRadicadosRpta] = useState([]);
   const [countRadicados, setCountRadicados] = useState(0);
-  const { user } = useAuth();
   useEffect(() => {
     if (respuestas && respuestas.id_radicado && respuestas.id_radicado.numero_radicado) {
       setRadicadosRpta([]);
@@ -36,7 +34,7 @@ function ModalRadicadosRespuestas({ opens, handleCloses, respuestas }) {
 
   const apiRadicadosRespuesta = async () => {
     try {
-      const response = await axios.get(`/answer/radicados_respuestas/${user.departamento._id}/${respuestas.id_radicado.numero_radicado}`);
+      const response = await axios.get(`/answer/radicados_respuestas/${respuestas.id_radicado.numero_radicado}`);
       setRadicadosRpta(response.data);
       setCountRadicados(response.data.length);
     } catch (error) {
