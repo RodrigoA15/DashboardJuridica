@@ -1,19 +1,13 @@
-//Axios
 import axios from 'api/axios';
-//Prime react
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
-import { FilterMatchMode, FilterOperator } from 'primereact/api';
+import { FilterMatchMode } from 'primereact/api';
 import { InputText } from 'primereact/inputtext';
-//MaterialUI
 import { Button } from '@mui/material';
-//SweetAlert
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
-//React
 import { useEffect, useState } from 'react';
 import { useAuth } from 'context/authContext';
-//Sonner
 import { Toaster, toast } from 'sonner';
 import ModalReasignacion from './ModalReasignacion';
 
@@ -24,41 +18,25 @@ function Preasignaciones() {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState(null);
   const [filters, setFilters] = useState({
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    'id_asunto.nombre_asunto': {
-      operator: FilterOperator.AND,
-      constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }]
-    },
-    numero_radicado: {
-      operator: FilterOperator.AND,
-      constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }]
-    },
-    representative: { value: null, matchMode: FilterMatchMode.IN },
-    observaciones_radicado: {
-      operator: FilterOperator.OR,
-      constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }]
-    }
+    global: { value: null, matchMode: FilterMatchMode.EQUALS }
   });
-  useEffect(() => {
-    {
-      user && getAllPreasignaciones();
-    }
 
-    const intervalId = setInterval(getAllPreasignaciones, 5000);
-    return () => clearInterval(intervalId);
+  useEffect(() => {
+    if (user) {
+      getAllPreasignaciones();
+    }
   }, [user]);
 
-  //Abrir modal
   const handleOpen = (data) => {
     setSelectedData(data);
     setOpen(true);
   };
-  //Cerrar modal
+
   const handleClose = () => {
     setSelectedData([]);
     setOpen(false);
   };
-  //Mostrar todas las peticiones pre-asignadas
+
   const getAllPreasignaciones = async () => {
     try {
       const response = await axios.get(`/radicadoState/${user.departamento._id}`);
@@ -71,33 +49,39 @@ function Preasignaciones() {
       }
     }
   };
-  //Actualizar a estado pendiente
-  const updateStatePreasignacion = async (pre) => {
+
+  const updateStatePreasignacion = async (preData) => {
     const MySwal = withReactContent(Swal);
 
     const alert = await MySwal.fire({
-      title: '¿Está seguro de aceptar esta petición?',
+      title: '¿Está seguro de aceptar estas peticiones?',
       icon: 'question',
       showCancelButton: true,
       confirmButtonText: 'Sí, modificar',
       cancelButtonText: 'Cancelar'
     });
+
     if (alert.isConfirmed) {
       try {
-        await axios.put(`/radicados/radicadosPre/`, {
-          _id: pre
-        });
-        toast.success('Petición aceptada correctamente');
+        // Ejecuta todas las solicitudes PUT en paralelo
+        const updatePromises = preData.map((pre) => axios.put(`/radicados/radicadosPre/`, { _id: pre._id }));
+        await Promise.all(updatePromises);
+        // Crea un Set con los IDs actualizados para un filtrado más eficiente
+        const updatedIds = new Set(preData.map((pre) => pre._id));
+        // Filtra los elementos actualizados fuera de la lista de manera eficiente
+        const nuevaData = data.filter((item) => !updatedIds.has(item._id));
+        setData(nuevaData);
+        toast.success('Peticiones aceptadas correctamente');
+        setSelectedData([]);
       } catch (error) {
-        console.error('Error al actualizar el estado de la petición:', error);
-        toast.error('Error al aceptar la petición');
+        console.error('Error al actualizar el estado de las peticiones:', error);
+        toast.error('Error al aceptar las peticiones');
       }
     } else {
-      toast.error('No se aceptó la petición');
+      toast.error('No se aceptaron las peticiones');
     }
   };
 
-  //Buscador
   const onGlobalFilterChange = (event) => {
     const value = event.target.value;
     let _filters = { ...filters };
@@ -110,7 +94,6 @@ function Preasignaciones() {
   const renderHeader = () => {
     const value = filters['global'] ? filters['global'].value : '';
 
-    //Input buscar, botones rechazar y aceptar
     return (
       <>
         <InputText type="search" value={value || ''} onChange={(e) => onGlobalFilterChange(e)} placeholder="Buscar" />
@@ -119,7 +102,6 @@ function Preasignaciones() {
             <Button className="card2 ml-5" size="small" variant="contained" onClick={() => updateStatePreasignacion(selectedData)}>
               Aceptar
             </Button>
-
             <Button className="card4 ms-3" size="small" variant="contained" onClick={() => handleOpen(selectedData)} disabled>
               Rechazar
             </Button>

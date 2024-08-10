@@ -9,7 +9,7 @@ import { Toaster, toast } from 'sonner';
 import { useAuth } from 'context/authContext';
 import { useForm } from 'react-hook-form';
 
-function UsuariosJuridica({ dataRadicados }) {
+function UsuariosJuridica({ dataRadicados, data, setDataApi, setSelected }) {
   const [users, setUsers] = useState([]);
   const [usuario, setUsuario] = useState('');
   const { user } = useAuth();
@@ -51,8 +51,15 @@ function UsuariosJuridica({ dataRadicados }) {
 
   const actualizacionEstado = async () => {
     try {
-      await axios.put(`/radicados`, { _id: dataRadicados });
+      const updateState = dataRadicados.map((pre) => axios.put(`/radicados`, { _id: pre._id }));
+      await Promise.all(updateState);
+
+      const updatedIds = new Set(dataRadicados.map((pre) => pre._id));
+      const nuevaData = data.filter((item) => !updatedIds.has(item._id));
+      setDataApi(nuevaData);
+
       toast.success('Estado actualizado correctamente');
+      setSelected([]);
     } catch (error) {
       toast.error('Error al actualizar estado');
       console.error(error);
@@ -118,7 +125,10 @@ function UsuariosJuridica({ dataRadicados }) {
 }
 
 UsuariosJuridica.propTypes = {
-  dataRadicados: PropTypes.array
+  dataRadicados: PropTypes.array,
+  setDataApi: PropTypes.func,
+  data: PropTypes.array,
+  setSelected: PropTypes.func
 };
 
 export default UsuariosJuridica;

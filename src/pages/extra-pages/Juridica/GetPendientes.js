@@ -32,13 +32,10 @@ export default function GetPendientes() {
   });
 
   useEffect(() => {
-    dataApiRest();
-
-    const intervalId = setInterval(dataApiRest, 5000);
-    return () => clearInterval(intervalId);
+    allPending();
   }, []);
 
-  const dataApiRest = async () => {
+  const allPending = async () => {
     try {
       const response = await axios.get(`/radicados/depjuridica_radicados/${user.departamento._id}`);
       setDataApi(response.data);
@@ -84,7 +81,7 @@ export default function GetPendientes() {
             />
           </div>
           <div className="col-6">
-            <UsuariosJuridica dataRadicados={selected} />
+            <UsuariosJuridica dataRadicados={selected} data={dataApi} setDataApi={setDataApi} setSelected={setSelected} />
           </div>
         </div>
       </>

@@ -4,6 +4,7 @@ import { useAuth } from 'context/authContext';
 
 // third party
 import { Formik } from 'formik';
+import LoaderComponent from 'components/LoaderComponent';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
@@ -23,7 +24,7 @@ const AuthLogin = () => {
   return (
     <>
       <Formik>
-        <h1>Cargando...</h1>
+        <LoaderComponent />
       </Formik>
     </>
   );
