@@ -17,10 +17,6 @@ const LoginRoutes = {
       path: '/',
       children: [
         {
-          path: '/',
-          element: <AuthLogin />
-        },
-        {
           path: 'login',
           element: <AuthLogin />
         },

@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../../context/authContext';
-import { useNavigate } from 'react-router-dom';
 
 // material-ui
 import {
@@ -33,12 +32,8 @@ import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 const AuthRegister = () => {
   const [level, setLevel] = useState();
   const [showPassword, setShowPassword] = useState(false);
-  const { signup, isAuthenticated } = useAuth();
-  const navigate = useNavigate();
+  const { signup } = useAuth();
 
-  useEffect(() => {
-    if (isAuthenticated) navigate('/login');
-  }, [isAuthenticated]);
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };

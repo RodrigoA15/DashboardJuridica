@@ -3,31 +3,15 @@ import { useRef, useState } from 'react';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import {
-  Box,
-  ButtonBase,
-  CardContent,
-  ClickAwayListener,
-  Grid,
-  IconButton,
-  Paper,
-  Popper,
-  Stack,
-  Tab,
-  Tabs,
-  Typography
-} from '@mui/material';
+import { Box, ButtonBase, CardContent, ClickAwayListener, Grid, Paper, Popper, Stack, Typography } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 // project import
 import MainCard from 'components/MainCard';
 import Transitions from 'components/@extended/Transitions';
-import ProfileTab from './ProfileTab';
-import SettingTab from './SettingTab';
 import { useAuth } from 'context/authContext';
 // assets
-import { LogoutOutlined, UserOutlined } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
-import { Navigate } from '../../../../../../node_modules/react-router-dom/dist/index';
+import { Button } from '../../../../../../node_modules/@mui/material/index';
+import LoaderComponent from 'components/LoaderComponent';
 
 // tab panel wrapper
 function TabPanel({ children, value, index, ...other }) {
@@ -44,13 +28,6 @@ TabPanel.propTypes = {
   value: PropTypes.any.isRequired
 };
 
-function a11yProps(index) {
-  return {
-    id: `profile-tab-${index}`,
-    'aria-controls': `profile-tabpanel-${index}`
-  };
-}
-
 // ==============================|| HEADER CONTENT - PROFILE ||============================== //
 
 const Profile = () => {
@@ -59,6 +36,7 @@ const Profile = () => {
   const handleLogout = async () => {
     // Lógica para el logout aquí
     logout();
+    window.location.replace('http://localhost:5174/login');
   };
 
   const anchorRef = useRef(null);
@@ -72,12 +50,6 @@ const Profile = () => {
       return;
     }
     setOpen(false);
-  };
-
-  const [value, setValue] = useState(0);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
   };
 
   const iconBackColorOpen = 'grey.300';
@@ -99,7 +71,7 @@ const Profile = () => {
       >
         <Stack direction="row" spacing={2} alignItems="center" sx={{ p: 0.5 }}>
           <AccountCircleIcon />
-          <Typography variant="subtitle1">{user !== null ? user.username : <Navigate to="/login" />}</Typography>
+          <Typography variant="subtitle1">{user !== null ? user.username : <LoaderComponent />}</Typography>
         </Stack>
       </ButtonBase>
       <Popper
@@ -135,67 +107,29 @@ const Profile = () => {
                 }}
               >
                 <ClickAwayListener onClickAway={handleClose}>
-                  <MainCard elevation={0} border={false} content={false}>
-                    <CardContent sx={{ px: 2.5, pt: 3 }}>
-                      <Grid container justifyContent="space-between" alignItems="center">
-                        <Grid item>
-                          <Stack direction="row" spacing={1.25} alignItems="center">
-                            <Stack>
-                              <Typography variant="h6">{user.username}</Typography>
-                              <Typography variant="body2" color="textSecondary">
-                                {user.role.nombre_rol}
-                              </Typography>
+                  {user !== null ? (
+                    <MainCard elevation={0} border={false} content={false}>
+                      <CardContent sx={{ px: 2.5, pt: 3 }}>
+                        <Grid container justifyContent="space-between" alignItems="center">
+                          <Grid item>
+                            <Stack direction="row" spacing={1.25} alignItems="center">
+                              <Stack>
+                                <Typography variant="h6">{user.username}</Typography>
+                                <Typography variant="body2" color="textSecondary">
+                                  {user.role.nombre_rol}
+                                </Typography>
+                              </Stack>
                             </Stack>
-                          </Stack>
+                          </Grid>
+                          <Grid item>
+                            <Button onClick={handleLogout}>Cerrar</Button>
+                          </Grid>
                         </Grid>
-                        <Grid item>
-                          <Link to="/login" onClick={handleLogout}>
-                            <IconButton size="large" color="secondary">
-                              <LogoutOutlined />
-                            </IconButton>
-                          </Link>
-                        </Grid>
-                      </Grid>
-                    </CardContent>
-                    {open && (
-                      <>
-                        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                          <Tabs variant="fullWidth" value={value} onChange={handleChange} aria-label="profile tabs">
-                            <Tab
-                              sx={{
-                                display: 'flex',
-                                flexDirection: 'row',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                textTransform: 'capitalize'
-                              }}
-                              icon={<UserOutlined style={{ marginBottom: 0, marginRight: '10px' }} />}
-                              label="Perfil"
-                              {...a11yProps(0)}
-                            />
-                            {/* <Tab
-                              sx={{
-                                display: 'flex',
-                                flexDirection: 'row',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                textTransform: 'capitalize'
-                              }}
-                              icon={<SettingOutlined style={{ marginBottom: 0, marginRight: '10px' }} />}
-                              label="Setting"
-                              {...a11yProps(1)}
-                            /> */}
-                          </Tabs>
-                        </Box>
-                        <TabPanel value={value} index={0} dir={theme.direction}>
-                          <ProfileTab handleLogout={handleLogout} />
-                        </TabPanel>
-                        <TabPanel value={value} index={1} dir={theme.direction}>
-                          <SettingTab />
-                        </TabPanel>
-                      </>
-                    )}
-                  </MainCard>
+                      </CardContent>
+                    </MainCard>
+                  ) : (
+                    <LoaderComponent />
+                  )}
                 </ClickAwayListener>
               </Paper>
             )}

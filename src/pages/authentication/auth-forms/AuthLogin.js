@@ -17,7 +17,7 @@ const AuthLogin = () => {
       navigate('/dashboard/default');
     } else {
       // navigate('/unauthorized');
-      window.location.replace('http://localhost:5173/login');
+      window.location.replace('http://localhost:5174/login');
     }
   }, [isAuthenticated]);
 
