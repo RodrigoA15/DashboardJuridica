@@ -1,5 +1,5 @@
 // material-ui
-import { Box, Grid, Stack, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 
 // project import
 import MainCard from 'components/MainCard';
@@ -12,15 +12,16 @@ import AnalyticPQRSPendientes from 'components/cards/statistics/AnalyticPQRSPend
 import ChartEntidad from './ChartEntidad';
 import RadicadosChart from './RadicadosChart';
 import CanalEntradaChart from './CanalEntradaChart';
-import JsonToFileExcel from 'pages/components-overview/Radicados/JsonToXLSX';
+// import JsonToFileExcel from 'pages/components-overview/Radicados/JsonToXLSX';
 import ChartDepartamentos from './ChartDepartamentos';
 import AnalyticDesacatos from 'components/cards/statistics/AnalyticDesacatos';
 import AnalyticTutelas from 'components/cards/statistics/AnalyticTutelas';
 import AnalyticCourts from 'components/cards/statistics/AnalyticCourts';
 import AnalyticPQRSSecretaria from 'components/cards/statistics/AnalyticPQRSSecretaria';
-import RadicadosExcel from 'pages/components-overview/Radicados/radicadosExcel';
+// import RadicadosExcel from 'pages/components-overview/Radicados/radicadosExcel';
 import IndexTipoAsunto from 'pages/components-overview/TipoAsunto/index';
 import { Parameters } from 'hooks/useParameters';
+import TablaVencidas from './TablaVencidas';
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
 const DashboardDefault = () => {
@@ -63,16 +64,14 @@ const DashboardDefault = () => {
       <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
 
       {/* row 2 */}
-      <Grid item xs={12} md={7} lg={8}>
+      <Grid item xs={12} md={5} lg={4}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
             <Typography variant="h5">Respuestas por mes</Typography>
           </Grid>
         </Grid>
         <MainCard content={false} sx={{ mt: 1.5 }}>
-          <Box sx={{ pt: 1, pr: 2 }}>
-            <RadicadosChart />
-          </Box>
+          <RadicadosChart />
         </MainCard>
       </Grid>
 
@@ -100,7 +99,7 @@ const DashboardDefault = () => {
         <MainCard sx={{ mt: 2 }} content={false}>
           <ChartEntidad />
         </MainCard>
-        <Grid item>
+        {/* <Grid item>
           <Typography variant="h5">Exportar informacion radicados </Typography>
         </Grid>
         <MainCard sx={{ mt: 2 }} content={false}>
@@ -123,11 +122,23 @@ const DashboardDefault = () => {
               </div>
             </div>
           </Stack>
+        </MainCard> */}
+      </Grid>
+
+      <Grid item xs={12} md={7} lg={8}>
+        <Grid container alignItems="center" justifyContent="space-between">
+          <Grid item>
+            <Typography variant="h5">PQRS vencidas</Typography>
+          </Grid>
+          <Grid item />
+        </Grid>
+        <MainCard content={false} sx={{ mt: 1.5 }}>
+          <TablaVencidas />
         </MainCard>
       </Grid>
 
       {/* row 4 */}
-      <Grid item xs={12} md={7} lg={8}>
+      <Grid item xs={12} md={5} lg={4}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
             <Typography variant="h5">Tipo asunto</Typography>
