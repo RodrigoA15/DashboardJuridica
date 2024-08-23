@@ -10,6 +10,7 @@ import Index from 'pages/admin/Asunto/index';
 import IndexCE from 'pages/admin/CanalEntrada/index';
 import IndexResumen from 'pages/admin/Resumen/index';
 import TabViewComponent from 'pages/admin/Radicados/index';
+import IndexParametros from 'pages/admin/Parametros/index';
 // render - dashboard
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
 
@@ -70,6 +71,10 @@ const MainRoutes = {
     {
       path: 'resumenAdmin',
       element: <IndexResumen />
+    },
+    {
+      path: 'parameters',
+      element: <IndexParametros />
     }
   ]
 };

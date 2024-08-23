@@ -9,6 +9,8 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { Button } from '@mui/material';
 import { useAuth } from 'context/authContext';
+import ModalComponent from './ImportFile/modal';
+import { Parameters } from 'hooks/useParameters';
 function ComponentRadicados() {
   const {
     register,
@@ -29,7 +31,7 @@ function ComponentRadicados() {
   const onSubmit = handleSubmit((data) => {
     createRadicado(data);
   });
-
+  const { parameters } = Parameters();
   const createRadicado = async (data) => {
     try {
       const datos = {
@@ -172,6 +174,16 @@ function ComponentRadicados() {
                   Registrar
                 </button>
               </div>
+
+              {parameters.map(
+                (parametro) =>
+                  parametro.nombre_parametro === 'Importar archivo' &&
+                  parametro.activo === true && (
+                    <div className="col-3" key={parametro._id}>
+                      <ModalComponent />
+                    </div>
+                  )
+              )}
             </div>
           </form>
 

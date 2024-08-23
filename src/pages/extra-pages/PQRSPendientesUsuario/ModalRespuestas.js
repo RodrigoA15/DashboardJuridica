@@ -10,7 +10,8 @@ import PropTypes from 'prop-types';
 import PDFViewer from './PDFViewer';
 import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-
+import IndexTypesAffairs from './ActualizarAsunto/index';
+import { Parameters } from 'hooks/useParameters';
 const style = {
   position: 'absolute',
   top: '50%',
@@ -30,6 +31,7 @@ function ModalRespuestas({ open, handleClose, data }) {
     handleSubmit,
     reset
   } = useForm({ mode: 'onChange' });
+  const [valueAffair, setValueAffair] = useState(null);
   const [url, setUrl] = useState('');
   const [urlFile, setUrlFile] = useState('');
   const onDrop = useCallback((acceptedFiles) => {
@@ -42,6 +44,10 @@ function ModalRespuestas({ open, handleClose, data }) {
       'text/pdf': ['.pdf']
     }
   });
+
+  const { parameters } = Parameters();
+
+  const parametroActivo = parameters.some((parametro) => parametro.nombre_parametro === 'Asuntos respuesta' && parametro.activo === true);
 
   const MySwal = withReactContent(Swal);
 
@@ -58,7 +64,12 @@ function ModalRespuestas({ open, handleClose, data }) {
     });
 
     if (alert.isConfirmed) {
-      await crearRespuesta(num);
+      if (parametroActivo) {
+        await crearRespuesta(num);
+        await updateAffair();
+      } else {
+        await crearRespuesta(num);
+      }
     } else {
       toast.error('Respuesta Cancelada');
     }
@@ -74,13 +85,23 @@ function ModalRespuestas({ open, handleClose, data }) {
       formData.append('respuesta_pdf', urlFile);
       formData.append('fechaRespuesta', new Date());
       const config = { headers: { 'Content-Type': 'multipart/form-data' } };
-
       await axios.post('/answer', formData, config);
       toast.success('Respuesta Agregada');
       setUrl('');
       handleClose();
     } catch (error) {
       toast.error(error.response.data);
+    }
+  };
+
+  //Funcion actualizar asunto de la peticion (Atlantico)
+  const updateAffair = async () => {
+    try {
+      await axios.put(`/typeAffair/${data.id_radicado._id}`, {
+        id_asunto: valueAffair
+      });
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -111,6 +132,10 @@ function ModalRespuestas({ open, handleClose, data }) {
                 />
                 {errors.numero_radicado_respuesta && <span className="inputForm ">{errors.numero_radicado_respuesta.message}</span>}
               </div>
+              {parameters.some((parametro) => parametro.nombre_parametro === 'Asuntos respuesta' && parametro.activo === true) && (
+                <IndexTypesAffairs setValueAffair={setValueAffair} />
+              )}
+
               <div
                 className="mb-3"
                 {...getRootProps()}

@@ -19,10 +19,12 @@ import AnalyticTutelas from 'components/cards/statistics/AnalyticTutelas';
 import AnalyticCourts from 'components/cards/statistics/AnalyticCourts';
 import AnalyticPQRSSecretaria from 'components/cards/statistics/AnalyticPQRSSecretaria';
 import RadicadosExcel from 'pages/components-overview/Radicados/radicadosExcel';
-
+import IndexTipoAsunto from 'pages/components-overview/TipoAsunto/index';
+import { Parameters } from 'hooks/useParameters';
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
 const DashboardDefault = () => {
+  const { parameters } = Parameters();
   return (
     <Grid container rowSpacing={4.5} columnSpacing={2.75}>
       {/* row 1 */}
@@ -128,11 +130,15 @@ const DashboardDefault = () => {
       <Grid item xs={12} md={7} lg={8}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
-            <Typography variant="h5">Canales de entrada</Typography>
+            <Typography variant="h5">Tipo asunto</Typography>
           </Grid>
         </Grid>
         <MainCard sx={{ mt: 1.75 }}>
-          <CanalEntradaChart />
+          {parameters.some((parametro) => parametro.nombre_parametro === 'Tabla asuntos' && parametro.activo === true) ? (
+            <IndexTipoAsunto />
+          ) : (
+            <CanalEntradaChart />
+          )}
         </MainCard>
       </Grid>
     </Grid>
