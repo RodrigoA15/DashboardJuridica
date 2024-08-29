@@ -3,6 +3,7 @@ import { Grid, Typography } from '@mui/material';
 import ChartEntidadAdmin from './chart';
 import ChartArea from './chartArea';
 import ChartEstados from './chartEstados';
+import { ChartPQRSmonth } from './chartPQRSmonth';
 
 function IndexResumen() {
   return (
@@ -38,6 +39,17 @@ function IndexResumen() {
         </Grid>
         <MainCard content={false} sx={{ mt: 1.5 }}>
           <ChartEntidadAdmin />
+        </MainCard>
+      </Grid>
+
+      <Grid item xs={8} md={5}>
+        <Grid container alignItems="center" justifyContent="space-between">
+          <Grid item>
+            <Typography variant="h5">Resumen</Typography>
+          </Grid>
+        </Grid>
+        <MainCard content={false} sx={{ mt: 1.5 }}>
+          <ChartPQRSmonth />
         </MainCard>
       </Grid>
     </Grid>

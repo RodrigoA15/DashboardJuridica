@@ -1,5 +1,7 @@
 // material-ui
-import logo from '../../assets/images/auth/LogoConcesion.webp';
+import logoConcesion from '../../assets/images/auth/LogoConcesion.webp';
+import logoAtlantico from '../../assets/images/auth/LogoAtlantico.webp';
+import { Parameters } from 'hooks/useParameters';
 
 /**
  * if you want to use image instead of <svg> uncomment following.
@@ -12,14 +14,21 @@ import logo from '../../assets/images/auth/LogoConcesion.webp';
 // ==============================|| LOGO SVG ||============================== //
 
 const Logo = () => {
+  const { parameters } = Parameters();
   return (
     /**
      * if you want to use image instead of svg uncomment following, and comment out <svg> element.
      *
-     *<img src={logo} alt="Mantis" width="100" />
+   
      *
      */
-    <img src={logo} alt="Consecion" width="60%" height="60%" />
+    <>
+      {parameters.some((parametro) => parametro.nombre_parametro === 'Logo Atlantico' && parametro.activo === true) ? (
+        <img src={logoAtlantico} alt="Consecion" width="60%" height="60%" />
+      ) : (
+        <img src={logoConcesion} alt="atlantico" width="60%" height="60%" />
+      )}
+    </>
   );
 };
 
