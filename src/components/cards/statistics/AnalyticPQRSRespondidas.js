@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import MainCard from 'components/MainCard';
-import { Grid, Stack, Typography } from '@mui/material';
 import axios from 'api/axios';
-import { Toaster, toast } from 'sonner';
-import { meses } from 'data/meses';
+import { toast } from 'sonner';
+
+import { Card } from '../Card';
 function AnalyticPQRSRespondidas() {
   const [answers, setAnswers] = useState([]);
 
@@ -24,25 +23,10 @@ function AnalyticPQRSRespondidas() {
     }
   };
 
-  const mes = new Date().getMonth();
+  const count = answers.map((answer) => answer.count);
   return (
     <div>
-      <Toaster position="top-right" richColors expand={true} offset="80px" />
-
-      <MainCard contentSX={{ p: 2.25 }} className="card2">
-        <Stack spacing={0.5}>
-          <Typography style={{ margin: 'auto' }} variant="h6" color="textSecondary">
-            PQRS Respondidas - {meses[mes]}
-          </Typography>
-          <Grid container alignItems="center">
-            <Grid item style={{ margin: 'auto' }}>
-              <Typography variant="h3" color="inherit">
-                {answers.map((answer) => answer.count)}
-              </Typography>
-            </Grid>
-          </Grid>
-        </Stack>
-      </MainCard>
+      <Card description="PQRS Respondidas" value={count} color="card2" />
     </div>
   );
 }

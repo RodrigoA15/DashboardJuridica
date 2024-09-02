@@ -7,7 +7,7 @@ export const meses = [
   'Junio',
   'Julio',
   'Agosto',
-  'Setiembre',
+  'Septiembre',
   'Octubre',
   'Noviembre',
   'Diciembre'

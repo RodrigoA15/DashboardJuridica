@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import MainCard from 'components/MainCard';
-import { Grid, Stack, Typography } from '@mui/material';
 import axios from 'api/axios';
-import { Toaster, toast } from 'sonner';
+import { toast } from 'sonner';
+import { Card } from '../Card';
 
 function AnalyticPQRSPendientes() {
   const [count, setCount] = useState(0);
@@ -27,22 +26,7 @@ function AnalyticPQRSPendientes() {
 
   return (
     <div>
-      <Toaster position="top-right" richColors expand={true} offset="80px" />
-
-      <MainCard contentSX={{ p: 2.25 }} className="card4">
-        <Stack spacing={0.5}>
-          <Typography style={{ margin: 'auto' }} variant="h6" color="textSecondary">
-            PQRS sin asignar
-          </Typography>
-          <Grid container alignItems="center">
-            <Grid item style={{ margin: 'auto' }}>
-              <Typography variant="h3" color="inherit">
-                {count}
-              </Typography>
-            </Grid>
-          </Grid>
-        </Stack>
-      </MainCard>
+      <Card description="PQRS sin asignar" value={count} color="card4" />
     </div>
   );
 }

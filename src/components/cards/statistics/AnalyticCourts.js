@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'api/axios';
-import { Toaster, toast } from 'sonner';
-import MainCard from 'components/MainCard';
-import { Grid, Stack, Typography } from '@mui/material';
-import { meses } from 'data/meses';
+import { toast } from 'sonner';
+import { Card } from '../Card';
+
 function AnalyticCourts() {
   const [courtData, setCourtData] = useState([]);
 
@@ -24,26 +23,12 @@ function AnalyticCourts() {
     }
   };
 
-  const mesActual = new Date();
-  return (
-    <div>
-      <Toaster position="top-right" richColors expand={true} offset="80px" />
+  const count = courtData.map((item) => item.count);
 
-      <MainCard contentSX={{ p: 2.25 }} className="cardEntidad">
-        <Stack spacing={0.5}>
-          <Typography style={{ margin: 'auto' }} variant="h6" color="textSecondary">
-            PQRS Entidades Juridicas - {meses[mesActual.getMonth()]}
-          </Typography>
-          <Grid container alignItems="center">
-            <Grid item style={{ margin: 'auto' }}>
-              <Typography variant="h3" color="inherit">
-                {courtData.map((count) => count.count)}
-              </Typography>
-            </Grid>
-          </Grid>
-        </Stack>
-      </MainCard>
-    </div>
+  return (
+    <>
+      <Card value={count} description="PQRS Entidades Juridicas" color="card2" />
+    </>
   );
 }
 

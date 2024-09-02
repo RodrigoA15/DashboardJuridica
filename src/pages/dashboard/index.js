@@ -17,24 +17,30 @@ import ChartDepartamentos from './ChartDepartamentos';
 import AnalyticDesacatos from 'components/cards/statistics/AnalyticDesacatos';
 import AnalyticTutelas from 'components/cards/statistics/AnalyticTutelas';
 import AnalyticCourts from 'components/cards/statistics/AnalyticCourts';
-import AnalyticPQRSSecretaria from 'components/cards/statistics/AnalyticPQRSSecretaria';
+
 // import RadicadosExcel from 'pages/components-overview/Radicados/radicadosExcel';
 import IndexTipoAsunto from 'pages/components-overview/TipoAsunto/index';
 import { Parameters } from 'hooks/useParameters';
 import TablaVencidas from './TablaVencidas';
+import { CreadasApi } from './creadasApi';
+
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
 const DashboardDefault = () => {
   const { parameters } = Parameters();
+  const { data } = CreadasApi();
+
   return (
     <Grid container rowSpacing={4.5} columnSpacing={2.75}>
       {/* row 1 */}
       <Grid item xs={12} sx={{ mb: -2.25 }}>
         <Typography variant="h5">Dashboard</Typography>
       </Grid>
-      <Grid item xs={12} sm={6} md={4} lg={3}>
-        <AnalyticPQRSCreadas />
-      </Grid>
+      {data.map((item) => (
+        <Grid item xs={12} sm={6} md={4} lg={3} key={item.entidad}>
+          <AnalyticPQRSCreadas description={item.entidad} value={item.count} />
+        </Grid>
+      ))}
       <Grid item xs={12} sm={6} md={4} lg={3}>
         <AnalyticPQRSPendientes />
       </Grid>
@@ -55,10 +61,6 @@ const DashboardDefault = () => {
 
       <Grid item xs={12} sm={6} md={4} lg={3}>
         <AnalyticCourts />
-      </Grid>
-
-      <Grid item xs={12} sm={6} md={4} lg={3}>
-        <AnalyticPQRSSecretaria />
       </Grid>
 
       <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
