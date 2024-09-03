@@ -23,6 +23,7 @@ import IndexTipoAsunto from 'pages/components-overview/TipoAsunto/index';
 import { Parameters } from 'hooks/useParameters';
 import TablaVencidas from './TablaVencidas';
 import { CreadasApi } from './creadasApi';
+import { GraficaTipoAsunto } from './Tipo_asunto/GraficaTipo_asunto';
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
@@ -86,7 +87,11 @@ const DashboardDefault = () => {
         </Grid>
 
         <MainCard sx={{ mt: 2 }} content={false}>
-          <ChartDepartamentos />
+          {parameters.some((parametro) => parametro.nombre_parametro === 'Tabla asuntos' && parametro.activo === true) ? (
+            <GraficaTipoAsunto />
+          ) : (
+            <ChartDepartamentos />
+          )}
         </MainCard>
       </Grid>
 
