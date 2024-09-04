@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import axios from 'api/axios';
 
 export const Parameters = () => {
@@ -8,14 +8,17 @@ export const Parameters = () => {
     getParametersApi();
   }, []);
 
-  const getParametersApi = async () => {
-    try {
-      const response = await axios.get('/parameters');
-      setDataParameters(response.data);
-    } catch (error) {
-      console.error('Error fetching parameters:', error);
-    }
-  };
+  const getParametersApi = useMemo(
+    () => async () => {
+      try {
+        const response = await axios.get('/parameters');
+        setDataParameters(response.data);
+      } catch (error) {
+        console.error('Error fetching parameters:', error);
+      }
+    },
+    []
+  );
 
   const parameters = dataParameters.map((item) => item);
 

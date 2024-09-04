@@ -2,9 +2,11 @@ import { useEffect, useMemo, useState } from 'react';
 import axios from 'api/axios';
 export const ApiAsunto = () => {
   const [data, setData] = useState([]);
+  const [dataMes, setDataMes] = useState([]);
 
   useEffect(() => {
     getTipoAsuntos();
+    getTipoAsuntosMes();
   }, []);
 
   const getTipoAsuntos = useMemo(
@@ -19,5 +21,16 @@ export const ApiAsunto = () => {
     []
   );
 
-  return { data };
+  const getTipoAsuntosMes = useMemo(
+    () => async () => {
+      try {
+        const response = await axios.get('/typification/month');
+        setDataMes(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    []
+  );
+  return { data, dataMes };
 };

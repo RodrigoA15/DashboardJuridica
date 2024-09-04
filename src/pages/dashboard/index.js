@@ -24,6 +24,7 @@ import { Parameters } from 'hooks/useParameters';
 import TablaVencidas from './TablaVencidas';
 import { CreadasApi } from './creadasApi';
 import { GraficaTipoAsunto } from './Tipo_asunto/GraficaTipo_asunto';
+import { GraficaTAMes } from './Tipo_asunto/GraficaTAMes';
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
@@ -104,7 +105,11 @@ const DashboardDefault = () => {
           <Grid item />
         </Grid>
         <MainCard sx={{ mt: 2 }} content={false}>
-          <ChartEntidad />
+          {parameters.some((parametro) => parametro.nombre_parametro === 'Tabla asuntos' && parametro.activo === true) ? (
+            <GraficaTAMes />
+          ) : (
+            <ChartEntidad />
+          )}
         </MainCard>
         {/* <Grid item>
           <Typography variant="h5">Exportar informacion radicados </Typography>
