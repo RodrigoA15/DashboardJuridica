@@ -14,7 +14,7 @@ function AnalyticDesacatos() {
   const apiAsuntos = async () => {
     try {
       const response = await axios.get('/radicados/chartasuntos');
-      setData(response.data);
+      setData(response.data);   
     } catch (error) {
       if (error.response && error.response.status === 404) {
         toast.error('No hay Desacatos');
@@ -24,14 +24,11 @@ function AnalyticDesacatos() {
     }
   };
 
-  const countTutelas = data.filter((asuntos) => asuntos.id_asunto.tipo_asunto === '3').length;
-  const alertTutelas = data.filter((asuntos) => asuntos.id_asunto.tipo_asunto === '3');
+  const tutelas = data.filter((asuntos) => asuntos.tipo_asunto === '3');
+  const countTutelas = tutelas.length;
 
-  const alertDesacatos = async () => {
-    const dataDesacatos = alertTutelas.map((i) => {
-      return `${i.numero_radicado} - ${i.estado_radicado}`;
-    });
-
+  const alertDesacatos = () => {
+    const dataDesacatos = tutelas.map((i) => `${i.numero_radicado} - ${i.estado_radicado}`);
     alert(dataDesacatos.join('\n'));
   };
 

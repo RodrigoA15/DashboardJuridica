@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'api/axios';
 import ReactApexChart from 'react-apexcharts';
-import { Toaster, toast } from 'sonner';
+import { toast } from 'sonner';
 
 function RadicadosChart() {
   const dia = new Date();
@@ -104,14 +104,12 @@ function RadicadosChart() {
 
   return (
     <div id="chart">
-      <Toaster position="top-right" richColors expand={true} offset="80px" />
-
       <div className="row m-1">
         <div className="col">
-          <input className="form-control" type="date" onChange={handleFechaInicio} />
+          <input className="form-control" type="date" onChange={handleFechaInicio} aria-label="Search" />
         </div>
         <div className="col">
-          <input className="form-control" type="date" onChange={handleFechaFin} />
+          <input className="form-control" type="date" onChange={handleFechaFin} aria-label="Search" />
         </div>
         <div className="col">
           <button className="btn btn-primary" onClick={apiChartRadicados}>

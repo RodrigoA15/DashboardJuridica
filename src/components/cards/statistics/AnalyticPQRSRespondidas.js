@@ -26,7 +26,7 @@ function AnalyticPQRSRespondidas() {
   const count = answers.map((answer) => answer.count);
   return (
     <div>
-      <Card description="PQRS Respondidas" value={count} color="card2" />
+      <Card description="PQRS respondidas" value={count} color="card2" />
     </div>
   );
 }

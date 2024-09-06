@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import axios from 'api/axios';
 import PropTypes from 'prop-types';
 import GetDepartamentos from '../Departamento/GetDepartamentos';
 
-function GetEntidad({ register, errors, setIdDepartamento, id_departamento }) {
+const GetEntidad = memo(({ register, errors, setIdDepartamento, id_departamento }) => {
   const [dataEntidad, setDataEntidad] = useState([]);
   const [idEntidadSeleccionada, setIdEntidadSeleccionada] = useState('');
 
@@ -54,7 +54,7 @@ function GetEntidad({ register, errors, setIdDepartamento, id_departamento }) {
       />
     </div>
   );
-}
+});
 
 GetEntidad.propTypes = {
   register: PropTypes.func.isRequired

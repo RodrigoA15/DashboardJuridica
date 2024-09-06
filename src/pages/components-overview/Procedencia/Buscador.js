@@ -134,7 +134,7 @@ function Buscador({ setProcedencia, setNameCourt, nameCourt, setJuzgados }) {
           </div>
 
           {/* Campos de entrada*/}
-          {entrada === true && (
+          {entrada && (
             <div>
               {procedenciaData.map((i) => (
                 <div key={i._id} className="row">
@@ -181,7 +181,7 @@ function Buscador({ setProcedencia, setNameCourt, nameCourt, setJuzgados }) {
           )}
 
           <div>
-            {entrada === false && (
+            {!entrada && (
               <form onSubmit={onSubmit}>
                 <div className="row">
                   <div className="col-4">

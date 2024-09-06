@@ -25,14 +25,11 @@ function AnalyticTutelas() {
     }
   };
 
-  const countTutelas = data.filter((asuntos) => asuntos.id_asunto.tipo_asunto === '2').length;
-  const dataTutelas = data.filter((asuntos) => asuntos.id_asunto.tipo_asunto === '2');
+  const countTutelas = data.filter((asuntos) => asuntos.tipo_asunto === '2');
+  const dataTutelas = countTutelas.length;
 
-  const alertTutelas = async () => {
-    const dataDesacatos = dataTutelas.map((i) => {
-      return `${i.numero_radicado} - ${i.estado_radicado}`;
-    });
-
+  const alertTutelas = () => {
+    const dataDesacatos = countTutelas.map((i) => `${i.numero_radicado} - ${i.estado_radicado}`);
     alert(dataDesacatos.join('\n'));
   };
 
@@ -40,7 +37,7 @@ function AnalyticTutelas() {
     <div>
       <Toaster position="top-right" richColors expand={true} offset="80px" />
 
-      <MainCard contentSX={{ p: 2.25 }} className={countTutelas > 0 ? 'blinking' : 'cardTutelas'} onClick={() => alertTutelas()}>
+      <MainCard contentSX={{ p: 2.25 }} className={dataTutelas > 0 ? 'blinking' : 'cardTutelas'} onClick={() => alertTutelas()}>
         <Stack spacing={0.5}>
           <Typography style={{ margin: 'auto' }} variant="h6" color="textSecondary">
             Tutelas
@@ -51,7 +48,7 @@ function AnalyticTutelas() {
             ) : (
               <Grid item style={{ margin: 'auto' }}>
                 <Typography variant="h3" color="inherit">
-                  {countTutelas}
+                  {dataTutelas}
                 </Typography>
               </Grid>
             )}

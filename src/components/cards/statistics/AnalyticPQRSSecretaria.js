@@ -25,9 +25,9 @@ const AnalyticPQRSSecretaria = () => {
   const dataApi = async () => {
     try {
       const response = await axios.get(`/entity/entidadt/${dateFirstMonth}/${dateEndMonth}`);
-      const responseData = response.data[0]; // Acceder al primer objeto del array
-      const movitCount = responseData.Secretaria; // Obtener el valor de 'Movit' del objeto
-      setCount(movitCount); // Actualizar el estado 'count'
+      const responseData = response.data[0];
+      const movitCount = responseData.Secretaria;
+      setCount(movitCount);
     } catch (error) {
       if (error.response && error.response.status === 404) {
         toast.error('No hay PQRS creadas');

@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 import { Card } from '../Card';
 
 function AnalyticPQRSPendientes() {
-  const [count, setCount] = useState(0);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     allRadicadosPendientes();
@@ -13,8 +13,7 @@ function AnalyticPQRSPendientes() {
   const allRadicadosPendientes = async () => {
     try {
       const response = await axios.get('/radicados/radicados_sinasignar');
-      const contador = response.data.length;
-      setCount(contador);
+      setData(response.data);
     } catch (error) {
       if (error.response && error.response.status === 404) {
         toast.error('No se encontraron radicados pendientes');
@@ -23,6 +22,8 @@ function AnalyticPQRSPendientes() {
       }
     }
   };
+
+  const count = data.map((item) => item.count);
 
   return (
     <div>

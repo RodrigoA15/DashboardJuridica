@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import axios from '../../../api/axios';
 import PropTypes from 'prop-types';
 
-function GetEntrada({ register, errors }) {
+const GetEntrada = memo(({ register, errors }) => {
   const [entrada, setEntrada] = useState([]);
 
   useEffect(() => {
@@ -38,7 +38,7 @@ function GetEntrada({ register, errors }) {
       {errors.id_canal_entrada && <span className="inputForm">{errors.id_canal_entrada.message}</span>}
     </div>
   );
-}
+});
 
 export default GetEntrada;
 

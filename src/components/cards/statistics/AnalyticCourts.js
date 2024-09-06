@@ -27,7 +27,7 @@ function AnalyticCourts() {
 
   return (
     <>
-      <Card value={count} description="PQRS Entidades Juridicas" color="card2" />
+      <Card value={count} description="PQRS entidades juridicas" color="card2" />
     </>
   );
 }

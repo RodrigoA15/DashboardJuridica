@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
+import { memo, useEffect } from 'react';
 import axios from 'api/axios';
 import PropTypes from 'prop-types';
 
-function GetTipificacion({ setIdTipificacion }) {
+const GetTipificacion = memo(({ setIdTipificacion }) => {
   useEffect(() => {
     listTipificacion();
   }, []);
@@ -15,7 +15,7 @@ function GetTipificacion({ setIdTipificacion }) {
       console.log(error);
     }
   };
-}
+});
 
 export default GetTipificacion;
 
