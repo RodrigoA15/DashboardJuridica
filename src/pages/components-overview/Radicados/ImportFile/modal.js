@@ -1,8 +1,9 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import ImportFile from './ImportFile';
+import { useState } from 'react';
+import { ImportFileUsers } from './ImportFileUsers';
 
 const style = {
   position: 'absolute',
@@ -17,7 +18,7 @@ const style = {
 };
 
 const ModalComponent = () => {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   return (
@@ -28,6 +29,7 @@ const ModalComponent = () => {
       <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
         <Box sx={style}>
           <ImportFile setOpen={setOpen} />
+          <ImportFileUsers setOpen={setOpen} />
         </Box>
       </Modal>
     </div>

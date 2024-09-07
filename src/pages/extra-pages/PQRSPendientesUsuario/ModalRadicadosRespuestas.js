@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'api/axios';
-import { Toaster } from 'sonner';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
@@ -21,7 +20,7 @@ const style = {
   p: 4
 };
 
-function ModalRadicadosRespuestas({ opens, handleCloses, respuestas }) {
+function ModalRadicadosRespuestas({ opens, handleCloses, respuestas, asignados, setAsignados }) {
   const [radicadosRpta, setRadicadosRpta] = useState([]);
   const [countRadicados, setCountRadicados] = useState(0);
   useEffect(() => {
@@ -41,10 +40,8 @@ function ModalRadicadosRespuestas({ opens, handleCloses, respuestas }) {
       console.log(error);
     }
   };
-
   const updateEstadoAsignacion = async (asignaciones) => {
     try {
-      console.log(asignaciones._id);
       await axios.put(`/assigned/${asignaciones._id}`, {
         estado_asignacion: 'cerrado'
       });
@@ -71,9 +68,11 @@ function ModalRadicadosRespuestas({ opens, handleCloses, respuestas }) {
         await axios.put(`/radicados/${respuestas.id_radicado._id}`, {
           estado_radicado: 'Respuesta'
         });
-        toast.success('Respondido correctamente');
+        const newData = asignados.filter((item) => item._id !== respuestas._id);
+        setAsignados(newData);
         updateEstadoAsignacion(respuestas);
         handleCloses();
+        toast.success('Respondido correctamente');
       } else {
         toast.error('No se respondio la peticion');
       }
@@ -84,7 +83,6 @@ function ModalRadicadosRespuestas({ opens, handleCloses, respuestas }) {
 
   return (
     <div>
-      <Toaster position="top-right" richColors expand={true} offset="80px" />
       <Modal open={opens} onClose={handleCloses} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
         <Box sx={style} className="scrollbarAnswers">
           {respuestas && (
@@ -118,5 +116,7 @@ export default ModalRadicadosRespuestas;
 ModalRadicadosRespuestas.propTypes = {
   opens: PropTypes.bool,
   respuestas: PropTypes.object,
-  handleCloses: PropTypes.func
+  handleCloses: PropTypes.func,
+  asignados: PropTypes.func,
+  setAsignados: PropTypes.func
 };

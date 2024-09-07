@@ -42,11 +42,6 @@ function PendientesUsuario() {
       operator: FilterOperator.AND,
       constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }]
     },
-    'id_radicado.numero_radicado': {
-      operator: FilterOperator.AND,
-      constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }]
-    },
-    representative: { value: null, matchMode: FilterMatchMode.IN },
     status: {
       operator: FilterOperator.OR,
       constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }]
@@ -57,8 +52,6 @@ function PendientesUsuario() {
     {
       user && apiDataUser();
     }
-    const intervalId = setInterval(apiDataUser, 5000);
-    return () => clearInterval(intervalId);
   }, [user]);
 
   //TODO consumo de api asignaciones
@@ -117,27 +110,6 @@ function PendientesUsuario() {
 
     return <div className={hola}>{diasLaborables}</div>;
   };
-
-  //TODO Actualizar contador respuestas estimadas
-  // const updateCount = async (pendiente) => {
-  //   try {
-  //     const MySwal = withReactContent(Swal);
-  //     const alerta = await MySwal.fire({
-  //       title: '¿Estas seguro de actualizar el contador de respuestas estimadas?',
-  //       icon: 'warning',
-  //       showCancelButton: true,
-  //       confirmButtonColor: '#99b080',
-  //       confirmButtonText: 'Si, Actualizar!'
-  //     });
-
-  //     if (alerta.isConfirmed) {
-  //       const id_radicado = pendiente.id_radicado._id;
-  //       await axios.put(`/radicados/updateQuantity/${id_radicado}`, { cantidad_respuesta: count });
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
 
   //Buscador
   const onGlobalFilterChange = (event) => {
@@ -244,7 +216,13 @@ function PendientesUsuario() {
         <Column body={btnReasignation} />
       </DataTable>
       <ModalRespuestas open={openModal} handleClose={handleClose} data={selectedData} />
-      <ModalRadicadosRespuestas opens={openRespuestasModal} handleCloses={handleCloseR} respuestas={selectedRespuesta} />
+      <ModalRadicadosRespuestas
+        setAsignados={setAsignados}
+        asignados={asignados}
+        opens={openRespuestasModal}
+        handleCloses={handleCloseR}
+        respuestas={selectedRespuesta}
+      />
       <Reasignaciones open={openReasignacion} close={handleCloseReasignacion} asignaciones={selectedAsignacion} />
     </div>
   );

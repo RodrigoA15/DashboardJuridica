@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import axios from 'api/axios';
 import { Button } from '@mui/material';
@@ -9,7 +9,7 @@ import { Toaster, toast } from 'sonner';
 import { useAuth } from 'context/authContext';
 import { useForm } from 'react-hook-form';
 
-function UsuariosJuridica({ dataRadicados, data, setDataApi, setSelected }) {
+const UsuariosJuridica = memo(({ dataRadicados, data, setDataApi, setSelected }) => {
   const [users, setUsers] = useState([]);
   const [usuario, setUsuario] = useState('');
   const { user } = useAuth();
@@ -122,7 +122,7 @@ function UsuariosJuridica({ dataRadicados, data, setDataApi, setSelected }) {
       </Box>
     </div>
   );
-}
+});
 
 UsuariosJuridica.propTypes = {
   dataRadicados: PropTypes.array,
