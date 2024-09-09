@@ -28,7 +28,7 @@ const ImportFile = ({ setOpen }) => {
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
     // Validar el archivo en el momento de la selección
-    if (file.name !== 'Libro1.xlsx') {
+    if (file.name !== 'Pqrs_Atlantico.xlsx') {
       setSelectedFile(null);
       setOpen(false);
       return toast.error('Estructura invalida o nombre del archivo incorrecto');
