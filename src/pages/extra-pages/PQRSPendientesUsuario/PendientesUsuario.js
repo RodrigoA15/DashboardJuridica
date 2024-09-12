@@ -215,7 +215,7 @@ function PendientesUsuario() {
         <Column body={btnOpenModalViewAnswer} />
         <Column body={btnReasignation} />
       </DataTable>
-      <ModalRespuestas open={openModal} handleClose={handleClose} data={selectedData} />
+      <ModalRespuestas open={openModal} handleClose={handleClose} data={selectedData} setAsignados={setAsignados} asignados={asignados} />
       <ModalRadicadosRespuestas
         setAsignados={setAsignados}
         asignados={asignados}

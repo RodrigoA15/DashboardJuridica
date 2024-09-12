@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'api/axios';
 
-const Affairs = ({ typeAffair, setValueAffair }) => {
+const Affairs = ({ typeAffair, setValueAffair, granted }) => {
   const [data, setData] = useState([]);
   useEffect(() => {
     if (typeAffair) {
@@ -20,7 +20,7 @@ const Affairs = ({ typeAffair, setValueAffair }) => {
 
   return (
     <>
-      <select className="form-select rounded-pill mb-3" onChange={(e) => setValueAffair(e.target.value)}>
+      <select className="form-select rounded-pill mb-3" onChange={(e) => setValueAffair(e.target.value)} disabled={granted === 'Devuelto'}>
         <option>Seleccione asunto</option>
         {data.map((affair) => (
           <option key={affair._id} value={affair._id}>

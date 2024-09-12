@@ -3,6 +3,7 @@ import { TabView, TabPanel } from 'primereact/tabview';
 import React from 'react';
 import AdminRadicados from './TablaRadicados';
 import ConsultaRadicados from './ConsultaRadicados';
+import { ConsultarUsuario } from './ConsultarUsuario';
 
 function TabViewComponent() {
   return (
@@ -13,6 +14,10 @@ function TabViewComponent() {
         </TabPanel>
         <TabPanel header="Consultar radicados">
           <ConsultaRadicados />
+        </TabPanel>
+
+        <TabPanel header="Consultar n&uacute;mero identificaci&oacute;n">
+          <ConsultarUsuario />
         </TabPanel>
       </TabView>
     </div>

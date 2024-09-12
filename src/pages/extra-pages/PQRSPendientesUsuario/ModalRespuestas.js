@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import axios from 'api/axios';
-import { Toaster, toast } from 'sonner';
+import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import PropTypes from 'prop-types';
 import PDFViewer from './PDFViewer';
@@ -12,6 +12,8 @@ import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import IndexTypesAffairs from './ActualizarAsunto/index';
 import { Parameters } from 'hooks/useParameters';
+import { ListAreas } from './ActualizarArea/ListAreas';
+import { FormControl, FormControlLabel, FormLabel, RadioGroup, Radio } from '@mui/material';
 const style = {
   position: 'absolute',
   top: '50%',
@@ -24,7 +26,7 @@ const style = {
   p: 4
 };
 
-function ModalRespuestas({ open, handleClose, data }) {
+function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
   const {
     register,
     formState: { errors },
@@ -32,17 +34,22 @@ function ModalRespuestas({ open, handleClose, data }) {
     reset
   } = useForm({ mode: 'onChange' });
   const [valueAffair, setValueAffair] = useState(null);
+  const [nameArea, setNameArea] = useState(null);
+  const [granted, setGranted] = useState(null);
   const [url, setUrl] = useState('');
   const [urlFile, setUrlFile] = useState('');
   const onDrop = useCallback((acceptedFiles) => {
     setUrl(URL.createObjectURL(acceptedFiles[0]));
     setUrlFile(acceptedFiles[0]);
   }, []);
+  const validorGranted = granted === 'Devuelto';
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
       'text/pdf': ['.pdf']
-    }
+    },
+    disabled: validorGranted
   });
 
   const { parameters } = Parameters();
@@ -67,6 +74,7 @@ function ModalRespuestas({ open, handleClose, data }) {
       if (parametroActivo) {
         await crearRespuesta(num);
         await updateAffair();
+        await updateArea();
       } else {
         await crearRespuesta(num);
       }
@@ -81,6 +89,7 @@ function ModalRespuestas({ open, handleClose, data }) {
       const numero_radicado_respuesta = num.numero_radicado_respuesta;
       const formData = new FormData();
       formData.append('numero_radicado_respuesta', numero_radicado_respuesta);
+      formData.append('concedido', granted);
       formData.append('id_asignacion', data._id);
       formData.append('respuesta_pdf', urlFile);
       formData.append('fechaRespuesta', new Date());
@@ -105,13 +114,60 @@ function ModalRespuestas({ open, handleClose, data }) {
     }
   };
 
+  const updateArea = async () => {
+    try {
+      await axios.put(`/answer/update-area`, {
+        _id: data.id_radicado._id,
+        nombre_area: nameArea
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updateState = async () => {
+    try {
+      await axios.put(`/radicados/reasignacion/${data.id_radicado._id}`, {
+        estado_radicado: 'Devuelto',
+        id_asunto: '66e0863a1acb1d803a74953f'
+      });
+      const newData = asignados.filter((item) => item._id !== data._id);
+      setAsignados(newData);
+      handleClose();
+      toast.success('Radicado actualizado correctamente');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const validatorTypeAffair = parameters.some(
+    (parametro) => parametro.nombre_parametro === 'Asuntos respuesta' && parametro.activo === true
+  );
+
   return (
-    <div>
-      <Toaster position="top-right" richColors expand={true} offset="80px" />
+    <>
       <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
         <Box sx={style}>
           {data && (
             <form onSubmit={onSubmit} encType="multipart/form-data">
+              {validatorTypeAffair && (
+                <div>
+                  <FormControl>
+                    <FormLabel id="concedido">Concedido</FormLabel>
+                    <RadioGroup
+                      row
+                      aria-labelledby="concedido"
+                      name="concedido"
+                      value={granted}
+                      onChange={(e) => setGranted(e.target.value)}
+                    >
+                      <FormControlLabel value="Si" control={<Radio />} label="Si" />
+                      <FormControlLabel value="No" control={<Radio />} label="No" />
+                      <FormControlLabel value="Devuelto" control={<Radio />} label="Devuelto" />
+                    </RadioGroup>
+                  </FormControl>
+                </div>
+              )}
               <div className="mb-3">
                 <label className="form-label" htmlFor="NoRadicado">
                   Número radicado respuesta
@@ -129,11 +185,20 @@ function ModalRespuestas({ open, handleClose, data }) {
                       message: 'Número radicado respuesta debe ser minimo 12 carácteres'
                     }
                   })}
+                  disabled={validorGranted}
                 />
                 {errors.numero_radicado_respuesta && <span className="inputForm ">{errors.numero_radicado_respuesta.message}</span>}
               </div>
-              {parameters.some((parametro) => parametro.nombre_parametro === 'Asuntos respuesta' && parametro.activo === true) && (
-                <IndexTypesAffairs setValueAffair={setValueAffair} />
+              {validatorTypeAffair && (
+                <>
+                  <div>
+                    <IndexTypesAffairs setValueAffair={setValueAffair} granted={granted} />
+                  </div>
+
+                  <div>
+                    <ListAreas setNameArea={setNameArea} granted={granted} />
+                  </div>
+                </>
               )}
 
               <div
@@ -156,18 +221,24 @@ function ModalRespuestas({ open, handleClose, data }) {
               </div>
               {url && <PDFViewer url={url} />}
 
-              {urlFile ? (
+              {urlFile && !validorGranted ? (
                 <Button className="btn btn-success mt-4" type="submit">
                   Responder
                 </Button>
               ) : (
                 <span className="inputForm">Todos los campos son abligatorios</span>
               )}
+
+              {validorGranted && (
+                <Button className="btn btn-success mt-4" onClick={() => updateState()}>
+                  Responder
+                </Button>
+              )}
             </form>
           )}
         </Box>
       </Modal>
-    </div>
+    </>
   );
 }
 
@@ -176,5 +247,7 @@ export default ModalRespuestas;
 ModalRespuestas.propTypes = {
   open: PropTypes.bool,
   data: PropTypes.object,
-  handleClose: PropTypes.func
+  handleClose: PropTypes.func,
+  asignados: PropTypes.array,
+  setAsignados: PropTypes.func
 };

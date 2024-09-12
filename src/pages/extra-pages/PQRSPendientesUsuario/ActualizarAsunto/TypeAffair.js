@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import axios from 'api/axios';
 import Affairs from './Affairs';
 
-const TypeAffair = ({ setValueAffair }) => {
+const TypeAffair = memo(({ setValueAffair, granted }) => {
   const [data, setData] = useState([]);
   const [valueAffair, setValueTypeAffair] = useState(null);
   useEffect(() => {
@@ -20,7 +20,11 @@ const TypeAffair = ({ setValueAffair }) => {
 
   return (
     <>
-      <select className="form-select rounded-pill mb-3" onChange={(e) => setValueTypeAffair(e.target.value)}>
+      <select
+        className="form-select rounded-pill mb-3"
+        onChange={(e) => setValueTypeAffair(e.target.value)}
+        disabled={granted === 'Devuelto'}
+      >
         <option value={null}>Seleccione tipo asunto</option>
         {data.map((affair) => (
           <option key={affair._id} value={affair._id}>
@@ -28,9 +32,9 @@ const TypeAffair = ({ setValueAffair }) => {
           </option>
         ))}
       </select>
-      <Affairs typeAffair={valueAffair} setValueAffair={setValueAffair} />
+      <Affairs typeAffair={valueAffair} setValueAffair={setValueAffair} granted={granted} />
     </>
   );
-};
+});
 
 export default TypeAffair;

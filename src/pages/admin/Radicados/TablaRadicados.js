@@ -53,6 +53,10 @@ function AdminRadicados() {
     );
   };
 
+  const formatFecha = (rowData) => {
+    const fecha = rowData.fecha_radicado;
+    return new Date(fecha).toLocaleDateString('es-ES', { timeZone: 'UTC' });
+  };
   const header = renderHeader();
 
   return (
@@ -71,12 +75,11 @@ function AdminRadicados() {
           emptyMessage="No se encontraron resultados"
         >
           <Column field="numero_radicado" header="Número radicado" />
-          <Column field="fecha_radicado" header="Fecha radicado" />
+          <Column field="fecha_radicado" header="Fecha radicado" body={formatFecha} />
           <Column field="cantidad_respuesta" header="Cantidad respuesta" />
           <Column field="id_canal_entrada.nombre_canal" header="Canal entrada" />
           <Column field="id_asunto.nombre_asunto" header="Asunto" />
           <Column field="id_tipificacion.nombre_tipificacion" header="Tipificacion" />
-          <Column field="id_asunto.nombre_asunto" header="Asunto" />
           <Column field="id_entidad.nombre_entidad" header="Entidad" />
           <Column field="id_departamento.nombre_departamento" header="Área" />
           <Column field="estado_radicado" header="Estado radicado" />

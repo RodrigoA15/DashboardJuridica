@@ -1,24 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'api/axios';
-import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
-import Button from '@mui/material/Button';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import { toast } from 'sonner';
 import PropTypes from 'prop-types';
-
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4
-};
 
 function ModalRadicadosRespuestas({ opens, handleCloses, respuestas, asignados, setAsignados }) {
   const [radicadosRpta, setRadicadosRpta] = useState([]);
@@ -40,6 +26,7 @@ function ModalRadicadosRespuestas({ opens, handleCloses, respuestas, asignados, 
       console.log(error);
     }
   };
+
   const updateEstadoAsignacion = async (asignaciones) => {
     try {
       await axios.put(`/assigned/${asignaciones._id}`, {
@@ -68,6 +55,7 @@ function ModalRadicadosRespuestas({ opens, handleCloses, respuestas, asignados, 
         await axios.put(`/radicados/${respuestas.id_radicado._id}`, {
           estado_radicado: 'Respuesta'
         });
+        console.log(respuestas._id);
         const newData = asignados.filter((item) => item._id !== respuestas._id);
         setAsignados(newData);
         updateEstadoAsignacion(respuestas);
@@ -80,34 +68,50 @@ function ModalRadicadosRespuestas({ opens, handleCloses, respuestas, asignados, 
       console.log(error);
     }
   };
+  // let count = 1;
 
   return (
-    <div>
+    <>
       <Modal open={opens} onClose={handleCloses} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
-        <Box sx={style} className="scrollbarAnswers">
-          {respuestas && (
-            <>
-              {radicadosRpta &&
-                radicadosRpta.map((i) => (
-                  <div className="row mb-3" key={i._id}>
-                    <ul>
-                      <li className="form-label">{i.numero_radicado_respuesta}</li>
-                    </ul>
-                  </div>
-                ))}
-              <Button
-                variant="contained"
-                color="success"
-                onClick={() => updateEstadoRespondido(respuestas)}
-                disabled={respuestas.id_radicado.cantidad_respuesta !== countRadicados}
-              >
-                Responder
-              </Button>
-            </>
-          )}
-        </Box>
+        <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+          <div className="bg-white p-4 rounded shadow" style={{ width: '80%', maxWidth: '800px' }}>
+            <p>
+              Pulse tecla <b>Esc</b> para salir
+            </p>
+            <h5 className="mb-4 text-center">Respuesta radicado</h5>
+            <p className="text-center">
+              Tienes <b>{countRadicados}</b> respuestas cargadas de{' '}
+              <b>{respuestas ? respuestas.id_radicado.cantidad_respuesta : 0} estimadas</b>
+            </p>
+            {respuestas && (
+              <>
+                <div className="row">
+                  {radicadosRpta &&
+                    radicadosRpta.map((i, index) => (
+                      <div className="col-12 col-sm-6 col-md-4 mb-3" key={i._id}>
+                        <ol className="list-group">
+                          <li className="list-group-item">
+                            {index + 1}. {i.numero_radicado_respuesta}
+                          </li>
+                        </ol>
+                      </div>
+                    ))}
+                </div>
+                <div className="text-center mt-4">
+                  <button
+                    className="btn btn-success"
+                    onClick={() => updateEstadoRespondido(respuestas)}
+                    disabled={respuestas.id_radicado.cantidad_respuesta !== countRadicados}
+                  >
+                    Responder
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
       </Modal>
-    </div>
+    </>
   );
 }
 
@@ -117,6 +121,6 @@ ModalRadicadosRespuestas.propTypes = {
   opens: PropTypes.bool,
   respuestas: PropTypes.object,
   handleCloses: PropTypes.func,
-  asignados: PropTypes.func,
+  asignados: PropTypes.array,
   setAsignados: PropTypes.func
 };

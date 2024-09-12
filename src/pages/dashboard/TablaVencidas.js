@@ -5,18 +5,20 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import axios from 'api/axios';
 import useDiasHabiles from 'hooks/useDate';
 import { classNames } from 'primereact/utils';
 import { TablePagination } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { esES } from '@mui/material/locale';
+
 const TablaVencidas = () => {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const { diasHabiles } = useDiasHabiles();
   const theme = createTheme(
     {
@@ -26,6 +28,7 @@ const TablaVencidas = () => {
     },
     esES
   );
+
   useEffect(() => {
     getPQRSexpired();
   }, []);
@@ -35,50 +38,52 @@ const TablaVencidas = () => {
       const response = await axios.get('/radicados/vencidas');
       setData(response.data);
     } catch (error) {
-      console.error(error);
+      setError('Hubo un problema al cargar los datos.');
     } finally {
       setLoading(false);
     }
   };
 
-  const extractMonth = (fecha) => {
-    const date = new Date(fecha).getMonth() + 1;
-    return date;
+  //extraer mes y año
+  const extractDateInfo = (fecha) => {
+    const date = new Date(fecha);
+    return {
+      month: date.getMonth() + 1,
+      year: date.getFullYear()
+    };
   };
 
-  const extractYear = (fecha) => {
-    const date = new Date(fecha).getFullYear();
-    return date;
-  };
-
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = useCallback((event, newPage) => {
     setPage(newPage);
-  };
+  }, []);
 
-  const handleChangeRowsPerPage = (event) => {
+  const handleChangeRowsPerPage = useCallback((event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
-  };
-
-  // const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
+  }, []);
 
   const visibleRows = useMemo(() => {
     return [...data].slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
   }, [data, page, rowsPerPage]);
 
-  const getBackgroundColor = (rowData) => {
-    const diasLaborables = diasHabiles(rowData);
-
-    const hola = classNames('rounded-pill justify-content-center align-items-center text-center font-weight-bold', {
+  const getDiasLaborablesClass = (diasLaborables) => {
+    return classNames('rounded-pill justify-content-center align-items-center text-center font-weight-bold', {
       'dias text-dark': diasLaborables >= 10 && diasLaborables <= 12,
       'bg-danger bg-gradient text-dark': diasLaborables >= 13
     });
+  };
 
-    return <div className={hola}>{diasLaborables}</div>;
+  const getBackgroundColor = (rowData) => {
+    const diasLaborables = diasHabiles(rowData.fecha_radicado);
+    return <div className={getDiasLaborablesClass(diasLaborables)}>{diasLaborables}</div>;
   };
 
   if (loading) {
-    return <div>Cargando...</div>; // O cualquier indicador de carga
+    return <div>Cargando...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
   }
 
   return (
@@ -97,25 +102,26 @@ const TablaVencidas = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {visibleRows
-              .filter((item) => diasHabiles(item.fecha_radicado) >= 10)
-              .map((item) => (
+            {visibleRows.map((item) => {
+              const { year, month } = extractDateInfo(item.fecha_radicado);
+              return (
                 <TableRow key={item.numero_radicado}>
-                  <TableCell align="center">{extractYear(item.fecha_radicado)}</TableCell>
-                  <TableCell align="center">{extractMonth(item.fecha_radicado)}</TableCell>
+                  <TableCell align="center">{year}</TableCell>
+                  <TableCell align="center">{month}</TableCell>
                   <TableCell align="center">{item.id_departamento}</TableCell>
                   <TableCell align="center">{item.id_usuario}</TableCell>
                   <TableCell align="center">{item.numero_radicado}</TableCell>
                   <TableCell align="center">{item.fecha_asignacion}</TableCell>
-                  <TableCell align="center">{getBackgroundColor(item.fecha_radicado)}</TableCell>
+                  <TableCell align="center">{getBackgroundColor(item)}</TableCell>
                 </TableRow>
-              ))}
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>
       <ThemeProvider theme={theme}>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[10, 15, 25]}
           component="div"
           count={data.length}
           rowsPerPage={rowsPerPage}
