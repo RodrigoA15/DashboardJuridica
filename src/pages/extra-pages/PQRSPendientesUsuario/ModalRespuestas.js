@@ -42,6 +42,9 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
     setUrl(URL.createObjectURL(acceptedFiles[0]));
     setUrlFile(acceptedFiles[0]);
   }, []);
+  const { parameters } = Parameters();
+
+  const parametroActivo = parameters.some((parametro) => parametro.nombre_parametro === 'Asuntos respuesta' && parametro.activo === true);
   const validorGranted = granted === 'Devuelto';
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -49,12 +52,8 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
     accept: {
       'text/pdf': ['.pdf']
     },
-    disabled: validorGranted
+    disabled: validorGranted || parametroActivo
   });
-
-  const { parameters } = Parameters();
-
-  const parametroActivo = parameters.some((parametro) => parametro.nombre_parametro === 'Asuntos respuesta' && parametro.activo === true);
 
   const MySwal = withReactContent(Swal);
 
@@ -71,11 +70,7 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
     });
 
     if (alert.isConfirmed) {
-      if (parametroActivo) {
-        await crearRespuesta(num);
-        await updateAffair();
-        await updateArea();
-      } else {
+      if (!parametroActivo) {
         await crearRespuesta(num);
       }
     } else {
@@ -83,6 +78,13 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
     }
     reset();
   });
+
+  const handleSubmitOutFile = () => {
+    createAnswerOutFile();
+    updateAffair();
+    updateArea();
+    handleClose();
+  };
 
   const crearRespuesta = async (num) => {
     try {
@@ -110,7 +112,7 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
         id_asunto: valueAffair
       });
     } catch (error) {
-      console.log(error);
+      toast.error(error.response.data);
     }
   };
 
@@ -121,7 +123,7 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
         nombre_area: nameArea
       });
     } catch (error) {
-      console.log(error);
+      toast.error(error.response.data);
     }
   };
 
@@ -136,13 +138,22 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
       handleClose();
       toast.success('Radicado actualizado correctamente');
     } catch (error) {
-      console.log(error);
+      toast.error(error.response.data);
     }
   };
 
-  const validatorTypeAffair = parameters.some(
-    (parametro) => parametro.nombre_parametro === 'Asuntos respuesta' && parametro.activo === true
-  );
+  const createAnswerOutFile = async () => {
+    try {
+      await axios.post(`/answer/out-file`, {
+        id_asignacion: data._id,
+        fechaRespuesta: new Date(),
+        concedido: granted
+      });
+      toast.success('Archivo creado correctamente');
+    } catch (error) {
+      toast.error('Error al responder radicado');
+    }
+  };
 
   return (
     <>
@@ -150,10 +161,10 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
         <Box sx={style}>
           {data && (
             <form onSubmit={onSubmit} encType="multipart/form-data">
-              {validatorTypeAffair && (
+              {parametroActivo && (
                 <div>
                   <FormControl>
-                    <FormLabel id="concedido">Concedido</FormLabel>
+                    <FormLabel id="concedido">*Concedido</FormLabel>
                     <RadioGroup
                       row
                       aria-labelledby="concedido"
@@ -185,11 +196,11 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
                       message: 'Número radicado respuesta debe ser minimo 12 carácteres'
                     }
                   })}
-                  disabled={validorGranted}
+                  disabled={validorGranted || parametroActivo}
                 />
                 {errors.numero_radicado_respuesta && <span className="inputForm ">{errors.numero_radicado_respuesta.message}</span>}
               </div>
-              {validatorTypeAffair && (
+              {parametroActivo && (
                 <>
                   <div>
                     <IndexTypesAffairs setValueAffair={setValueAffair} granted={granted} />
@@ -234,6 +245,15 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
                   Responder
                 </Button>
               )}
+
+              {parametroActivo &&
+                (!nameArea || !valueAffair || !granted ? (
+                  <p>Seleccione todos los campos</p>
+                ) : (
+                  <Button className="btn btn-success mt-4" onClick={() => handleSubmitOutFile()}>
+                    Responder
+                  </Button>
+                ))}
             </form>
           )}
         </Box>

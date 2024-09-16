@@ -90,29 +90,31 @@ export default function GetPendientes() {
 
   const header = renderHeader();
   return (
-    <div className="card">
-      <DataTable
-        value={dataApi}
-        removableSort
-        selection={selected}
-        onSelectionChange={(e) => setSelected(e.value)}
-        dataKey="_id"
-        header={header}
-        filters={filters}
-        onFilter={(e) => setFilters(e.filters)}
-        paginator
-        rows={5}
-        rowsPerPageOptions={[5, 10, 25, 50]}
-        emptyMessage="No se encontraron resultados"
-      >
-        <Column selectionMode="multiple" headerStyle={{ width: '3rem' }} className="bluegray-100" />
-        <Column field="numero_radicado" sortable header="Número radicado" />
-        <Column field="fecha_radicado" sortable header="Fecha radicado" />
-        <Column field="id_asunto.nombre_asunto" header="Asunto" />
-        <Column field="observaciones_radicado" header="Observaciones" />
-        <Column field="id_procedencia.nombre" header="Procedencia" />
-        <Column field="fecha_radicado" sortable header="Dias" body={getBackgroundColor} />
-      </DataTable>
-    </div>
+    <>
+      <div className="card">
+        <DataTable
+          value={dataApi}
+          removableSort
+          selection={selected}
+          onSelectionChange={(e) => setSelected(e.value)}
+          dataKey="_id"
+          header={header}
+          filters={filters}
+          onFilter={(e) => setFilters(e.filters)}
+          paginator
+          rows={5}
+          rowsPerPageOptions={[5, 10, 25, 50]}
+          emptyMessage="No se encontraron resultados"
+        >
+          <Column selectionMode="multiple" headerStyle={{ width: '3rem' }} className="bluegray-100" />
+          <Column field="numero_radicado" sortable header="Número radicado" />
+          <Column field="fecha_radicado" sortable header="Fecha radicado" />
+          <Column field="id_asunto.nombre_asunto" header="Asunto" />
+          <Column field="observaciones_radicado" header="Observaciones" />
+          <Column field="id_procedencia.nombre" header="Procedencia" />
+          <Column field="fecha_radicado" sortable header="Dias" body={getBackgroundColor} />
+        </DataTable>
+      </div>
+    </>
   );
 }

@@ -33,9 +33,7 @@ function GetAsignados() {
   useEffect(() => {
     {
       user && apiAsignados();
-
-      const intervalId = setInterval(apiAsignados, 5000);
-      return () => clearInterval(intervalId);
+      apiAsignados();
     }
   }, [user]);
 

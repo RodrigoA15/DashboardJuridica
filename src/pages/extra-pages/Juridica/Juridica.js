@@ -9,6 +9,7 @@ import GetRespuesta from './GetRespuesta';
 import Preasignaciones from '../PQRSPreasignadas/Preasignaciones';
 import { List, ListItem, Stack, Typography } from '@mui/material';
 import Dot from 'components/@extended/Dot';
+import { GetAssignedUser } from './GetAssignedUser';
 
 // ==============================|| SAMPLE PAGE ||============================== //
 
@@ -47,6 +48,7 @@ const Juridica = () => {
             <Tab label="Pendientes" value="2" />
             <Tab label="Asignados" value="3" />
             <Tab label="Respuestas" value="4" />
+            <Tab label="Asignados usuario" value="5" />
           </TabList>
         </Box>
         <TabPanel value="1">
@@ -60,6 +62,9 @@ const Juridica = () => {
         </TabPanel>
         <TabPanel value="4">
           <GetRespuesta />
+        </TabPanel>
+        <TabPanel value="5">
+          <GetAssignedUser />
         </TabPanel>
       </TabContext>
     </Box>
