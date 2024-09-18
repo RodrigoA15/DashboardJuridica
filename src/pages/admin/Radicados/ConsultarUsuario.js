@@ -1,13 +1,15 @@
 import axios from 'api/axios';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { FloatLabel } from 'primereact/floatlabel';
 import { InputText } from 'primereact/inputtext';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
+import LoaderComponent from 'components/LoaderComponent';
 
 export const ConsultarUsuario = () => {
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const {
     register,
@@ -21,30 +23,40 @@ export const ConsultarUsuario = () => {
 
   const radicadosUsuarioApi = async (data) => {
     try {
+      setLoading(true);
       const response = await axios.get(`/radicados/search-user/${data.identificationNumber}`);
       setData(response.data);
+      setLoading(false);
     } catch (error) {
-      console.log(error);
+      setData([]);
+      setError(error.response.data);
+    } finally {
+      setLoading(false);
     }
   };
 
   const renderHeader = () => {
     return (
       <form onSubmit={onSubmit}>
-        <FloatLabel>
-          <InputText
-            id="search"
-            keyfilter="int"
-            {...register('identificationNumber', {
-              required: { value: true, message: 'Ingrese número de cedula' }
-            })}
-          />
-          <label htmlFor="search">N&uacute;mero identificaci&oacute;n</label>
-        </FloatLabel>
+        <InputText
+          id="search"
+          keyfilter="int"
+          {...register('identificationNumber', {
+            required: { value: true, message: 'Ingrese número de cedula' }
+          })}
+        />
         {errors.identificationNumber && <span className="inputForm ">{errors.identificationNumber.message}</span>}
       </form>
     );
   };
+
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center">
+        <LoaderComponent />
+      </div>
+    );
+  }
 
   const formatFecha = (rowData) => {
     const fecha = rowData.fecha_radicado;
@@ -53,8 +65,8 @@ export const ConsultarUsuario = () => {
   const header = renderHeader();
 
   return (
-    <div>
-      <DataTable value={data} dataKey={'_id'} header={header} emptyMessage="No se encontraron resultados">
+    <>
+      <DataTable value={data} dataKey={'_id'} header={header} emptyMessage={error}>
         <Column field="numero_radicado" header="N&uacute;mero radicado" />
         <Column field="fecha_radicado" body={formatFecha} header="Fecha radicado" />
         <Column field="cantidad_respuesta" header="Cantidad respuesta" />
@@ -66,6 +78,6 @@ export const ConsultarUsuario = () => {
         <Column field="departamento.nombre_departamento" header="&Aacute;rea" />
         <Column field="estado_radicado" header="Estado" />
       </DataTable>
-    </div>
+    </>
   );
 };

@@ -3,7 +3,9 @@ import { Grid, Typography } from '@mui/material';
 import ChartEntidadAdmin from './chart';
 import ChartArea from './chartArea';
 import ChartEstados from './chartEstados';
-import { ChartPQRSmonth } from './chartPQRSmonth';
+import BarChart from './StatesByUser';
+// import { ChartPQRSmonth } from './chartPQRSmonth';
+// import { AnswerByuser } from './answerByuser';
 
 function IndexResumen() {
   return (
@@ -49,7 +51,7 @@ function IndexResumen() {
           </Grid>
         </Grid>
         <MainCard content={false} sx={{ mt: 1.5 }}>
-          <ChartPQRSmonth />
+          <BarChart />
         </MainCard>
       </Grid>
     </Grid>
