@@ -22,10 +22,18 @@ export const GetAssignedUser = () => {
   return (
     <>
       <div className="card">
-        <DataTable value={data} stripedRows removableSort selectionMode="single" emptyMessage="No se encontraron resultados">
-          <Column field="username" header="Nombre" sortable />
-          <Column field="estados.estado" header="Estado" />
-          <Column field="estados.cantidad" header="Total" />
+        <DataTable
+          value={data}
+          rowGroupMode="rowspan"
+          groupRowsBy="username"
+          sortMode="single"
+          sortField="username"
+          sortOrder={1}
+          emptyMessage="No se encontraron resultados"
+        >
+          <Column field="username" header="Nombre"></Column>
+          <Column field="estados.estado" header="Estado"></Column>
+          <Column field="estados.cantidad" header="Total"></Column>
         </DataTable>
       </div>
     </>
