@@ -8,7 +8,7 @@ import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import { useEffect, useState } from 'react';
 import { useAuth } from 'context/authContext';
-import { Toaster, toast } from 'sonner';
+import { toast } from 'sonner';
 import ModalReasignacion from './ModalReasignacion';
 
 function Preasignaciones() {
@@ -115,7 +115,6 @@ function Preasignaciones() {
 
   return (
     <div className="card">
-      <Toaster richColors position="top-right" />
       <DataTable
         value={data}
         removableSort

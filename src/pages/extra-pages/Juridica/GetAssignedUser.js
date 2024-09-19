@@ -29,11 +29,12 @@ export const GetAssignedUser = () => {
           sortMode="single"
           sortField="username"
           sortOrder={1}
+          showGridlines
           emptyMessage="No se encontraron resultados"
         >
-          <Column field="username" header="Nombre"></Column>
-          <Column field="estados.estado" header="Estado"></Column>
-          <Column field="estados.cantidad" header="Total"></Column>
+          <Column className="border" field="username" header="Nombre"></Column>
+          <Column className="border" field="estados.estado" header="Estado"></Column>
+          <Column className="border" field="estados.cantidad" header="Total"></Column>
         </DataTable>
       </div>
     </>
