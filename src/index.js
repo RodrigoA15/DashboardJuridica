@@ -52,6 +52,7 @@ root.render(
                 <Route path="/asuntosAdmin" element />
                 <Route path="canalesAdmin" element />
                 <Route path="/pendientes" element />
+                <Route path="/radicadosAdmin" element />
               </Route>
             </Routes>
           </BrowserRouter>
