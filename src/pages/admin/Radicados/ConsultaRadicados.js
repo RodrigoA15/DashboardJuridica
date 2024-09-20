@@ -9,11 +9,16 @@ import axios from 'api/axios';
 import { ButtonGroup, IconButton, Tooltip } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import SearchIcon from '@mui/icons-material/Search';
 import { useAuth } from 'context/authContext';
 import ModalAdmin from './modalAdmin';
+import { ConsultarAsignacion } from './ConsultarAsignacion';
 function ConsultaRadicados() {
   const [radicado, setRadicado] = useState([]);
-  const [visible, setVisible] = useState(false);
+  const [dataApi, setDataApi] = useState([]);
+  const [visible, setVisible] = useState(false); //Estado modal Admin
+  const [visibleAS, setVisibleAS] = useState(false); //Estado modal Ver asignaciones
+  const [loader, setLoader] = useState(false);
   const [data, setData] = useState('');
   const { user } = useAuth();
   const {
@@ -34,9 +39,27 @@ function ConsultaRadicados() {
     }
   };
 
-  const handleOPenButton = (rowData) => {
+  const queryAssigned = async (data) => {
+    try {
+      setLoader(true);
+      const response = await axios.get(`/assigned/search/${data.numero_radicado}`);
+      setDataApi(response.data);
+      setLoader(false);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoader(false);
+    }
+  };
+
+  const handleOPenButtonAdmin = (rowData) => {
     setVisible(true);
     setData(rowData);
+  };
+
+  const handleOPenButtonAss = (rowData) => {
+    setVisibleAS(true);
+    queryAssigned(rowData);
   };
 
   const renderHeader = () => {
@@ -65,16 +88,31 @@ function ConsultaRadicados() {
     return (
       <div>
         <ButtonGroup aria-label="Basic button group">
-          <Tooltip title="Editar radicado" placement="top-start">
-            <IconButton aria-label="edit" color="warning" onClick={() => handleOPenButton(rowData)}>
-              <EditIcon />
+          <Tooltip title="Consultar asignaci&oacute;n" placement="top-start">
+            <IconButton
+              aria-label="consulta"
+              onClick={() => handleOPenButtonAss(rowData)}
+              disabled={rowData.estado_radicado !== 'Asignados' && rowData.estado_radicado !== 'Respuesta'}
+            >
+              <SearchIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Eliminar radicado" placement="top-start">
-            <IconButton aria-label="delete" color="error">
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
+          {user.role.nombre_rol === 'admin' || user.role.nombre_rol === 'Radicador' ? (
+            <>
+              <Tooltip title="Editar radicado" placement="top-start">
+                <IconButton aria-label="edit" color="warning" onClick={() => handleOPenButtonAdmin(rowData)}>
+                  <EditIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Eliminar radicado" placement="top-start">
+                <IconButton aria-label="delete" color="error">
+                  <DeleteIcon />
+                </IconButton>
+              </Tooltip>
+            </>
+          ) : (
+            <p> </p>
+          )}
         </ButtonGroup>
       </div>
     );
@@ -100,9 +138,10 @@ function ConsultaRadicados() {
         <Column field="id_entidad.nombre_entidad" header="Entidad" />
         <Column field="id_departamento.nombre_departamento" header="Área" />
         <Column field="estado_radicado" header="Estado" />
-        {user.role.nombre_rol === 'admin' && <Column header="Acciones" body={buttonsGroup} />}
+        <Column header="Acciones" body={buttonsGroup} />
       </DataTable>
       <ModalAdmin visible={visible} setVisible={setVisible} data={data} />
+      <ConsultarAsignacion visibleAS={visibleAS} setVisibleAS={setVisibleAS} dataApi={dataApi} loader={loader} />
     </div>
   );
 }

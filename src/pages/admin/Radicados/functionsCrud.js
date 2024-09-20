@@ -3,6 +3,9 @@ import { Dropdown } from 'primereact/dropdown';
 import axios from 'api/axios';
 import PropTypes from 'prop-types';
 import { Button } from '@mui/material';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+import { useAuth } from 'context/authContext';
 
 function AdminGetEntities({ setEntidad, entidad }) {
   const [entities, setEntities] = useState([]);
@@ -112,19 +115,57 @@ AdminGetStates.propTypes = {
   estadoRadicado: PropTypes.object.isRequired
 };
 
-function UpdateRadicados({ dataId, cantidadRespuesta, entidad, area, asunto, estadoRadicado }) {
+function UpdateRadicados({ dataId, cantidadRespuesta, entidad, area, asunto, estadoRadicado, setVisible }) {
+  const MySwal = withReactContent(Swal);
+  const { user } = useAuth();
+
+  const historialCambios = async () => {
+    try {
+      const datos = `El usuario ${user.username} modifico el radicado ${
+        dataId.numero_radicado
+      } con fecha de modificacion ${new Date().toLocaleString()}`;
+      await axios.post('/history', {
+        observacion: datos
+      });
+    } catch (error) {
+      await Myswal.fire({
+        text: 'Ops error de servidor  :(',
+        icon: 'error',
+        customClass: {
+          container: 'swal-zindex'
+        }
+      });
+    }
+  };
+
   const updated = async () => {
-    await axios.put(`/radicados/updradicadosAdmin/${dataId}`, {
-      cantidad_respuesta: cantidadRespuesta,
-      id_entidad: entidad._id,
-      id_departamento: area._id,
-      id_asunto: asunto._id,
-      estado_radicado: estadoRadicado.name
-    });
+    try {
+      await axios.put(`/radicados/updradicadosAdmin/${dataId._id}`, {
+        cantidad_respuesta: cantidadRespuesta,
+        id_entidad: entidad._id,
+        id_departamento: area._id,
+        id_asunto: asunto._id,
+        estado_radicado: estadoRadicado.name
+      });
+      historialCambios();
+      setVisible(false);
+
+      await MySwal.fire({
+        title: 'Actualizado correctamente',
+        icon: 'success'
+      });
+    } catch (error) {
+      setVisible(false);
+      await MySwal.fire({
+        title: 'Sucedio algo al momento de actualizar el radicado',
+        text: error.response.data,
+        icon: 'error'
+      });
+    }
   };
 
   return (
-    <Button variant="contained" onClick={updated}>
+    <Button variant="contained" onClick={() => updated()}>
       Editar
     </Button>
   );
@@ -136,7 +177,8 @@ UpdateRadicados.propTypes = {
   entidad: PropTypes.object,
   area: PropTypes.object,
   asunto: PropTypes.object,
-  estadoRadicado: PropTypes.object
+  estadoRadicado: PropTypes.object,
+  setVisible: PropTypes.bool
 };
 
 export { AdminGetEntities, AdminGetAreas, AdminGetStates, AdminGetAffairs, UpdateRadicados };

@@ -68,12 +68,13 @@ function ModalAdmin({ visible, setVisible, data }) {
 
             <div className="d-flex justify-content-center align-items-center">
               <UpdateRadicados
-                dataId={data._id}
+                dataId={data}
                 cantidadRespuesta={cantidadRespuesta}
                 entidad={entidad}
                 area={area}
                 asunto={asunto}
                 estadoRadicado={estadoRadicado}
+                setVisible={setVisible}
               />
             </div>
           </form>
@@ -88,5 +89,5 @@ export default ModalAdmin;
 ModalAdmin.propTypes = {
   visible: PropTypes.bool.isRequired,
   setVisible: PropTypes.func.isRequired,
-  data: PropTypes.object
+  data: PropTypes.string
 };
