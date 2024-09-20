@@ -16,6 +16,7 @@ import { ConsultarAsignacion } from './ConsultarAsignacion';
 function ConsultaRadicados() {
   const [radicado, setRadicado] = useState([]);
   const [dataApi, setDataApi] = useState([]);
+  const [error, setError] = useState(null);
   const [visible, setVisible] = useState(false); //Estado modal Admin
   const [visibleAS, setVisibleAS] = useState(false); //Estado modal Ver asignaciones
   const [loader, setLoader] = useState(false);
@@ -35,7 +36,8 @@ function ConsultaRadicados() {
       const response = await axios.get(`/radicados/search/${data.numero_radicado}`);
       setRadicado(response.data);
     } catch (error) {
-      console.log(error);
+      setRadicado([]);
+      setError(error.response.data);
     }
   };
 
@@ -126,7 +128,7 @@ function ConsultaRadicados() {
   const header = renderHeader();
   return (
     <div>
-      <DataTable value={radicado} dataKey={'_id'} header={header} emptyMessage="No se encontraron resultados">
+      <DataTable value={radicado} dataKey={'_id'} header={header} emptyMessage={error}>
         <Column field="numero_radicado" header="Número radicado" />
         <Column field="fecha_radicado" body={formatFecha} header="Fecha radicado" />
         <Column field="cantidad_respuesta" header="Cantidad respuesta" />
