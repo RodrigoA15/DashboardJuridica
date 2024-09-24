@@ -24,7 +24,8 @@ export const AuthProvider = ({ children }) => {
     if (!token) {
       setIsAuthenticated(false);
       setLoading(false);
-      return setUser(null);
+      setUser(null);
+      return window.location.replace('http://localhost:5173/');
     }
     try {
       const res = await verifyToken(token);
