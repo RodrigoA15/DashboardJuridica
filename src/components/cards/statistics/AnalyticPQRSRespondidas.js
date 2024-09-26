@@ -12,7 +12,7 @@ function AnalyticPQRSRespondidas() {
 
   const apiCountRespondidos = async () => {
     try {
-      const response = await axios.get('/answer/answer_month');
+      const response = await axios.get('/answer/total-answer');
       setAnswers(response.data);
     } catch (error) {
       if (error.response && error.response.status === 404) {
@@ -24,9 +24,10 @@ function AnalyticPQRSRespondidas() {
   };
 
   const count = answers.map((answer) => answer.count);
+
   return (
     <div>
-      <Card description="PQRS respondidas" value={count} color="card2" />
+      <Card description="PQRS CON RESPUESTA" value={count} color="card2" />
     </div>
   );
 }

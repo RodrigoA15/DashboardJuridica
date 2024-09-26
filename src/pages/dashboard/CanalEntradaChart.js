@@ -1,139 +1,75 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import Chart from 'react-apexcharts';
 import axios from 'api/axios';
-import ReactApexChart from 'react-apexcharts';
-import { Toaster, toast } from 'sonner';
 
-function CanalEntradaChart() {
-  const fecha = new Date();
-  const dateFirstMonth = new Date(fecha.getFullYear(), fecha.getMonth(), 0);
-  const dateEndMonth = new Date();
-  const [fechaInicio, setFechaInicio] = useState(dateFirstMonth);
-  const [fechaFin, setFechaFin] = useState(dateEndMonth);
+export const CanalEntradaChart = () => {
+  const [data, setData] = useState([]);
 
-  const [chartData, setChartData] = useState({
-    series: [
-      {
-        name: 'Presencial',
-        data: []
-      },
-      {
-        name: 'Correo Electronico',
-        data: []
-      },
-      {
-        name: 'Orfeo',
-        data: []
-      },
-      {
-        name: 'Correo Certificado',
-        data: []
-      }
-    ],
+  useEffect(() => {
+    dataCanalApi();
+  }, []);
 
+  const dataCanalApi = async () => {
+    try {
+      const response = await axios.get('/radicados/chart-canal');
+      setData(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const categories = data.map((item) => item._id.mes);
+  const canales = [...new Set(data.flatMap((item) => item.canales.map((canal) => canal.canal)))];
+
+  const series = canales.map((canal) => {
+    return {
+      name: canal,
+      data: data.map((item) => {
+        const canalData = item.canales.find((c) => c.canal === canal);
+        return canalData ? canalData.count : 0;
+      })
+    };
+  });
+
+  const chartData = {
+    type: 'bar',
+    series: series,
     options: {
-      chart: {
-        heigth: 100,
-        tipe: 'line'
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          columnWidth: '55%',
+          endingShape: 'rounded'
+        }
       },
-
       dataLabels: {
         enabled: false
       },
-
       stroke: {
-        curve: 'smooth'
+        show: true,
+        width: 2,
+        colors: ['transparent']
       },
-
-      markers: {
-        size: 6
-        // hover: {
-        //   size: 9
-        // }
-      },
-
       xaxis: {
-        categories: []
+        categories: categories // Los meses como categorías
       },
-
+      yaxis: {
+        title: {
+          text: 'Número de radicados'
+        }
+      },
+      fill: {
+        opacity: 1
+      },
       tooltip: {
-        x: {
-          format: 'dd/MM/yy HH:mm'
-        }
-      }
-    }
-  });
-
-  useEffect(() => {
-    dataCanalesChart();
-  }, []);
-
-  const dataCanalesChart = async () => {
-    try {
-      const response = await axios.get(`/radicados/chart_canal/${fechaInicio}/${fechaFin}`);
-      const fecha = response.data.map((canal) =>
-        new Date(canal.fecha_radicado).toLocaleDateString('es-ES', { timeZone: 'UTC', day: 'numeric' })
-      );
-
-      setChartData({
-        series: [
-          {
-            data: response.data.map((item) => item.Presencial)
-          },
-          {
-            data: response.data.map((item) => item.Correo)
-          },
-          {
-            data: response.data.map((item) => item.Orfeo)
-          },
-          {
-            data: response.data.map((item) => item.CorreoCertificado)
-          }
-        ],
-
-        options: {
-          ...chartData.options,
-          xaxis: {
-            categories: fecha
+        y: {
+          formatter: function (val) {
+            return `${val} radicados`;
           }
         }
-      });
-    } catch (error) {
-      if (error.response && error.response.status === 404) {
-        toast.error('No se encontraron radicados por canales de entrada');
-      } else {
-        toast.error('No se pudo cargar la información', { description: 'error de servidor' });
       }
     }
   };
 
-  const handleFechaInicio = (e) => {
-    setFechaInicio(e.target.value);
-  };
-
-  const handleFechaFin = (e) => {
-    setFechaFin(e.target.value);
-  };
-
-  return (
-    <div>
-      <Toaster position="top-right" richColors expand={true} offset="80px" />
-
-      <div className="row m-1">
-        <div className="col">
-          <input className="form-control" type="date" value={fechaInicio} onChange={handleFechaInicio} />
-        </div>
-        <div className="col">
-          <input className="form-control" type="date" value={fechaFin} onChange={handleFechaFin} />
-        </div>
-        <div className="col">
-          <button className="btn btn-primary" onClick={dataCanalesChart}>
-            Buscar
-          </button>
-        </div>
-      </div>
-      <ReactApexChart options={chartData.options} series={chartData.series} type="line" heigth={100} />
-    </div>
-  );
-}
-
-export default CanalEntradaChart;
+  return <Chart options={chartData.options} series={chartData.series} type="bar" height={350} />;
+};

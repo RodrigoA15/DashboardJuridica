@@ -27,7 +27,7 @@ function AnalyticPQRSPendientes() {
 
   return (
     <div>
-      <Card description="PQRS sin asignar" value={count} color="card4" />
+      <Card description="SIN ASIGNAR" value={count} color="card4" />
     </div>
   );
 }

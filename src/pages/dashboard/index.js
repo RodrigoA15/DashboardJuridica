@@ -9,15 +9,13 @@ import AnalyticPQRSCreadas from 'components/cards/statistics/AnalyticPQRSCreadas
 import AnalyticPQRSAsignadas from 'components/cards/statistics/AnalyticPQRSAsignadas';
 import AnalyticPQRSRespondidas from 'components/cards/statistics/AnalyticPQRSRespondidas';
 import AnalyticPQRSPendientes from 'components/cards/statistics/AnalyticPQRSPendientes';
-import ChartEntidad from './ChartEntidad';
-import RadicadosChart from './RadicadosChart';
-import CanalEntradaChart from './CanalEntradaChart';
+import { ChartEntidad } from './ChartEntidad';
+import { RadicadosChart } from './RadicadosChart';
+import { CanalEntradaChart } from './CanalEntradaChart';
 // import JsonToFileExcel from 'pages/components-overview/Radicados/JsonToXLSX';
-import ChartDepartamentos from './ChartDepartamentos';
 import AnalyticDesacatos from 'components/cards/statistics/AnalyticDesacatos';
 import AnalyticTutelas from 'components/cards/statistics/AnalyticTutelas';
-import AnalyticCourts from 'components/cards/statistics/AnalyticCourts';
-
+import { AnalyticRespuestasPend } from 'components/cards/statistics/AnalyticRespuestasPend';
 // import RadicadosExcel from 'pages/components-overview/Radicados/radicadosExcel';
 import IndexTipoAsunto from 'pages/components-overview/TipoAsunto/index';
 import { Parameters } from 'hooks/useParameters';
@@ -25,6 +23,10 @@ import TablaVencidas from './TablaVencidas';
 import { CreadasApi } from './creadasApi';
 import { GraficaTipoAsunto } from './Tipo_asunto/GraficaTipo_asunto';
 import { GraficaTAMes } from './Tipo_asunto/GraficaTAMes';
+import { AnalyticTotal } from 'components/cards/statistics/AnalyticTotal';
+// import { AnalyticDevueltos } from 'components/cards/statistics/AnalyticDevueltos';
+import { AnalyticCantRespuestas } from 'components/cards/statistics/AnalyticCantRespuestas';
+import { ChartRadicadosAnswer } from './ChartRadicadosAnswer';
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
@@ -34,23 +36,26 @@ const DashboardDefault = () => {
 
   return (
     <Grid container rowSpacing={4.5} columnSpacing={2.75}>
-      {/* row 1 */}
       <Grid item xs={12} sx={{ mb: -2.25 }}>
         <Typography variant="h5">Dashboard</Typography>
       </Grid>
+
+      <Grid item xs={6} sm={3} md={2} lg={2}>
+        <AnalyticTotal />
+      </Grid>
       {data.map((item) => (
-        <Grid item xs={12} sm={6} md={4} lg={3} key={item.entidad}>
+        <Grid item xs={6} sm={3} md={2} lg={2} key={item.entidad}>
           <AnalyticPQRSCreadas description={item.entidad} value={item.count} />
         </Grid>
       ))}
-      <Grid item xs={12} sm={6} md={4} lg={3}>
-        <AnalyticPQRSPendientes />
+      <Grid item xs={6} sm={3} md={2} lg={2}>
+        <AnalyticPQRSRespondidas />
       </Grid>
-      <Grid item xs={12} sm={6} md={4} lg={3}>
+      <Grid item xs={6} sm={3} md={2} lg={2}>
         <AnalyticPQRSAsignadas />
       </Grid>
-      <Grid item xs={12} sm={6} md={4} lg={3}>
-        <AnalyticPQRSRespondidas />
+      <Grid item xs={6} sm={3} md={2} lg={2}>
+        <AnalyticPQRSPendientes />
       </Grid>
 
       <Grid item xs={12} sm={6} md={4} lg={3}>
@@ -62,45 +67,20 @@ const DashboardDefault = () => {
       </Grid>
 
       <Grid item xs={12} sm={6} md={4} lg={3}>
-        <AnalyticCourts />
+        <AnalyticRespuestasPend />
+      </Grid>
+
+      <Grid item xs={12} sm={6} md={4} lg={3}>
+        <AnalyticCantRespuestas />
       </Grid>
 
       <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
 
-      {/* row 2 */}
+      {/* row 1 */}
       <Grid item xs={12} md={5} lg={4}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
-            <Typography variant="h5">Respuestas por mes</Typography>
-          </Grid>
-        </Grid>
-        <MainCard content={false} sx={{ mt: 1.5 }}>
-          <RadicadosChart />
-        </MainCard>
-      </Grid>
-
-      <Grid item xs={12} md={5} lg={4}>
-        <Grid container alignItems="center" justifyContent="space-between">
-          <Grid item>
-            <Typography variant="h5">Radicados por área</Typography>
-          </Grid>
-          <Grid item />
-        </Grid>
-
-        <MainCard sx={{ mt: 2 }} content={false}>
-          {parameters.some((parametro) => parametro.nombre_parametro === 'Tabla asuntos' && parametro.activo === true) ? (
-            <GraficaTipoAsunto />
-          ) : (
-            <ChartDepartamentos />
-          )}
-        </MainCard>
-      </Grid>
-
-      {/* row 3 */}
-      <Grid item xs={12} md={5} lg={4}>
-        <Grid container alignItems="center" justifyContent="space-between">
-          <Grid item>
-            <Typography variant="h5">Entidad</Typography>
+            <Typography variant="h5">Entidades</Typography>
           </Grid>
           <Grid item />
         </Grid>
@@ -137,6 +117,35 @@ const DashboardDefault = () => {
         </MainCard> */}
       </Grid>
 
+      {/* row 2 */}
+      <Grid item xs={12} md={7} lg={4}>
+        <Grid container alignItems="center" justifyContent="space-between">
+          <Grid item>
+            <Typography variant="h5">Cantidad PQRS</Typography>
+          </Grid>
+        </Grid>
+        <MainCard content={false} sx={{ mt: 2 }}>
+          <RadicadosChart />
+        </MainCard>
+      </Grid>
+
+      <Grid item xs={12} md={5} lg={4}>
+        <Grid container alignItems="center" justifyContent="space-between">
+          <Grid item>
+            <Typography variant="h5">Radicados y respuestas por mes</Typography>
+          </Grid>
+          <Grid item />
+        </Grid>
+
+        <MainCard sx={{ mt: 2 }} content={false}>
+          {parameters.some((parametro) => parametro.nombre_parametro === 'Tabla asuntos' && parametro.activo === true) ? (
+            <GraficaTipoAsunto />
+          ) : (
+            <ChartRadicadosAnswer />
+          )}
+        </MainCard>
+      </Grid>
+
       <Grid item xs={12} md={7} lg={8}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
@@ -153,7 +162,7 @@ const DashboardDefault = () => {
       <Grid item xs={12} md={5} lg={4}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
-            <Typography variant="h5">Tipo asunto</Typography>
+            <Typography variant="h5">Canal entrada</Typography>
           </Grid>
         </Grid>
         <MainCard sx={{ mt: 1.75 }}>

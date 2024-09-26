@@ -49,9 +49,5 @@ export const GraficaTipoAsunto = () => {
     }
   };
 
-  return (
-    <>
-      <Chart {...chartData} />
-    </>
-  );
+  return <Chart {...chartData} />;
 };

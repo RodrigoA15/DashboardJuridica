@@ -27,7 +27,7 @@ function AnalyticPQRSAsignadas() {
 
   return (
     <>
-      <Card description="PQRS asignadas" value={count} color="card3" />
+      <Card description="SIN RESPUESTA" value={count} color="card3" />
     </>
   );
 }

@@ -3,9 +3,6 @@ import axios from 'api/axios';
 import { useEffect, useState } from 'react';
 export const CreadasApi = () => {
   const [data, setData] = useState([]);
-  const fecha = new Date();
-  const dateFirstMonth = new Date(fecha.getFullYear(), fecha.getMonth(), 0);
-  const dateEndMonth = new Date();
 
   useEffect(() => {
     dataApi();
@@ -13,7 +10,7 @@ export const CreadasApi = () => {
 
   const dataApi = async () => {
     try {
-      const response = await axios.get(`/entity/entidadt/${dateFirstMonth}/${dateEndMonth}`);
+      const response = await axios.get(`/entity/total/entity`);
       setData(response.data);
     } catch (error) {
       if (error.response && error.response.status === 404) {
