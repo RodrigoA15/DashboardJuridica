@@ -85,8 +85,8 @@ const ImportFile = ({ setOpen }) => {
 
   return (
     <div className="d-flex flex-column">
-      <div className="mb-3">
-        <h6>Total registros a importar: {total}</h6>
+      <div className="mt-3">
+        <h6>Total radicados a importar: {total}</h6>
         {error !== null && <span className="errors">{error.response.data}</span>}
       </div>
       <div className="d-flex justify-content-between">

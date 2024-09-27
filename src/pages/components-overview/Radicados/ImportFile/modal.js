@@ -28,8 +28,8 @@ const ModalComponent = () => {
       </Button>
       <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
         <Box sx={style}>
-          <ImportFile setOpen={setOpen} />
           <ImportFileUsers setOpen={setOpen} />
+          <ImportFile setOpen={setOpen} />
         </Box>
       </Modal>
     </div>

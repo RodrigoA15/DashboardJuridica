@@ -3,7 +3,7 @@ import { Box, Collapse, Table, TableBody, TableCell, TableHead, TableRow } from 
 import PropTypes from 'prop-types';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import { Toaster, toast } from 'sonner';
+import { toast } from 'sonner';
 import axios from 'api/axios';
 //Componentes
 import Crearasunto from './create';
@@ -50,7 +50,6 @@ function ListaAsuntos({ row }) {
 
   return (
     <Fragment>
-      <Toaster position="top-right" richColors expand={true} offset="80px" />
       <TableHead>
         <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
           <TableCell>

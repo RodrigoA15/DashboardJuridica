@@ -69,7 +69,7 @@ export const ImportFileUsers = ({ setOpen }) => {
   };
   return (
     <div className="d-flex flex-column">
-      <div className="mb-3">
+      <div className="">
         {/* <h6>Total registros a importar: {total}</h6> */}
         {error !== null && <span className="errors">{error.response.data}</span>}
       </div>
