@@ -37,9 +37,10 @@ export const ChartRadicadosAnswer = () => {
 
   const calculatePercentage = useMemo(() => {
     return (radicadosCount, answersCount) => {
-      if (radicadosCount === 0) return 0; // Evitar divisiones por cero
+      if (radicadosCount === 0) return 0;
       const porcentaje = ((radicadosCount - answersCount) / radicadosCount) * 100;
-      return porcentaje.toFixed(1);
+      if (porcentaje === 0) return answersCount;
+      return `${porcentaje.toFixed(1)}%`;
     };
   }, [radicados, answers]);
 
@@ -90,7 +91,7 @@ export const ChartRadicadosAnswer = () => {
         formatter: (val, opt) => {
           const radicadosCount = opt.w.config.series[0].data[opt.dataPointIndex].goals[0].value;
           const answersCount = val;
-          return `${calculatePercentage(radicadosCount, answersCount)}%`;
+          return calculatePercentage(radicadosCount, answersCount);
         }
       },
       legend: {
