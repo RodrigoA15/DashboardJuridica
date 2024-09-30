@@ -1,8 +1,8 @@
 import axios from 'api/axios';
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { Card } from '../Card';
 
-export const AnalyticTotal = () => {
+export const AnalyticTotal = memo(() => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -20,4 +20,4 @@ export const AnalyticTotal = () => {
   const dataClear = data.map((item) => item.count);
 
   return <Card color="card2" description="TOTAL PQRS" value={dataClear} />;
-};
+});

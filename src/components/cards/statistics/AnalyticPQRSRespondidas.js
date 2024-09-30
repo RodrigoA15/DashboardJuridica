@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import axios from 'api/axios';
 import { toast } from 'sonner';
 
 import { Card } from '../Card';
-function AnalyticPQRSRespondidas() {
+const AnalyticPQRSRespondidas = memo(() => {
   const [answers, setAnswers] = useState([]);
 
   useEffect(() => {
@@ -30,6 +30,6 @@ function AnalyticPQRSRespondidas() {
       <Card description="PQRS CON RESPUESTA" value={count} color="card2" />
     </div>
   );
-}
+});
 
 export default AnalyticPQRSRespondidas;

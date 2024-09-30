@@ -1,10 +1,10 @@
 import MainCard from 'components/MainCard';
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { Grid, Stack, Typography } from '@mui/material';
 import axios from 'api/axios';
 import { Toaster, toast } from 'sonner';
 
-function AnalyticDesacatos() {
+const AnalyticDesacatos = memo(() => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -14,7 +14,7 @@ function AnalyticDesacatos() {
   const apiAsuntos = async () => {
     try {
       const response = await axios.get('/radicados/chartasuntos');
-      setData(response.data);   
+      setData(response.data);
     } catch (error) {
       if (error.response && error.response.status === 404) {
         toast.error('No hay Desacatos');
@@ -52,6 +52,6 @@ function AnalyticDesacatos() {
       </MainCard>
     </div>
   );
-}
+});
 
 export default AnalyticDesacatos;

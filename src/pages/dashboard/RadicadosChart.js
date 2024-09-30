@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Chart from 'react-apexcharts';
 import axios from 'api/axios';
+
 export const RadicadosChart = () => {
   const [data, setData] = useState([]);
 

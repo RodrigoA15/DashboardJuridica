@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo } from 'react';
 import axios from 'api/axios';
 import Chart from 'react-apexcharts';
 
-export const ChartRadicadosAnswer = () => {
+const ChartRadicadosAnswer = () => {
   const [radicados, setRadicados] = useState([]);
   const [answers, setAnswers] = useState([]);
 
@@ -107,3 +107,5 @@ export const ChartRadicadosAnswer = () => {
 
   return <Chart {...chartData} />;
 };
+
+export default ChartRadicadosAnswer;

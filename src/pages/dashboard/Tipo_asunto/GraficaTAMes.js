@@ -1,7 +1,7 @@
 import { ApiAsunto } from './ApiAsunto';
 import Chart from 'react-apexcharts';
 
-export const GraficaTAMes = () => {
+const GraficaTAMes = () => {
   const { dataMes } = ApiAsunto();
 
   const uniqueMonths = [...new Set(dataMes.map((item) => item._id))];
@@ -68,3 +68,5 @@ export const GraficaTAMes = () => {
     </>
   );
 };
+
+export default GraficaTAMes;

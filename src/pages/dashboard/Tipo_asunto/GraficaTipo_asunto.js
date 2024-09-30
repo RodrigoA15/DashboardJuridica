@@ -1,6 +1,6 @@
 import { ApiAsunto } from './ApiAsunto';
 import Chart from 'react-apexcharts';
-export const GraficaTipoAsunto = () => {
+const GraficaTipoAsunto = () => {
   const { data } = ApiAsunto();
 
   const chartData = {
@@ -51,3 +51,5 @@ export const GraficaTipoAsunto = () => {
 
   return <Chart {...chartData} />;
 };
+
+export default GraficaTipoAsunto;

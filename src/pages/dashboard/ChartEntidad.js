@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import Chart from 'react-apexcharts';
 import axios from 'api/axios';
 
-export const ChartEntidad = () => {
+const ChartEntidad = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -66,3 +66,5 @@ export const ChartEntidad = () => {
   };
   return <Chart {...chartData} />;
 };
+
+export default ChartEntidad;

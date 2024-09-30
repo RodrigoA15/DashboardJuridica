@@ -1,15 +1,12 @@
 // material-ui
 import { Grid, Typography } from '@mui/material';
-
 // project import
 import MainCard from 'components/MainCard';
 import AnalyticPQRSCreadas from 'components/cards/statistics/AnalyticPQRSCreadas';
-
 // assets
 import AnalyticPQRSAsignadas from 'components/cards/statistics/AnalyticPQRSAsignadas';
 import AnalyticPQRSRespondidas from 'components/cards/statistics/AnalyticPQRSRespondidas';
 import AnalyticPQRSPendientes from 'components/cards/statistics/AnalyticPQRSPendientes';
-import { ChartEntidad } from './ChartEntidad';
 import { RadicadosChart } from './RadicadosChart';
 import { CanalEntradaChart } from './CanalEntradaChart';
 // import JsonToFileExcel from 'pages/components-overview/Radicados/JsonToXLSX';
@@ -21,18 +18,25 @@ import IndexTipoAsunto from 'pages/components-overview/TipoAsunto/index';
 import { Parameters } from 'hooks/useParameters';
 import TablaVencidas from './TablaVencidas';
 import { CreadasApi } from './creadasApi';
-import { GraficaTipoAsunto } from './Tipo_asunto/GraficaTipo_asunto';
-import { GraficaTAMes } from './Tipo_asunto/GraficaTAMes';
 import { AnalyticTotal } from 'components/cards/statistics/AnalyticTotal';
 // import { AnalyticDevueltos } from 'components/cards/statistics/AnalyticDevueltos';
 import { AnalyticCantRespuestas } from 'components/cards/statistics/AnalyticCantRespuestas';
-import { ChartRadicadosAnswer } from './ChartRadicadosAnswer';
-
+import { lazy, Suspense, useEffect, useState } from 'react';
+const GraficaTAMes = lazy(() => import('./Tipo_asunto/GraficaTAMes'));
+const ChartEntidad = lazy(() => import('./ChartEntidad'));
+const GraficaTipoAsunto = lazy(() => import('./Tipo_asunto/GraficaTipo_asunto'));
+const ChartRadicadosAnswer = lazy(() => import('./ChartRadicadosAnswer'));
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
-
 const DashboardDefault = () => {
   const { parameters } = Parameters();
   const { data } = CreadasApi();
+  const [validateParam, setValidateParam] = useState(false);
+  useEffect(() => {
+    const validatorParameter = parameters.some((parametro) => parametro.nombre_parametro === 'Tabla asuntos' && parametro.activo === true);
+    if (validatorParameter !== validateParam) {
+      setValidateParam(validatorParameter);
+    }
+  }, [parameters, validateParam]);
 
   return (
     <Grid container rowSpacing={4.5} columnSpacing={2.75}>
@@ -85,11 +89,7 @@ const DashboardDefault = () => {
           <Grid item />
         </Grid>
         <MainCard sx={{ mt: 2 }} content={false}>
-          {parameters.some((parametro) => parametro.nombre_parametro === 'Tabla asuntos' && parametro.activo === true) ? (
-            <GraficaTAMes />
-          ) : (
-            <ChartEntidad />
-          )}
+          <Suspense fallback={<div>Cargando...</div>}>{validateParam ? <GraficaTAMes /> : <ChartEntidad />}</Suspense>
         </MainCard>
         {/* <Grid item>
           <Typography variant="h5">Exportar informacion radicados </Typography>
@@ -138,11 +138,7 @@ const DashboardDefault = () => {
         </Grid>
 
         <MainCard sx={{ mt: 2 }} content={false}>
-          {parameters.some((parametro) => parametro.nombre_parametro === 'Tabla asuntos' && parametro.activo === true) ? (
-            <GraficaTipoAsunto />
-          ) : (
-            <ChartRadicadosAnswer />
-          )}
+          <Suspense fallback={<div>Cargando...</div>}> {validateParam ? <GraficaTipoAsunto /> : <ChartRadicadosAnswer />}</Suspense>
         </MainCard>
       </Grid>
 
@@ -166,11 +162,7 @@ const DashboardDefault = () => {
           </Grid>
         </Grid>
         <MainCard sx={{ mt: 1.75 }}>
-          {parameters.some((parametro) => parametro.nombre_parametro === 'Tabla asuntos' && parametro.activo === true) ? (
-            <IndexTipoAsunto />
-          ) : (
-            <CanalEntradaChart />
-          )}
+          <Suspense fallback={<div>Cargando...</div>}>{validateParam ? <IndexTipoAsunto /> : <CanalEntradaChart />}</Suspense>
         </MainCard>
       </Grid>
     </Grid>
