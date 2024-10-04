@@ -16,12 +16,12 @@ import { AnalyticRespuestasPend } from 'components/cards/statistics/AnalyticResp
 // import RadicadosExcel from 'pages/components-overview/Radicados/radicadosExcel';
 import IndexTipoAsunto from 'pages/components-overview/TipoAsunto/index';
 import { Parameters } from 'hooks/useParameters';
-import TablaVencidas from './TablaVencidas';
 import { CreadasApi } from './creadasApi';
 import { AnalyticTotal } from 'components/cards/statistics/AnalyticTotal';
 // import { AnalyticDevueltos } from 'components/cards/statistics/AnalyticDevueltos';
 import { AnalyticCantRespuestas } from 'components/cards/statistics/AnalyticCantRespuestas';
 import { lazy, Suspense, useEffect, useState } from 'react';
+import { TabVencidas } from './vencidas/index';
 const GraficaTAMes = lazy(() => import('./Tipo_asunto/GraficaTAMes'));
 const ChartEntidad = lazy(() => import('./ChartEntidad'));
 const GraficaTipoAsunto = lazy(() => import('./Tipo_asunto/GraficaTipo_asunto'));
@@ -150,7 +150,7 @@ const DashboardDefault = () => {
           <Grid item />
         </Grid>
         <MainCard content={false} sx={{ mt: 1.5 }}>
-          <TablaVencidas />
+          <TabVencidas />
         </MainCard>
       </Grid>
 

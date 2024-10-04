@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import { useState } from 'react';
 import { Box, Collapse, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import PropTypes from 'prop-types';
 import Swal from 'sweetalert2';
@@ -49,7 +49,7 @@ function ListaAsuntos({ row }) {
   };
 
   return (
-    <Fragment>
+    <>
       <TableHead>
         <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
           <TableCell>
@@ -78,7 +78,6 @@ function ListaAsuntos({ row }) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {/* Componente crear asunto */}
                   <Crearasunto valueDP={valueDP} openPost={openPost} />
                   {row.asuntos.map((asunto) => (
                     <TableRow key={asunto._id}>
@@ -100,7 +99,7 @@ function ListaAsuntos({ row }) {
           </Collapse>
         </TableCell>
       </TableRow>
-    </Fragment>
+    </>
   );
 }
 
