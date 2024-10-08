@@ -33,8 +33,16 @@ export const GetAssignedUser = () => {
           emptyMessage="No se encontraron resultados"
         >
           <Column className="border" field="username" header="Nombre"></Column>
-          <Column className="border" field="estados.estado" header="Estado"></Column>
-          <Column className="border" field="estados.cantidad" header="Total"></Column>
+          <Column
+            className="border"
+            header="Estado"
+            body={(rowData) => rowData.estados.map((estado, index) => <div key={index}>{estado.estado}</div>)}
+          ></Column>
+          <Column
+            className="border"
+            header="Total"
+            body={(rowData) => rowData.estados.map((estado, index) => <div key={index}>{estado.cantidad}</div>)}
+          ></Column>
         </DataTable>
       </div>
     </>
