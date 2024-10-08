@@ -32,7 +32,7 @@ const ChartRadicadosAnswer = () => {
   const getMonths = () => {
     const radicadoMonths = radicados.map((item) => item._id);
     const answerMonths = answers.map((item) => item._id.month);
-    return Array.from(new Set([...radicadoMonths, ...answerMonths])).sort();
+    return Array.from(new Set([...radicadoMonths, ...answerMonths]));
   };
 
   const calculatePercentage = useMemo(() => {

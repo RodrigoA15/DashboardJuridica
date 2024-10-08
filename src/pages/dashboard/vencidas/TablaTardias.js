@@ -19,6 +19,7 @@ export const TablaTardias = () => {
   const [openYears, setOpenYears] = useState({});
   const [openMonths, setOpenMonths] = useState({});
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     answerLate();
@@ -30,6 +31,8 @@ export const TablaTardias = () => {
       setData(response.data);
     } catch (error) {
       setError(error.response.data);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -46,6 +49,14 @@ export const TablaTardias = () => {
       [`${anio}-${month}`]: !prevState[`${anio}-${month}`]
     }));
   };
+
+  if (loading) {
+    return <div>Cargando...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <Grid container spacing={2}>

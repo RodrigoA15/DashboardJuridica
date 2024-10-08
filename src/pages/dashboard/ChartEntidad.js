@@ -36,7 +36,7 @@ const ChartEntidad = () => {
           enabled: false
         }
       },
-      colors: ['#4379F2', '#FF1E1E', '#2196f3', '#03a9f4', '#ff9800', '#f44336'],
+      colors: ['#4379F2', '#F46060', '#2196f3', '#03a9f4', '#ff9800', '#f44336'],
 
       legend: {
         position: 'bottom'
