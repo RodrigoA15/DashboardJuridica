@@ -60,14 +60,14 @@ const BarChart = () => {
             usernames.push(item.username);
           }
 
-          const { estado, cantidad } = item.estados;
+          item.estados.map((item2) => {
+            if (!estadosMap[item2.estado]) {
+              estadosMap[item2.estado] = Array(usernames.length).fill(0);
+            }
 
-          if (!estadosMap[estado]) {
-            estadosMap[estado] = Array(usernames.length).fill(0);
-          }
-
-          const userIndex = usernames.indexOf(item.username);
-          estadosMap[estado][userIndex] = cantidad;
+            const userIndex = usernames.indexOf(item.username);
+            estadosMap[item2.estado][userIndex] = item2.cantidad;
+          });
         });
 
         const series = Object.keys(estadosMap).map((estado) => ({

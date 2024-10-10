@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'api/axios';
-import ReactApexChart from 'react-apexcharts';
+import Chart from 'react-apexcharts';
 
 function ChartArea() {
   const [data, setData] = useState({
@@ -71,7 +71,7 @@ function ChartArea() {
 
   return (
     <div>
-      <ReactApexChart options={data.options} series={data.series} type="bar" height={350} />
+      <Chart options={data.options} series={data.series} type="bar" height={450} />
     </div>
   );
 }

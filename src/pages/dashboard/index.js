@@ -18,7 +18,7 @@ import IndexTipoAsunto from 'pages/components-overview/TipoAsunto/index';
 import { Parameters } from 'hooks/useParameters';
 import { CreadasApi } from './creadasApi';
 import { AnalyticTotal } from 'components/cards/statistics/AnalyticTotal';
-// import { AnalyticDevueltos } from 'components/cards/statistics/AnalyticDevueltos';
+import { AnalyticDevueltos } from 'components/cards/statistics/AnalyticDevueltos';
 import { AnalyticCantRespuestas } from 'components/cards/statistics/AnalyticCantRespuestas';
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { TabVencidas } from './vencidas/index';
@@ -77,6 +77,12 @@ const DashboardDefault = () => {
       <Grid item xs={12} sm={6} md={4} lg={3}>
         <AnalyticCantRespuestas />
       </Grid>
+
+      {validateParam && (
+        <Grid item xs={12} sm={6} md={4} lg={3}>
+          <AnalyticDevueltos />
+        </Grid>
+      )}
 
       <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
 

@@ -1,6 +1,5 @@
 import MainCard from 'components/MainCard';
 import { Grid, Typography } from '@mui/material';
-import ChartEntidadAdmin from './chart';
 import ChartArea from './chartArea';
 import ChartEstados from './chartEstados';
 import BarChart from './StatesByUser';
@@ -10,7 +9,7 @@ import BarChart from './StatesByUser';
 function IndexResumen() {
   return (
     <Grid container rowSpacing={4.5} columnSpacing={2.75}>
-      <Grid item xs={8} md={5}>
+      <Grid item xs={6} md={6}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
             <Typography variant="h5">Resumen</Typography>
@@ -21,7 +20,7 @@ function IndexResumen() {
         </MainCard>
       </Grid>
 
-      <Grid item xs={8} md={5}>
+      <Grid item xs={6} md={6}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
             <Typography variant="h5">Resumen</Typography>
@@ -32,19 +31,7 @@ function IndexResumen() {
         </MainCard>
       </Grid>
 
-      {/* Entidades */}
-      <Grid item xs={8} md={5}>
-        <Grid container alignItems="center" justifyContent="space-between">
-          <Grid item>
-            <Typography variant="h5">Resumen</Typography>
-          </Grid>
-        </Grid>
-        <MainCard content={false} sx={{ mt: 1.5 }}>
-          <ChartEntidadAdmin />
-        </MainCard>
-      </Grid>
-
-      <Grid item xs={8} md={5}>
+      <Grid item xs={6} md={12}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
             <Typography variant="h5">Resumen</Typography>

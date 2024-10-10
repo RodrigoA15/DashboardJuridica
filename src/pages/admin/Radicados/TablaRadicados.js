@@ -69,6 +69,8 @@ function AdminRadicados() {
           header={header}
           paginator
           rows={5}
+          showGridlines
+          stripedRows
           rowsPerPageOptions={[5, 10, 25, 50]}
           paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
           currentPageReportTemplate="{first} a {last} de {totalRecords}"
