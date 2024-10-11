@@ -63,7 +63,7 @@ const DashboardDefault = () => {
       </Grid>
 
       {validateParam && (
-        <Grid item xs={12} sm={6} md={4} lg={3}>
+        <Grid item xs={6} sm={3} md={2} lg={2}>
           <AnalyticDevueltos />
         </Grid>
       )}
