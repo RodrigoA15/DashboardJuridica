@@ -84,6 +84,7 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
     updateAffair();
     updateArea();
     handleClose();
+    setNameArea(null);
   };
 
   const crearRespuesta = async (num) => {
@@ -136,6 +137,7 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
       const newData = asignados.filter((item) => item._id !== data._id);
       setAsignados(newData);
       handleClose();
+      setGranted(null);
       toast.success('Radicado actualizado correctamente');
     } catch (error) {
       toast.error(error.response.data);
