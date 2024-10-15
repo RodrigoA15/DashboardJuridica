@@ -40,7 +40,7 @@ root.render(
     <PrimeReactProvider>
       <ReduxProvider store={store}>
         <AuthProvider>
-          <BrowserRouter>
+          <BrowserRouter basename="/pqrs">
             <App />
             <Routes>
               <Route element={<ProtectedRoute />}>
