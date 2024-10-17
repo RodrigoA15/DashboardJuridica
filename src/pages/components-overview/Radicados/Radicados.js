@@ -26,7 +26,6 @@ function ComponentRadicados() {
   const [nameCourt, setNameCourt] = useState('');
   const [juzgado, setJuzgados] = useState(null);
   const [check, setCheck] = useState(false);
-  const [errorData, setError] = useState(null);
   const MySwal = withReactContent(Swal);
   const onSubmit = handleSubmit((data) => {
     createRadicado(data);
@@ -50,12 +49,10 @@ function ComponentRadicados() {
       reset();
       setJuzgados(null);
     } catch (error) {
-      setError(error.response.data);
-      // const errorMessage = error.response?.data?.message || 'Error al crear radicado';
       MySwal.fire({
         title: 'Error',
-        text: errorData,
-        icon: 'error'
+        text: error.response.data,
+        icon: 'info'
       });
     }
   };
@@ -96,6 +93,11 @@ function ComponentRadicados() {
                     minLength: {
                       value: 14,
                       message: 'Número Radicado debe ser mayor igual a 14 caracteres'
+                    },
+
+                    maxLength: {
+                      value: 18,
+                      message: 'Número Radicado no debe sobrepasar 18 caracteres'
                     }
                   })}
                 />
