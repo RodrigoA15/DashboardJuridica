@@ -52,7 +52,8 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
     accept: {
       'text/pdf': ['.pdf']
     },
-    disabled: validorGranted || parametroActivo
+    disabled: validorGranted || parametroActivo,
+    maxSize: 10000000
   });
 
   const MySwal = withReactContent(Swal);
@@ -229,7 +230,10 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
                 {isDragActive ? (
                   <p>Suelte el archivo aqui...</p>
                 ) : (
-                  <p>Arrastre y suelte archivo PDF aquí o haga clic para selecciona archivo</p>
+                  <div>
+                    <p>Arrastre y suelte archivo PDF aquí o haga clic para selecciona archivo</p>
+                    <p className="errors">Nota: el tamaño del archivo debe ser inferior a 10 MB</p>
+                  </div>
                 )}
               </div>
               {url && <PDFViewer url={url} />}
