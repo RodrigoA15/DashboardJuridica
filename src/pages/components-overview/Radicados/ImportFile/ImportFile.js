@@ -18,7 +18,7 @@ const VisuallyHiddenInput = styled('input')({
   width: 1
 });
 
-const ImportFile = ({ setOpen }) => {
+const ImportFile = ({ setOpen, setHidden }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [upload, setUpload] = useState(false);
   const [loading, setLoading] = useState(false); // Estado para la barra de carga
@@ -73,11 +73,13 @@ const ImportFile = ({ setOpen }) => {
       if (response.data) {
         toast.success('Archivo importado correctamente');
         setOpen(false);
+        setHidden(false);
       }
     } catch (error) {
       setError(error);
       toast.error(error.response?.data);
       setOpen(false);
+      setHidden(false);
     } finally {
       setLoading(false);
     }
@@ -98,7 +100,7 @@ const ImportFile = ({ setOpen }) => {
           startIcon={<CloudUploadIcon />}
           disabled={selectedFile !== null}
         >
-          Cargar archivo
+          Cargar archivo PQRS
           <VisuallyHiddenInput type="file" onChange={handleFileUpload} accept=".xlsx" />
         </Button>
         {selectedFile !== null && (

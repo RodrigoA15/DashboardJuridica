@@ -17,7 +17,7 @@ const VisuallyHiddenInput = styled('input')({
   width: 1
 });
 
-export const ImportFileUsers = ({ setOpen }) => {
+export const ImportFileUsers = ({ setOpen, setHidden }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [upload, setUpload] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -43,7 +43,6 @@ export const ImportFileUsers = ({ setOpen }) => {
         toast.success('Archivo guardado');
       }
     } catch (error) {
-      console.log(error);
       setError(error);
       toast.error(error.response?.data);
       setOpen(false);
@@ -57,16 +56,21 @@ export const ImportFileUsers = ({ setOpen }) => {
       const response = await axios.get('/radicados/readFile-users');
       if (response.data) {
         toast.success('Archivo importado correctamente');
-        setOpen(false);
+        setHidden(true);
+        setUpload(false);
+        setSelectedFile('2');
       }
     } catch (error) {
       setError(error);
       toast.error(error.response?.data);
-      setOpen(false);
+      setSelectedFile('2');
+      setUpload(false);
+      setHidden(true);
     } finally {
       setLoading(false);
     }
   };
+
   return (
     <div className="d-flex flex-column">
       <div className="">
@@ -87,7 +91,7 @@ export const ImportFileUsers = ({ setOpen }) => {
         </Button>
         {selectedFile !== null && (
           <div>
-            <Button variant="contained" className="btn btn-success" onClick={handleUpload} disabled={upload}>
+            <Button variant="contained" className="btn btn-success" onClick={handleUpload} disabled={upload || selectedFile === '2'}>
               Subir
             </Button>
           </div>

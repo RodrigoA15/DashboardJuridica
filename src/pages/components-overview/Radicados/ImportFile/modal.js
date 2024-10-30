@@ -19,6 +19,7 @@ const style = {
 
 const ModalComponent = () => {
   const [open, setOpen] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   return (
@@ -28,8 +29,8 @@ const ModalComponent = () => {
       </Button>
       <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
         <Box sx={style}>
-          <ImportFileUsers setOpen={setOpen} />
-          <ImportFile setOpen={setOpen} />
+          <ImportFileUsers setOpen={setOpen} hidden={hidden} setHidden={setHidden} />
+          {hidden && <ImportFile setOpen={setOpen} setHidden={setHidden} />}
         </Box>
       </Modal>
     </div>
