@@ -32,10 +32,26 @@ export const GetAssignedUser = () => {
           showGridlines
           emptyMessage="No se encontraron resultados"
         >
-          <Column className="border" field="username" header="Nombre"></Column>
+          <Column className="border" field="username" header="Responsable"></Column>
           <Column
             className="border"
-            header="Estado"
+            header="Tipificacion"
+            body={(rowData) =>
+              rowData.tipificacion.map((tipificacion, index) => (
+                <div className={tipificacion.tipificacion === 'TUTELAS' ? 'underlineText' : ''} key={index}>
+                  {tipificacion.tipificacion}
+                </div>
+              ))
+            }
+          ></Column>
+          <Column
+            className="border"
+            header="Total"
+            body={(rowData) => rowData.tipificacion.map((tipificacion, index) => <div key={index}>{tipificacion.cantidad}</div>)}
+          ></Column>
+          <Column
+            className="border"
+            header="Estado radicado"
             body={(rowData) => rowData.estados.map((estado, index) => <div key={index}>{estado.estado}</div>)}
           ></Column>
           <Column

@@ -206,7 +206,11 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
               {parametroActivo && (
                 <>
                   <div>
-                    <IndexTypesAffairs setValueAffair={setValueAffair} granted={granted} />
+                    <IndexTypesAffairs
+                      setValueAffair={setValueAffair}
+                      granted={granted}
+                      typeAffair={data.id_radicado.id_asunto.id_tipo_asunto}
+                    />
                   </div>
 
                   <div>
@@ -248,7 +252,7 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
 
               {validorGranted && (
                 <Button className="btn btn-success mt-4" onClick={() => updateState()}>
-                  Responder
+                  Devolver
                 </Button>
               )}
 
@@ -256,7 +260,7 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
                 (!nameArea || !valueAffair || !granted ? (
                   <p>Seleccione todos los campos</p>
                 ) : (
-                  <Button className="btn btn-success mt-4" onClick={() => handleSubmitOutFile()}>
+                  <Button disabled={validorGranted} className="btn btn-success mt-4" onClick={() => handleSubmitOutFile()}>
                     Responder
                   </Button>
                 ))}

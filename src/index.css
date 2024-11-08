@@ -272,3 +272,8 @@ hr {
     opacity: 1;
   }
 }
+
+.underlineText {
+  text-decoration: underline;
+  color: #F46060;
+}

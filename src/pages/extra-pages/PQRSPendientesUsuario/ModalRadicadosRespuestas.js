@@ -55,7 +55,6 @@ function ModalRadicadosRespuestas({ opens, handleCloses, respuestas, asignados, 
         await axios.put(`/radicados/${respuestas.id_radicado._id}`, {
           estado_radicado: 'Respuesta'
         });
-        console.log(respuestas._id);
         const newData = asignados.filter((item) => item._id !== respuestas._id);
         setAsignados(newData);
         updateEstadoAsignacion(respuestas);
