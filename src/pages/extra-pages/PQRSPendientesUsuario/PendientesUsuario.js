@@ -154,7 +154,7 @@ function PendientesUsuario() {
   //Buttons
   const btnOpenModalAddAnswer = (data) => {
     return (
-      <Tooltip title="Agregar respuestas" placement="top-start">
+      <Tooltip title="Agregar respuestas" placement="top-start" arrow>
         <IconButton onClick={() => handleOpen(data)}>
           <AddIcon />
         </IconButton>
@@ -163,7 +163,7 @@ function PendientesUsuario() {
   };
   const btnOpenModalViewAnswer = (data) => {
     return (
-      <Tooltip title="Ver respuestas" placement="top-start">
+      <Tooltip title="Ver respuestas" placement="top-start" arrow>
         <IconButton onClick={() => handleOpenR(data)}>
           <VisibilityIcon />
         </IconButton>
@@ -172,7 +172,7 @@ function PendientesUsuario() {
   };
   const btnReasignation = (data) => {
     return (
-      <Tooltip title="Reasignación" placement="top-start">
+      <Tooltip title="Reasignación" placement="top-start" arrow>
         <IconButton onClick={() => handleOpenReasignacion(data)}>
           <SendIcon />
         </IconButton>

@@ -13,7 +13,10 @@ import { useDropzone } from 'react-dropzone';
 import IndexTypesAffairs from './ActualizarAsunto/index';
 import { Parameters } from 'hooks/useParameters';
 import { ListAreas } from './ActualizarArea/ListAreas';
-import { FormControl, FormControlLabel, FormLabel, RadioGroup, Radio } from '@mui/material';
+import { FormControl, FormControlLabel, FormLabel, RadioGroup, Radio, IconButton, Tooltip } from '@mui/material';
+import ClearIcon from '@mui/icons-material/Clear';
+import CheckIcon from '@mui/icons-material/Check';
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -38,6 +41,9 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
   const [granted, setGranted] = useState(null);
   const [url, setUrl] = useState('');
   const [urlFile, setUrlFile] = useState('');
+  const [newName, setNewName] = useState(null);
+  const [newLastName, setNewLastName] = useState(null);
+
   const onDrop = useCallback((acceptedFiles) => {
     setUrl(URL.createObjectURL(acceptedFiles[0]));
     setUrlFile(acceptedFiles[0]);
@@ -57,7 +63,6 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
   });
 
   const MySwal = withReactContent(Swal);
-
   const onSubmit = handleSubmit(async (num) => {
     const alert = await MySwal.fire({
       title: 'Esta seguro de agregar respuesta?',
@@ -101,6 +106,7 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
       await axios.post('/answer', formData, config);
       toast.success('Respuesta Agregada');
       setUrl('');
+      cancelUpdateNewName();
       handleClose();
     } catch (error) {
       toast.error(error.response.data);
@@ -121,8 +127,8 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
   const updateArea = async () => {
     try {
       await axios.put(`/answer/update-area`, {
-        _id: data.id_radicado._id,
-        nombre_area: nameArea
+        id_radicado: data.id_radicado._id,
+        id_departamento: nameArea
       });
     } catch (error) {
       toast.error(error.response.data);
@@ -158,6 +164,23 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
     }
   };
 
+  const updateOrigin = async () => {
+    try {
+      await axios.put(`/origin/${data.id_radicado.id_procedencia._id}`, {
+        nombre: newName,
+        apellido: newLastName
+      });
+      toast.success('Procedecencia actualizado correctamente');
+    } catch (error) {
+      toast.error(error.response.data);
+    }
+  };
+
+  const cancelUpdateNewName = () => {
+    setNewName(null);
+    setNewLastName(null);
+  };
+
   return (
     <>
       <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
@@ -167,7 +190,9 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
               {parametroActivo && (
                 <div>
                   <FormControl>
-                    <FormLabel id="concedido">*Concedido</FormLabel>
+                    <FormLabel id="concedido">
+                      <h6>Concedido*</h6>
+                    </FormLabel>
                     <RadioGroup
                       row
                       aria-labelledby="concedido"
@@ -202,6 +227,49 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
                   disabled={validorGranted || parametroActivo}
                 />
                 {errors.numero_radicado_respuesta && <span className="inputForm ">{errors.numero_radicado_respuesta.message}</span>}
+              </div>
+              <div className="mb-3 row">
+                <h6>Informaci&oacute;n usuario</h6>
+
+                <div className="col">
+                  <label className="form-label" htmlFor="name">
+                    Nombres
+                  </label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    defaultValue={data.id_radicado.id_procedencia.nombre}
+                    onChange={(e) => setNewName(e.target.value)}
+                  />
+                </div>
+
+                <div className="col">
+                  <label className="form-label" htmlFor="lastname">
+                    Apellidos
+                  </label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    defaultValue={data.id_radicado.id_procedencia.apellido}
+                    onChange={(e) => setNewLastName(e.target.value)}
+                  />
+                </div>
+
+                {newName && newLastName !== null && (
+                  <div className="col-1 d-flex justify-content-center ">
+                    <Tooltip title="Cancelar" arrow>
+                      <IconButton aria-label="cancel" color="error" onClick={cancelUpdateNewName}>
+                        <ClearIcon />
+                      </IconButton>
+                    </Tooltip>
+
+                    <Tooltip title="Actualizar" arrow>
+                      <IconButton aria-label="check" color="success" onClick={updateOrigin}>
+                        <CheckIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                )}
               </div>
               {parametroActivo && (
                 <>
