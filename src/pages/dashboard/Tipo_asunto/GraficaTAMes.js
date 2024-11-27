@@ -1,3 +1,4 @@
+import { meses } from 'data/meses';
 import { ApiAsunto } from './ApiAsunto';
 import Chart from 'react-apexcharts';
 
@@ -15,7 +16,6 @@ const GraficaTAMes = () => {
     const entry = dataMes.find((item) => item._id === month && item.nombre_tipificacion === 'TUTELAS');
     return entry ? entry.count : 0;
   });
-
   const chartData = {
     series: [
       {
@@ -57,7 +57,7 @@ const GraficaTAMes = () => {
         size: 5
       },
       xaxis: {
-        categories: uniqueMonths
+        categories: uniqueMonths.map((item) => meses[item])
       }
     }
   };

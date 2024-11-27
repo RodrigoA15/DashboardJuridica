@@ -2,9 +2,10 @@
 import { Box, useMediaQuery } from '@mui/material';
 
 // project import
-import Search from './Search';
+// import Search from './Search';
 import Profile from './Profile';
 import MobileSection from './MobileSection';
+import JsonToFileExcel from 'pages/components-overview/Radicados/JsonToXLSX';
 
 // ==============================|| HEADER - CONTENT ||============================== //
 
@@ -13,7 +14,7 @@ const HeaderContent = () => {
 
   return (
     <>
-      {!matchesXs && <Search />}
+      {!matchesXs && <JsonToFileExcel />}
       {matchesXs && <Box sx={{ width: '100%', ml: 1 }} />}
 
       {!matchesXs && <Profile />}

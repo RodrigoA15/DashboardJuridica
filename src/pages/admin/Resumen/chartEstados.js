@@ -1,10 +1,36 @@
 import { useEffect, useState } from 'react';
 import axios from 'api/axios';
-import ReactApexChart from 'react-apexcharts';
+import Chart from 'react-apexcharts';
 
-function ChartEstados() {
-  const [data, setData] = useState({
-    series: [],
+export const ChartEstados = () => {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    statesByArea();
+  }, []);
+
+  const statesByArea = async () => {
+    try {
+      const response = await axios.get('/chartAdmin/radicadosAreasEstados');
+      setData(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const cleanData = data.map((radicado) => radicado.radicados).flat();
+
+  const seriesData = cleanData.map((item) => ({
+    name: item.estado,
+    data: data.map((area) => {
+      const radicadoFound = area.radicados.find((r) => r.estado === item.estado);
+      return radicadoFound ? radicadoFound.count : 0;
+    })
+  }));
+
+  const chartData = {
+    type: 'bar',
+    series: seriesData,
     options: {
       plotOptions: {
         bar: {
@@ -16,52 +42,13 @@ function ChartEstados() {
       },
       dataLabels: {
         enabled: true,
-        offsetY: -20,
-        style: {
-          fontSize: '12px',
-          colors: ['#304758']
-        }
+        offsetY: -20
       },
       xaxis: {
-        categories: []
+        categories: data.map((item) => item._id)
       }
-    }
-  });
-
-  useEffect(() => {
-    apiRadicadosEstados();
-  }, []);
-
-  const apiRadicadosEstados = async () => {
-    try {
-      const radicadoEstados = await axios.get('/chartAdmin/radicadosAreasEstados');
-      const radicadosResponse = radicadoEstados.data;
-
-      const categories = radicadosResponse.map((area) => area.departamento);
-      const seriesData = radicadosResponse[0].radicados.map((radicado) => ({
-        name: radicado.estado,
-        data: radicadosResponse.map((area) => area.radicados.find((item) => item.estado === radicado.estado).count)
-      }));
-
-      setData({
-        series: seriesData,
-        options: {
-          ...data.options,
-          xaxis: {
-            categories: categories
-          }
-        }
-      });
-    } catch (error) {
-      console.log(error);
     }
   };
 
-  return (
-    <div className="chart-container">
-      <ReactApexChart options={data.options} series={data.series} type="bar" height={450} />
-    </div>
-  );
-}
-
-export default ChartEstados;
+  return <Chart {...chartData} height={450} />;
+};

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Chart from 'react-apexcharts';
 import axios from 'api/axios';
+import { meses } from 'data/meses';
 
 export const RadicadosChart = () => {
   const [data, setData] = useState([]);
@@ -41,9 +42,15 @@ export const RadicadosChart = () => {
       },
 
       xaxis: {
-        categories: data.map((item) => item._id),
+        categories: data.map((item) => meses[item._id]),
         title: {
           text: 'Meses'
+        }
+      },
+
+      tooltip: {
+        x: {
+          format: 'MM'
         }
       },
 

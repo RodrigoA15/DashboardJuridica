@@ -10,13 +10,15 @@ export const ListAreas = memo(({ setNameArea, granted }) => {
 
   return (
     <>
-      <select className="form-select mb-3" onChange={handleSubmit} disabled={granted === 'Devuelto'}>
+      <select className="form-select rounded-pill mb-3" onChange={handleSubmit} disabled={granted === 'Devuelto'}>
         <option value="">Seleccione &aacute;rea</option>
-        {areas.map((area) => (
-          <option key={area._id} value={area._id}>
-            {area.nombre_departamento}
-          </option>
-        ))}
+        {areas
+          .filter((name) => name.nombre_departamento != 'Juridica - MDA')
+          .map((area) => (
+            <option key={area._id} value={area._id}>
+              {area.nombre_departamento}
+            </option>
+          ))}
       </select>
     </>
   );
