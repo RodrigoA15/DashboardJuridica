@@ -13,9 +13,10 @@ import { useDropzone } from 'react-dropzone';
 import IndexTypesAffairs from './ActualizarAsunto/index';
 import { Parameters } from 'hooks/useParameters';
 import { ListAreas } from './ActualizarArea/ListAreas';
-import { FormControl, FormControlLabel, FormLabel, RadioGroup, Radio, IconButton, Tooltip } from '@mui/material';
-import ClearIcon from '@mui/icons-material/Clear';
-import CheckIcon from '@mui/icons-material/Check';
+import { FormControl, FormControlLabel, FormLabel, RadioGroup, Radio } from '@mui/material';
+// import ClearIcon from '@mui/icons-material/Clear';
+// import CheckIcon from '@mui/icons-material/Check';
+// import CreateIcon from '@mui/icons-material/Create';
 
 const style = {
   position: 'absolute',
@@ -41,8 +42,10 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
   const [granted, setGranted] = useState(null);
   const [url, setUrl] = useState('');
   const [urlFile, setUrlFile] = useState('');
-  const [newName, setNewName] = useState(null);
-  const [newLastName, setNewLastName] = useState(null);
+  // const [newIdentififcation, setNewIdentification] = useState(null);
+  // const [newName, setNewName] = useState(null);
+  // const [newLastName, setNewLastName] = useState(null);
+  // const [updated, setUpdated] = useState(false);
 
   const onDrop = useCallback((acceptedFiles) => {
     setUrl(URL.createObjectURL(acceptedFiles[0]));
@@ -106,7 +109,7 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
       await axios.post('/answer', formData, config);
       toast.success('Respuesta Agregada');
       setUrl('');
-      cancelUpdateNewName();
+      // cancelUpdateNewName();
       handleClose();
     } catch (error) {
       toast.error(error.response.data);
@@ -164,22 +167,36 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
     }
   };
 
-  const updateOrigin = async () => {
-    try {
-      await axios.put(`/origin/${data.id_radicado.id_procedencia._id}`, {
-        nombre: newName,
-        apellido: newLastName
-      });
-      toast.success('Procedecencia actualizado correctamente');
-    } catch (error) {
-      toast.error(error.response.data);
-    }
-  };
+  // const updateOrigin = async () => {
+  //   try {
+  //     const updatedData = {};
+  //     if (newName !== null) updatedData.nombre = newName;
+  //     if (newLastName !== null) updatedData.apellido = newLastName;
+  //     if (newIdentififcation !== null) updatedData.numero_identificacion = newIdentififcation;
 
-  const cancelUpdateNewName = () => {
-    setNewName(null);
-    setNewLastName(null);
-  };
+  //     // Validar si no hay datos para actualizar
+  //     if (Object.keys(updatedData).length === 0) {
+  //       return toast.error('No hay datos válidos para actualizar');
+  //     }
+
+  //     await axios.put(`/origin/${data.id_radicado.id_procedencia._id}`, updatedData);
+  //     toast.success('Procedencia actualizada correctamente');
+  //     cancelUpdateNewName();
+  //   } catch (error) {
+  //     toast.error(error.response?.data || 'Error al actualizar la procedencia');
+  //   }
+  // };
+
+  // const cancelUpdateNewName = () => {
+  //   setUpdated(false);
+  //   setNewName(null);
+  //   setNewLastName(null);
+  //   setNewIdentification(null);
+  // };
+
+  // const activeUpdated = () => {
+  //   setUpdated(true);
+  // };
 
   return (
     <>
@@ -207,29 +224,43 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
                   </FormControl>
                 </div>
               )}
-              <div className="mb-3">
-                <label className="form-label" htmlFor="NoRadicado">
-                  Número radicado respuesta
-                </label>
-                <input
-                  className="form-control rounded-pill"
-                  type="number"
-                  {...register('numero_radicado_respuesta', {
-                    required: {
-                      value: true,
-                      message: 'Este campo es obligatorio'
-                    },
-                    minLength: {
-                      value: 12,
-                      message: 'Número radicado respuesta debe ser minimo 12 carácteres'
-                    }
-                  })}
-                  disabled={validorGranted || parametroActivo}
-                />
-                {errors.numero_radicado_respuesta && <span className="inputForm ">{errors.numero_radicado_respuesta.message}</span>}
-              </div>
-              <div className="mb-3 row">
+              {!parametroActivo && (
+                <div className="mb-3">
+                  <label className="form-label" htmlFor="NoRadicado">
+                    Número radicado respuesta
+                  </label>
+                  <input
+                    className="form-control rounded-pill"
+                    type="number"
+                    {...register('numero_radicado_respuesta', {
+                      required: {
+                        value: true,
+                        message: 'Este campo es obligatorio'
+                      },
+                      minLength: {
+                        value: 12,
+                        message: 'Número radicado respuesta debe ser minimo 12 carácteres'
+                      }
+                    })}
+                  />
+                  {errors.numero_radicado_respuesta && <span className="inputForm ">{errors.numero_radicado_respuesta.message}</span>}
+                </div>
+              )}
+              {/* <div className="mb-3 row align-items-center">
                 <h6>Informaci&oacute;n usuario</h6>
+
+                <div className="col">
+                  <label className="form-label" htmlFor="name">
+                    N&uacute;mero identificaci&oacute;n
+                  </label>
+                  <input
+                    className="form-control"
+                    type="number"
+                    defaultValue={data.id_radicado.id_procedencia.numero_identificacion}
+                    onChange={(e) => setNewIdentification(e.target.value)}
+                    disabled={!updated}
+                  />
+                </div>
 
                 <div className="col">
                   <label className="form-label" htmlFor="name">
@@ -240,6 +271,7 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
                     type="text"
                     defaultValue={data.id_radicado.id_procedencia.nombre}
                     onChange={(e) => setNewName(e.target.value)}
+                    disabled={!updated}
                   />
                 </div>
 
@@ -252,12 +284,23 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
                     type="text"
                     defaultValue={data.id_radicado.id_procedencia.apellido}
                     onChange={(e) => setNewLastName(e.target.value)}
+                    disabled={!updated}
                   />
                 </div>
 
-                {newName && newLastName !== null && (
-                  <div className="col-1 d-flex justify-content-center ">
-                    <Tooltip title="Cancelar" arrow>
+                {!updated && (
+                  <div className="col-1">
+                    <Tooltip title="Editar" arrow>
+                      <IconButton onClick={activeUpdated}>
+                        <CreateIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                )}
+
+                {updated && (
+                  <div className="col-1">
+                    <Tooltip title="Cancelar" placement="top" arrow>
                       <IconButton aria-label="cancel" color="error" onClick={cancelUpdateNewName}>
                         <ClearIcon />
                       </IconButton>
@@ -270,9 +313,11 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
                     </Tooltip>
                   </div>
                 )}
-              </div>
+              </div> */}
               {parametroActivo && (
                 <>
+                  <h6>Informaci&oacute;n radicado*</h6>
+
                   <div>
                     <IndexTypesAffairs
                       setValueAffair={setValueAffair}
@@ -287,35 +332,39 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
                 </>
               )}
 
-              <div
-                className="mb-3"
-                {...getRootProps()}
-                style={{
-                  background: '#e3e3e3',
-                  padding: '20px'
-                }}
-              >
-                <label className="form-label" htmlFor="NoRadicado">
-                  Archivo
-                </label>
-                <input className="form-control rounded-pill" {...getInputProps()} />
-                {isDragActive ? (
-                  <p>Suelte el archivo aqui...</p>
-                ) : (
-                  <div>
-                    <p>Arrastre y suelte archivo PDF aquí o haga clic para selecciona archivo</p>
-                    <p className="errors">Nota: el tamaño del archivo debe ser inferior a 10 MB</p>
+              {!parametroActivo && (
+                <div>
+                  <div
+                    className="mb-3"
+                    {...getRootProps()}
+                    style={{
+                      background: '#e3e3e3',
+                      padding: '20px'
+                    }}
+                  >
+                    <label className="form-label" htmlFor="NoRadicado">
+                      Archivo
+                    </label>
+                    <input className="form-control rounded-pill" {...getInputProps()} />
+                    {isDragActive ? (
+                      <p>Suelte el archivo aqui...</p>
+                    ) : (
+                      <div>
+                        <p>Arrastre y suelte archivo PDF aquí o haga clic para selecciona archivo</p>
+                        <p className="errors">Nota: el tamaño del archivo debe ser inferior a 10 MB</p>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-              {url && <PDFViewer url={url} />}
+                  {url && <PDFViewer url={url} />}
 
-              {urlFile && !validorGranted ? (
-                <Button className="btn btn-success mt-4" type="submit">
-                  Responder
-                </Button>
-              ) : (
-                <span className="inputForm">Todos los campos son abligatorios</span>
+                  {urlFile && !validorGranted ? (
+                    <Button className="btn btn-success mt-4" type="submit">
+                      Responder
+                    </Button>
+                  ) : (
+                    <span className="inputForm">Todos los campos son abligatorios</span>
+                  )}
+                </div>
               )}
 
               {validorGranted && (
@@ -326,7 +375,7 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
 
               {parametroActivo &&
                 (!nameArea || !valueAffair || !granted ? (
-                  <p>Seleccione todos los campos</p>
+                  <p className="errors">Seleccione todos los campos</p>
                 ) : (
                   <Button disabled={validorGranted} className="btn btn-success mt-4" onClick={() => handleSubmitOutFile()}>
                     Responder

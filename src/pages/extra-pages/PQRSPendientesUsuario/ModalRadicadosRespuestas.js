@@ -27,7 +27,10 @@ function ModalRadicadosRespuestas({ opens, handleCloses, respuestas, asignados, 
       setRadicadosRpta(response.data);
       setCountRadicados(response.data.length);
     } catch (error) {
-      console.log(error);
+      if (error.response.status) {
+        setLoading(false);
+      }
+      toast.error(error.response.data);
     }
   };
 
