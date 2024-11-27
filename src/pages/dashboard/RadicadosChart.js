@@ -42,7 +42,7 @@ export const RadicadosChart = () => {
       },
 
       xaxis: {
-        categories: data.map((item) => meses[item._id]),
+        categories: data.map((item) => meses[item._id - 1]),
         title: {
           text: 'Meses'
         }

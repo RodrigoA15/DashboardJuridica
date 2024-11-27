@@ -57,7 +57,7 @@ const GraficaTAMes = () => {
         size: 5
       },
       xaxis: {
-        categories: uniqueMonths.map((item) => meses[item])
+        categories: uniqueMonths.map((item) => meses[item - 1])
       }
     }
   };
