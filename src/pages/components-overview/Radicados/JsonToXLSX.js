@@ -2,9 +2,11 @@
 import axios from 'api/axios';
 import { useState } from 'react';
 import { Button, Box, Grid } from '@mui/material';
+import { useAuth } from 'context/authContext';
 function JsonToFileExcel() {
   const [archivo, setArchivo] = useState(null);
   const [downloaded, setDownloaded] = useState(false);
+  const { user } = useAuth();
 
   const descargarArchivo = async () => {
     try {
@@ -21,23 +23,25 @@ function JsonToFileExcel() {
 
   return (
     <Box sx={{ width: '100%', ml: { xs: 0, md: 1 } }}>
-      <Grid container spacing={1} alignItems="center">
-        <Grid item xs={12} sm={6} md={3}>
-          <Button fullWidth className="bg-success" variant="contained" onClick={descargarArchivo} disabled={downloaded}>
-            Generar archivo
-          </Button>
-        </Grid>
-
-        {archivo && (
+      {user.role.nombre_rol === 'admin' && (
+        <Grid container spacing={1} alignItems="center">
           <Grid item xs={12} sm={6} md={3}>
-            <a href={archivo} download="radicados.xlsx" style={{ textDecoration: 'none' }}>
-              <Button fullWidth variant="contained">
-                Descargar archivo
-              </Button>
-            </a>
+            <Button fullWidth className="bg-success" variant="contained" onClick={descargarArchivo} disabled={downloaded}>
+              Generar archivo
+            </Button>
           </Grid>
-        )}
-      </Grid>
+
+          {archivo && (
+            <Grid item xs={12} sm={6} md={3}>
+              <a href={archivo} download="radicados.xlsx" style={{ textDecoration: 'none' }}>
+                <Button fullWidth variant="contained">
+                  Descargar archivo
+                </Button>
+              </a>
+            </Grid>
+          )}
+        </Grid>
+      )}
     </Box>
   );
 }
