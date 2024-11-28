@@ -142,7 +142,7 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
     try {
       await axios.put(`/radicados/reasignacion/${data.id_radicado._id}`, {
         estado_radicado: 'Devuelto',
-        id_asunto: '66e0863a1acb1d803a74953f'
+        id_asunto: '674198216459b9e9df5473a4'
       });
       const newData = asignados.filter((item) => item._id !== data._id);
       setAsignados(newData);
