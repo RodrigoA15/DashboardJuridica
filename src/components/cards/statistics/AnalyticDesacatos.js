@@ -2,7 +2,7 @@ import MainCard from 'components/MainCard';
 import React, { memo, useEffect, useState } from 'react';
 import { Grid, Stack, Typography } from '@mui/material';
 import axios from 'api/axios';
-import { Toaster, toast } from 'sonner';
+import { toast } from 'sonner';
 
 const AnalyticDesacatos = memo(() => {
   const [data, setData] = useState([]);
@@ -34,8 +34,6 @@ const AnalyticDesacatos = memo(() => {
 
   return (
     <div>
-      <Toaster position="top-right" richColors expand={true} offset="80px" />
-
       <MainCard contentSX={{ p: 2.25 }} className={countTutelas > 0 ? 'blinking' : 'card1'} onClick={() => alertDesacatos()}>
         <Stack spacing={0.5}>
           <Typography style={{ margin: 'auto' }} variant="h6" color="textSecondary">

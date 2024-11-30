@@ -13,11 +13,12 @@ import { useDropzone } from 'react-dropzone';
 import IndexTypesAffairs from './ActualizarAsunto/index';
 import { Parameters } from 'hooks/useParameters';
 import { ListAreas } from './ActualizarArea/ListAreas';
-import { FormControl, FormControlLabel, FormLabel, RadioGroup, Radio } from '@mui/material';
-// import ClearIcon from '@mui/icons-material/Clear';
-// import CheckIcon from '@mui/icons-material/Check';
-// import CreateIcon from '@mui/icons-material/Create';
-
+import { FormControl, FormControlLabel, FormLabel, RadioGroup, Radio, Tooltip, IconButton } from '@mui/material';
+import ClearIcon from '@mui/icons-material/Clear';
+import CheckIcon from '@mui/icons-material/Check';
+import CreateIcon from '@mui/icons-material/Create';
+import AddIcon from '@mui/icons-material/Add';
+import InfoIcon from '@mui/icons-material/Info';
 const style = {
   position: 'absolute',
   top: '50%',
@@ -42,10 +43,11 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
   const [granted, setGranted] = useState(null);
   const [url, setUrl] = useState('');
   const [urlFile, setUrlFile] = useState('');
-  // const [newIdentififcation, setNewIdentification] = useState(null);
-  // const [newName, setNewName] = useState(null);
-  // const [newLastName, setNewLastName] = useState(null);
-  // const [updated, setUpdated] = useState(false);
+  const [newIdentififcation, setNewIdentification] = useState(null);
+  const [newName, setNewName] = useState(null);
+  const [newLastName, setNewLastName] = useState(null);
+  const [updated, setUpdated] = useState(false);
+  const [openRegister, setOpenRegister] = useState(false);
 
   const onDrop = useCallback((acceptedFiles) => {
     setUrl(URL.createObjectURL(acceptedFiles[0]));
@@ -109,7 +111,7 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
       await axios.post('/answer', formData, config);
       toast.success('Respuesta Agregada');
       setUrl('');
-      // cancelUpdateNewName();
+      cancelUpdateNewName();
       handleClose();
     } catch (error) {
       toast.error(error.response.data);
@@ -161,42 +163,147 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
         fechaRespuesta: new Date(),
         concedido: granted
       });
+
       toast.success('Archivo creado correctamente');
     } catch (error) {
       toast.error('Error al responder radicado');
     }
   };
 
-  // const updateOrigin = async () => {
-  //   try {
-  //     const updatedData = {};
-  //     if (newName !== null) updatedData.nombre = newName;
-  //     if (newLastName !== null) updatedData.apellido = newLastName;
-  //     if (newIdentififcation !== null) updatedData.numero_identificacion = newIdentififcation;
+  const updateOrigin = async () => {
+    try {
+      const updatedData = {};
+      if (newName !== null) updatedData.nombre = newName;
+      if (newLastName !== null) updatedData.apellido = newLastName;
+      // if (newIdentififcation !== null) updatedData.numero_identificacion = newIdentififcation;
 
-  //     // Validar si no hay datos para actualizar
-  //     if (Object.keys(updatedData).length === 0) {
-  //       return toast.error('No hay datos válidos para actualizar');
-  //     }
+      // Validar si no hay datos para actualizar
+      if (Object.keys(updatedData).length === 0) {
+        return toast.error('No hay datos válidos para actualizar');
+      }
+      const alert = await MySwal.fire({
+        title: '¿Esta seguro de actualizar usuario?',
+        icon: 'question',
+        showCancelButton: true,
+        cancelButtonText: 'Cancelar',
+        confirmButtonText: 'Sí, agregar',
+        customClass: {
+          container: 'swal-zindex'
+        }
+      });
 
-  //     await axios.put(`/origin/${data.id_radicado.id_procedencia._id}`, updatedData);
-  //     toast.success('Procedencia actualizada correctamente');
-  //     cancelUpdateNewName();
-  //   } catch (error) {
-  //     toast.error(error.response?.data || 'Error al actualizar la procedencia');
-  //   }
-  // };
+      if (alert.isConfirmed) {
+        await axios.put(`/origin/${data.id_radicado.id_procedencia._id}`, updatedData);
+        toast.success('Procedencia actualizada correctamente');
+        cancelUpdateNewName();
+      } else {
+        toast('Cancelado', {
+          className: 'text-dark',
+          icon: <InfoIcon />
+        });
+      }
+    } catch (error) {
+      toast.error(error.response?.data || 'Error al actualizar la procedencia');
+    }
+  };
 
-  // const cancelUpdateNewName = () => {
-  //   setUpdated(false);
-  //   setNewName(null);
-  //   setNewLastName(null);
-  //   setNewIdentification(null);
-  // };
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      searchOrigin();
+    }
+  };
 
-  // const activeUpdated = () => {
-  //   setUpdated(true);
-  // };
+  const searchOrigin = async () => {
+    try {
+      if (newIdentififcation === null) return toast.error('Ingresa un número de identificación válido');
+      const response = await axios.get(`/origin/${newIdentififcation}`);
+      const alert = await MySwal.fire({
+        title: 'Usuario encontrado!',
+        text: 'Si aceptas se actualizara la peticion con la información del usuario encontrado',
+        icon: 'success',
+        showCancelButton: true,
+        cancelButtonText: 'Cancelar',
+        confirmButtonText: 'Sí, agregar',
+        customClass: {
+          container: 'swal-zindex'
+        }
+      });
+
+      const cleanDta = response.data.map((item) => item._id);
+
+      if (alert.isConfirmed) {
+        updateOriginRad(cleanDta);
+        toast.success('Usuario actualizado correctamente');
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        setOpenRegister(true);
+        toast.error('Usuario no  registrado', {
+          duration: 5000
+        });
+      } else {
+        toast.error(error.message);
+      }
+    }
+  };
+
+  const createOrigin = async () => {
+    try {
+      if (newIdentififcation === null || newName === null || newLastName === null) return toast.error('Ingresa valores válidos');
+      const alert = await MySwal.fire({
+        title: '¿Esta seguro de crear usuario?',
+        icon: 'question',
+        showCancelButton: true,
+        cancelButtonText: 'Cancelar',
+        confirmButtonText: 'Sí, agregar',
+        customClass: {
+          container: 'swal-zindex'
+        }
+      });
+
+      if (alert.isConfirmed) {
+        const responsePost = await axios.post('/origin', {
+          numero_identificacion: newIdentififcation,
+          nombre: newName,
+          apellido: newLastName
+        });
+        updateOriginRad(responsePost.data);
+        toast.success('Procedencia actualizada correctamente');
+      } else {
+        toast('Cancelado', {
+          className: 'text-dark',
+          icon: <InfoIcon />
+        });
+      }
+    } catch (error) {
+      toast.error(error.response.data);
+    }
+  };
+
+  const updateOriginRad = async (pruebaId) => {
+    try {
+      if (pruebaId === null) return toast.error('Procedencia no valida');
+      await axios.put(`/radicados/updated-origin/${data.id_radicado._id}`, {
+        id_procedencia: pruebaId
+      });
+      cancelUpdateNewName();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const cancelUpdateNewName = () => {
+    setUpdated(false);
+    setNewName(null);
+    setNewLastName(null);
+    setOpenRegister(false);
+    setNewIdentification(null);
+  };
+
+  const activeUpdated = () => {
+    setUpdated(true);
+  };
 
   return (
     <>
@@ -246,20 +353,28 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
                   {errors.numero_radicado_respuesta && <span className="inputForm ">{errors.numero_radicado_respuesta.message}</span>}
                 </div>
               )}
-              {/* <div className="mb-3 row align-items-center">
+              <div className="mb-3 row align-items-center">
                 <h6>Informaci&oacute;n usuario</h6>
 
                 <div className="col">
                   <label className="form-label" htmlFor="name">
                     N&uacute;mero identificaci&oacute;n
                   </label>
-                  <input
-                    className="form-control"
-                    type="number"
-                    defaultValue={data.id_radicado.id_procedencia.numero_identificacion}
-                    onChange={(e) => setNewIdentification(e.target.value)}
-                    disabled={!updated}
-                  />
+                  <Tooltip title="Ingresa n&uacute;mero identificación y pulsa enter para buscar" placement="top" arrow>
+                    <div className="input-with-icon">
+                      <span className="icon alert-icon">
+                        <InfoIcon />
+                      </span>
+                      <input
+                        className="form-control"
+                        type="number"
+                        defaultValue={data.id_radicado.id_procedencia.numero_identificacion}
+                        onChange={(e) => setNewIdentification(e.target.value)}
+                        disabled={!updated}
+                        onKeyDown={handleKeyPress}
+                      />
+                    </div>
+                  </Tooltip>
                 </div>
 
                 <div className="col">
@@ -307,13 +422,22 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
                     </Tooltip>
 
                     <Tooltip title="Actualizar" arrow>
-                      <IconButton aria-label="check" color="success" onClick={updateOrigin}>
-                        <CheckIcon />
-                      </IconButton>
+                      <span>
+                        <IconButton aria-label="check" color="success" onClick={updateOrigin} disabled={openRegister}>
+                          <CheckIcon />
+                        </IconButton>
+                      </span>
                     </Tooltip>
+                    {openRegister && (
+                      <Tooltip title="Crear" placement="top" arrow>
+                        <IconButton aria-label="cancel" color="warning" onClick={createOrigin}>
+                          <AddIcon />
+                        </IconButton>
+                      </Tooltip>
+                    )}
                   </div>
                 )}
-              </div> */}
+              </div>
               {parametroActivo && (
                 <>
                   <h6>Informaci&oacute;n radicado*</h6>
