@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import axios from 'api/axios';
-import { Toaster, toast } from 'sonner';
+import { toast } from 'sonner';
 import { SearchOutlined } from '@mui/icons-material';
 import { InputAdornment, OutlinedInput } from '@mui/material';
 import PropTypes from 'prop-types';
@@ -56,7 +56,6 @@ function Buscador({ setProcedencia, setNameCourt, nameCourt, setJuzgados }) {
         setProcedencia(procedenciaValue);
         setEntrada(true);
       } else {
-        console.log('No se encontro el usuario  :(', 'error');
         resetEntrada();
       }
     } catch (error) {
@@ -67,7 +66,7 @@ function Buscador({ setProcedencia, setNameCourt, nameCourt, setJuzgados }) {
         });
         resetEntrada();
       } else {
-        console.log(error.message);
+        toast.error(error.message);
       }
     }
   };
@@ -95,7 +94,6 @@ function Buscador({ setProcedencia, setNameCourt, nameCourt, setJuzgados }) {
 
   return (
     <div>
-      <Toaster position="top-right" richColors />
       <div className="row ">
         <>
           <h4>Informaci&oacute;n usuario</h4>
