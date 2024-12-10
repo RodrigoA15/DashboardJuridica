@@ -6,8 +6,9 @@ import ModalRespuestas from './ModalRespuestas';
 import ModalRadicadosRespuestas from './ModalRadicadosRespuestas';
 import Reasignaciones from './Reasignaciones/Reasignaciones';
 // //Sweet Alert
-// import Swal from 'sweetalert2';
-// import withReactContent from 'sweetalert2-react-content';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+import { toast } from 'sonner';
 //icons
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import AddIcon from '@mui/icons-material/Add';
@@ -54,6 +55,8 @@ function PendientesUsuario() {
     }
   }, [user]);
 
+  let MySwal = withReactContent(Swal);
+
   //TODO consumo de api asignaciones
   const apiDataUser = async () => {
     try {
@@ -69,6 +72,7 @@ function PendientesUsuario() {
   const handleOpen = (data) => {
     setSelectedData(data);
     setOpenModal(true);
+    answersByUser(data);
   };
 
   const handleClose = () => {
@@ -187,6 +191,26 @@ function PendientesUsuario() {
   const formatoFechaAsignacion = (rowData) => {
     return new Date(rowData.fecha_asignacion).toLocaleDateString('es-ES', { timeZone: 'UTC' });
   };
+
+  const answersByUser = async (data) => {
+    try {
+      await axios.get(`/answer/radicados_respuestas/${data.id_radicado.numero_radicado}`);
+      const alert = await MySwal.fire({
+        title: 'Esta petición tiene una respuesta cargada',
+        text: 'Por favor marque la petición como respuesta',
+        icon: 'success',
+        customClass: {
+          container: 'swal-zindex'
+        }
+      });
+      if (alert.isConfirmed) {
+        handleClose();
+      }
+    } catch (error) {
+      toast('No se encontrarón respuestas cargadas');
+    }
+  };
+
   return (
     <div className="card">
       <DataTable

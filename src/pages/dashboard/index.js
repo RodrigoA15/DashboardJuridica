@@ -90,7 +90,7 @@ const DashboardDefault = () => {
       <Grid item xs={12} md={5} lg={4}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
-            <Typography variant="h5">Entidades</Typography>
+            {validateParam ? <Typography variant="h5">PQRS y Tutelas por mes</Typography> : <Typography variant="h5">Entidades</Typography>}
           </Grid>
           <Grid item />
         </Grid>
@@ -127,7 +127,7 @@ const DashboardDefault = () => {
       <Grid item xs={12} md={7} lg={4}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
-            <Typography variant="h5">Cantidad PQRS</Typography>
+            <Typography variant="h5">Total peticiones por mes</Typography>
           </Grid>
         </Grid>
         <MainCard content={false} sx={{ mt: 2 }}>
@@ -138,7 +138,11 @@ const DashboardDefault = () => {
       <Grid item xs={12} md={5} lg={4}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
-            <Typography variant="h5">Radicados y respuestas por mes</Typography>
+            {validateParam ? (
+              <Typography variant="h5">Total PQRS y Tutelas</Typography>
+            ) : (
+              <Typography variant="h5">Radicados y respuestas por mes</Typography>
+            )}
           </Grid>
           <Grid item />
         </Grid>
@@ -164,7 +168,7 @@ const DashboardDefault = () => {
       <Grid item xs={12} md={5} lg={4}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
-            <Typography variant="h5">Canal entrada</Typography>
+            {validateParam ? <Typography variant="h5">Total asuntos</Typography> : <Typography variant="h5">Canal entrada</Typography>}
           </Grid>
         </Grid>
         <MainCard sx={{ mt: 1.75 }}>

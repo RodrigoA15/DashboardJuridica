@@ -9,7 +9,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import axios from 'api/axios';
 import useDiasHabiles from 'hooks/useDate';
 import { classNames } from 'primereact/utils';
-import { TablePagination } from '@mui/material';
+import { TablePagination, Typography } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { esES } from '@mui/material/locale';
 
@@ -89,6 +89,7 @@ const TablaVencidas = () => {
   return (
     <>
       <TableContainer component={Paper}>
+        <Typography variant="h5">Total: {data.length}</Typography>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
