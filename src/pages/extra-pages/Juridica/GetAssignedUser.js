@@ -3,64 +3,87 @@ import axios from 'api/axios';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 
-export const GetAssignedUser = () => {
-  const [data, setData] = useState([]);
+// Custom hook para manejar la lógica de fetching
+const useFetchAssignedUsers = () => {
+  const [state, setState] = useState({ data: [], loader: false, error: null });
 
   useEffect(() => {
-    assignedUser();
+    const fetchData = async () => {
+      setState((prev) => ({ ...prev, loader: true }));
+      try {
+        const response = await axios.get('/assigned/allState-user');
+        setState({ data: response.data, loader: false, error: null });
+      } catch (error) {
+        setState({
+          data: [],
+          loader: false,
+          error: error?.response?.status === 404 ? 'No se encontraron resultados' : error.message
+        });
+      }
+    };
+
+    fetchData();
   }, []);
 
-  const assignedUser = async () => {
-    try {
-      const response = await axios.get('/assigned/allState-user');
-      setData(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  return state;
+};
+
+// Componente principal
+export const GetAssignedUser = () => {
+  const { data, loader, error } = useFetchAssignedUsers();
+
+  const renderLoader = () => (
+    <div className="d-flex flex-column justify-content-center align-items-center">
+      <div className="spinner-border text-primary" role="status" aria-label="Cargando..."></div>
+      <span>Cargando...</span>
+    </div>
+  );
+
+  const renderEmptyMessage = () => <div>{error || 'No hay datos para mostrar.'}</div>;
+
+  const renderTipificacion = (rowData) =>
+    rowData.tipificacion.map((tip, idx) => (
+      <div key={tip.id || idx} className={tip.tipificacion === 'TUTELAS' ? 'underlineText' : ''}>
+        {tip.tipificacion}
+      </div>
+    ));
+
+  const renderTotalEstados = (rowData) => rowData.estados.reduce((acc, estado) => acc + estado.cantidad, 0);
+
+  if (loader) return renderLoader();
 
   return (
-    <>
-      <div className="card">
-        <DataTable
-          value={data}
-          rowGroupMode="rowspan"
-          groupRowsBy="username"
-          sortMode="single"
-          sortField="username"
-          sortOrder={1}
-          showGridlines
-          emptyMessage="No se encontraron resultados"
-        >
-          <Column className="border" field="username" header="Responsable"></Column>
-          <Column
-            className="border"
-            header="Tipificacion"
-            body={(rowData) =>
-              rowData.tipificacion.map((tipificacion, index) => (
-                <div className={tipificacion.tipificacion === 'TUTELAS' ? 'underlineText' : ''} key={index}>
-                  {tipificacion.tipificacion}
-                </div>
-              ))
-            }
-          ></Column>
-          <Column
-            className="border"
-            header="Total"
-            body={(rowData) => rowData.tipificacion.map((tipificacion, index) => <div key={index}>{tipificacion.cantidad}</div>)}
-          ></Column>
-          <Column
-            className="border"
-            header="Estado radicado"
-            body={(rowData) => rowData.estados.map((estado, index) => <div key={index}>{estado.estado}</div>)}
-          ></Column>
-          <Column
-            className="border"
-            header="Total"
-            body={(rowData) => rowData.estados.map((estado, index) => <div key={index}>{estado.cantidad}</div>)}
-          ></Column>
-        </DataTable>
-      </div>
-    </>
+    <div className="card">
+      <DataTable
+        value={data}
+        rowGroupMode="rowspan"
+        groupRowsBy="username"
+        sortMode="single"
+        sortField="username"
+        sortOrder={1}
+        showGridlines
+        emptyMessage={renderEmptyMessage()}
+      >
+        <Column className="border" field="username" header="Responsable" />
+        <Column className="border" header="Tipificación" body={renderTipificacion} />
+        <Column
+          className="border"
+          header="Total"
+          body={(rowData) => rowData.tipificacion.map((tip, idx) => <div key={tip.id || idx}>{tip.cantidad}</div>)}
+        />
+        <Column
+          className="border"
+          header="Estado radicado"
+          body={(rowData) => rowData.estados.map((estado, idx) => <div key={estado.id || idx}>{estado.estado}</div>)}
+        />
+        <Column
+          className="border"
+          header="Total"
+          align="center"
+          body={(rowData) => rowData.estados.map((estado, idx) => <div key={estado.id || idx}>{estado.cantidad}</div>)}
+        />
+        <Column className="border" header="Total estados" align="center" body={renderTotalEstados} />
+      </DataTable>
+    </div>
   );
 };
