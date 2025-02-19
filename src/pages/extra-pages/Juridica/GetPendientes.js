@@ -71,7 +71,7 @@ export default function GetPendientes() {
     return (
       <>
         <div className="row">
-          <div className="col-6">
+          <div className="d-flex justify-content-between items-center col-6">
             <InputText
               className="inputUser"
               type="search"
@@ -79,6 +79,8 @@ export default function GetPendientes() {
               onChange={(e) => onGlobalFilterChange(e)}
               placeholder="Buscar"
             />
+            <p className="m-1">Total pendientes: {dataApi.length}</p>
+            <p className="m-1">Seleccionados: {selected.length}</p>
           </div>
           <div className="col-6">
             <UsuariosJuridica dataRadicados={selected} data={dataApi} setDataApi={setDataApi} setSelected={setSelected} />
@@ -102,9 +104,10 @@ export default function GetPendientes() {
           filters={filters}
           onFilter={(e) => setFilters(e.filters)}
           paginator
-          rows={5}
-          rowsPerPageOptions={[5, 10, 25, 50]}
+          rows={10}
+          rowsPerPageOptions={[10, 20, 30]}
           emptyMessage="No se encontraron resultados"
+          selectionPageOnly
         >
           <Column selectionMode="multiple" headerStyle={{ width: '3rem' }} className="bluegray-100" />
           <Column field="numero_radicado" sortable header="Número radicado" />
