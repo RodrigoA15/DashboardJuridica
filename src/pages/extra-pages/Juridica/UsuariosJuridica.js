@@ -101,7 +101,12 @@ const UsuariosJuridica = memo(({ dataRadicados, data, setDataApi, setSelected })
                 })}
               >
                 <option value="">Seleccione un usuario</option>
-                {user.departamento.nombre_departamento === 'Juridica' && <option value="66707ccb09551288ee467ea1">Daniella Dorado</option>}
+                {user.departamento.nombre_departamento === 'Juridica' && (
+                  <>
+                    <option value="66707ccb09551288ee467ea1">Daniella.dorado</option>
+                    <option value="6580c13c12c7dee0d0e8d557">Johana.pillimue</option>
+                  </>
+                )}
                 {users.map((usuario) => (
                   <option key={usuario._id} value={usuario._id}>
                     {usuario.username}
