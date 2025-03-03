@@ -194,20 +194,29 @@ function PendientesUsuario() {
 
   const answersByUser = async (data) => {
     try {
-      await axios.get(`/answer/radicados_respuestas/${data.id_radicado.numero_radicado}`);
-      const alert = await MySwal.fire({
-        title: 'Esta petición tiene una respuesta cargada',
-        text: 'Por favor marque la petición como respuesta',
-        icon: 'success',
-        customClass: {
-          container: 'swal-zindex'
-        }
-      });
-      if (alert.isConfirmed) {
-        handleClose();
+      const { numero_radicado, cantidad_respuesta } = data.id_radicado ?? {};
+      if (!numero_radicado) return toast.error('Datos de radicado no válidos');
+
+      const { data: answers } = await axios.get(`/answer/radicados_respuestas/${numero_radicado}`);
+
+      const cantidadRespuestasCargadas = answers?.length ?? 0;
+
+      if (cantidadRespuestasCargadas === cantidad_respuesta) {
+        MySwal.fire({
+          title: 'Esta petición tiene una respuesta cargada',
+          text: 'Por favor marque la petición como respuesta',
+          icon: 'success',
+          customClass: { container: 'swal-zindex' }
+        }).then((alert) => {
+          if (alert.isConfirmed) handleClose();
+        });
       }
     } catch (error) {
-      toast('No se encontrarón respuestas cargadas');
+      if (error.response?.status === 404) {
+        toast.error('No se encontraron respuestas cargadas');
+      } else {
+        toast.error('Ocurrió un error al cargar las respuestas');
+      }
     }
   };
 
