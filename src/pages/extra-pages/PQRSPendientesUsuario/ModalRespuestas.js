@@ -30,7 +30,6 @@ const style = {
   boxShadow: 24,
   p: 4
 };
-
 function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
   const {
     register,
@@ -345,8 +344,8 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
                         message: 'Este campo es obligatorio'
                       },
                       minLength: {
-                        value: 12,
-                        message: 'Número radicado respuesta debe ser minimo 12 carácteres'
+                        value: 14,
+                        message: 'Número radicado respuesta debe ser minimo 14 carácteres'
                       }
                     })}
                   />
@@ -368,7 +367,7 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
                       <input
                         className="form-control"
                         type="number"
-                        defaultValue={data.id_radicado.id_procedencia.numero_identificacion}
+                        defaultValue={data.numero_identificacion}
                         onChange={(e) => setNewIdentification(e.target.value)}
                         disabled={!updated}
                         onKeyDown={handleKeyPress}
@@ -384,7 +383,7 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
                   <input
                     className="form-control"
                     type="text"
-                    defaultValue={data.id_radicado.id_procedencia.nombre}
+                    defaultValue={data.nombre_procedencia}
                     onChange={(e) => setNewName(e.target.value)}
                     disabled={!updated}
                   />
@@ -397,7 +396,7 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
                   <input
                     className="form-control"
                     type="text"
-                    defaultValue={data.id_radicado.id_procedencia.apellido}
+                    defaultValue={data.apellido_procedencia}
                     onChange={(e) => setNewLastName(e.target.value)}
                     disabled={!updated}
                   />

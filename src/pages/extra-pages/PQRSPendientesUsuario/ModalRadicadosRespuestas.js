@@ -12,7 +12,7 @@ function ModalRadicadosRespuestas({ opens, handleCloses, respuestas, asignados, 
   const [countRadicados, setCountRadicados] = useState(0);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
-    if (respuestas && respuestas.id_radicado && respuestas.id_radicado.numero_radicado) {
+    if (respuestas && respuestas.numero_radicado) {
       setRadicadosRpta([]);
       setCountRadicados(0);
       apiRadicadosRespuesta();
@@ -22,7 +22,7 @@ function ModalRadicadosRespuestas({ opens, handleCloses, respuestas, asignados, 
   const apiRadicadosRespuesta = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`/answer/radicados_respuestas/${respuestas.id_radicado.numero_radicado}`);
+      const response = await axios.get(`/answer/radicados_respuestas/${respuestas.numero_radicado}`);
       setLoading(false);
       setRadicadosRpta(response.data);
       setCountRadicados(response.data.length);
@@ -59,7 +59,7 @@ function ModalRadicadosRespuestas({ opens, handleCloses, respuestas, asignados, 
       });
 
       if (alert.isConfirmed) {
-        await axios.put(`/radicados/${respuestas.id_radicado._id}`, {
+        await axios.put(`/radicados/${respuestas.id_radicado}`, {
           estado_radicado: 'Respuesta'
         });
         const newData = asignados.filter((item) => item._id !== respuestas._id);
@@ -85,8 +85,7 @@ function ModalRadicadosRespuestas({ opens, handleCloses, respuestas, asignados, 
             </p>
             <h5 className="mb-4 text-center">Respuesta radicado</h5>
             <p className="text-center">
-              Tienes <b>{countRadicados}</b> respuestas cargadas de{' '}
-              <b>{respuestas ? respuestas.id_radicado.cantidad_respuesta : 0} estimadas</b>
+              Tienes <b>{countRadicados}</b> respuestas cargadas de <b>{respuestas ? respuestas.cantidad_respuesta : 0} estimadas</b>
             </p>
             {loading ? (
               <div className="d-flex justify-content-center">
@@ -112,7 +111,7 @@ function ModalRadicadosRespuestas({ opens, handleCloses, respuestas, asignados, 
                       <button
                         className="btn btn-success"
                         onClick={() => updateEstadoRespondido(respuestas)}
-                        disabled={respuestas.id_radicado.cantidad_respuesta !== countRadicados}
+                        disabled={respuestas.cantidad_respuesta !== countRadicados}
                       >
                         Responder
                       </button>

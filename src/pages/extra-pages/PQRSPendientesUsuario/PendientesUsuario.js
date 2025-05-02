@@ -103,7 +103,7 @@ function PendientesUsuario() {
 
   //TODO colores de las alertas por dia habil
   const getBackgroundColor = (data) => {
-    const diasLaborables = diasHabiles(data.id_radicado.fecha_radicado);
+    const diasLaborables = diasHabiles(data.fecha_radicado);
 
     const hola = classNames('rounded-pill justify-content-center align-items-center text-center font-weight-bold', {
       'bg-success bg-gradient text-dark': diasLaborables <= 5,
@@ -185,7 +185,7 @@ function PendientesUsuario() {
   };
 
   const formatoFechaRadicados = (rowData) => {
-    return new Date(rowData.id_radicado.fecha_radicado).toLocaleDateString('es-ES', { timeZone: 'UTC' });
+    return new Date(rowData.fecha_radicado).toLocaleDateString('es-ES', { timeZone: 'UTC' });
   };
 
   const formatoFechaAsignacion = (rowData) => {
@@ -194,7 +194,7 @@ function PendientesUsuario() {
 
   const answersByUser = async (data) => {
     try {
-      const { numero_radicado, cantidad_respuesta } = data.id_radicado ?? {};
+      const { numero_radicado, cantidad_respuesta } = data ?? {};
       if (!numero_radicado) return toast.error('Datos de radicado no válidos');
 
       const { data: answers } = await axios.get(`/answer/radicados_respuestas/${numero_radicado}`);
@@ -236,14 +236,14 @@ function PendientesUsuario() {
         filters={filters}
         onFilter={(e) => setFilters(e.filters)}
       >
-        <Column field="id_radicado.numero_radicado" header="Número radicado" />
-        <Column field="id_radicado.fecha_radicado" sortable header="Fecha radicado" body={formatoFechaRadicados} />
-        <Column field="id_radicado.id_asunto.nombre_asunto" sortable header="Asunto" />
+        <Column field="numero_radicado" header="Número radicado" />
+        <Column field="fecha_radicado" sortable header="Fecha radicado" body={formatoFechaRadicados} />
+        <Column field="id_asunto" sortable header="Asunto" />
         <Column field="fecha_asignacion" sortable header="Fecha asignación" body={formatoFechaAsignacion} />
-        <Column field="id_radicado.id_procedencia.nombre" header="Procedencia" />
-        <Column field="id_radicado.observaciones_radicado" header="Observaciones" />
-        <Column field="id_radicado.cantidad_respuesta" sortable header="Respuestas estimadas" />
-        <Column field="id_radicado.fecha_radicado" sortable header="Dias" body={getBackgroundColor} />
+        <Column field="nombre_procedencia" header="Procedencia" />
+        <Column field="observaciones" header="Observaciones" />
+        <Column field="cantidad_respuesta" sortable header="Respuestas estimadas" />
+        <Column field="fecha_radicado" sortable header="Dias" body={getBackgroundColor} />
         <Column body={btnOpenModalAddAnswer} />
         <Column body={btnOpenModalViewAnswer} />
         <Column body={btnReasignation} />
