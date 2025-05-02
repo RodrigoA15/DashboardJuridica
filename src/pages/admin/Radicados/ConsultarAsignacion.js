@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
 import LoaderComponent from 'components/LoaderComponent';
+import { ListadoRespuestas } from './ListadoRespuestas';
 export const ConsultarAsignacion = ({ visibleAS, setVisibleAS, dataApi, loader }) => {
   const formatFecha = (fecha) => {
     return new Date(fecha).toLocaleDateString('es-ES', { timeZone: 'UTC' });
@@ -48,6 +49,7 @@ export const ConsultarAsignacion = ({ visibleAS, setVisibleAS, dataApi, loader }
               <InputText value={item.estado_radicado} />
             </div>
           ))}
+          <ListadoRespuestas respuesta={dataApi} />
         </>
       )}
     </Dialog>
