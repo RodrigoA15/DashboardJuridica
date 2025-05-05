@@ -120,7 +120,7 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
   //Funcion actualizar asunto de la peticion (Atlantico)
   const updateAffair = async () => {
     try {
-      await axios.put(`/typeAffair/${data.id_radicado._id}`, {
+      await axios.put(`/typeAffair/${data.id_radicado}`, {
         id_asunto: valueAffair
       });
     } catch (error) {
@@ -131,7 +131,7 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
   const updateArea = async () => {
     try {
       await axios.put(`/answer/update-area`, {
-        id_radicado: data.id_radicado._id,
+        id_radicado: data.id_radicado,
         id_departamento: nameArea
       });
     } catch (error) {
@@ -141,11 +141,11 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
 
   const updateState = async () => {
     try {
-      await axios.put(`/radicados/reasignacion/${data.id_radicado._id}`, {
+      await axios.put(`/radicados/reasignacion/${data.id_radicado}`, {
         estado_radicado: 'Devuelto',
         id_asunto: '674198216459b9e9df5473a4'
       });
-      const newData = asignados.filter((item) => item._id !== data._id);
+      const newData = asignados.filter((item) => item.id_radicado !== data.radicado);
       setAsignados(newData);
       handleClose();
       setGranted(null);

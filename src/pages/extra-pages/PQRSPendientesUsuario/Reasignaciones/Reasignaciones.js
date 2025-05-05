@@ -38,9 +38,9 @@ function Reasignaciones({ open, close, asignaciones }) {
     try {
       if (asignaciones) {
         const message = `El usuario ${user.username} reasigno la petición ${
-          asignaciones.id_radicado.numero_radicado
+          asignaciones.numero_radicado
         } por motivo de ${observacion} con fecha de reasignacion ${new Date().toLocaleString()}`;
-        const id_radicado = asignaciones.id_radicado._id;
+        const id_radicado = asignaciones.id_radicado;
         await axios.put(`/radicados/reasignacion/${id_radicado}`, {
           id_departamento: selectArea,
           id_entidad: selectEntidad,
