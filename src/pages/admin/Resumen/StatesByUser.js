@@ -56,17 +56,17 @@ const BarChart = () => {
         const estadosMap = {};
 
         data.map((item) => {
-          if (!usernames.includes(item.username)) {
-            usernames.push(item.username);
+          if (!usernames.includes(item.nombre_usuario)) {
+            usernames.push(item.nombre_usuario);
           }
 
-          item.estados.map((item2) => {
-            if (!estadosMap[item2.estado]) {
-              estadosMap[item2.estado] = Array(usernames.length).fill(0);
+          item.data.map((item2) => {
+            if (!estadosMap[item2.estado_radicado]) {
+              estadosMap[item2.estado_radicado] = Array(usernames.length).fill(0);
             }
 
-            const userIndex = usernames.indexOf(item.username);
-            estadosMap[item2.estado][userIndex] = item2.cantidad;
+            const userIndex = usernames.indexOf(item.nombre_usuario);
+            estadosMap[item2.estado_radicado][userIndex] = item2.total;
           });
         });
 

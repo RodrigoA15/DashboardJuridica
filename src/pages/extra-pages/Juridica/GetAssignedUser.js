@@ -28,7 +28,6 @@ const useFetchAssignedUsers = () => {
   return state;
 };
 
-// Componente principal
 export const GetAssignedUser = () => {
   const { data, loader, error } = useFetchAssignedUsers();
 
@@ -40,15 +39,14 @@ export const GetAssignedUser = () => {
   );
 
   const renderEmptyMessage = () => <div>{error || 'No hay datos para mostrar.'}</div>;
-
   const renderTipificacion = (rowData) =>
-    rowData.tipificacion.map((tip, idx) => (
+    rowData.data.map((tip, idx) => (
       <div key={tip.id || idx} className={tip.tipificacion === 'TUTELAS' ? 'underlineText' : ''}>
         {tip.tipificacion}
       </div>
     ));
 
-  const renderTotalEstados = (rowData) => rowData.estados.reduce((acc, estado) => acc + estado.cantidad, 0);
+  const renderTotalEstados = (rowData) => rowData.data.reduce((acc, estado) => acc + estado.total, 0);
 
   if (loader) return renderLoader();
 
@@ -64,23 +62,24 @@ export const GetAssignedUser = () => {
         showGridlines
         emptyMessage={renderEmptyMessage()}
       >
-        <Column className="border" field="username" header="Responsable" />
-        <Column className="border" header="Tipificación" body={renderTipificacion} />
-        <Column
-          className="border"
-          header="Total"
-          body={(rowData) => rowData.tipificacion.map((tip, idx) => <div key={tip.id || idx}>{tip.cantidad}</div>)}
-        />
+        <Column className="border" field="nombre_usuario" header="Responsable" />
+        <Column className="border" header="Tipificaci&oacute;n" body={renderTipificacion} />
         <Column
           className="border"
           header="Estado radicado"
-          body={(rowData) => rowData.estados.map((estado, idx) => <div key={estado.id || idx}>{estado.estado}</div>)}
+          body={(item) =>
+            item.data.map((item2, index) => (
+              <div key={index}>
+                <span>{item2.estado_radicado}</span>
+              </div>
+            ))
+          }
         />
         <Column
           className="border"
-          header="Total"
+          header="Total estados"
           align="center"
-          body={(rowData) => rowData.estados.map((estado, idx) => <div key={estado.id || idx}>{estado.cantidad}</div>)}
+          body={(item) => item.data.map((item2, index) => <div key={index}>{item2.total}</div>)}
         />
         <Column className="border" header="Total estados" align="center" body={renderTotalEstados} />
       </DataTable>
