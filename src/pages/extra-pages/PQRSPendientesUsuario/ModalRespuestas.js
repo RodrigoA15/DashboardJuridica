@@ -283,7 +283,7 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
   const updateOriginRad = async (pruebaId) => {
     try {
       if (pruebaId === null) return toast.error('Procedencia no valida');
-      await axios.put(`/radicados/updated-origin/${data.id_radicado._id}`, {
+      await axios.put(`/radicados/updated-origin/${data.id_radicado}`, {
         id_procedencia: pruebaId
       });
       cancelUpdateNewName();
@@ -442,11 +442,7 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
                   <h6>Informaci&oacute;n radicado*</h6>
 
                   <div>
-                    <IndexTypesAffairs
-                      setValueAffair={setValueAffair}
-                      granted={granted}
-                      typeAffair={data.id_radicado.id_asunto.id_tipo_asunto}
-                    />
+                    <IndexTypesAffairs setValueAffair={setValueAffair} granted={granted} typeAffair={data.id_tipo_asunto} />
                   </div>
 
                   <div>
