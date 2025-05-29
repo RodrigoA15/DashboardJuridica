@@ -192,7 +192,7 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
       });
 
       if (alert.isConfirmed) {
-        await axios.put(`/origin/${data.id_radicado.id_procedencia._id}`, updatedData);
+        await axios.put(`/origin/${data.id_procedencia}`, updatedData);
         toast.success('Procedencia actualizada correctamente');
         cancelUpdateNewName();
       } else {
