@@ -22,6 +22,7 @@ import { IconButton, Tooltip } from '@mui/material';
 import { FilterMatchMode, FilterOperator } from 'primereact/api';
 import { InputText } from 'primereact/inputtext';
 import { AllAnswers, AnswersByArea, AnswersByUser } from './Totals';
+import { useFormatDate } from 'hooks/useFormatDate';
 
 function PendientesUsuario() {
   const { user } = useAuth();
@@ -34,9 +35,8 @@ function PendientesUsuario() {
   //Modal Reasignacion
   const [openReasignacion, setOpenReasignacion] = useState(false);
   const [selectedAsignacion, setSelectedAsignacion] = useState(null);
-  //Input actualizar contador respuesta
-  // const [count, setCount] = useState(1);
   const { diasHabiles } = useDiasHabiles();
+  const { formatDate } = useFormatDate();
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
     'id_usuario.username': {
@@ -183,15 +183,6 @@ function PendientesUsuario() {
       </Tooltip>
     );
   };
-
-  const formatoFechaRadicados = (rowData) => {
-    return new Date(rowData.fecha_radicado).toLocaleDateString('es-ES', { timeZone: 'UTC' });
-  };
-
-  const formatoFechaAsignacion = (rowData) => {
-    return new Date(rowData.fecha_asignacion).toLocaleDateString('es-ES', { timeZone: 'UTC' });
-  };
-
   const answersByUser = async (data) => {
     try {
       const { numero_radicado, cantidad_respuesta } = data ?? {};
@@ -237,9 +228,9 @@ function PendientesUsuario() {
         onFilter={(e) => setFilters(e.filters)}
       >
         <Column field="numero_radicado" header="Número radicado" />
-        <Column field="fecha_radicado" sortable header="Fecha radicado" body={formatoFechaRadicados} />
+        <Column field="fecha_radicado" sortable header="Fecha radicado" body={(rowData) => formatDate(rowData.fecha_radicado)} />
         <Column field="id_asunto" sortable header="Asunto" />
-        <Column field="fecha_asignacion" sortable header="Fecha asignación" body={formatoFechaAsignacion} />
+        <Column field="fecha_asignacion" sortable header="Fecha asignación" body={(rowData) => formatDate(rowData.fecha_asignacion)} />
         <Column field="nombre_procedencia" header="Procedencia" />
         <Column field="observaciones" header="Observaciones" />
         <Column field="cantidad_respuesta" sortable header="Respuestas estimadas" />
