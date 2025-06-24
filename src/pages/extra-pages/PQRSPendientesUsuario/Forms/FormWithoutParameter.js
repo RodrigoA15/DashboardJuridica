@@ -93,6 +93,48 @@ export const FormWithoutParameter = ({ data, handleClose }) => {
             })}
           />
           {errors.numero_radicado_respuesta && <span className="inputForm ">{errors.numero_radicado_respuesta.message}</span>}
+
+        </div>
+        <div className="mb-3">
+          <h6>Tipo firma</h6>
+          <div className="d-flex gap-4">
+            <div className="form-check">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                id="firmaDigital"
+                onChange={(e) => setSignatureDigital(e.target.checked)}
+                disabled={signatureManual}
+              />
+              <label className="form-check-label" htmlFor="firmaDigital">
+                Firma digital
+              </label>
+            </div>
+            <div className="form-check">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                id="firmaManual"
+                onChange={(e) => setSignatureManual(e.target.checked)}
+                disabled={signatureDigital}
+              />
+              <label className="form-check-label" htmlFor="firmaManual">
+                Firma manual
+                </label>
+
+                  </div>
+            <div className="form-check">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                id="firmaMecanica"
+                onChange={(e) => setSignatureManual(e.target.checked)}
+                disabled={signatureMecanica}
+              />
+            
+            </div>
+          </div>
+          {errors.firma && <div className="text-danger">{errors.firma.message}</div>}
         </div>
 
         <div>
