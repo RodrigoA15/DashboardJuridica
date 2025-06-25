@@ -67,7 +67,7 @@ export const FormWithoutParameter = ({ data, handleClose }) => {
       setUrl('');
       handleClose();
     } catch (error) {
-      toast.error(error.response.data);
+      console.log(error);
     }
   };
 
@@ -93,9 +93,8 @@ export const FormWithoutParameter = ({ data, handleClose }) => {
             })}
           />
           {errors.numero_radicado_respuesta && <span className="inputForm ">{errors.numero_radicado_respuesta.message}</span>}
-
         </div>
-        <div className="mb-3">
+        {/* <div className="mb-3">
           <h6>Tipo firma</h6>
           <div className="d-flex gap-4">
             <div className="form-check">
@@ -135,7 +134,7 @@ export const FormWithoutParameter = ({ data, handleClose }) => {
             </div>
           </div>
           {errors.firma && <div className="text-danger">{errors.firma.message}</div>}
-        </div>
+        </div> */}
 
         <div>
           <FormUpdateUser data={data} />
