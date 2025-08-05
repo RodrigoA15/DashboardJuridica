@@ -1,48 +1,62 @@
 import { useEffect, useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 import axios from 'api/axios';
-import PropTypes from 'prop-types';
 import GetAsunto from '../Asunto/GetAsunto';
 
-function GetDepartamentos({ register, setIdDepartamento, id_departamento, errors, selectedEntityId }) {
+function GetDepartamentos() {
   const [dataDepartamento, setDataDepartamento] = useState([]);
+  const {
+    register,
+    watch,
+    formState: { errors }
+  } = useFormContext();
+
+  const id_entidad = watch('id_entidad');
 
   useEffect(() => {
-    if (selectedEntityId) {
-      listDepartamentos(selectedEntityId);
+    if (id_entidad) {
+      listDepartamentos(id_entidad);
+    } else {
+      setDataDepartamento([]);
     }
-  }, [selectedEntityId]);
+  }, [id_entidad]);
 
   const listDepartamentos = async (entityId) => {
     try {
       const response = await axios.get(`/area/dptoentidad/${entityId}`);
       setDataDepartamento(response.data);
     } catch (error) {
-      console.log(error);
+      console.error('Error al obtener departamentos:', error);
     }
   };
 
   return (
     <div className="row">
       <div className="col-6">
-        <select className="form-select rounded-pill minimal-input-dark" onChange={(e) => setIdDepartamento(e.target.value)}>
-          <option>Seleccione un departamento</option>
+        <label htmlFor="id_departamento" className="form-label">
+          Departamento
+        </label>
+        <select
+          className="form-select rounded-pill minimal-input-dark"
+          {...register('id_departamento', {
+            required: 'Campo área es obligatorio'
+          })}
+        >
+          <option value="">Seleccione un departamento</option>
           {dataDepartamento.map((i) => (
             <option key={i._id} value={i._id}>
               {i.nombre_departamento}
             </option>
           ))}
         </select>
+        {errors?.id_departamento && <span className="inputForm">{errors.id_departamento.message}</span>}
       </div>
 
       <div className="col-6">
-        <GetAsunto register={register} errors={errors} id_departamento={id_departamento} />
+        <GetAsunto />
       </div>
     </div>
   );
 }
-
-GetDepartamentos.propTypes = {
-  register: PropTypes.func.isRequired
-};
 
 export default GetDepartamentos;
