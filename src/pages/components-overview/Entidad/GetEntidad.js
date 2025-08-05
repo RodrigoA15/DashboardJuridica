@@ -3,9 +3,8 @@ import axios from 'api/axios';
 import PropTypes from 'prop-types';
 import GetDepartamentos from '../Departamento/GetDepartamentos';
 
-const GetEntidad = memo(({ register, errors, setIdDepartamento, id_departamento }) => {
+const GetEntidad = memo(({ register, errors, watch }) => {
   const [dataEntidad, setDataEntidad] = useState([]);
-  const [idEntidadSeleccionada, setIdEntidadSeleccionada] = useState('');
 
   useEffect(() => {
     listEntidad();
@@ -29,10 +28,6 @@ const GetEntidad = memo(({ register, errors, setIdDepartamento, id_departamento 
           {...register('id_entidad', {
             required: 'Campo entidad es obligatorio'
           })}
-          onChange={(e) => {
-            setIdEntidadSeleccionada(e.target.value);
-            setIdDepartamento(e.target.value);
-          }}
         >
           <option value="">Seleccione entidad</option>
           {dataEntidad.map((entidad) => (
@@ -44,20 +39,14 @@ const GetEntidad = memo(({ register, errors, setIdDepartamento, id_departamento 
         {errors.id_entidad && <span className="inputForm">{errors.id_entidad.message}</span>}
       </div>
 
-      <GetDepartamentos
-        register={register}
-        setIdDepartamento={setIdDepartamento}
-        id_departamento={id_departamento}
-        errors={errors}
-        dataEntidad={dataEntidad}
-        selectedEntityId={idEntidadSeleccionada}
-      />
+      <GetDepartamentos register={register} errors={errors} watch={watch} />
     </div>
   );
 });
 
 GetEntidad.propTypes = {
-  register: PropTypes.func.isRequired
+  register: PropTypes.func.isRequired,
+  errors: PropTypes.object
 };
 
 export default GetEntidad;
