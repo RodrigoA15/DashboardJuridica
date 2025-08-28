@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import axios from 'api/axios';
 import Chart from 'react-apexcharts';
 
@@ -18,19 +18,28 @@ export const ChartEstados = () => {
     }
   };
 
-  const cleanData = data.map((radicado) => radicado.radicados).flat();
+  // Estados únicos (series)
+  const estados = useMemo(() => {
+    const set = new Set();
+    (data || []).forEach((u) => (u.radicados || []).forEach((it) => set.add(it.estado)));
+    return Array.from(set);
+  }, [data]);
 
-  const seriesData = cleanData.map((item) => ({
-    name: item.estado,
-    data: data.map((area) => {
-      const radicadoFound = area.radicados.find((r) => r.estado === item.estado);
-      return radicadoFound ? radicadoFound.count : 0;
-    })
-  }));
+  const categories = useMemo(() => (data || []).map((d) => d._id), [data]);
+
+  // Series por estado
+  const series = useMemo(
+    () =>
+      estados.map((estado) => ({
+        name: estado,
+        data: (data || []).map((u) => u.radicados.find((e) => e.estado === estado)?.count || 0)
+      })),
+    [data, estados]
+  );
 
   const chartData = {
     type: 'bar',
-    series: seriesData,
+    series: series,
     options: {
       plotOptions: {
         bar: {
@@ -45,7 +54,7 @@ export const ChartEstados = () => {
         offsetY: -20
       },
       xaxis: {
-        categories: data.map((item) => item._id)
+        categories: categories
       }
     }
   };
