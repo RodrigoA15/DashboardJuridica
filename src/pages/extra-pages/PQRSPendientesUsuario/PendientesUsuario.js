@@ -56,6 +56,7 @@ function PendientesUsuario() {
     <div className="card">
       <TablePendingUser
         asignados={asignados}
+        setAsignados={setAsignados}
         error={error}
         setOpenReasignacion={setOpenReasignacion}
         setSelectedData={setSelectedData}

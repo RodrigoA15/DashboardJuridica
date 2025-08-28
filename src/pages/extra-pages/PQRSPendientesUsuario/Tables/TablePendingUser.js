@@ -2,6 +2,7 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
+import { InputNumber } from 'primereact/inputnumber';
 //Sweet Alert
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
@@ -23,6 +24,7 @@ import useDiasHabiles from 'hooks/useDate';
 
 export const TablePendingUser = ({
   asignados,
+  setAsignados,
   error,
   setOpenReasignacion,
   setSelectedData,
@@ -110,6 +112,36 @@ export const TablePendingUser = ({
     }
   };
 
+  const updateQuantityAnswers = async (data) => {
+    try {
+      if (data.cantidad_respuesta > 0) {
+        await axios.put(`/radicados/updateQuantity/${data.id_radicado}`, {
+          cantidad_respuesta: data.cantidad_respuesta
+        });
+      } else {
+        toast.error('La cantidad de respuestas debe ser mayor a 0');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const onRowEditComplete = (e) => {
+    let _products = [...asignados];
+    let { newData, index } = e;
+
+    updateQuantityAnswers(newData);
+    _products[index] = newData;
+    setAsignados(_products);
+  };
+
+  const allowEdit = (rowData) => {
+    return rowData.name !== 'Blue Band';
+  };
+
+  const quantityAnswers = (options) => {
+    return <InputNumber className="w-72" value={options.value} onValueChange={(e) => options.editorCallback(e.value)} />;
+  };
+
   const renderHeader = () => {
     return (
       <>
@@ -183,6 +215,8 @@ export const TablePendingUser = ({
         header={header}
         filters={filters}
         onFilter={(e) => setFilters(e.filters)}
+        editMode="row"
+        onRowEditComplete={onRowEditComplete}
       >
         <Column field="numero_radicado" header="Número radicado" />
         <Column field="fecha_radicado" sortable header="Fecha radicado" body={(rowData) => formatDate(rowData.fecha_radicado)} />
@@ -190,11 +224,12 @@ export const TablePendingUser = ({
         <Column field="fecha_asignacion" sortable header="Fecha asignación" body={(rowData) => formatDate(rowData.fecha_asignacion)} />
         <Column field="nombre_procedencia" header="Procedencia" />
         <Column field="observaciones" header="Observaciones" />
-        <Column field="cantidad_respuesta" sortable header="Respuestas estimadas" />
+        <Column field="cantidad_respuesta" sortable header="Respuestas estimadas" editor={(options) => quantityAnswers(options)} />
         <Column field="fecha_radicado" sortable header="Dias" body={getBackgroundColor} />
         <Column body={btnOpenModalAddAnswer} />
         <Column body={btnOpenModalViewAnswer} />
         <Column body={btnReasignation} />
+        <Column rowEditor={allowEdit} headerStyle={{ width: '10%', minWidth: '8rem' }} bodyStyle={{ textAlign: 'center' }} />
       </DataTable>
     </>
   );
@@ -202,6 +237,7 @@ export const TablePendingUser = ({
 
 TablePendingUser.propTypes = {
   asignados: PropTypes.array,
+  setAsignados: PropTypes.func,
   error: PropTypes.string,
   setOpenReasignacion: PropTypes.func,
   setSelectedData: PropTypes.func,
