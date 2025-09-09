@@ -3,6 +3,7 @@ import { Grid, Typography } from '@mui/material';
 import ChartArea from './chartArea';
 import { ChartEstados } from './chartEstados';
 import { BarChart } from './StatesByUser';
+import { TableUsersAnswer } from './tableUsersAnswer';
 // import { ChartPQRSmonth } from './chartPQRSmonth';
 // import { AnswerByuser } from './answerByuser';
 
@@ -28,6 +29,17 @@ function IndexResumen() {
         </Grid>
         <MainCard content={false} sx={{ mt: 1.5 }}>
           <ChartEstados />
+        </MainCard>
+      </Grid>
+
+      <Grid item xs={6} md={6}>
+        <Grid container alignItems="center" justifyContent="space-between">
+          <Grid item>
+            <Typography variant="h5">Total respuestas por usuario</Typography>
+          </Grid>
+        </Grid>
+        <MainCard content={false} sx={{ mt: 1.5 }}>
+          <TableUsersAnswer />
         </MainCard>
       </Grid>
 
