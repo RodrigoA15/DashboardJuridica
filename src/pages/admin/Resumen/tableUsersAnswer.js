@@ -11,9 +11,6 @@ manana.setDate(hoy.getDate() + 1);
 
 const año = manana.getFullYear();
 const mes = String(manana.getMonth() + 1).padStart(2, '0');
-const dia = String(manana.getDate()).padStart(2, '0');
-
-const dateFormat = `${año}-${mes}-${dia}`;
 const dateFormat2 = `${año}-${mes}-${dia2}`;
 
 const fetchUserAnswers = async (startDate, endDate) => {
@@ -26,7 +23,7 @@ export const TableUsersAnswer = () => {
   const [loadig, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [startDate, setStartDate] = useState(dateFormat2);
-  const [endDate, setEndDate] = useState(dateFormat);
+  const [endDate, setEndDate] = useState(dateFormat2);
 
   const fetchData = async () => {
     try {
