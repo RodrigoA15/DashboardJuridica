@@ -83,7 +83,14 @@ export const TableUsersAnswer = () => {
       size="small"
     >
       <Column className="border border-2 border-primary-subtle" field="_id" header="Usuario" align="center" sortable />
-      <Column className="border border-2 border-primary-subtle" field="count" align="center" header="Total respuestas" sortable />
+      <Column
+        className="border border-2 border-primary-subtle"
+        field="count"
+        align="center"
+        style={{ width: '5rem' }}
+        header="Total respuestas"
+        sortable
+      />
     </DataTable>
   );
 };
