@@ -1,8 +1,8 @@
-import { memo, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'api/axios';
 import { Card } from '../Card';
 
-export const AnalyticCantRespuestas = memo(() => {
+export const AnalyticCantRespuestas = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -19,4 +19,4 @@ export const AnalyticCantRespuestas = memo(() => {
   }, []);
 
   return <Card value={data} description="RESPUESTAS" color="card2" />;
-});
+};

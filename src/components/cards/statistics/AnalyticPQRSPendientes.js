@@ -1,9 +1,9 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'api/axios';
 import { toast } from 'sonner';
 import { Card } from '../Card';
 
-const AnalyticPQRSPendientes = memo(() => {
+const AnalyticPQRSPendientes = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -28,6 +28,6 @@ const AnalyticPQRSPendientes = memo(() => {
       <Card description="SIN ASIGNAR" value={data} color="card4" />
     </div>
   );
-});
+};
 
 export default AnalyticPQRSPendientes;

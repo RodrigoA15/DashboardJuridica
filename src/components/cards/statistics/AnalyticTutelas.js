@@ -1,10 +1,10 @@
 import MainCard from 'components/MainCard';
-import React, { memo, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Grid, Stack, Typography } from '@mui/material';
 import axios from 'api/axios';
 import { Toaster, toast } from 'sonner';
 
-const AnalyticTutelas = memo(() => {
+const AnalyticTutelas = () => {
   const [data, setData] = useState([]);
   const [error, setError] = useState('');
 
@@ -57,6 +57,6 @@ const AnalyticTutelas = memo(() => {
       </MainCard>
     </div>
   );
-});
+};
 
 export default AnalyticTutelas;

@@ -1,10 +1,10 @@
 import MainCard from 'components/MainCard';
-import React, { memo, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Grid, Stack, Typography } from '@mui/material';
 import axios from 'api/axios';
 import { toast } from 'sonner';
 
-const AnalyticDesacatos = memo(() => {
+const AnalyticDesacatos = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -50,6 +50,6 @@ const AnalyticDesacatos = memo(() => {
       </MainCard>
     </div>
   );
-});
+};
 
 export default AnalyticDesacatos;

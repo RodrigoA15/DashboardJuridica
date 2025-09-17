@@ -1,9 +1,9 @@
-import { memo, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'api/axios';
 import { toast } from 'sonner';
 import { Card } from '../Card';
 
-const AnalyticPQRSAsignadas = memo(() => {
+const AnalyticPQRSAsignadas = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -28,6 +28,6 @@ const AnalyticPQRSAsignadas = memo(() => {
       <Card description="SIN RESPUESTA" value={data} color="card3" />
     </>
   );
-});
+};
 
 export default AnalyticPQRSAsignadas;
