@@ -25,7 +25,7 @@ const AnalyticPQRSAsignadas = () => {
 
   return (
     <>
-      <Card description="SIN RESPUESTA" value={data} color="card3" />
+      <Card description="TOTAL ASIGNADAS" value={data} color="card3" />
     </>
   );
 };

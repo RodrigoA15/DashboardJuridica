@@ -25,7 +25,7 @@ const AnalyticPQRSPendientes = () => {
 
   return (
     <div>
-      <Card description="SIN ASIGNAR" value={data} color="card4" />
+      <Card description="POR ASIGNAR" value={data} color="card4" />
     </div>
   );
 };

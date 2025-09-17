@@ -21,7 +21,7 @@ export const AnalyticDevueltos = () => {
 
   return (
     <>
-      <Card description="PQRS devueltas" value={count} color="card3" />
+      <Card description="DEVUELTAS" value={count} color="card3" />
     </>
   );
 };

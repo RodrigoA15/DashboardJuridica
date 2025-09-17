@@ -5,7 +5,6 @@ import MainCard from 'components/MainCard';
 import AnalyticPQRSCreadas from 'components/cards/statistics/AnalyticPQRSCreadas';
 // assets
 import AnalyticPQRSAsignadas from 'components/cards/statistics/AnalyticPQRSAsignadas';
-import AnalyticPQRSRespondidas from 'components/cards/statistics/AnalyticPQRSRespondidas';
 import AnalyticPQRSPendientes from 'components/cards/statistics/AnalyticPQRSPendientes';
 import { RadicadosChart } from './RadicadosChart';
 import { CanalEntradaChart } from './CanalEntradaChart';
@@ -53,7 +52,7 @@ const DashboardDefault = () => {
         </Grid>
       ))}
       <Grid item xs={6} sm={3} md={2} lg={2}>
-        <AnalyticPQRSRespondidas />
+        <AnalyticCantRespuestas />
       </Grid>
       <Grid item xs={6} sm={3} md={2} lg={2}>
         <AnalyticPQRSAsignadas />
@@ -78,10 +77,6 @@ const DashboardDefault = () => {
 
       <Grid item xs={12} sm={6} md={4} lg={3}>
         <AnalyticRespuestasPend />
-      </Grid>
-
-      <Grid item xs={12} sm={6} md={4} lg={3}>
-        <AnalyticCantRespuestas />
       </Grid>
 
       <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
