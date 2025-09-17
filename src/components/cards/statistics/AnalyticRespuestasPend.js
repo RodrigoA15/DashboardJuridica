@@ -18,5 +18,5 @@ export const AnalyticRespuestasPend = () => {
     respuestasPendientesApi();
   }, []);
 
-  return <Card value={data} description="RESPUESTAS POR DAR" color="card2" />;
+  return <Card value={data} description="PENDIENTE RESPUESTA" color="card2" />;
 };

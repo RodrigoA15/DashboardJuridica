@@ -43,26 +43,26 @@ const DashboardDefault = () => {
         <Typography variant="h5">Dashboard</Typography>
       </Grid>
 
-      <Grid item xs={6} sm={3} md={2} lg={2}>
+      <Grid item xs={12} sm={6} md={4} lg={2}>
         <AnalyticTotal />
       </Grid>
       {data.map((item) => (
-        <Grid item xs={6} sm={3} md={2} lg={2} key={item.entidad}>
+        <Grid item xs={12} sm={6} md={4} lg={2} key={item.entidad}>
           <AnalyticPQRSCreadas description={item.entidad} value={item.count} />
         </Grid>
       ))}
-      <Grid item xs={6} sm={3} md={2} lg={2}>
+      <Grid item xs={12} sm={6} md={4} lg={2}>
         <AnalyticCantRespuestas />
       </Grid>
-      <Grid item xs={6} sm={3} md={2} lg={2}>
+      <Grid item xs={12} sm={6} md={10} lg={2}>
         <AnalyticPQRSAsignadas />
       </Grid>
-      <Grid item xs={6} sm={3} md={2} lg={2}>
+      <Grid item xs={12} sm={6} md={10} lg={2}>
         <AnalyticPQRSPendientes />
       </Grid>
 
       {validateParam && (
-        <Grid item xs={6} sm={3} md={2} lg={2}>
+        <Grid item xs={12} sm={6} md={4} lg={3}>
           <AnalyticDevueltos />
         </Grid>
       )}
