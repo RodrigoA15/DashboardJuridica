@@ -1,33 +1,17 @@
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import axios from 'api/axios';
-import useDiasHabiles from 'hooks/useDate';
+import { useEffect, useState } from 'react';
 import { classNames } from 'primereact/utils';
-import { TablePagination, Typography } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { esES } from '@mui/material/locale';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+import useDiasHabiles from 'hooks/useDate';
+import axios from 'api/axios';
+import { useFormatDate } from 'hooks/useFormatDate';
 
 const TablaVencidas = () => {
   const [data, setData] = useState([]);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { diasHabiles } = useDiasHabiles();
-  const theme = createTheme(
-    {
-      palette: {
-        primary: { main: '#1976d2' }
-      }
-    },
-    esES
-  );
+  const { formatDate } = useFormatDate();
 
   useEffect(() => {
     getPQRSexpired();
@@ -44,28 +28,6 @@ const TablaVencidas = () => {
     }
   };
 
-  //extraer mes y año
-  const extractDateInfo = (fecha) => {
-    const date = new Date(fecha);
-    return {
-      month: date.getMonth() + 1,
-      year: date.getFullYear()
-    };
-  };
-
-  const handleChangePage = useCallback((event, newPage) => {
-    setPage(newPage);
-  }, []);
-
-  const handleChangeRowsPerPage = useCallback((event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  }, []);
-
-  const visibleRows = useMemo(() => {
-    return [...data].slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-  }, [data, page, rowsPerPage]);
-
   const getDiasLaborablesClass = (diasLaborables) => {
     return classNames('rounded-pill justify-content-center align-items-center text-center font-weight-bold', {
       'dias text-dark': diasLaborables >= 10 && diasLaborables <= 12,
@@ -78,59 +40,25 @@ const TablaVencidas = () => {
     return <div className={getDiasLaborablesClass(diasLaborables)}>{diasLaborables}</div>;
   };
 
-  if (loading) {
-    return <div>Cargando...</div>;
-  }
-
-  if (error) {
-    return <div>{error}</div>;
-  }
-
   return (
     <>
-      <TableContainer component={Paper}>
-        <Typography variant="h5">Total: {data.length}</Typography>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="center">Año</TableCell>
-              <TableCell align="center">Mes</TableCell>
-              <TableCell align="center">&aacute;rea</TableCell>
-              <TableCell align="center">Responsable</TableCell>
-              <TableCell align="center">N&uacute;mero radicado</TableCell>
-              <TableCell align="center">Fecha asignaci&oacute;n</TableCell>
-              <TableCell align="center">Tiempo sin respuesta</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {visibleRows.map((item) => {
-              const { year, month } = extractDateInfo(item.fecha_radicado);
-              return (
-                <TableRow key={item.numero_radicado}>
-                  <TableCell align="center">{year}</TableCell>
-                  <TableCell align="center">{month}</TableCell>
-                  <TableCell align="center">{item.id_departamento}</TableCell>
-                  <TableCell align="center">{item.id_usuario}</TableCell>
-                  <TableCell align="center">{item.numero_radicado}</TableCell>
-                  <TableCell align="center">{item.fecha_asignacion}</TableCell>
-                  <TableCell align="center">{getBackgroundColor(item)}</TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <ThemeProvider theme={theme}>
-        <TablePagination
-          rowsPerPageOptions={[10, 15, 25]}
-          component="div"
-          count={data.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </ThemeProvider>
+      <DataTable
+        value={data}
+        stripedRows
+        removableSort
+        paginator
+        rows={5}
+        rowsPerPageOptions={[5, 10, 25, 50]}
+        emptyMessage={error || 'No se encontraron radicados'}
+        loading={loading}
+      >
+        <Column field="numero_radicado" header="Número radicado" />
+        <Column field="fecha_radicado" header="Fecha radicado" sortable body={(rowData) => formatDate(rowData.fecha_radicado)} />
+        <Column field="id_departamento" header="Área" />
+        <Column field="id_usuario" header="Responsable" />
+        <Column field="fecha_asignacion" header="Fecha asignacion" body={(rowData) => formatDate(rowData.fecha_asignacion)} />
+        <Column field="fecha_radicado" header="Dias" sortable body={getBackgroundColor} />
+      </DataTable>
     </>
   );
 };

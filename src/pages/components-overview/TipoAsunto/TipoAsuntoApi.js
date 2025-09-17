@@ -27,7 +27,7 @@ const TipoAsuntoApi = () => {
       {loading ? (
         <p>Cargando...</p>
       ) : (
-        <div className="d-flex flex-column mb-3">
+        <div className="d-flex flex-column">
           {error === null ? (
             <>
               <TablePQRS response={data} />

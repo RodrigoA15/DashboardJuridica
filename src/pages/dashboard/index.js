@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 // material-ui
 import { Grid, Typography } from '@mui/material';
 // project import
@@ -19,12 +20,11 @@ import { CreadasApi } from './creadasApi';
 import { AnalyticTotal } from 'components/cards/statistics/AnalyticTotal';
 import { AnalyticDevueltos } from 'components/cards/statistics/AnalyticDevueltos';
 import { AnalyticCantRespuestas } from 'components/cards/statistics/AnalyticCantRespuestas';
-import { lazy, Suspense, useEffect, useState } from 'react';
 import { TabVencidas } from './vencidas/index';
-const GraficaTAMes = lazy(() => import('./Tipo_asunto/GraficaTAMes'));
-const ChartEntidad = lazy(() => import('./ChartEntidad'));
-const GraficaTipoAsunto = lazy(() => import('./Tipo_asunto/GraficaTipo_asunto'));
-const ChartRadicadosAnswer = lazy(() => import('./ChartRadicadosAnswer'));
+import GraficaTAMes from './Tipo_asunto/GraficaTAMes';
+import ChartEntidad from './ChartEntidad';
+import GraficaTipoAsunto from './Tipo_asunto/GraficaTipo_asunto';
+import ChartRadicadosAnswer from './ChartRadicadosAnswer';
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 const DashboardDefault = () => {
   const { parameters } = Parameters();
@@ -90,7 +90,7 @@ const DashboardDefault = () => {
           <Grid item />
         </Grid>
         <MainCard sx={{ mt: 2 }} content={false}>
-          <Suspense fallback={<div>Cargando...</div>}>{validateParam ? <GraficaTAMes /> : <ChartEntidad />}</Suspense>
+          {validateParam ? <GraficaTAMes /> : <ChartEntidad />}
         </MainCard>
         {/* <Grid item>
           <Typography variant="h5">Exportar informacion radicados </Typography>
@@ -143,7 +143,7 @@ const DashboardDefault = () => {
         </Grid>
 
         <MainCard sx={{ mt: 2 }} content={false}>
-          <Suspense fallback={<div>Cargando...</div>}> {validateParam ? <GraficaTipoAsunto /> : <ChartRadicadosAnswer />}</Suspense>
+          {validateParam ? <GraficaTipoAsunto /> : <ChartRadicadosAnswer />}
         </MainCard>
       </Grid>
 
@@ -166,9 +166,7 @@ const DashboardDefault = () => {
             {validateParam ? <Typography variant="h5">Total asuntos</Typography> : <Typography variant="h5">Canal entrada</Typography>}
           </Grid>
         </Grid>
-        <MainCard sx={{ mt: 1.75 }}>
-          <Suspense fallback={<div>Cargando...</div>}>{validateParam ? <IndexTipoAsunto /> : <CanalEntradaChart />}</Suspense>
-        </MainCard>
+        <MainCard sx={{ mt: 1.75 }}>{validateParam ? <IndexTipoAsunto /> : <CanalEntradaChart />}</MainCard>
       </Grid>
     </Grid>
   );
