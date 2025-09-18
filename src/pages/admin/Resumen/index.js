@@ -5,16 +5,17 @@ import { ChartEstados } from './chartEstados';
 import { BarChart } from './StatesByUser';
 import { TableUsersAnswer } from './tableUsersAnswer';
 import ChartRadicadosAnswer from 'pages/dashboard/ChartRadicadosAnswer';
-import { Parameters } from 'hooks/useParameters';
+import { useParameters } from 'hooks/useParameters';
 import { useEffect, useState } from 'react';
 // import { ChartPQRSmonth } from './chartPQRSmonth';
 // import { AnswerByuser } from './answerByuser';
 
 function IndexResumen() {
-  const { parameters } = Parameters();
+  const { parameters } = useParameters();
   const [validateParam, setValidateParam] = useState(false);
+
   useEffect(() => {
-    const validatorParameter = parameters.some((parametro) => parametro.nombre_parametro === 'Tabla asuntos' && parametro.activo === true);
+    const validatorParameter = parameters.some((parametro) => parametro.nombre_parametro === 'Tabla asuntos' && parametro.activo);
     if (validatorParameter !== validateParam) {
       setValidateParam(validatorParameter);
     }

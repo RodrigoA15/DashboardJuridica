@@ -1,8 +1,12 @@
+import { CreadasApi } from 'pages/dashboard/creadasApi';
 import { Card } from '../Card';
-const AnalyticPQRSCreadas = ({ description, value }) => {
+const AnalyticPQRSCreadas = () => {
+  const { data } = CreadasApi();
   return (
     <>
-      <Card description={`PQRS ${description} 2025`} value={value} color="card1" />
+      {data.map((item) => (
+        <Card description={`PQRS ${item.entidad} 2025`} value={item.count} key={item.entidad} color="card1" />
+      ))}
     </>
   );
 };

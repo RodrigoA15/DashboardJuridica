@@ -24,20 +24,16 @@ const TipoAsuntoApi = () => {
 
   return (
     <>
-      {loading ? (
-        <p>Cargando...</p>
-      ) : (
-        <div className="d-flex flex-column">
-          {error === null ? (
-            <>
-              <TablePQRS response={data} />
-              <TableTutelas response={data} />
-            </>
-          ) : (
-            <span className="errors">{error}</span>
-          )}
-        </div>
-      )}
+      <div className="d-flex flex-column">
+        {error === null ? (
+          <>
+            <TablePQRS response={data} loading={loading} />
+            <TableTutelas response={data} loading={loading} />
+          </>
+        ) : (
+          <span className="errors">{error}</span>
+        )}
+      </div>
     </>
   );
 };

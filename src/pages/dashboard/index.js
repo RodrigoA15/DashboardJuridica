@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 // material-ui
-import { Grid, Typography } from '@mui/material';
+import { Grid, Typography, CircularProgress, Box } from '@mui/material';
 // project import
 import MainCard from 'components/MainCard';
 import AnalyticPQRSCreadas from 'components/cards/statistics/AnalyticPQRSCreadas';
@@ -15,8 +15,7 @@ import AnalyticTutelas from 'components/cards/statistics/AnalyticTutelas';
 import { AnalyticRespuestasPend } from 'components/cards/statistics/AnalyticRespuestasPend';
 // import RadicadosExcel from 'pages/components-overview/Radicados/radicadosExcel';
 import IndexTipoAsunto from 'pages/components-overview/TipoAsunto/index';
-import { Parameters } from 'hooks/useParameters';
-import { CreadasApi } from './creadasApi';
+import { useParameters } from 'hooks/useParameters';
 import { AnalyticTotal } from 'components/cards/statistics/AnalyticTotal';
 import { AnalyticDevueltos } from 'components/cards/statistics/AnalyticDevueltos';
 import { AnalyticCantRespuestas } from 'components/cards/statistics/AnalyticCantRespuestas';
@@ -27,15 +26,23 @@ import GraficaTipoAsunto from './Tipo_asunto/GraficaTipo_asunto';
 import ChartRadicadosAnswer from './ChartRadicadosAnswer';
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 const DashboardDefault = () => {
-  const { parameters } = Parameters();
-  const { data } = CreadasApi();
+  const { parameters, loading } = useParameters();
   const [validateParam, setValidateParam] = useState(false);
+
   useEffect(() => {
-    const validatorParameter = parameters.some((parametro) => parametro.nombre_parametro === 'Tabla asuntos' && parametro.activo === true);
-    if (validatorParameter !== validateParam) {
+    if (!loading) {
+      const validatorParameter = parameters.some((parametro) => parametro.nombre_parametro === 'Tabla asuntos' && parametro.activo);
       setValidateParam(validatorParameter);
     }
-  }, [parameters, validateParam]);
+  }, [parameters, loading]);
+
+  if (loading) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="70vh">
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <Grid container rowSpacing={4.5} columnSpacing={2.75}>
@@ -46,11 +53,10 @@ const DashboardDefault = () => {
       <Grid item xs={12} sm={6} md={4} lg={2}>
         <AnalyticTotal />
       </Grid>
-      {data.map((item) => (
-        <Grid item xs={12} sm={6} md={4} lg={2} key={item.entidad}>
-          <AnalyticPQRSCreadas description={item.entidad} value={item.count} />
-        </Grid>
-      ))}
+      <Grid item xs={12} sm={6} md={4} lg={2}>
+        <AnalyticPQRSCreadas />
+      </Grid>
+
       <Grid item xs={12} sm={6} md={4} lg={2}>
         <AnalyticCantRespuestas />
       </Grid>
@@ -85,13 +91,14 @@ const DashboardDefault = () => {
       <Grid item xs={12} md={5} lg={4}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
-            {validateParam ? <Typography variant="h5">PQRS y Tutelas por mes</Typography> : <Typography variant="h5">Entidades</Typography>}
+            <Typography variant="h5">{validateParam ? 'PQRS y Tutelas por mes' : 'Entidades'}</Typography>
           </Grid>
           <Grid item />
         </Grid>
         <MainCard sx={{ mt: 2 }} content={false}>
           {validateParam ? <GraficaTAMes /> : <ChartEntidad />}
         </MainCard>
+
         {/* <Grid item>
           <Typography variant="h5">Exportar informacion radicados </Typography>
         </Grid>
@@ -133,11 +140,7 @@ const DashboardDefault = () => {
       <Grid item xs={12} md={5} lg={4}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
-            {validateParam ? (
-              <Typography variant="h5">Total PQRS y Tutelas</Typography>
-            ) : (
-              <Typography variant="h5">Radicados y respuestas por mes</Typography>
-            )}
+            <Typography variant="h5">{validateParam ? 'Total PQRS y Tutelas' : 'Radicados y respuestas por mes'}</Typography>
           </Grid>
           <Grid item />
         </Grid>
@@ -163,7 +166,7 @@ const DashboardDefault = () => {
       <Grid item xs={12} md={5} lg={4}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
-            {validateParam ? <Typography variant="h5">Total asuntos</Typography> : <Typography variant="h5">Canal entrada</Typography>}
+            <Typography variant="h5">{validateParam ? 'Total asuntos' : 'Canal entrada'}</Typography>
           </Grid>
         </Grid>
         <MainCard sx={{ mt: 1.75 }}>{validateParam ? <IndexTipoAsunto /> : <CanalEntradaChart />}</MainCard>

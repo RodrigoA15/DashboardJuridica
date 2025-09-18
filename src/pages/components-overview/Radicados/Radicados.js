@@ -10,7 +10,7 @@ import withReactContent from 'sweetalert2-react-content';
 import { Button } from '@mui/material';
 import { useAuth } from 'context/authContext';
 import ModalComponent from './ImportFile/modal';
-import { Parameters } from 'hooks/useParameters';
+import { useParameters } from 'hooks/useParameters';
 import { FormProvider } from 'react-hook-form';
 function ComponentRadicados() {
   const methods = useForm({ mode: 'onChange' });
@@ -32,7 +32,7 @@ function ComponentRadicados() {
   const onSubmit = handleSubmit((data) => {
     createRadicado(data);
   });
-  const { parameters } = Parameters();
+  const { parameters } = useParameters();
   const createRadicado = async (data) => {
     try {
       const datos = {

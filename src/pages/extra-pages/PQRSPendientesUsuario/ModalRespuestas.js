@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import PropTypes from 'prop-types';
-import { Parameters } from 'hooks/useParameters';
+import { useParameters } from 'hooks/useParameters';
 import { FormWithParameter } from './Forms/FormWithParameter';
 import { FormWithoutParameter } from './Forms/FormWithoutParameter';
 const style = {
@@ -16,7 +16,7 @@ const style = {
   p: 4
 };
 function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
-  const { parameters } = Parameters();
+  const { parameters } = useParameters();
   const parametroActivo = parameters.some((parametro) => parametro.nombre_parametro === 'Asuntos respuesta' && parametro.activo);
 
   return (

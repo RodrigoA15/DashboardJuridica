@@ -47,8 +47,8 @@ const TablaVencidas = () => {
         stripedRows
         removableSort
         paginator
-        rows={5}
-        rowsPerPageOptions={[5, 10, 25, 50]}
+        rows={10}
+        rowsPerPageOptions={[10, 25, 50]}
         emptyMessage={error || 'No se encontraron radicados'}
         loading={loading}
       >

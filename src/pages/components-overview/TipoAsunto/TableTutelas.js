@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 
-const TableTutelas = ({ response }) => {
+const TableTutelas = ({ response, loading }) => {
   const newData = response
     .filter((tutela) => tutela.tipo_asunto === 'Tutelas')
     .map((item2) => item2.asuntos)
@@ -19,6 +19,7 @@ const TableTutelas = ({ response }) => {
           rows={5}
           rowsPerPageOptions={[5, 10, 20, 30]}
           emptyMessage="No se encontraron resultados"
+          loading={loading}
         >
           <Column className="bluegray-100" />
           <Column field="nombre_asunto" sortable header="Tutelas" />
@@ -32,5 +33,6 @@ const TableTutelas = ({ response }) => {
 export default TableTutelas;
 
 TableTutelas.propTypes = {
-  response: PropTypes.array
+  response: PropTypes.array,
+  loading: PropTypes.bool
 };
