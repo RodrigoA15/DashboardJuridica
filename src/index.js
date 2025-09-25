@@ -30,6 +30,7 @@ import { Routes } from 'react-router-dom';
 import { Route } from 'react-router-dom';
 import ProtectedRoute from 'ProtectedRoutes';
 import App from 'App';
+import { QueryProvider } from 'QueryProvider';
 
 // ==============================|| MAIN - REACT DOM RENDER  ||============================== //
 
@@ -40,22 +41,24 @@ root.render(
     <PrimeReactProvider>
       <ReduxProvider store={store}>
         <AuthProvider>
-          <BrowserRouter basename="/pqrs">
-            <App />
-            <Routes>
-              <Route element={<ProtectedRoute />}>
-                <Route path="radicados" element="" />
-                <Route path="pqrs" element="" />
-                <Route path="admin" element="" />
-                <Route path="usuariosqx" element="" />
-                <Route path="dashboard/default" element="" />
-                <Route path="/asuntosAdmin" element />
-                <Route path="canalesAdmin" element />
-                <Route path="/pendientes" element />
-                <Route path="/radicadosAdmin" element />
-              </Route>
-            </Routes>
-          </BrowserRouter>
+          <QueryProvider>
+            <BrowserRouter basename="/pqrs">
+              <App />
+              <Routes>
+                <Route element={<ProtectedRoute />}>
+                  <Route path="radicados" element="" />
+                  <Route path="pqrs" element="" />
+                  <Route path="admin" element="" />
+                  <Route path="usuariosqx" element="" />
+                  <Route path="dashboard/default" element="" />
+                  <Route path="/asuntosAdmin" element />
+                  <Route path="canalesAdmin" element />
+                  <Route path="/pendientes" element />
+                  <Route path="/radicadosAdmin" element />
+                </Route>
+              </Routes>
+            </BrowserRouter>
+          </QueryProvider>
         </AuthProvider>
       </ReduxProvider>
     </PrimeReactProvider>
