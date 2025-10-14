@@ -151,89 +151,93 @@ export const FormUpdateUser = ({ data }) => {
   };
   return (
     <>
-      <div className="mb-3 row align-items-center">
-        <h6>Informaci&oacute;n usuario</h6>
-        <div className="col">
-          <label className="form-label" htmlFor="name">
-            N&uacute;mero identificaci&oacute;n
-          </label>
-          <Tooltip title="Ingresa n&uacute;mero identificación y pulsa enter para buscar" placement="top" arrow>
+      <div className="mb-6">
+        <h6 className="text-lg font-semibold mb-4">Información del usuario</h6>
+
+        <div className="grid grid-cols-1 md:grid-cols-7 gap-3 items-start">
+          <div className="flex flex-col gap-2 md:col-span-2">
+            <label className="text-sm font-medium text-gray-700" htmlFor="identification">
+              Identificación
+            </label>
             <div className="input-with-icon">
-              <span className="icon alert-icon">
-                <InfoIcon />
-              </span>
               <input
-                className="form-control"
+                id="identification"
+                className="block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2.5 px-4"
                 type="number"
-                defaultValue={data.numero_identificacion}
+                defaultValue={data?.numero_identificacion}
                 onChange={(e) => setNewIdentification(e.target.value)}
                 disabled={!updated}
                 onKeyDown={handleKeyPress}
               />
-            </div>
-          </Tooltip>
-        </div>
-
-        <div className="col">
-          <label className="form-label" htmlFor="name">
-            Nombres
-          </label>
-          <input
-            className="form-control"
-            type="text"
-            defaultValue={data.nombre_procedencia}
-            onChange={(e) => setNewName(e.target.value)}
-            disabled={!updated}
-          />
-        </div>
-
-        <div className="col">
-          <label className="form-label" htmlFor="lastname">
-            Apellidos
-          </label>
-          <input
-            className="form-control"
-            type="text"
-            defaultValue={data.apellido_procedencia}
-            onChange={(e) => setNewLastName(e.target.value)}
-            disabled={!updated}
-          />
-        </div>
-
-        {!updated && (
-          <div className="col-1">
-            <Tooltip title="Editar" arrow>
-              <IconButton onClick={activeUpdated}>
-                <CreateIcon />
-              </IconButton>
-            </Tooltip>
-          </div>
-        )}
-
-        {updated && (
-          <div className="col-1">
-            <Tooltip title="Cancelar" placement="top" arrow>
-              <IconButton aria-label="cancel" color="error" onClick={cancelUpdateNewName}>
-                <ClearIcon />
-              </IconButton>
-            </Tooltip>
-
-            <Tooltip title="Actualizar" arrow>
-              <span>
-                <IconButton aria-label="check" color="success" onClick={updateOrigin} disabled={openRegister}>
-                  <CheckIcon />
-                </IconButton>
+              <span className="icon alert-icon">
+                <InfoIcon className="h-5 w-5 text-blue-600" />
               </span>
-            </Tooltip>
-            {openRegister && (
-              <Tooltip title="Crear" placement="top" arrow>
-                <IconButton aria-label="cancel" color="warning" onClick={createOrigin}>
-                  <AddIcon />
+            </div>
+          </div>
+
+          {/* --- Campo: Nombres --- */}
+          <div className="flex flex-col gap-2 md:col-span-2">
+            <label className="text-sm font-medium text-gray-700" htmlFor="name">
+              Nombres
+            </label>
+            <input
+              id="name"
+              className="block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm  py-2.5 px-4"
+              type="text"
+              defaultValue={data?.nombre_procedencia}
+              onChange={(e) => setNewName(e.target.value)}
+              disabled={!updated}
+            />
+          </div>
+
+          <div className="flex flex-col gap-2 md:col-span-2">
+            <label className="text-sm font-medium text-gray-700" htmlFor="lastname">
+              Apellidos
+            </label>
+            <input
+              id="lastname"
+              className="block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2.5 px-4"
+              type="text"
+              defaultValue={data?.apellido_procedencia}
+              onChange={(e) => setNewLastName(e.target.value)}
+              disabled={!updated}
+            />
+          </div>
+
+          <div className="flex flex-col items-center">
+            {!updated ? (
+              <Tooltip title="Editar" arrow>
+                <IconButton onClick={activeUpdated}>
+                  <CreateIcon />
                 </IconButton>
               </Tooltip>
+            ) : (
+              <>
+                <Tooltip title="Cancelar" placement="top" arrow>
+                  <IconButton aria-label="cancel" color="error" onClick={cancelUpdateNewName}>
+                    <ClearIcon />
+                  </IconButton>
+                </Tooltip>
+
+                <Tooltip title="Actualizar" arrow>
+                  <span>
+                    <IconButton aria-label="check" color="success" onClick={updateOrigin} disabled={openRegister}>
+                      <CheckIcon />
+                    </IconButton>
+                  </span>
+                </Tooltip>
+
+                {openRegister && (
+                  <Tooltip title="Crear" placement="top" arrow>
+                    <IconButton aria-label="create" color="warning" onClick={createOrigin}>
+                      <AddIcon />
+                    </IconButton>
+                  </Tooltip>
+                )}
+              </>
             )}
           </div>
-        )}
+        </div>
       </div>
     </>
   );
