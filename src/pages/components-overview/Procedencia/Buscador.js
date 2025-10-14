@@ -1,16 +1,29 @@
 import { useState } from 'react';
 import axios from 'api/axios';
 import { toast } from 'sonner';
-import { SearchOutlined } from '@mui/icons-material';
-import { InputAdornment, OutlinedInput } from '@mui/material';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import Juzgados from './Juzgados';
+
+// Ícono de Búsqueda en formato SVG para reemplazar el de MUI
+const SearchIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="h-5 w-5 text-gray-400"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth={2}
+  >
+    <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+  </svg>
+);
 
 function Buscador({ setProcedencia, setNameCourt, nameCourt, setJuzgados }) {
   const [numero_identificacion, setNumero_identificacion] = useState('');
   const [procedenciaData, setProcedenciaData] = useState([]);
   const [entrada, setEntrada] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -19,306 +32,234 @@ function Buscador({ setProcedencia, setNameCourt, nameCourt, setJuzgados }) {
     watch
   } = useForm({
     mode: 'onChange',
-    defaultValues: {
-      search: ''
-    }
+    defaultValues: { search: '' }
   });
 
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault(); // Evitar la recarga de la página
-      GetidentificacionById();
-    }
-  };
-
-  const handleInputChange = (e) => {
-    e.preventDefault();
-    setNumero_identificacion(e.target.value);
-  };
-
-  const resetEntrada = () => {
-    setEntrada(false);
-  };
-
-  const validacion = async () => {
-    if (numero_identificacion.trim() === '') {
-      toast.error('El término búsqueda no puede estar vacío');
-    }
-  };
-
   const GetidentificacionById = async () => {
-    validacion();
+    if (numero_identificacion.trim() === '') {
+      return toast.error('El campo de búsqueda no puede estar vacío.');
+    }
     try {
       const response = await axios.get(`/origin/${numero_identificacion}`);
       if (response.data.length > 0) {
         setProcedenciaData(response.data);
-        const procedenciaValue = response.data[0]._id;
-        setProcedencia(procedenciaValue);
+        setProcedencia(response.data[0]._id);
         setEntrada(true);
+        toast.success('Usuario encontrado.');
       } else {
-        resetEntrada();
+        setEntrada(false);
+        // Si no se encuentra, el catch manejará el 404
       }
     } catch (error) {
+      setEntrada(false);
       if (error.response && error.response.status === 404) {
-        toast.error('Usuario no  registrado', {
-          description: 'Llene los campos y registre la procedencia',
-          duration: 10000
+        toast.error('Usuario no registrado', {
+          description: 'Por favor, complete el formulario para registrarlo.',
+          duration: 6000
         });
-        resetEntrada();
       } else {
-        toast.error(error.message);
+        toast.error(error.message || 'Ocurrió un error inesperado.');
       }
     }
   };
 
-  const onSubmit = handleSubmit((data) => {
-    validacion();
-    PostProcedencia(data);
-    reset();
-  });
-
-  //Data metodo post
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      GetidentificacionById();
+    }
+  };
 
   const PostProcedencia = async (data) => {
     try {
       await axios.post('/origin', { ...data, numero_identificacion });
-      toast.success('Usuario registrado', {
-        description: 'Por favor realice la búsqueda nuevamente',
-        duration: 10000
+      toast.success('Usuario registrado con éxito', {
+        description: 'Realizando búsqueda nuevamente...',
+        duration: 4000
       });
       GetidentificacionById();
+      reset();
     } catch (error) {
-      toast.error(error.response.data);
+      toast.error(error.response?.data || 'Error al registrar.');
     }
   };
 
+  const onSubmit = handleSubmit(PostProcedencia);
+
   return (
-    <div>
-      <div className="row ">
-        <>
-          <h4>Informaci&oacute;n usuario</h4>
+    <div className="space-y-6">
+      <h2 className="text-2xl font-bold text-gray-800">Información del Usuario</h2>
 
-          {/* Buscador */}
-          <div className="col-4 input-container mb-4">
-            <OutlinedInput
-              type="number"
-              placeholder="Digite número de identificación y pulse enter para buscar"
-              {...register('search', {
-                required: { value: true, message: 'El termino busqueda no puede estar vacio' },
-
-                validate: (value) => {
-                  if (value.length < 5) {
-                    return 'Número de identificación debe ser mayor igual a 6 caracteres';
-                  } else if (value.length === 9) {
-                    return 'Número de identificación debe ser iguales a 6, 7, 8 y 10 caracteres';
-                  }
-                }
-              })}
-              size="small"
-              id="search2"
-              sx={{
-                width: '430px'
-              }}
-              startAdornment={
-                <InputAdornment position="start" sx={{ mr: -0.5 }}>
-                  <SearchOutlined />
-                </InputAdornment>
-              }
-              onChange={handleInputChange}
-              onKeyDown={handleKeyPress}
-              required
-            />
-            {errors.search && <span className="inputForm ">{errors.search.message}</span>}
+      {/* --- Buscador --- */}
+      <div className="w-full md:w-2/3 lg:w-1/2">
+        <label htmlFor="search" className="block text-sm font-semibold text-gray-600 mb-2">
+          Buscar por identificación
+        </label>
+        <div className="relative">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <SearchIcon />
           </div>
-
-          {/* Campos de entrada*/}
-          {entrada && (
-            <div>
-              {procedenciaData.map((i) => (
-                <div key={i._id} className="row">
-                  <div className="col mb-3">
-                    <label htmlFor="nombre" className="form-label h6">
-                      Nombres
-                    </label>
-                    <input
-                      aria-label="nombres"
-                      type="text"
-                      className="form-control rounded-pill minimal-input-dark"
-                      id="nombre"
-                      value={i.nombre}
-                      readOnly
-                    />
-                  </div>
-                  <div className="col mb-3">
-                    <label htmlFor="label" className="form-label h6">
-                      Apellidos
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control rounded-pill minimal-input-dark"
-                      id="apellido"
-                      value={i.apellido}
-                      aria-label="apellidos"
-                      readOnly
-                    />
-                  </div>
-
-                  <div>
-                    {i.numero_identificacion === 12345 && (
-                      <div>
-                        <label htmlFor="nombre" className="form-label h6">
-                          Entidad juridica
-                        </label>
-                        <Juzgados setNameCourt={setNameCourt} nameCourt={nameCourt} setJuzgados={setJuzgados} />
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          <div>
-            {!entrada && (
-              <form onSubmit={onSubmit}>
-                <div className="row">
-                  <div className="col-4">
-                    <label htmlFor="label" className="form-label h6">
-                      Tipo documento
-                    </label>
-                    <select
-                      id="tipo"
-                      className="form-select  rounded-pill minimal-input-dark"
-                      {...register('tipo_identificacion', { required: 'Tipo identificación es requerido' })}
-                    >
-                      <option value="">Seleccione...</option>
-                      <option value="TI">Tarjeta de identidad</option>
-                      <option value="CC">Cedula de ciudadania</option>
-                      <option value="CE">Cedula de extranjeria</option>
-                      <option value="PEP">Permiso Especial De Permanencia</option>
-                      <option value="PPT">Permiso Proteccion Temporal</option>
-                      <option value="NIT">NIT</option>
-                      <option value="OTRO">Otro</option>
-                    </select>
-                    {errors.tipo_identificacion && <span className="inputForm ">{errors.tipo_identificacion.message}</span>}
-                  </div>
-                  <div className="col  mb-3">
-                    <label htmlFor="nombre" className="form-label  h6">
-                      Nombres
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control rounded-pill minimal-input-dark"
-                      id="nombres"
-                      {...register('nombre', { required: { value: true, message: 'Campo nombre es requerido' } })}
-                    />
-                    {errors.nombre && <span className="inputForm ">{errors.nombre.message}</span>}
-                  </div>
-
-                  <div className="col mb-4">
-                    <label htmlFor="label" className="form-label h6">
-                      Apellidos
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control rounded-pill minimal-input-dark"
-                      id="apellidos"
-                      {...register('apellido', { required: { value: true, message: 'Campo apellido es requerido' } })}
-                    />
-                    {errors.apellido && <span className="inputForm ">{errors.apellido.message}</span>}
-                  </div>
-
-                  <div className="row">
-                    <div className="col">
-                      <label htmlFor="label" className="form-label h6">
-                        Seleccione una opci&oacute;n de contacto
-                      </label>
-
-                      <select
-                        id="contacto"
-                        className="form-select  rounded-pill minimal-input-dark"
-                        {...register('tipo_contacto', {
-                          required: 'Tipo contacto es obligatorio'
-                        })}
-                      >
-                        <option value="">Seleccione...</option>
-                        <option value="direccion">Dirección</option>
-                        <option value="telefono">Teléfono</option>
-                        <option value="correo">Correo Electrónico</option>
-                      </select>
-
-                      {errors.tipo_contacto && <span className="inputForm ">{errors.tipo_contacto.message}</span>}
-                    </div>
-
-                    <div className="col mt-4">
-                      {watch('tipo_contacto') == 'direccion' && (
-                        <div>
-                          <input
-                            className="form-control rounded-pill minimal-input-dark"
-                            placeholder="Direcci&oacute;n"
-                            type="text"
-                            id="direccion"
-                            {...register('direccion', { required: 'Información de contacto es requerido' })}
-                          />
-                          {errors.direccion && <span className="inputForm ">{errors.direccion.message}</span>}
-                        </div>
-                      )}
-
-                      {watch('tipo_contacto') == 'telefono' && (
-                        <div>
-                          <input
-                            className="form-control rounded-pill minimal-input-dark"
-                            placeholder="Tel&eacute;fono"
-                            type="number"
-                            id="telefono"
-                            {...register('telefono', {
-                              required: 'Información de contacto es requerido',
-                              minLength: { value: 8, message: 'Número de teléfono  debe ser minimo 8 caracteres' },
-                              maxLength: { value: 12, message: 'Número de teléfono  debe ser maximo 12 caracteres' }
-                            })}
-                          />
-                          {errors.telefono && <span className="inputForm ">{errors.telefono.message}</span>}
-                        </div>
-                      )}
-
-                      {watch('tipo_contacto') == 'correo' && (
-                        <div>
-                          <input
-                            className="form-control rounded-pill minimal-input-dark"
-                            placeholder="Correo electr&oacute;nico"
-                            type="email"
-                            id="correo"
-                            {...register('correo', {
-                              required: 'Información de contacto es requerido',
-                              pattern: {
-                                value: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
-                                message: 'Correo no valido, no cumple formato'
-                              }
-                            })}
-                          />
-                          {errors.correo && <span className="inputForm ">{errors.correo.message}</span>}
-                        </div>
-                      )}
-                    </div>
-                    <div className="col"></div>
-                  </div>
-                </div>
-
-                <div className="col-2 mb-3">
-                  <button className="btn btn-primary mt-3" type="submit">
-                    Registrar
-                  </button>
-                </div>
-              </form>
-            )}
-          </div>
-        </>
+          <input
+            id="search"
+            type="number"
+            placeholder="Digite identificación y presione Enter"
+            className="w-full pl-10 pr-4 py-2 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow"
+            {...register('search', {
+              required: { value: true, message: 'El campo no puede estar vacío' },
+              minLength: { value: 5, message: 'Debe tener al menos 5 caracteres' }
+            })}
+            onChange={(e) => setNumero_identificacion(e.target.value)}
+            onKeyDown={handleKeyPress}
+          />
+        </div>
+        {errors.search && <span className="text-red-500 text-xs mt-2 block">{errors.search.message}</span>}
       </div>
+
+      {/* --- Resultados de la Búsqueda --- */}
+      {entrada &&
+        procedenciaData.map((i) => (
+          <div key={i._id} className="bg-blue-50 p-6 rounded-lg border border-blue-200 animate-fade-in">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label htmlFor="names" className="block text-sm font-semibold text-gray-600 mb-2">
+                  Nombres
+                </label>
+                <p className="w-full px-4 py-2 bg-gray-200 rounded-lg text-gray-700">{i.nombre}</p>
+              </div>
+              <div>
+                <label htmlFor="lastnames" className="block text-sm font-semibold text-gray-600 mb-2">
+                  Apellidos
+                </label>
+                <p className="w-full px-4 py-2 bg-gray-200 rounded-lg text-gray-700">{i.apellido}</p>
+              </div>
+              {i.numero_identificacion === 12345 && (
+                <div className="md:col-span-2">
+                  <label htmlFor="entities" className="block text-sm font-semibold text-gray-600 mb-2">
+                    Entidad jurídica
+                  </label>
+                  <Juzgados setNameCourt={setNameCourt} nameCourt={nameCourt} setJuzgados={setJuzgados} />
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+
+      {/* --- Formulario de Registro (si no se encuentra el usuario) --- */}
+      {!entrada && (
+        <form onSubmit={onSubmit} className="space-y-6 pt-4 border-t border-gray-200 animate-fade-in">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Tipo Documento */}
+            <div>
+              <label htmlFor="tipo_identificacion" className="block text-sm font-semibold text-gray-600 mb-2">
+                Tipo de documento
+              </label>
+              <select
+                id="tipo_identificacion"
+                className="w-full px-4 py-2 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                {...register('tipo_identificacion', { required: 'Campo requerido' })}
+              >
+                <option value="">Seleccione...</option>
+                <option value="TI">Tarjeta de identidad</option>
+                <option value="CC">Cédula de ciudadanía</option>
+                <option value="CE">Cédula de extranjería</option>
+                <option value="PEP">Permiso Especial de Permanencia</option>
+                <option value="PPT">Permiso Protección Temporal</option>
+                <option value="NIT">NIT</option>
+                <option value="OTRO">Otro</option>
+              </select>
+              {errors.tipo_identificacion && <span className="text-red-500 text-xs mt-2 block">{errors.tipo_identificacion.message}</span>}
+            </div>
+
+            {/* Nombres */}
+            <div>
+              <label htmlFor="nombre" className="block text-sm font-semibold text-gray-600 mb-2">
+                Nombres
+              </label>
+              <input
+                id="nombre"
+                type="text"
+                className="w-full px-4 py-2 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                {...register('nombre', { required: 'El nombre es requerido' })}
+              />
+              {errors.nombre && <span className="text-red-500 text-xs mt-2 block">{errors.nombre.message}</span>}
+            </div>
+
+            {/* Apellidos */}
+            <div>
+              <label htmlFor="apellido" className="block text-sm font-semibold text-gray-600 mb-2">
+                Apellidos
+              </label>
+              <input
+                id="apellido"
+                type="text"
+                className="w-full px-4 py-2 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                {...register('apellido', { required: 'El apellido es requerido' })}
+              />
+              {errors.apellido && <span className="text-red-500 text-xs mt-2 block">{errors.apellido.message}</span>}
+            </div>
+          </div>
+
+          {/* --- Información de Contacto --- */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+            <div>
+              <label htmlFor="tipo_contacto" className="block text-sm font-semibold text-gray-600 mb-2">
+                Opción de contacto
+              </label>
+              <select
+                id="tipo_contacto"
+                className="w-full px-4 py-2 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                {...register('tipo_contacto', { required: 'Seleccione una opción' })}
+              >
+                <option value="">Seleccione...</option>
+                <option value="direccion">Dirección</option>
+                <option value="telefono">Teléfono</option>
+                <option value="correo">Correo Electrónico</option>
+              </select>
+              {errors.tipo_contacto && <span className="text-red-500 text-xs mt-2 block">{errors.tipo_contacto.message}</span>}
+            </div>
+
+            {/* Input dinámico basado en la selección */}
+            <div className="self-end">
+              {watch('tipo_contacto') === 'direccion' && (
+                <input
+                  type="text"
+                  placeholder="Dirección"
+                  className="w-full px-4 py-2 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  {...register('direccion', { required: 'La dirección es requerida' })}
+                />
+              )}
+              {watch('tipo_contacto') === 'telefono' && (
+                <input
+                  type="number"
+                  placeholder="Teléfono"
+                  className="w-full px-4 py-2 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  {...register('telefono', { required: 'El teléfono es requerido', minLength: 7, maxLength: 10 })}
+                />
+              )}
+              {watch('tipo_contacto') === 'correo' && (
+                <input
+                  type="email"
+                  placeholder="Correo electrónico"
+                  className="w-full px-4 py-2 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  {...register('correo', { required: 'El correo es requerido', pattern: /^\S+@\S+$/i })}
+                />
+              )}
+            </div>
+          </div>
+
+          <div className="flex justify-start pt-4">
+            <button
+              type="submit"
+              className="bg-blue-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300"
+            >
+              Registrar Usuario
+            </button>
+          </div>
+        </form>
+      )}
     </div>
   );
 }
-
-export default Buscador;
 
 Buscador.propTypes = {
   setProcedencia: PropTypes.func.isRequired,
@@ -326,3 +267,5 @@ Buscador.propTypes = {
   setNameCourt: PropTypes.func.isRequired,
   nameCourt: PropTypes.string.isRequired
 };
+
+export default Buscador;

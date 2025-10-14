@@ -1,4 +1,4 @@
-import { useForm } from 'react-hook-form';
+import { useForm, FormProvider } from 'react-hook-form';
 import axios from 'api/axios';
 import GetEntrada from '../CanalEntrada/GetEntrada';
 import Buscador from '../Procedencia/Buscador';
@@ -7,11 +7,10 @@ import GetEntidad from '../Entidad/GetEntidad';
 import { useState } from 'react';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import { Button } from '@mui/material';
 import { useAuth } from 'context/authContext';
 import ModalComponent from './ImportFile/modal';
 import { useParameters } from 'hooks/useParameters';
-import { FormProvider } from 'react-hook-form';
+
 function ComponentRadicados() {
   const methods = useForm({ mode: 'onChange' });
   const {
@@ -29,11 +28,10 @@ function ComponentRadicados() {
   const [juzgado, setJuzgados] = useState(null);
   const [check, setCheck] = useState(false);
   const MySwal = withReactContent(Swal);
-  const onSubmit = handleSubmit((data) => {
-    createRadicado(data);
-  });
+
   const { parameters } = useParameters();
-  const createRadicado = async (data) => {
+
+  const onSubmit = handleSubmit(async (data) => {
     try {
       const datos = {
         ...data,
@@ -45,27 +43,30 @@ function ComponentRadicados() {
 
       await axios.post(`/radicados`, datos);
       MySwal.fire({
-        title: 'Creado correctamente',
-        icon: 'success'
+        title: '¡Creado exitosamente!',
+        icon: 'success',
+        confirmButtonColor: '#34D399' // Verde esmeralda
       });
       reset();
       setJuzgados(null);
     } catch (error) {
       MySwal.fire({
-        title: 'Error',
+        title: '¡Ups! Algo salió mal',
         text: error.response.data,
-        icon: 'info'
+        icon: 'error',
+        confirmButtonColor: '#F87171' // Rojo claro
       });
     }
-  };
+  });
 
   const shouldDisableButton =
     (procedencia === '6579e6f0d99b6ec78c8ca264' && juzgado === null) ||
     (user.role.nombre_rol !== 'Radicador' && user.role.nombre_rol !== 'admin');
+
   return (
-    <div className="container col-sm-7">
-      <div className="card justify-content-center">
-        <div className="card-body">
+    <div className="max-w-4xl mx-auto my-8">
+      <div className="bg-white shadow-xl rounded-lg">
+        <div className="bg-white rounded-2xl shadow-lg p-8 space-y-6">
           <Buscador
             setProcedencia={setProcedencia}
             watch={watch}
@@ -73,118 +74,105 @@ function ComponentRadicados() {
             nameCourt={nameCourt}
             setJuzgados={setJuzgados}
           />
-          <hr />
+
+          <hr className="border-gray-200" />
+
           <FormProvider {...methods}>
-            <form onSubmit={onSubmit}>
-              {/* Radicados */}
-              <div className="row mb-3">
-                <h4>Informaci&oacute;n radicado</h4>
-                <div className="mb-3 col">
-                  <label htmlFor="numero" className="form-label h6">
-                    N&uacute;mero radicado*
-                  </label>
-                  <input
-                    aria-label="radicados"
-                    type="number"
-                    className="form-control rounded-pill minimal-input-dark"
-                    id="radicados"
-                    {...register('numero_radicado', {
-                      required: {
-                        value: true,
-                        message: 'Número radicado es obligatorio'
-                      },
-                      minLength: {
-                        value: 14,
-                        message: 'Número Radicado debe ser mayor igual a 14 caracteres'
-                      },
-
-                      maxLength: {
-                        value: 18,
-                        message: 'Número Radicado no debe sobrepasar 18 caracteres'
-                      }
-                    })}
-                  />
-                  {errors.numero_radicado && <span className="inputForm ">{errors.numero_radicado.message}</span>}
-                </div>
-
-                <div className="mb-3 col">
-                  <label htmlFor="fecha" className="form-label h6">
-                    Fecha radicado*
-                  </label>
-                  <input
-                    aria-label="Search"
-                    type="date"
-                    className="form-control rounded-pill minimal-input-dark"
-                    id="fecha"
-                    {...register('fecha_radicado', {
-                      required: {
-                        value: true,
-                        message: 'Fecha radicado es obligatorio'
-                      },
-                      valueAsDate: true,
-
-                      validate: (value) => {
-                        const fechaRadicado = new Date(value);
-                        const fechaActual = new Date();
-                        // Obtener la diferencia en milisegundos entre las dos fechas
-                        const diferenciaTiempo = fechaActual - fechaRadicado;
-                        // Convertir la diferencia a meses
-                        const diferenciaMeses = diferenciaTiempo / (1000 * 60 * 60 * 24 * 30);
-
-                        if (diferenciaMeses > 6) {
-                          return 'Fecha inválida, las fechas de radicación no pueden ser mayores a 6 meses';
-                        } else if (fechaRadicado > fechaActual) {
-                          return 'Fecha inválida, la fecha de radicación no puede ser mayor a la fecha actual';
-                        }
-                        // Retorna undefined si la fecha es válida
-                        return undefined;
-                      }
-                    })}
-                  />
-                  {errors.fecha_radicado && <span className="inputForm ">{errors.fecha_radicado.message}</span>}
-                </div>
-              </div>
-
+            <form onSubmit={onSubmit} className="space-y-8">
               <div>
-                <div className="mb-3">
-                  <GetEntrada register={register} errors={errors} />
-                </div>
+                <h2 className="text-2xl font-bold text-gray-800 mb-6">Información del Radicado</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Número de Radicado */}
+                  <div>
+                    <label htmlFor="numero_radicado" className="block text-sm font-semibold text-gray-600 mb-2">
+                      Número radicado*
+                    </label>
+                    <input
+                      id="numero_radicado"
+                      type="number"
+                      className="w-full px-4 py-2 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow"
+                      {...register('numero_radicado', {
+                        required: { value: true, message: 'El número de radicado es obligatorio' },
+                        minLength: { value: 14, message: 'Debe tener al menos 14 caracteres' },
+                        maxLength: { value: 18, message: 'No debe exceder los 18 caracteres' }
+                      })}
+                    />
+                    {errors.numero_radicado && <span className="text-red-500 text-xs mt-2 block">{errors.numero_radicado.message}</span>}
+                  </div>
 
-                <div>
-                  <GetEntidad register={register} errors={errors} watch={watch} />
+                  {/* Fecha de Radicado */}
+                  <div>
+                    <label htmlFor="fecha_radicado" className="block text-sm font-semibold text-gray-600 mb-2">
+                      Fecha radicado*
+                    </label>
+                    <input
+                      id="fecha_radicado"
+                      type="date"
+                      className="w-full px-4 py-2 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow"
+                      {...register('fecha_radicado', {
+                        required: { value: true, message: 'La fecha es obligatoria' },
+                        validate: (value) => {
+                          const fechaRadicado = new Date(value);
+                          const fechaActual = new Date();
+                          if (fechaRadicado > fechaActual) return 'La fecha no puede ser futura';
+                          const seisMesesAtras = new Date();
+                          seisMesesAtras.setMonth(seisMesesAtras.getMonth() - 6);
+                          if (fechaRadicado < seisMesesAtras) return 'La fecha no puede tener más de 6 meses de antigüedad';
+                          return true;
+                        }
+                      })}
+                    />
+                    {errors.fecha_radicado && <span className="text-red-500 text-xs mt-2 block">{errors.fecha_radicado.message}</span>}
+                  </div>
                 </div>
               </div>
-              <div className="row justify-content-center align-items-center">
-                <div className="col-2">
-                  <Button variant="text" className="btn-block" onClick={() => setCheck((prevCheck) => !prevCheck)}>
-                    {check ? 'Cancelar Observación' : 'Agregar Observación'}
-                  </Button>
-                </div>
-                {check && (
-                  <div className="col-4">
-                    <div className="form-group">
-                      <label htmlFor="observaciones">Observaciones*</label>
-                      <textarea
-                        className="form-control"
-                        rows="3"
-                        placeholder="Observaciones Radicado"
-                        disabled={!check}
-                        {...register('observaciones_radicado')}
-                      ></textarea>
-                    </div>
-                  </div>
-                )}
-                <div className="col-3">
-                  <button type="submit" className="btn btn-success btn-block" disabled={shouldDisableButton}>
-                    Registrar
+
+              <GetEntrada register={register} errors={errors} />
+              <GetEntidad register={register} errors={errors} watch={watch} />
+              <GetTipificacion setIdTipificacion={setIdTipificacion} />
+
+              {/* Sección de Observaciones y Acciones */}
+              <div className="pt-4 space-y-4">
+                <div className="flex items-center">
+                  <button
+                    type="button"
+                    onClick={() => setCheck(!check)}
+                    className="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors"
+                  >
+                    {check ? 'Ocultar Observaciones' : 'Agregar Observación'}
                   </button>
                 </div>
 
+                {check && (
+                  <div>
+                    <label htmlFor="observaciones" className="block text-sm font-semibold text-gray-600 mb-2">
+                      Observaciones
+                    </label>
+                    <textarea
+                      id="observaciones"
+                      rows="3"
+                      placeholder="Escribe aquí cualquier detalle adicional..."
+                      className="w-full px-4 py-2 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow"
+                      {...register('observaciones_radicado')}
+                    ></textarea>
+                  </div>
+                )}
+              </div>
+
+              {/* Botones de Acción */}
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6 border-t border-gray-200">
+                <button
+                  type="submit"
+                  disabled={shouldDisableButton}
+                  className="w-full sm:w-auto bg-green-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                >
+                  Registrar Radicado
+                </button>
                 {parameters.map(
-                  (parametro) =>
-                    parametro.nombre_parametro === 'Importar archivo' &&
-                    parametro.activo === true && (
-                      <div className="col-3" key={parametro._id}>
+                  (param) =>
+                    param.nombre_parametro === 'Importar archivo' &&
+                    param.activo && (
+                      <div key={param._id}>
                         <ModalComponent />
                       </div>
                     )
@@ -192,8 +180,6 @@ function ComponentRadicados() {
               </div>
             </form>
           </FormProvider>
-
-          <GetTipificacion setIdTipificacion={setIdTipificacion} />
         </div>
       </div>
     </div>

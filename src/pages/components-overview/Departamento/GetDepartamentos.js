@@ -5,15 +5,29 @@ import GetAsunto from '../Asunto/GetAsunto';
 
 function GetDepartamentos() {
   const [dataDepartamento, setDataDepartamento] = useState([]);
+  const [loading, setLoading] = useState(false);
   const {
-    register,
     watch,
+    register,
     formState: { errors }
   } = useFormContext();
 
   const id_entidad = watch('id_entidad');
 
   useEffect(() => {
+    const listDepartamentos = async (entityId) => {
+      setLoading(true);
+      setDataDepartamento([]);
+      try {
+        const response = await axios.get(`/area/dptoentidad/${entityId}`);
+        setDataDepartamento(response.data);
+      } catch (error) {
+        console.error('Error al obtener departamentos:', error);
+      } finally {
+        setLoading(false); // Stop loading
+      }
+    };
+
     if (id_entidad) {
       listDepartamentos(id_entidad);
     } else {
@@ -21,42 +35,43 @@ function GetDepartamentos() {
     }
   }, [id_entidad]);
 
-  const listDepartamentos = async (entityId) => {
-    try {
-      const response = await axios.get(`/area/dptoentidad/${entityId}`);
-      setDataDepartamento(response.data);
-    } catch (error) {
-      console.error('Error al obtener departamentos:', error);
-    }
+  const getPlaceholderOption = () => {
+    if (!id_entidad) return 'Seleccione una entidad primero';
+    if (loading) return 'Cargando departamentos...';
+    return 'Seleccione un departamento';
   };
 
   return (
-    <div className="row">
-      <div className="col-6">
-        <label htmlFor="id_departamento" className="form-label">
-          Departamento
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label htmlFor="id_departamento" className="block text-sm font-semibold text-gray-600 mb-2">
+          Departamento*
         </label>
         <select
-          className="form-select rounded-pill minimal-input-dark"
+          id="id_departamento"
+          className="w-full px-4 py-2 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow disabled:opacity-50 disabled:cursor-not-allowed"
+          disabled={!id_entidad || loading}
           {...register('id_departamento', {
-            required: 'Campo área es obligatorio'
+            required: 'El departamento es obligatorio'
           })}
         >
-          <option value="">Seleccione un departamento</option>
+          <option value="">{getPlaceholderOption()}</option>
           {dataDepartamento.map((i) => (
             <option key={i._id} value={i._id}>
               {i.nombre_departamento}
             </option>
           ))}
         </select>
-        {errors?.id_departamento && <span className="inputForm">{errors.id_departamento.message}</span>}
+        {errors.id_departamento && <span className="text-red-500 text-xs mt-2 block">{errors.id_departamento.message}</span>}
       </div>
 
-      <div className="col-6">
+      <div>
         <GetAsunto />
       </div>
     </div>
   );
 }
+
+GetDepartamentos.displayName = 'GetDepartamentos';
 
 export default GetDepartamentos;
