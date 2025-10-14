@@ -27,18 +27,21 @@ import { Routes } from 'react-router-dom';
 import { Route } from 'react-router-dom';
 import ProtectedRoute from 'ProtectedRoutes';
 import App from 'App';
-import { QueryProvider } from 'QueryProvider';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 // ==============================|| MAIN - REACT DOM RENDER  ||============================== //
 
 const container = document.getElementById('root');
 const root = createRoot(container); // createRoot(container!) if you use TypeScript
+
+const queryClient = new QueryClient();
+
 root.render(
   <StrictMode>
-    <PrimeReactProvider>
-      <ReduxProvider store={store}>
-        <AuthProvider>
-          <QueryProvider>
+    <QueryClientProvider client={queryClient}>
+      <PrimeReactProvider>
+        <ReduxProvider store={store}>
+          <AuthProvider>
             <BrowserRouter basename="/pqrs">
               <App />
               <Routes>
@@ -55,10 +58,10 @@ root.render(
                 </Route>
               </Routes>
             </BrowserRouter>
-          </QueryProvider>
-        </AuthProvider>
-      </ReduxProvider>
-    </PrimeReactProvider>
+          </AuthProvider>
+        </ReduxProvider>
+      </PrimeReactProvider>
+    </QueryClientProvider>
   </StrictMode>
 );
 reportWebVitals();
