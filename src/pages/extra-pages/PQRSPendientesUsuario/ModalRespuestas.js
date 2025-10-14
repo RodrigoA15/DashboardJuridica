@@ -1,35 +1,30 @@
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
+import { Dialog } from 'primereact/dialog';
 import PropTypes from 'prop-types';
 import { useParameters } from 'hooks/useParameters';
 import { FormWithParameter } from './Forms/FormWithParameter';
 import { FormWithoutParameter } from './Forms/FormWithoutParameter';
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 600,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4
-};
 function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
   const { parameters } = useParameters();
   const parametroActivo = parameters.some((parametro) => parametro.nombre_parametro === 'Asuntos respuesta' && parametro.activo);
 
   return (
     <>
-      <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
-        <Box sx={style}>
-          {parametroActivo ? (
-            <FormWithParameter data={data} asignados={asignados} setAsignados={setAsignados} handleClose={handleClose} />
-          ) : (
-            <FormWithoutParameter data={data} handleClose={handleClose} />
-          )}
-        </Box>
-      </Modal>
+      <Dialog
+        header="Cargue de respuestas"
+        visible={open}
+        style={{ width: '50vw' }}
+        breakpoints={{ '960px': '75vw', '641px': '100vw' }}
+        onHide={() => {
+          if (!open) return;
+          handleClose();
+        }}
+      >
+        {parametroActivo ? (
+          <FormWithParameter data={data} asignados={asignados} setAsignados={setAsignados} handleClose={handleClose} />
+        ) : (
+          <FormWithoutParameter data={data} handleClose={handleClose} />
+        )}
+      </Dialog>
     </>
   );
 }

@@ -1,138 +1,157 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'api/axios';
-import Modal from '@mui/material/Modal';
-import withReactContent from 'sweetalert2-react-content';
-import Swal from 'sweetalert2';
-import { toast } from 'sonner';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { Dialog } from 'primereact/dialog';
+import { useQuery } from '@tanstack/react-query';
+import { toast } from 'sonner';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+import axios from 'api/axios';
+import { useFetchAprobations } from 'lib/PQRS/fetchAprobations';
 import LoaderComponent from 'components/LoaderComponent';
 
-function ModalRadicadosRespuestas({ opens, handleCloses, respuestas, asignados, setAsignados }) {
+const SEARCH_STATUS_APROBATION = 'Pendiente aprobacion';
+
+export default function ModalRadicadosRespuestas({ opens, handleCloses, respuestas, setAsignados }) {
   const [radicadosRpta, setRadicadosRpta] = useState([]);
   const [countRadicados, setCountRadicados] = useState(0);
   const [loading, setLoading] = useState(false);
+  const { fetchSearchAprobations } = useFetchAprobations();
+
+  const { data = [{ count: 0 }], refetch } = useQuery({
+    queryKey: ['search-aprobations', respuestas?.id_radicado, SEARCH_STATUS_APROBATION],
+    queryFn: () => fetchSearchAprobations(respuestas?.id_radicado, SEARCH_STATUS_APROBATION),
+    enabled: false,
+    placeholderData: [{ count: 0 }]
+  });
+
   useEffect(() => {
-    if (respuestas && respuestas.numero_radicado) {
-      setRadicadosRpta([]);
-      setCountRadicados(0);
-      apiRadicadosRespuesta();
+    if (respuestas?.numero_radicado) {
+      resetModalState();
+      loadRadicadosRespuestas();
+      refetch();
     }
-  }, [respuestas]);
+  }, [respuestas, refetch]);
 
-  const apiRadicadosRespuesta = async () => {
+  const resetModalState = useCallback(() => {
+    setRadicadosRpta([]);
+    setCountRadicados(0);
+  }, []);
+
+  const loadRadicadosRespuestas = useCallback(async () => {
+    setLoading(true);
     try {
-      setLoading(true);
-      const response = await axios.get(`/answer/radicados_respuestas/${respuestas.numero_radicado}`);
+      const { data } = await axios.get(`/answer/radicados_respuestas/${respuestas.numero_radicado}`);
+      setRadicadosRpta(data);
+      setCountRadicados(data.length);
+    } catch (error) {
+      toast.error(error.response?.data || 'Error al obtener respuestas');
+    } finally {
       setLoading(false);
-      setRadicadosRpta(response.data);
-      setCountRadicados(response.data.length);
-    } catch (error) {
-      if (error.response.status) {
-        setLoading(false);
-      }
-      toast.error(error.response.data);
     }
-  };
+  }, [respuestas?.numero_radicado]);
 
-  const updateEstadoAsignacion = async (asignaciones) => {
+  const updateEstadoAsignacion = useCallback(async (asignacion) => {
     try {
-      await axios.put(`/assigned/${asignaciones._id}`, {
-        estado_asignacion: 'cerrado'
-      });
-    } catch (error) {
-      console.log('No se pudo actualizar');
+      await axios.put(`/assigned/${asignacion._id}`, { estado_asignacion: 'cerrado' });
+    } catch {
+      console.warn('No se pudo actualizar el estado de la asignación');
     }
-  };
+  }, []);
 
-  const updateEstadoRespondido = async (respuestas) => {
+  const updateEstadoRespondido = useCallback(async () => {
+    const MySwal = withReactContent(Swal);
+
+    const result = await MySwal.fire({
+      title: '¿Está seguro de responder?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, modificar',
+      cancelButtonText: 'Cancelar',
+      customClass: { container: 'swal-zindex' }
+    });
+
+    if (!result.isConfirmed) {
+      toast.info('Operación cancelada');
+      return;
+    }
+
     try {
-      const MySwal = withReactContent(Swal);
-      const alert = await MySwal.fire({
-        title: 'Esta seguro de responder?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'Si, modificar',
-        cancelButtonText: 'Cancelar',
-        customClass: {
-          container: 'swal-zindex'
-        }
+      await axios.put(`/radicados/${respuestas.id_radicado}`, {
+        estado_radicado: 'Respuesta'
       });
 
-      if (alert.isConfirmed) {
-        await axios.put(`/radicados/${respuestas.id_radicado}`, {
-          estado_radicado: 'Respuesta'
-        });
-        const newData = asignados.filter((item) => item._id !== respuestas._id);
-        setAsignados(newData);
-        updateEstadoAsignacion(respuestas);
-        handleCloses();
-        toast.success('Respondido correctamente');
-      } else {
-        toast.error('No se respondio la peticion');
-      }
+      setAsignados((prev) => prev.filter((item) => item._id !== respuestas._id));
+      updateEstadoAsignacion(respuestas);
+      handleCloses();
+      toast.success('Respondido correctamente');
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      toast.error('No se pudo actualizar el estado del radicado');
     }
-  };
+  }, [respuestas, setAsignados, handleCloses, updateEstadoAsignacion]);
+
+  const respuestasPendientes = useMemo(() => data?.[0]?.count || 0, [data]);
+  const respuestasEsperadas = respuestas?.cantidad_respuesta || 0;
+  const botonDeshabilitado = respuestasEsperadas !== countRadicados || respuestasPendientes > 0;
 
   return (
-    <>
-      <Modal open={opens} onClose={handleCloses} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
-        <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
-          <div className="bg-white p-4 rounded shadow" style={{ width: '80%', maxWidth: '800px' }}>
-            <p>
-              Pulse tecla <b>Esc</b> para salir
-            </p>
-            <h5 className="mb-4 text-center">Respuesta radicado</h5>
-            <p className="text-center">
-              Tienes <b>{countRadicados}</b> respuestas cargadas de <b>{respuestas ? respuestas.cantidad_respuesta : 0} estimadas</b>
-            </p>
-            {loading ? (
-              <div className="d-flex justify-content-center">
-                <LoaderComponent />
+    <Dialog
+      header="Marcar respuestas"
+      visible={opens}
+      style={{ width: '50vw' }}
+      breakpoints={{ '960px': '75vw', '641px': '100vw' }}
+      onHide={handleCloses}
+    >
+      <div className="flex items-center justify-center bg-gray-100 p-4">
+        <div className="w-full max-w-3xl rounded-lg bg-white p-6 shadow-lg">
+          <h2 className="mb-2 text-center text-xl font-bold text-gray-800">Respuesta radicado</h2>
+
+          <p className="mb-4 text-center text-gray-600">
+            Tienes <strong className="text-gray-900">{countRadicados}</strong> respuestas cargadas de{' '}
+            <strong className="text-gray-900">{respuestasEsperadas}</strong> estimadas
+          </p>
+
+          <p className="mb-6 text-center text-gray-600">
+            Tienes <strong className="text-gray-900">{respuestasPendientes}</strong> respuestas pendientes de aprobación
+          </p>
+
+          {loading ? (
+            <div className="flex justify-center py-8">
+              <LoaderComponent />
+            </div>
+          ) : (
+            <>
+              {/* Grid de radicados */}
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+                {radicadosRpta.map((item, index) => (
+                  <div key={item._id} className="rounded-md border border-gray-200 bg-gray-50 p-3 text-sm text-gray-700">
+                    {index + 1}. {item.numero_radicado_respuesta}
+                  </div>
+                ))}
               </div>
-            ) : (
-              <div>
-                {respuestas && (
-                  <>
-                    <div className="row">
-                      {radicadosRpta &&
-                        radicadosRpta.map((i, index) => (
-                          <div className="col-12 col-sm-6 col-md-4 mb-3" key={i._id}>
-                            <ol className="list-group">
-                              <li className="list-group-item">
-                                {index + 1}. {i.numero_radicado_respuesta}
-                              </li>
-                            </ol>
-                          </div>
-                        ))}
-                    </div>
-                    <div className="text-center mt-4">
-                      <button
-                        className="btn btn-success"
-                        onClick={() => updateEstadoRespondido(respuestas)}
-                        disabled={respuestas.cantidad_respuesta !== countRadicados}
-                      >
-                        Responder
-                      </button>
-                    </div>
-                  </>
-                )}
+
+              {/* Botón de acción */}
+              <div className="mt-8 text-center">
+                <button
+                  onClick={updateEstadoRespondido}
+                  disabled={botonDeshabilitado}
+                  className="rounded-lg bg-green-600 px-6 py-2 font-bold text-white shadow-md transition-colors hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400 disabled:opacity-70"
+                >
+                  Responder
+                </button>
               </div>
-            )}
-          </div>
+            </>
+          )}
         </div>
-      </Modal>
-    </>
+      </div>
+    </Dialog>
   );
 }
 
-export default ModalRadicadosRespuestas;
-
 ModalRadicadosRespuestas.propTypes = {
-  opens: PropTypes.bool,
+  opens: PropTypes.bool.isRequired,
   respuestas: PropTypes.object,
-  handleCloses: PropTypes.func,
+  handleCloses: PropTypes.func.isRequired,
   asignados: PropTypes.array,
-  setAsignados: PropTypes.func
+  setAsignados: PropTypes.func.isRequired
 };
