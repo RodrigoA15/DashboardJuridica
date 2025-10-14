@@ -1,10 +1,10 @@
 import React from 'react';
 import TypeAffair from './TypeAffair';
 
-const IndexTypesAffairs = ({ setValueAffair, granted, typeAffair }) => {
+const IndexTypesAffairs = ({ valueAffair, setValueAffair, granted, typeAffair }) => {
   return (
     <div>
-      <TypeAffair setValueAffair={setValueAffair} granted={granted} typeAffair={typeAffair} />
+      <TypeAffair valueAffair={valueAffair} setValueAffair={setValueAffair} granted={granted} typeAffair={typeAffair} />
     </div>
   );
 };

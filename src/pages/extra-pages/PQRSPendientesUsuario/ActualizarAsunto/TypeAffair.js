@@ -1,9 +1,9 @@
 import Affairs from './Affairs';
 
-const TypeAffair = ({ setValueAffair, granted, typeAffair }) => {
+const TypeAffair = ({ valueAffair, setValueAffair, granted, typeAffair }) => {
   return (
     <>
-      <Affairs typeAffair={typeAffair} setValueAffair={setValueAffair} granted={granted} />
+      <Affairs valueAffair={valueAffair} typeAffair={typeAffair} setValueAffair={setValueAffair} granted={granted} />
     </>
   );
 };

@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
+import { Dropdown } from 'primereact/dropdown';
+
 import axios from 'api/axios';
 
-const Affairs = ({ typeAffair, setValueAffair, granted }) => {
+const Affairs = ({ valueAffair, typeAffair, setValueAffair, granted }) => {
   const [data, setData] = useState([]);
   useEffect(() => {
     if (typeAffair) {
@@ -20,14 +22,19 @@ const Affairs = ({ typeAffair, setValueAffair, granted }) => {
 
   return (
     <>
-      <select className="form-select rounded-pill mb-3" onChange={(e) => setValueAffair(e.target.value)} disabled={granted === 'Devuelto'}>
-        <option>Seleccione asunto</option>
-        {data.map((affair) => (
-          <option key={affair._id} value={affair._id}>
-            {affair.nombre_asunto}
-          </option>
-        ))}
-      </select>
+      <div className="flex flex-col gap-2 md:col-span-2">
+        <label className="text-sm font-medium text-gray-700" htmlFor="affairs">
+          Asunto
+        </label>
+        <Dropdown
+          value={valueAffair}
+          options={data}
+          onChange={(e) => setValueAffair(e.value)}
+          disabled={granted === 'Devuelto'}
+          optionLabel="nombre_asunto"
+          placeholder="Seleccione asunto"
+        />
+      </div>
     </>
   );
 };
