@@ -30,7 +30,7 @@ function JsonToFileExcel() {
         <Grid item xs={12} sm={6} md={3}>
           <Button
             fullWidth
-            className="btn btn-success"
+            className="bg-green-700 hover:bg-green-800"
             variant="contained"
             onClick={descargarArchivo}
             disabled={downloaded || error || loading}
