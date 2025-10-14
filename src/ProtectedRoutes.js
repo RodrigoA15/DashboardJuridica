@@ -1,17 +1,19 @@
-import Unauthorized from 'pages/authentication/Unauthorized';
-import { useAuth } from './context/authContext';
+import { useAuth } from 'context/authContext';
 import { Outlet } from 'react-router-dom';
 
 function ProtectedRoute() {
-  const { isAuthenticated, loading, user, setIsAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
 
-  if (loading) return <h1>Cargando...</h1>;
-  if (!loading && !isAuthenticated) return <Unauthorized />;
-
-  if (!user.departamento) {
-    setIsAuthenticated(false);
-    return <Unauthorized />;
+  if (isLoading) {
+    return <h1>Cargando...</h1>;
   }
+
+  if (!isAuthenticated) {
+    // Redirección a login externo
+    window.location.href = 'http://localhost:5173/dashboard/login';
+    return null;
+  }
+
   return <Outlet />;
 }
 
