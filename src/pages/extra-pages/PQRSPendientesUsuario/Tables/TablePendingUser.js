@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
@@ -17,7 +17,7 @@ import { InputText } from 'primereact/inputtext';
 import { classNames } from 'primereact/utils';
 //Api functions
 import axios from 'api/axios';
-import { AllAnswers, AnswersByArea, AnswersByUser } from '../Totals';
+// import { AllAnswers, AnswersByArea, AnswersByUser } from '../Totals';
 //Hooks
 import { useFormatDate } from 'hooks/useFormatDate';
 import useDiasHabiles from 'hooks/useDate';
@@ -28,7 +28,7 @@ export const TablePendingUser = ({
   error,
   setOpenReasignacion,
   setSelectedData,
-  setOpenModal,
+  setVisible,
   handleClose,
   setSelectedRespuesta,
   setOpenRespuestasModal,
@@ -43,22 +43,26 @@ export const TablePendingUser = ({
   let MySwal = withReactContent(Swal);
 
   //TODO colores de las alertas por dia habil
-  const getBackgroundColor = (data) => {
-    const diasLaborables = diasHabiles(data.fecha_radicado);
-
-    const hola = classNames('rounded-pill justify-content-center align-items-center text-center font-weight-bold', {
-      'bg-success bg-gradient text-dark': diasLaborables <= 5,
-      'bg-warning text-dark-900': diasLaborables >= 6 && diasLaborables <= 9,
-      'dias text-dark': diasLaborables >= 10 && diasLaborables <= 12,
-      'bg-danger bg-gradient text-dark': diasLaborables >= 13
+  const getDiasLaborablesClass = useCallback((dias) => {
+    return classNames('rounded-full flex justify-center items-center text-center font-bold w-8 h-8', {
+      'bg-green-500 bg-gradient text-black': dias <= 5,
+      'bg-yellow-500 text-black': dias >= 6 && dias <= 9,
+      'bg-orange-500 text-black': dias >= 10 && dias <= 12,
+      'bg-red-500 bg-gradient text-black': dias >= 13
     });
+  }, []);
 
-    return <div className={hola}>{diasLaborables}</div>;
-  };
+  const renderDiasLaborables = useCallback(
+    (rowData) => {
+      const dias = diasHabiles(rowData.fecha_radicado);
+      return <div className={getDiasLaborablesClass(dias)}>{dias}</div>;
+    },
+    [diasHabiles, getDiasLaborablesClass]
+  );
 
   const handleOpen = (data) => {
     setSelectedData(data);
-    setOpenModal(true);
+    setVisible(true);
     answersByUser(data);
   };
 
@@ -145,8 +149,8 @@ export const TablePendingUser = ({
   const renderHeader = () => {
     return (
       <>
-        <div className="row">
-          <div className="col-3">
+        <div className="grid grid-cols-4 gap-4 mb-3">
+          <div>
             <InputText
               className="inputUser"
               type="search"
@@ -155,15 +159,15 @@ export const TablePendingUser = ({
               placeholder="Buscar"
             />
           </div>
-          <div className="col-3">
+          {/* <div>
             <AnswersByUser />
           </div>
-          <div className="col-3">
+          <div>
             <AllAnswers />
           </div>
-          <div className="col-3">
+          <div>
             <AnswersByArea />
-          </div>
+          </div> */}
         </div>
       </>
     );
@@ -201,7 +205,8 @@ export const TablePendingUser = ({
   };
 
   return (
-    <>
+    <div className="rounded-xl border border-gray-200 bg-white p-6">
+      {header}
       <DataTable
         value={asignados}
         emptyMessage={error}
@@ -212,7 +217,6 @@ export const TablePendingUser = ({
         rowsPerPageOptions={[5, 10, 25, 50]}
         paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
         currentPageReportTemplate="{first} a {last} de {totalRecords}"
-        header={header}
         filters={filters}
         onFilter={(e) => setFilters(e.filters)}
         editMode="row"
@@ -225,13 +229,13 @@ export const TablePendingUser = ({
         <Column field="nombre_procedencia" header="Procedencia" />
         <Column field="observaciones" header="Observaciones" />
         <Column field="cantidad_respuesta" sortable header="Respuestas estimadas" editor={(options) => quantityAnswers(options)} />
-        <Column field="fecha_radicado" sortable header="Dias" body={getBackgroundColor} />
+        <Column field="fecha_radicado" sortable header="Dias" body={renderDiasLaborables} />
         <Column body={btnOpenModalAddAnswer} />
         <Column body={btnOpenModalViewAnswer} />
         <Column body={btnReasignation} />
         <Column rowEditor={allowEdit} headerStyle={{ width: '10%', minWidth: '8rem' }} bodyStyle={{ textAlign: 'center' }} />
       </DataTable>
-    </>
+    </div>
   );
 };
 
@@ -241,7 +245,7 @@ TablePendingUser.propTypes = {
   error: PropTypes.string,
   setOpenReasignacion: PropTypes.func,
   setSelectedData: PropTypes.func,
-  setOpenModal: PropTypes.func,
+  setVisible: PropTypes.func,
   handleClose: PropTypes.func,
   setSelectedRespuesta: PropTypes.func,
   setOpenRespuestasModal: PropTypes.func,
