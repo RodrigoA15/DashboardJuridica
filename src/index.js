@@ -15,10 +15,7 @@ import 'assets/third-party/apex-chart.css';
 
 import { store } from 'store';
 import reportWebVitals from './reportWebVitals';
-//bootstrap
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle';
-//css
+
 import './index.css';
 //Primereact styles
 import 'primereact/resources/themes/lara-light-indigo/theme.css'; //theme
