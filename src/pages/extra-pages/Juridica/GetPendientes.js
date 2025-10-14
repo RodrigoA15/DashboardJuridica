@@ -5,7 +5,7 @@ import { Column } from 'primereact/column';
 import { useEffect, useState } from 'react';
 import { classNames } from 'primereact/utils';
 import { InputText } from 'primereact/inputtext';
-import { FilterMatchMode, FilterOperator } from 'primereact/api';
+import { FilterMatchMode } from 'primereact/api';
 import axios from 'api/axios';
 import UsuariosJuridica from 'pages/extra-pages/Juridica/UsuariosJuridica';
 
@@ -15,20 +15,7 @@ export default function GetPendientes() {
   const { user } = useAuth();
   const { diasHabiles } = useDiasHabiles();
   const [filters, setFilters] = useState({
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    name: {
-      operator: FilterOperator.AND,
-      constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }]
-    },
-    'id_procedencia.nombre': {
-      operator: FilterOperator.AND,
-      constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }]
-    },
-    representative: { value: null, matchMode: FilterMatchMode.IN },
-    numero_radicado: {
-      operator: FilterOperator.OR,
-      constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }]
-    }
+    global: { value: null, matchMode: FilterMatchMode.CONTAINS }
   });
 
   useEffect(() => {
@@ -44,17 +31,22 @@ export default function GetPendientes() {
     }
   };
 
-  const getBackgroundColor = (rowData) => {
-    const diasLaborables = diasHabiles(rowData.fecha_radicado);
-    const hola = classNames('rounded-pill justify-content-center align-items-center text-center font-weight-bold', {
-      'bg-success bg-gradient text-dark': diasLaborables <= 5,
-      'bg-warning text-dark-900': diasLaborables >= 6 && diasLaborables <= 9,
-      'dias text-dark': diasLaborables >= 10 && diasLaborables <= 12,
-      'bg-danger bg-gradient text-dark': diasLaborables >= 13
+  const getDiasLaborablesClass = useCallback((dias) => {
+    return classNames('rounded-full flex justify-center items-center text-center font-bold w-8 h-8', {
+      'bg-green-500 bg-gradient text-black': dias <= 5,
+      'bg-yellow-500 text-black': dias >= 6 && dias <= 9,
+      'bg-orange-500 text-black': dias >= 10 && dias <= 12,
+      'bg-red-500 bg-gradient text-black': dias >= 13
     });
+  }, []);
 
-    return <div className={hola}>{diasLaborables}</div>;
-  };
+  const renderDiasLaborables = useCallback(
+    (rowData) => {
+      const dias = diasHabiles(rowData.fecha_radicado);
+      return <div className={getDiasLaborablesClass(dias)}>{dias}</div>;
+    },
+    [diasHabiles, getDiasLaborablesClass]
+  );
 
   const onGlobalFilterChange = (event) => {
     const value = event.target.value;
@@ -93,7 +85,7 @@ export default function GetPendientes() {
   const header = renderHeader();
   return (
     <>
-      <div className="card">
+      <div>
         <DataTable
           value={dataApi}
           removableSort
@@ -115,7 +107,7 @@ export default function GetPendientes() {
           <Column field="id_asunto.nombre_asunto" header="Asunto" />
           <Column field="observaciones_radicado" header="Observaciones" />
           <Column field="id_procedencia.nombre" header="Procedencia" />
-          <Column field="fecha_radicado" sortable header="Dias" body={getBackgroundColor} />
+          <Column field="fecha_radicado" sortable header="Dias" body={renderDiasLaborables} />
         </DataTable>
       </div>
     </>
