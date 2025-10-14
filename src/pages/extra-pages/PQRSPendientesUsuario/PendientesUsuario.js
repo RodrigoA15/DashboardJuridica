@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'api/axios';
 import { useAuth } from 'context/authContext';
+import { TabView, TabPanel } from 'primereact/tabview';
 //Componentes
 import ModalRespuestas from './ModalRespuestas';
 import ModalRadicadosRespuestas from './ModalRadicadosRespuestas';
 import Reasignaciones from './Reasignaciones/Reasignaciones';
 import { TablePendingUser } from './Tables/TablePendingUser';
+import { TableAprobations } from './Tables/TableAprobations';
 
 function PendientesUsuario() {
   const { user } = useAuth();
   const [asignados, setAsignados] = useState([]);
-  const [openModal, setOpenModal] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [visibleRM, setVisibleRM] = useState(false); //Modal Radicados Respuestas
   const [selectedData, setSelectedData] = useState(null);
-  const [openRespuestasModal, setOpenRespuestasModal] = useState(false);
   const [selectedRespuesta, setSelectedRespuesta] = useState(null);
   const [error, setError] = useState('');
   //Modal Reasignacion
@@ -38,13 +40,13 @@ function PendientesUsuario() {
   };
 
   const handleClose = () => {
+    setVisible(false);
     setSelectedData(null);
-    setOpenModal(false);
   };
 
   const handleCloseR = () => {
     setSelectedRespuesta(null);
-    setOpenRespuestasModal(false);
+    setVisibleRM(false);
   };
 
   const handleCloseReasignacion = () => {
@@ -54,27 +56,34 @@ function PendientesUsuario() {
 
   return (
     <div className="card">
-      <TablePendingUser
-        asignados={asignados}
-        setAsignados={setAsignados}
-        error={error}
-        setOpenReasignacion={setOpenReasignacion}
-        setSelectedData={setSelectedData}
-        setOpenModal={setOpenModal}
-        handleClose={handleClose}
-        setSelectedRespuesta={setSelectedRespuesta}
-        setOpenRespuestasModal={setOpenRespuestasModal}
-        setSelectedAsignacion={setSelectedAsignacion}
-      />
-      <ModalRespuestas open={openModal} handleClose={handleClose} data={selectedData} setAsignados={setAsignados} asignados={asignados} />
-      <ModalRadicadosRespuestas
-        setAsignados={setAsignados}
-        asignados={asignados}
-        opens={openRespuestasModal}
-        handleCloses={handleCloseR}
-        respuestas={selectedRespuesta}
-      />
-      <Reasignaciones open={openReasignacion} close={handleCloseReasignacion} asignaciones={selectedAsignacion} />
+      <TabView>
+        <TabPanel header="PQRS pendientes">
+          <TablePendingUser
+            asignados={asignados}
+            setAsignados={setAsignados}
+            error={error}
+            setOpenReasignacion={setOpenReasignacion}
+            setSelectedData={setSelectedData}
+            setVisible={setVisible}
+            handleClose={handleClose}
+            setSelectedRespuesta={setSelectedRespuesta}
+            setOpenRespuestasModal={setVisibleRM}
+            setSelectedAsignacion={setSelectedAsignacion}
+          />
+          <ModalRespuestas open={visible} handleClose={handleClose} data={selectedData} setAsignados={setAsignados} asignados={asignados} />
+          <ModalRadicadosRespuestas
+            setAsignados={setAsignados}
+            asignados={asignados}
+            opens={visibleRM}
+            handleCloses={handleCloseR}
+            respuestas={selectedRespuesta}
+          />
+          <Reasignaciones open={openReasignacion} close={handleCloseReasignacion} asignaciones={selectedAsignacion} />
+        </TabPanel>
+        <TabPanel header="Aprobaciones">
+          <TableAprobations />
+        </TabPanel>
+      </TabView>
     </div>
   );
 }
