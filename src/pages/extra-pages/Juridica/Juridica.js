@@ -10,6 +10,7 @@ import Preasignaciones from '../PQRSPreasignadas/Preasignaciones';
 import { List, ListItem, Stack, Typography } from '@mui/material';
 import Dot from 'components/@extended/Dot';
 import { GetAssignedUser } from './GetAssignedUser';
+import { GetAprobaciones } from './Aprobaciones/GetAprobaciones';
 
 // ==============================|| SAMPLE PAGE ||============================== //
 
@@ -48,7 +49,8 @@ const Juridica = () => {
             <Tab label="Pendientes" value="2" />
             <Tab label="Asignados" value="3" />
             <Tab label="Respuestas" value="4" />
-            <Tab label="Asignados usuario" value="5" />
+            <Tab label="Pendiente aprobacion" value="5" />
+            <Tab label="Asignados usuario" value="6" />
           </TabList>
         </Box>
         <TabPanel value="1">
@@ -64,6 +66,9 @@ const Juridica = () => {
           <GetRespuesta />
         </TabPanel>
         <TabPanel value="5">
+          <GetAprobaciones />
+        </TabPanel>
+        <TabPanel value="6">
           <GetAssignedUser />
         </TabPanel>
       </TabContext>
