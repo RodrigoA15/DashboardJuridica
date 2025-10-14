@@ -1,68 +1,35 @@
-import { verifyToken } from 'api/auth';
-import { useContext, useEffect } from 'react';
-import { createContext, useState } from 'react';
+import { createContext, useContext } from 'react';
 import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
+import { useQueryClient } from '@tanstack/react-query';
+import { useUser } from '../hooks/useUser';
 
 export const AuthContext = createContext();
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth debe de estar dentro de un provider');
+    throw new Error('useAuth debe estar dentro de un AuthProvider');
   }
   return context;
 };
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(true);
-
-  const checkLogin = async () => {
-    const token = Cookies.get('token');
-    if (!token) {
-      setIsAuthenticated(false);
-      setLoading(false);
-      setUser(null);
-      return window.location.replace('http://localhost:5173/');
-    }
-    try {
-      const res = await verifyToken(token);
-      if (!res.data) {
-        setIsAuthenticated(false);
-        setLoading(false);
-        return;
-      }
-      setIsAuthenticated(true);
-      setUser(res.data);
-    } catch (error) {
-      setIsAuthenticated(false);
-      setUser(null);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    checkLogin();
-  }, []);
+  const queryClient = useQueryClient();
+  const { user, isLoading, isError } = useUser();
 
   const logout = () => {
     Cookies.remove('token');
-    setUser(null);
-    setIsAuthenticated(false);
+    queryClient.setQueryData(['user'], null);
   };
 
   return (
     <AuthContext.Provider
       value={{
-        logout,
-        loading,
         user,
-        isAuthenticated,
-        setIsAuthenticated,
-        checkLogin
+        isLoading,
+        isAuthenticated: !!user && !isError,
+        logout
       }}
     >
       {children}
