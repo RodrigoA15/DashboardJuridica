@@ -70,6 +70,7 @@ function ConsultaRadicados() {
         <FloatLabel>
           <InputText
             id="search"
+            className="w-96 px-3 py-1.5 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             keyfilter="int"
             {...register('numero_radicado', {
               required: { value: true, message: 'Ingrese número de radicado' },

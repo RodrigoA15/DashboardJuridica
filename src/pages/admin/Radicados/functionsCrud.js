@@ -26,7 +26,6 @@ function AdminGetEntities({ setEntidad, entidad }) {
       options={entities}
       optionLabel="nombre_entidad"
       placeholder="Seleccione entidad"
-      className="w-20"
     />
   );
 }

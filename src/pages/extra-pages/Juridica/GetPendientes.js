@@ -2,7 +2,7 @@ import { useAuth } from 'context/authContext';
 import useDiasHabiles from 'hooks/useDate';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { classNames } from 'primereact/utils';
 import { InputText } from 'primereact/inputtext';
 import { FilterMatchMode } from 'primereact/api';
@@ -33,7 +33,7 @@ export default function GetPendientes() {
 
   const getDiasLaborablesClass = useCallback((dias) => {
     return classNames('rounded-full flex justify-center items-center text-center font-bold w-8 h-8', {
-      'bg-green-500 bg-gradient text-black': dias <= 5,
+      'bg-green-700 text-black': dias <= 5,
       'bg-yellow-500 text-black': dias >= 6 && dias <= 9,
       'bg-orange-500 text-black': dias >= 10 && dias <= 12,
       'bg-red-500 bg-gradient text-black': dias >= 13
@@ -62,19 +62,25 @@ export default function GetPendientes() {
 
     return (
       <>
-        <div className="row">
-          <div className="d-flex justify-content-between items-center col-6">
+        <div className="flex flex-col sm:flex-row items-center gap-4">
+          <div className="flex w-full sm:w-1/2 items-center gap-4">
             <InputText
-              className="inputUser"
+              className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               type="search"
               value={value || ''}
               onChange={(e) => onGlobalFilterChange(e)}
-              placeholder="Buscar"
+              placeholder="Buscar..."
             />
-            <p className="m-1">Total pendientes: {dataApi.length}</p>
-            <p className="m-1">Seleccionados: {selected.length}</p>
+            <div className="flex items-center gap-3 text-sm text-gray-600 whitespace-nowrap">
+              <p>
+                Pendientes: <span className="font-bold text-gray-800">{dataApi.length}</span>
+              </p>
+              <p>
+                Seleccionados: <span className="font-bold text-blue-600">{selected.length}</span>
+              </p>
+            </div>
           </div>
-          <div className="col-6">
+          <div className="w-full sm:w-1/2">
             <UsuariosJuridica dataRadicados={selected} data={dataApi} setDataApi={setDataApi} setSelected={setSelected} />
           </div>
         </div>

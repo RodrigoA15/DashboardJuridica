@@ -45,7 +45,7 @@ function GetDepartamentos() {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div>
         <label htmlFor="id_departamento" className="block text-sm font-semibold text-gray-600 mb-2">
-          Departamento*
+          &Aacute;rea*
         </label>
         <select
           id="id_departamento"

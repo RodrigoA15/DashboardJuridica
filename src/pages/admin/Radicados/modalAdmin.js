@@ -11,83 +11,118 @@ function ModalAdmin({ visible, setVisible, data }) {
   const [asunto, setAsunto] = useState('');
   const [estadoRadicado, setEstadoRadicado] = useState('');
 
-  return (
-    <div>
-      <Dialog
-        header="Editar radicado"
-        visible={visible}
-        style={{ width: '40vw' }}
-        breakpoints={{ '960px': '75vw', '641px': '100vw' }}
-        onHide={() => {
-          if (!visible) return;
-          setVisible(false);
-        }}
-      >
-        <div className="container d-flex justify-content-center align-items-center">
-          <form>
-            {/* row1 */}
-            <div className="row">
-              <div className="mb-4 col-6">
-                <label htmlFor="numero">Número radicado</label>
-                <InputText value={data.numero_radicado} />
-              </div>
-              <div className="mb-4 col-6">
-                <label htmlFor="fecha">Fecha radicado</label>
-                <InputText value={new Date(data.fecha_radicado).toLocaleDateString('es-ES', { timeZone: 'UTC' })} />
-              </div>
-            </div>
-            {/* row2 */}
-            <div className="row">
-              <div className="mb-4 col-6">
-                <label htmlFor="procedencia">Procedencia</label>
-                <InputText value={data.id_procedencia && data.id_procedencia.nombre} />
-              </div>
-              <div className="mb-4 col-6">
-                <label htmlFor="cantidad">Cantidad respuesta</label>
-                <InputText keyfilter="int" onChange={(e) => setCantidadRespuesta(e.target.value)} />
-              </div>
-            </div>
-            {/* row3 */}
-            <div className="row">
-              <div className="mb-4 col-6">
-                <AdminGetEntities setEntidad={setEntidad} entidad={entidad} />
-              </div>
-              <div className="mb-4 col-6">
-                <AdminGetAreas setArea={setArea} area={area} entidad={entidad} />
-              </div>
-            </div>
-            {/* row4 */}
-            <div className="row">
-              <div className="mb-4 col-6">
-                <AdminGetAffairs setAsunto={setAsunto} asunto={asunto} area={area} />
-              </div>
-              <div className="mb-4 col-6">
-                <AdminGetStates setEstadoRadicado={setEstadoRadicado} estadoRadicado={estadoRadicado} />
-              </div>
-            </div>
+  // Función para formatear la fecha de manera segura
+  const formatFecha = (fecha) => {
+    if (!fecha) return '';
+    return new Date(fecha).toLocaleDateString('es-ES', { timeZone: 'UTC' });
+  };
 
-            <div className="d-flex justify-content-center align-items-center">
-              <UpdateRadicados
-                dataId={data}
-                cantidadRespuesta={cantidadRespuesta}
-                entidad={entidad}
-                area={area}
-                asunto={asunto}
-                estadoRadicado={estadoRadicado}
-                setVisible={setVisible}
+  return (
+    <Dialog
+      header="Editar radicado"
+      visible={visible}
+      style={{ width: '40vw' }}
+      breakpoints={{ '960px': '75vw', '641px': '100vw' }}
+      onHide={() => setVisible(false)}
+      // Añadimos un footer para el botón de acción para una mejor UI
+      footer={() => (
+        <div className="flex justify-center">
+          <UpdateRadicados
+            dataId={data}
+            cantidadRespuesta={cantidadRespuesta}
+            entidad={entidad}
+            area={area}
+            asunto={asunto}
+            estadoRadicado={estadoRadicado}
+            setVisible={setVisible}
+          />
+        </div>
+      )}
+    >
+      {/* El contenido del formulario ahora usa 'p-fluid' para que los inputs se expandan */}
+      <div className="p-fluid">
+        <form>
+          {/* Usamos un grid de Tailwind para organizar los campos */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-5">
+            {/* Campo Número radicado */}
+            <div>
+              <label htmlFor="numero" className="block text-sm font-semibold text-gray-600 mb-2">
+                Número radicado
+              </label>
+              <InputText
+                className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                id="numero"
+                value={data.numero_radicado || ''}
+                readOnly
               />
             </div>
-          </form>
-        </div>
-      </Dialog>
-    </div>
+
+            {/* Campo Fecha radicado */}
+            <div>
+              <label htmlFor="fecha" className="block text-sm font-semibold text-gray-600 mb-2">
+                Fecha radicado
+              </label>
+              <InputText
+                className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                id="fecha"
+                value={formatFecha(data.fecha_radicado)}
+                readOnly
+              />
+            </div>
+
+            {/* Campo Procedencia */}
+            <div>
+              <label htmlFor="procedencia" className="block text-sm font-semibold text-gray-600 mb-2">
+                Procedencia
+              </label>
+              <InputText
+                className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                id="procedencia"
+                value={data.id_procedencia?.nombre || ''}
+                readOnly
+              />
+            </div>
+
+            {/* Campo Cantidad respuesta */}
+            <div>
+              <label htmlFor="cantidad" className="block text-sm font-semibold text-gray-600 mb-2">
+                Cantidad respuesta
+              </label>
+              <InputText
+                className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                id="cantidad"
+                keyfilter="int"
+                onChange={(e) => setCantidadRespuesta(e.target.value)}
+              />
+            </div>
+
+            <div>
+              <AdminGetEntities setEntidad={setEntidad} entidad={entidad} />
+            </div>
+
+            <div>
+              <AdminGetAreas setArea={setArea} area={area} entidad={entidad} />
+            </div>
+
+            <div>
+              <AdminGetAffairs setAsunto={setAsunto} asunto={asunto} area={area} />
+            </div>
+
+            <div>
+              <AdminGetStates setEstadoRadicado={setEstadoRadicado} estadoRadicado={estadoRadicado} />
+            </div>
+          </div>
+        </form>
+      </div>
+    </Dialog>
   );
 }
-
-export default ModalAdmin;
 
 ModalAdmin.propTypes = {
   visible: PropTypes.bool.isRequired,
   setVisible: PropTypes.func.isRequired,
-  data: PropTypes.string
+  // Corregido: 'data' es un objeto, no un string
+  data: PropTypes.object
 };
+
+export default ModalAdmin;
