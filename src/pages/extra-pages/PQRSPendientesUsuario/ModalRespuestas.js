@@ -1,12 +1,12 @@
 import { Dialog } from 'primereact/dialog';
 import PropTypes from 'prop-types';
-import { useParameters } from 'hooks/useParameters';
 import { FormWithParameter } from './Forms/FormWithParameter';
 import { FormWithoutParameter } from './Forms/FormWithoutParameter';
+import { useAuth } from 'context/authContext';
+import { usePermissions } from 'hooks/usePermissions';
 function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
-  const { parameters } = useParameters();
-  const parametroActivo = parameters.some((parametro) => parametro.nombre_parametro === 'Asuntos respuesta' && parametro.activo);
-
+  const { user } = useAuth();
+  const { canViewAddAffairAnswer, canViewUploadFileAnswers } = usePermissions(user);
   return (
     <>
       <Dialog
@@ -19,10 +19,9 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
           handleClose();
         }}
       >
-        {parametroActivo ? (
+        {canViewUploadFileAnswers && <FormWithoutParameter data={data} handleClose={handleClose} />}
+        {canViewAddAffairAnswer && (
           <FormWithParameter data={data} asignados={asignados} setAsignados={setAsignados} handleClose={handleClose} />
-        ) : (
-          <FormWithoutParameter data={data} handleClose={handleClose} />
         )}
       </Dialog>
     </>
