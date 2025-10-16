@@ -9,7 +9,7 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { useAuth } from 'context/authContext';
 import ModalComponent from './ImportFile/modal';
-import { useParameters } from 'hooks/useParameters';
+import { usePermissions } from 'hooks/usePermissions';
 
 function ComponentRadicados() {
   const methods = useForm({ mode: 'onChange' });
@@ -22,14 +22,13 @@ function ComponentRadicados() {
   } = methods;
 
   const { user } = useAuth();
+  const { canViewButtonUploadFile } = usePermissions(user);
   const [procedencia, setProcedencia] = useState('');
   const [id_tipificacion, setIdTipificacion] = useState('');
   const [nameCourt, setNameCourt] = useState('');
   const [juzgado, setJuzgados] = useState(null);
   const [check, setCheck] = useState(false);
   const MySwal = withReactContent(Swal);
-
-  const { parameters } = useParameters();
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -168,15 +167,8 @@ function ComponentRadicados() {
                 >
                   Registrar Radicado
                 </button>
-                {parameters.map(
-                  (param) =>
-                    param.nombre_parametro === 'Importar archivo' &&
-                    param.activo && (
-                      <div key={param._id}>
-                        <ModalComponent />
-                      </div>
-                    )
-                )}
+
+                <div>{canViewButtonUploadFile && <ModalComponent />}</div>
               </div>
             </form>
           </FormProvider>
