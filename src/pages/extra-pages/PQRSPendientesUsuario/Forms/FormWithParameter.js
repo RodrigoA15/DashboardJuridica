@@ -16,16 +16,18 @@ import { FormUpdateUser } from './FormUpdateUser';
 import { ApiAreas } from '../ActualizarArea/ApiAreas';
 import { ListAreas } from '../ActualizarArea/ListAreas';
 import IndexTypesAffairs from '../ActualizarAsunto/index';
+import { usePermissions } from 'hooks/usePermissions';
 
 const STATUS_SEND_APROBATION = 'Pendiente aprobacion';
 
 export const FormWithParameter = ({ data, asignados, setAsignados, handleClose }) => {
+  const { user } = useAuth();
+  const { canViewCreateAprobations } = usePermissions(user);
   const [valueAffair, setValueAffair] = useState(null);
   const [nameArea, setNameArea] = useState(null);
   const [granted, setGranted] = useState(null);
   const [selectedArea, setSelectedArea] = useState([]);
   const { areas } = ApiAreas();
-  const { user } = useAuth();
   const { fetchCreateAprobation } = useFetchAprobations();
   const mutationCreate = useMutation({
     mutationFn: (dataAprobation) => fetchCreateAprobation(dataAprobation),
@@ -144,57 +146,59 @@ export const FormWithParameter = ({ data, asignados, setAsignados, handleClose }
         </FormControl>
 
         {/* COLUMNA 2: Ocupa 2/3 del espacio */}
-        <div className="md:col-span-2 flex flex-col gap-4">
-          {/* Encabezado de la sección */}
-          <div className="flex items-center gap-3">
-            <label htmlFor="aprobations" className="text-sm font-semibold text-gray-800">
-              Aprobacion PQRS
-            </label>
-            <Tooltip
-              title={
-                <div>
-                  <p className="font-semibold">&Aacute;reas seleccionadas: {selectedArea.length}</p>
-                  <ul>
-                    {selectedArea.map((item) => (
-                      <li key={item._id} className="list-disc ml-4">
-                        {item.nombre_departamento}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              }
-              placement="top"
+        {canViewCreateAprobations && (
+          <div className="md:col-span-2 flex flex-col gap-4">
+            {/* Encabezado de la sección */}
+            <div className="flex items-center gap-3">
+              <label htmlFor="aprobations" className="text-sm font-semibold text-gray-800">
+                Aprobacion PQRS
+              </label>
+              <Tooltip
+                title={
+                  <div>
+                    <p className="font-semibold">&Aacute;reas seleccionadas: {selectedArea.length}</p>
+                    <ul>
+                      {selectedArea.map((item) => (
+                        <li key={item._id} className="list-disc ml-4">
+                          {item.nombre_departamento}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                }
+                placement="top"
+              >
+                <VisibilityIcon className="text-gray-500 cursor-pointer" />
+              </Tooltip>
+            </div>
+
+            {/* Componente MultiSelect */}
+            <MultiSelect
+              value={selectedArea}
+              onChange={(e) => setSelectedArea(e.value)}
+              options={areas}
+              optionLabel="nombre_departamento"
+              display="chip"
+              placeholder="Seleccione area(s)"
+              maxSelectedLabels={3}
+              className="w-full" // Ocupa todo el ancho de su columna
+            />
+
+            {/* Botón de acción alineado a la derecha */}
+            <Button
+              variant="contained"
+              disabled={selectedArea.length === 0}
+              sx={{
+                bgcolor: '#2563eb', // bg-blue-600
+                '&:hover': { bgcolor: '#1d4ed8' }, // hover:bg-blue-700
+                alignSelf: 'flex-start'
+              }}
+              onClick={() => confirm()}
             >
-              <VisibilityIcon className="text-gray-500 cursor-pointer" />
-            </Tooltip>
+              Enviar
+            </Button>
           </div>
-
-          {/* Componente MultiSelect */}
-          <MultiSelect
-            value={selectedArea}
-            onChange={(e) => setSelectedArea(e.value)}
-            options={areas}
-            optionLabel="nombre_departamento"
-            display="chip"
-            placeholder="Seleccione area(s)"
-            maxSelectedLabels={3}
-            className="w-full" // Ocupa todo el ancho de su columna
-          />
-
-          {/* Botón de acción alineado a la derecha */}
-          <Button
-            variant="contained"
-            disabled={selectedArea.length === 0}
-            sx={{
-              bgcolor: '#2563eb', // bg-blue-600
-              '&:hover': { bgcolor: '#1d4ed8' }, // hover:bg-blue-700
-              alignSelf: 'flex-start'
-            }}
-            onClick={() => confirm()}
-          >
-            Enviar
-          </Button>
-        </div>
+        )}
       </div>
       <div>
         <FormUpdateUser data={data} />
