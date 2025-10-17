@@ -35,7 +35,7 @@ function ComponentRadicados() {
       const datos = {
         ...data,
         id_procedencia: procedencia,
-        estado_radicado: 'Pre-asignacion',
+        estado_radicado: 'Pendiente',
         id_tipificacion,
         juzgado
       };
