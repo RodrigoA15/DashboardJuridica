@@ -6,7 +6,19 @@ export const useFetchPendientes = () => {
     return data;
   };
 
+  const fetchRadicadosByStatus = async (id_area) => {
+    const { data } = await axios.get(`/radicados/pendientes/${id_area}`);
+    return data;
+  };
+
+  const fetchActiveAreas = async () => {
+    const { data } = await axios.get('/areas');
+    return data;
+  };
+
   return {
-    fetchUsersByArea
+    fetchUsersByArea,
+    fetchRadicadosByStatus,
+    fetchActiveAreas
   };
 };
