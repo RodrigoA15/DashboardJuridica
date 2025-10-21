@@ -16,9 +16,15 @@ export const useFetchPendientes = () => {
     return data;
   };
 
+  const fetchUpdateRadicados = async (updateData) => {
+    const { data } = await axios.put('/radicados/rm/reasignacion_departamento', updateData);
+    return data;
+  };
+
   return {
     fetchUsersByArea,
     fetchRadicadosByStatus,
-    fetchActiveAreas
+    fetchActiveAreas,
+    fetchUpdateRadicados
   };
 };
