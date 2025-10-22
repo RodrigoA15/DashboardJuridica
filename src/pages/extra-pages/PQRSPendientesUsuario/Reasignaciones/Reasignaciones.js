@@ -44,7 +44,7 @@ function Reasignaciones({ open, close, asignaciones }) {
         await axios.put(`/radicados/reasignacion/${id_radicado}`, {
           id_departamento: selectArea,
           id_entidad: selectEntidad,
-          estado_radicado: 'Pre-asignacion',
+          estado_radicado: 'Pendiente',
           observaciones_radicado: message
         });
         toast.success('Reasigando correctamente');
@@ -58,7 +58,6 @@ function Reasignaciones({ open, close, asignaciones }) {
   const updateEstadoAsignacion = async () => {
     try {
       if (asignaciones) {
-        console.log(asignaciones._id);
         await axios.put(`/assigned/${asignaciones._id}`, {
           estado_asignacion: 'cerrado'
         });
