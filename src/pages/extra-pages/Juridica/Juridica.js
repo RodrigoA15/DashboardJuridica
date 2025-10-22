@@ -3,10 +3,9 @@
 import { Box, Tab } from '@mui/material/index';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { useState } from 'react';
-import GetPendientes from './GetPendientes';
+import GetPendientes from './Pendientes/GetPendientes';
 import GetAsignados from './GetAsignados';
 import GetRespuesta from './GetRespuesta';
-import Preasignaciones from '../PQRSPreasignadas/Preasignaciones';
 import { List, ListItem, Stack, Typography } from '@mui/material';
 import Dot from 'components/@extended/Dot';
 import { GetAssignedUser } from './GetAssignedUser';
@@ -45,30 +44,26 @@ const Juridica = () => {
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <TabList onChange={handleChange}>
-            <Tab label="Pre-asignacion" value="1" />
-            <Tab label="Pendientes" value="2" />
-            <Tab label="Asignados" value="3" />
-            <Tab label="Respuestas" value="4" />
-            <Tab label="Pendiente aprobacion" value="5" />
-            <Tab label="Asignados usuario" value="6" />
+            <Tab label="Pendientes" value="1" />
+            <Tab label="Asignados" value="2" />
+            <Tab label="Respuestas" value="3" />
+            <Tab label="Pendiente aprobacion" value="4" />
+            <Tab label="Asignados usuario" value="5" />
           </TabList>
         </Box>
         <TabPanel value="1">
-          <Preasignaciones />
-        </TabPanel>
-        <TabPanel value="2">
           <GetPendientes />
         </TabPanel>
-        <TabPanel value="3">
+        <TabPanel value="2">
           <GetAsignados />
         </TabPanel>
-        <TabPanel value="4">
+        <TabPanel value="3">
           <GetRespuesta />
         </TabPanel>
-        <TabPanel value="5">
+        <TabPanel value="4">
           <GetAprobaciones />
         </TabPanel>
-        <TabPanel value="6">
+        <TabPanel value="5">
           <GetAssignedUser />
         </TabPanel>
       </TabContext>
