@@ -11,7 +11,7 @@ const STATUS_RADICADO = 'Asignados';
 const STATUS_ASSIGNMENTS = 'abierto';
 const QUERY_KEY = ['radicados-pendientes'];
 
-export const CreateAssignment = ({ selectedData, setSelected }) => {
+export const CreateAssignment = ({ selectedData, setSelected, usuario, setUsuario }) => {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const { fetchCreateAssignments, fetchUpdateStatusRadicado } = useFetchAssignments();
@@ -46,6 +46,7 @@ export const CreateAssignment = ({ selectedData, setSelected }) => {
 
     onSettled: (_, __, ___, context) => {
       setSelected([]);
+      setUsuario('');
       if (context?.keyByDept) queryClient.invalidateQueries({ queryKey: context.keyByDept });
     }
   });
@@ -53,12 +54,12 @@ export const CreateAssignment = ({ selectedData, setSelected }) => {
   const buildAssignments = useCallback(
     () =>
       selectedData.map(({ _id }) => ({
-        id_usuario: user._id,
+        id_usuario: usuario._id,
         fecha_asignacion: new Date(),
         estado_asignacion: STATUS_ASSIGNMENTS,
         id_radicado: _id
       })),
-    [selectedData, user._id]
+    [selectedData, usuario._id]
   );
   const handleConfirmAssign = useCallback(() => {
     const newAssignments = buildAssignments();
@@ -77,8 +78,8 @@ export const CreateAssignment = ({ selectedData, setSelected }) => {
   }, [buildAssignments, selectedData.length, assignAndUpdateMutation]);
 
   const isDisabled = useMemo(
-    () => selectedData.length === 0 || assignAndUpdateMutation.isPending,
-    [selectedData.length, assignAndUpdateMutation.isPending]
+    () => selectedData.length === 0 || assignAndUpdateMutation.isPending || !usuario,
+    [selectedData.length, assignAndUpdateMutation.isPending, usuario]
   );
 
   return (
@@ -100,5 +101,7 @@ export const CreateAssignment = ({ selectedData, setSelected }) => {
 
 CreateAssignment.propTypes = {
   selectedData: PropTypes.array.isRequired,
-  setSelected: PropTypes.func.isRequired
+  setSelected: PropTypes.func.isRequired,
+  usuario: PropTypes.object,
+  setUsuario: PropTypes.func
 };
