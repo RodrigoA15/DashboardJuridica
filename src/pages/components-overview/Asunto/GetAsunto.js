@@ -1,44 +1,29 @@
-import { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
+import { useQuery } from '@tanstack/react-query';
 import axios from 'api/axios';
 
 function GetAsunto() {
-  const [dataAsunto, setDataAsunto] = useState([]);
-  const [loading, setLoading] = useState(false);
-
   const {
     register,
     watch,
     formState: { errors }
   } = useFormContext();
-
   const id_departamento = watch('id_departamento');
-
-  useEffect(() => {
-    const listaAsuntos = async (areaId) => {
-      setLoading(true); // Start loading
-      setDataAsunto([]); // Clear previous options
-      try {
-        const response = await axios.get(`/affair/asuntos_departamento/${areaId}`);
-        setDataAsunto(response.data);
-      } catch (error) {
-        console.error('Error al obtener asuntos:', error);
-      } finally {
-        setLoading(false); // Stop loading
-      }
-    };
-
-    if (id_departamento) {
-      listaAsuntos(id_departamento);
-    } else {
-      setDataAsunto([]);
-    }
-  }, [id_departamento]);
+  const { data = [], isLoading } = useQuery({
+    queryKey: ['fetch-asuntos-area', id_departamento],
+    queryFn: async () => {
+      const response = await axios.get(`/affair/asuntos_departamento/${id_departamento}`);
+      return response.data;
+    },
+    staleTime: Infinity,
+    enabled: !!id_departamento,
+    placeholderData: []
+  });
 
   const getPlaceholderOption = () => {
     if (!id_departamento) return 'Seleccione un departamento primero';
-    if (loading) return 'Cargando asuntos...';
-    if (!loading && dataAsunto.length === 0) return 'No hay asuntos disponibles';
+    if (isLoading) return 'Cargando asuntos...';
+    if (!isLoading && data.length === 0) return 'No hay asuntos disponibles';
     return 'Seleccione un asunto';
   };
 
@@ -50,13 +35,13 @@ function GetAsunto() {
       <select
         id="id_asunto"
         className="w-full px-4 py-2 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow disabled:opacity-50 disabled:cursor-not-allowed"
-        disabled={!id_departamento || loading}
+        disabled={!id_departamento || isLoading}
         {...register('id_asunto', {
           required: 'El asunto es obligatorio'
         })}
       >
         <option value="">{getPlaceholderOption()}</option>
-        {dataAsunto.map((i) => (
+        {data.map((i) => (
           <option key={i._id} value={i._id}>
             {i.nombre_asunto}
           </option>
