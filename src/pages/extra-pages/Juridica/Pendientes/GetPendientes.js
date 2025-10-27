@@ -1,20 +1,20 @@
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { Column } from 'primereact/column';
-import { classNames } from 'primereact/utils';
+import { useAuth } from 'context/authContext';
 import { useQuery } from '@tanstack/react-query';
 import { InputText } from 'primereact/inputtext';
 import { FilterMatchMode } from 'primereact/api';
 import { DataTable } from 'primereact/datatable';
-import useDiasHabiles from 'hooks/useDate';
-import { useAuth } from 'context/authContext';
-import { useFetchPendientes } from 'lib/PQRS/fetchPendientes';
-import { CreateAssignment } from './CreateAssignment';
-import { SelectUserByArea } from 'components/select/selectUserByArea';
 import { Reject } from './Reject';
+import { useBadge } from 'hooks/Badge';
+import { CreateAssignment } from './CreateAssignment';
+import { useFetchPendientes } from 'lib/PQRS/fetchPendientes';
+import { SelectUserByArea } from 'components/select/selectUserByArea';
 
 export default function GetPendientes() {
   const { user } = useAuth();
   const [usuario, setUsuario] = useState('');
+  const { renderDiasLaborables } = useBadge();
   const { fetchRadicadosByStatus } = useFetchPendientes();
   const { data, isLoading } = useQuery({
     queryKey: ['radicados-pendientes', user.departamento._id],
@@ -22,27 +22,10 @@ export default function GetPendientes() {
     retry: false
   });
   const [selected, setSelected] = useState([]);
-  const { diasHabiles } = useDiasHabiles();
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS }
   });
   const [globalFilterValue, setGlobalFilterValue] = useState('');
-  const getDiasLaborablesClass = useCallback((dias) => {
-    return classNames('rounded-full flex justify-center items-center text-center font-bold w-8 h-8', {
-      'bg-green-700 text-black': dias <= 5,
-      'bg-yellow-500 text-black': dias >= 6 && dias <= 9,
-      'bg-orange-500 text-black': dias >= 10 && dias <= 12,
-      'bg-red-500 bg-gradient text-black': dias >= 13
-    });
-  }, []);
-
-  const renderDiasLaborables = useCallback(
-    (rowData) => {
-      const dias = diasHabiles(rowData.fecha_radicado);
-      return <div className={getDiasLaborablesClass(dias)}>{dias}</div>;
-    },
-    [diasHabiles, getDiasLaborablesClass]
-  );
 
   const onGlobalFilterChange = (event) => {
     const value = event.target.value;
@@ -78,7 +61,7 @@ export default function GetPendientes() {
           <div className="w-full sm:w-1/2">
             <SelectUserByArea selectedUser={usuario} setSelectedUser={setUsuario} />
           </div>
-          <CreateAssignment selectedData={selected} setSelected={setSelected} />
+          <CreateAssignment selectedData={selected} setSelected={setSelected} usuario={usuario} setUsuario={setUsuario} />
           <Reject selectedData={selected} setSelected={setSelected} />
         </div>
       </>
