@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'api/axios';
-import { Button } from '@mui/material';
 import PropTypes from 'prop-types';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
@@ -92,9 +91,13 @@ function Juzgados({ setNameCourt, nameCourt, setJuzgados }) {
   const historialCambios = async () => {
     try {
       const datos = `El usuario ${user.username} creo la entidad juridica: ${descripcion.label} del municipio de ${municipio.label}`;
-      await axios.post('/history', {
-        observacion: datos
-      });
+      await axios.post('/history', [
+        {
+          id_usuario: user._id,
+          observacion: datos,
+          fecha_modifica: new Date()
+        }
+      ]);
     } catch (error) {
       Myswal.fire({
         text: 'Ops error de servidor  :(',
@@ -128,9 +131,9 @@ function Juzgados({ setNameCourt, nameCourt, setJuzgados }) {
 
   return (
     <div>
-      <div className="row mt-3">
-        <div className="col">
-          <label className="form-label h6" htmlFor="desc_entidad">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+        <div>
+          <label className="block text-sm font-semibold text-gray-600 mb-2" htmlFor="desc_entidad">
             Nombre Entidad
           </label>
           <AsyncSelect
@@ -139,24 +142,50 @@ function Juzgados({ setNameCourt, nameCourt, setJuzgados }) {
             cacheOptions
             loadOptions={loadOptions}
             onChange={setNameCourt}
-            isClearable={true}
             noOptionsMessage={({ inputValue }) => (!inputValue ? '...' : `No hay ${inputValue}`)}
           />
         </div>
-        <div className="col">
-          <label className="form-label h6" htmlFor="municipio">
+
+        <div>
+          <label className="block text-sm font-semibold text-gray-600 mb-2" htmlFor="municipio">
             Municipio
           </label>
           <Cities setMunicipio={setMunicipio} municipio={municipio} />
         </div>
-        <span className="errors">{validation}</span>
-        {!municipio.label ? <span className="errors">Municipio es requerido</span> : <Button onClick={dataApiCourtsMongo}>Buscar</Button>}
       </div>
+
+      <div className="mt-4">
+        {validation && <span className="text-red-500 text-xs block mb-2">{validation}</span>}
+
+        {!municipio.label ? (
+          <span className="text-red-500 text-xs block">Municipio es requerido</span>
+        ) : (
+          <button
+            type="button"
+            onClick={dataApiCourtsMongo}
+            className="px-5 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+          >
+            Buscar
+          </button>
+        )}
+      </div>
+
       {registerEntity && (
-        <div className="d-flex flex-column align-items-center">
-          <input className="form-control mb-3" value={nameCourt.label} readOnly />
-          <input className="form-control mb-3" value={municipio.label} readOnly />
-          <button className="btn btn-success" onClick={handleOnClick}>
+        <div className="flex flex-col items-center mt-6 pt-6 border-t border-gray-200 space-y-4">
+          <input
+            className="w-full max-w-md px-4 py-2 bg-gray-100 border border-transparent rounded-lg text-gray-700 text-center"
+            value={nameCourt.label}
+            readOnly
+          />
+          <input
+            className="w-full max-w-md px-4 py-2 bg-gray-100 border border-transparent rounded-lg text-gray-700 text-center"
+            value={municipio.label}
+            readOnly
+          />
+          <button
+            className="px-6 py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition-colors"
+            onClick={handleOnClick}
+          >
             Registrar
           </button>
         </div>
