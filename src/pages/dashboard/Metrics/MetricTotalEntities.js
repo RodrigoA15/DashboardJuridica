@@ -14,7 +14,7 @@ export const MetricTotalEntities = () => {
   });
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-[#5A96E3] p-4 h-28">
+    <div className="rounded-2xl border border-gray-200 bg-[#5A96E3] p-4 h-24">
       {data?.map((item) => (
         <div key={item.entidad} className="flex flex-col items-center justify-center text-center">
           <p className="text-sm text-white/90">{item.entidad}</p>
