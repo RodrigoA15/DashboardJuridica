@@ -1,15 +1,16 @@
-import { useForm, FormProvider } from 'react-hook-form';
-import axios from 'api/axios';
-import GetEntrada from '../CanalEntrada/GetEntrada';
-import Buscador from '../Procedencia/Buscador';
-import GetTipificacion from '../Tipificacion/GetTipificacion';
-import GetEntidad from '../Entidad/GetEntidad';
-import { useState } from 'react';
 import Swal from 'sweetalert2';
+import { Toaster } from 'sonner';
+import { useState } from 'react';
+import { useForm, FormProvider } from 'react-hook-form';
 import withReactContent from 'sweetalert2-react-content';
+import axios from 'api/axios';
+import Buscador from '../Procedencia/Buscador';
 import { useAuth } from 'context/authContext';
+import GetEntidad from '../Entidad/GetEntidad';
 import ModalComponent from './ImportFile/modal';
+import GetEntrada from '../CanalEntrada/GetEntrada';
 import { usePermissions } from 'hooks/usePermissions';
+import GetTipificacion from '../Tipificacion/GetTipificacion';
 
 function ComponentRadicados() {
   const methods = useForm({ mode: 'onChange' });
@@ -64,6 +65,7 @@ function ComponentRadicados() {
 
   return (
     <div className="max-w-4xl mx-auto my-8">
+      <Toaster richColors position="top-right" />
       <div className="bg-white shadow-xl rounded-lg">
         <div className="bg-white rounded-2xl shadow-lg p-8 space-y-6">
           <Buscador
