@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import Juzgados from './Juzgados';
+import { ModalCreateLegal } from './ModalCreateLegal';
 
 // Ícono de Búsqueda en formato SVG para reemplazar el de MUI
 const SearchIcon = () => (
@@ -133,10 +134,14 @@ function Buscador({ setProcedencia, setNameCourt, nameCourt, setJuzgados }) {
                 <p className="w-full px-4 py-2 bg-gray-200 rounded-lg text-gray-700">{i.apellido}</p>
               </div>
               {i.numero_identificacion === 12345 && (
-                <div className="md:col-span-2">
-                  <label htmlFor="entities" className="block text-sm font-semibold text-gray-600 mb-2">
-                    Entidad jurídica
-                  </label>
+                <div className="md:col-span-3">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <label htmlFor="entities" className="block text-sm font-semibold text-gray-600 mb-2">
+                      Entidad jur&iacute;dica
+                    </label>
+                    <ModalCreateLegal />
+                  </div>
+
                   <Juzgados setNameCourt={setNameCourt} nameCourt={nameCourt} setJuzgados={setJuzgados} />
                 </div>
               )}
@@ -250,7 +255,7 @@ function Buscador({ setProcedencia, setNameCourt, nameCourt, setJuzgados }) {
           <div className="flex justify-start pt-4">
             <button
               type="submit"
-              className="bg-blue-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300"
+              className="bg-green-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300"
             >
               Registrar Usuario
             </button>
