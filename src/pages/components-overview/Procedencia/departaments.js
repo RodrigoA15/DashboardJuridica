@@ -19,8 +19,15 @@ function Departaments({ data }) {
   };
 
   return (
-    <div className="col-md-6">
-      <input className="form-control" value={departaments.name} readOnly />
+    <div className="md:col-span-2">
+      <label htmlFor="city" className="block text-sm font-semibold text-gray-600 mb-2 mt-2">
+        Departamento
+      </label>
+      <input
+        className="w-full px-4 py-2 mt-2 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        value={departaments.name}
+        readOnly
+      />
     </div>
   );
 }
