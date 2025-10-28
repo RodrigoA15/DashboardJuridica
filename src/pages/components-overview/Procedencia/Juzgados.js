@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'api/axios';
-import PropTypes from 'prop-types';
-import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
-import { useAuth } from 'context/authContext';
-import Cities from './cities';
+import PropTypes from 'prop-types';
 import AsyncSelect from 'react-select/async';
+import React, { useEffect, useState } from 'react';
+import withReactContent from 'sweetalert2-react-content';
+import axios from 'api/axios';
+import Cities from './cities';
+import { useAuth } from 'context/authContext';
 
 function Juzgados({ setNameCourt, nameCourt, setJuzgados }) {
   const [validation, setValidation] = useState('');
