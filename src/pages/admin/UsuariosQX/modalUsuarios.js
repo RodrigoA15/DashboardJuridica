@@ -110,10 +110,17 @@ function ModalUsuarios({ open, handleClose, data }) {
       <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
         <Box sx={style}>
           {data && (
-            <form>
+            <form className="space-y-4" onSubmit={handleButtononClick}>
               <div>
-                <select className="form-select m-1" onChange={handleDepartamentos}>
-                  <option>Selecione un área</option>
+                <label htmlFor="departamento" className="block text-sm font-semibold text-gray-600 mb-2">
+                  &Aacute;rea
+                </label>
+                <select
+                  id="departamento"
+                  className="w-full px-4 py-2 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow"
+                  onChange={handleDepartamentos}
+                >
+                  <option value="">Selecione un área</option>
                   {dataDepartamento.map((departamentos) => (
                     <option key={departamentos._id} value={departamentos._id}>
                       {departamentos.nombre_departamento}
@@ -123,8 +130,15 @@ function ModalUsuarios({ open, handleClose, data }) {
               </div>
 
               <div>
-                <select className="form-select m-1" onChange={handleRoles}>
-                  <option>Seleccione rol</option>
+                <label htmlFor="rol" className="block text-sm font-semibold text-gray-600 mb-2">
+                  Rol
+                </label>
+                <select
+                  id="rol"
+                  className="w-full px-4 py-2 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow"
+                  onChange={handleRoles}
+                >
+                  <option value="">Seleccione rol</option>
                   {dataRoles.map((rol) => (
                     <option key={rol._id} value={rol._id}>
                       {rol.nombre_rol}
@@ -133,7 +147,10 @@ function ModalUsuarios({ open, handleClose, data }) {
                 </select>
               </div>
 
-              <button className="btn btn-warning mt-3" type="submit" onClick={handleButtononClick}>
+              <button
+                className="w-full bg-green-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-300 transition-all duration-300 mt-4"
+                type="submit"
+              >
                 Asignar
               </button>
             </form>
