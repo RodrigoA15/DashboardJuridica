@@ -1,4 +1,5 @@
-import { useState } from 'react';
+// Importa useMemo y useCallback
+import { useState, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
@@ -16,10 +17,11 @@ import { IconButton, Tooltip } from '@mui/material';
 import { InputText } from 'primereact/inputtext';
 //Api functions
 import axios from 'api/axios';
-// import { AllAnswers, AnswersByArea, AnswersByUser } from '../Totals';
 //Hooks
 import { useFormatDate } from 'hooks/useFormatDate';
 import { useBadge } from 'hooks/Badge';
+
+const MySwal = withReactContent(Swal);
 
 export const TablePendingUser = ({
   asignados,
@@ -40,151 +42,155 @@ export const TablePendingUser = ({
   const [globalFilterValue, setGlobalFilterValue] = useState('');
   const { renderDiasLaborables } = useBadge();
 
-  let MySwal = withReactContent(Swal);
+  const answersByUser = useCallback(
+    async (data) => {
+      try {
+        const { numero_radicado, cantidad_respuesta } = data ?? {};
+        if (!numero_radicado) return toast.error('Datos de radicado no válidos');
 
-  const handleOpen = (data) => {
-    setSelectedData(data);
-    setVisible(true);
-    answersByUser(data);
-  };
+        const { data: answers } = await axios.get(`/answer/radicados_respuestas/${numero_radicado}`);
+        const cantidadRespuestasCargadas = answers?.length ?? 0;
 
-  const handleOpenR = (respuesta) => {
-    setSelectedRespuesta(respuesta);
-    setOpenRespuestasModal(true);
-  };
-
-  //TODO modal reasignaciones
-  const handleOpenReasignacion = (asignacion) => {
-    setSelectedAsignacion(asignacion);
-    setOpenReasignacion(true);
-  };
-
-  //SEARCH
-  const onGlobalFilterChange = (event) => {
-    const value = event.target.value;
-    let _filters = { ...filters };
-
-    _filters['global'].value = value;
-
-    setFilters(_filters);
-    setGlobalFilterValue(value);
-  };
-
-  const answersByUser = async (data) => {
-    try {
-      const { numero_radicado, cantidad_respuesta } = data ?? {};
-      if (!numero_radicado) return toast.error('Datos de radicado no válidos');
-
-      const { data: answers } = await axios.get(`/answer/radicados_respuestas/${numero_radicado}`);
-
-      const cantidadRespuestasCargadas = answers?.length ?? 0;
-
-      if (cantidadRespuestasCargadas === cantidad_respuesta) {
-        MySwal.fire({
-          title: 'Esta petición tiene una respuesta cargada',
-          text: 'Por favor marque la petición como respuesta',
-          icon: 'success',
-          customClass: { container: 'swal-zindex' }
-        }).then((alert) => {
-          if (alert.isConfirmed) handleClose();
-        });
+        if (cantidadRespuestasCargadas === cantidad_respuesta) {
+          MySwal.fire({
+            title: 'Esta petición tiene una respuesta cargada',
+            text: 'Por favor marque la petición como respuesta',
+            icon: 'success',
+            customClass: { container: 'swal-zindex' }
+          }).then((alert) => {
+            if (alert.isConfirmed) handleClose();
+          });
+        }
+      } catch (error) {
+        if (error.response?.status === 404) {
+          toast.error('No se encontraron respuestas cargadas');
+        } else {
+          toast.error('Ocurrió un error al cargar las respuestas');
+        }
       }
-    } catch (error) {
-      if (error.response?.status === 404) {
-        toast.error('No se encontraron respuestas cargadas');
-      } else {
-        toast.error('Ocurrió un error al cargar las respuestas');
-      }
+    },
+    [handleClose]
+  );
+
+  const updateQuantityAnswers = useCallback(async (data) => {
+    if (data.cantidad_respuesta <= 0) {
+      toast.error('La cantidad de respuestas debe ser mayor a 0');
+      throw new Error('Cantidad de respuesta no válida');
     }
-  };
 
-  const updateQuantityAnswers = async (data) => {
-    try {
-      if (data.cantidad_respuesta > 0) {
-        await axios.put(`/radicados/updateQuantity/${data.id_radicado}`, {
-          cantidad_respuesta: data.cantidad_respuesta
-        });
-      } else {
-        toast.error('La cantidad de respuestas debe ser mayor a 0');
+    await axios.put(`/radicados/updateQuantity/${data.id_radicado}`, {
+      cantidad_respuesta: data.cantidad_respuesta
+    });
+  }, []);
+
+  const handleOpen = useCallback(
+    (data) => {
+      setSelectedData(data);
+      setVisible(true);
+      answersByUser(data);
+    },
+    [setSelectedData, setVisible, answersByUser]
+  );
+
+  const handleOpenR = useCallback(
+    (respuesta) => {
+      setSelectedRespuesta(respuesta);
+      setOpenRespuestasModal(true);
+    },
+    [setSelectedRespuesta, setOpenRespuestasModal]
+  );
+
+  const handleOpenReasignacion = useCallback(
+    (asignacion) => {
+      setSelectedAsignacion(asignacion);
+      setOpenReasignacion(true);
+    },
+    [setSelectedAsignacion, setOpenReasignacion]
+  );
+
+  const onGlobalFilterChange = useCallback(
+    (event) => {
+      const value = event.target.value;
+      let _filters = { ...filters };
+      _filters['global'].value = value;
+      setFilters(_filters);
+      setGlobalFilterValue(value);
+    },
+    [filters]
+  );
+
+  const onRowEditComplete = useCallback(
+    async (e) => {
+      const { newData } = e;
+      try {
+        await updateQuantityAnswers(newData);
+
+        setAsignados((prevAsignados) => prevAsignados.map((item) => (item.id_radicado === newData.id_radicado ? newData : item)));
+
+        toast.success('Registro actualizado correctamente.');
+      } catch (error) {
+        console.error('Error al actualizar:', error);
       }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const onRowEditComplete = (e) => {
-    let _products = [...asignados];
-    let { newData, index } = e;
-
-    updateQuantityAnswers(newData);
-    _products[index] = newData;
-    setAsignados(_products);
-  };
+    },
+    [updateQuantityAnswers, setAsignados]
+  );
 
   const allowEdit = (rowData) => {
-    return rowData.name !== 'Blue Band';
+    return rowData.cantidad_respuesta !== 'Blue Band';
   };
 
-  const quantityAnswers = (options) => {
+  const quantityAnswers = useCallback((options) => {
     return <InputNumber className="w-72" value={options.value} onValueChange={(e) => options.editorCallback(e.value)} />;
-  };
+  }, []);
 
-  const renderHeader = () => {
+  const header = useMemo(() => {
     return (
-      <>
-        <div className="grid grid-cols-4 gap-4 mb-3">
-          <div>
-            <InputText
-              className="inputUser"
-              type="search"
-              value={globalFilterValue}
-              onChange={(e) => onGlobalFilterChange(e)}
-              placeholder="Buscar"
-            />
-          </div>
-          {/* <div>
-            <AnswersByUser />
-          </div>
-          <div>
-            <AllAnswers />
-          </div>
-          <div>
-            <AnswersByArea />
-          </div> */}
+      <div className="grid grid-cols-4 gap-4 mb-3">
+        <div>
+          <InputText className="inputUser" type="search" value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Buscar" />
         </div>
-      </>
+      </div>
     );
-  };
+  }, [globalFilterValue, onGlobalFilterChange]);
 
-  const header = renderHeader();
+  const btnOpenModalAddAnswer = useCallback(
+    (data) => {
+      return (
+        <Tooltip title="Agregar respuestas" placement="top-start" arrow>
+          <IconButton onClick={() => handleOpen(data)}>
+            <AddIcon />
+          </IconButton>
+        </Tooltip>
+      );
+    },
+    [handleOpen]
+  );
 
-  //Buttons
-  const btnOpenModalAddAnswer = (data) => {
-    return (
-      <Tooltip title="Agregar respuestas" placement="top-start" arrow>
-        <IconButton onClick={() => handleOpen(data)}>
-          <AddIcon />
-        </IconButton>
-      </Tooltip>
-    );
-  };
-  const btnOpenModalViewAnswer = (data) => {
-    return (
-      <Tooltip title="Ver respuestas" placement="top-start" arrow>
-        <IconButton onClick={() => handleOpenR(data)}>
-          <VisibilityIcon />
-        </IconButton>
-      </Tooltip>
-    );
-  };
-  const btnReasignation = (data) => {
-    return (
-      <Tooltip title="Reasignación" placement="top-start" arrow>
-        <IconButton onClick={() => handleOpenReasignacion(data)}>
-          <SendIcon />
-        </IconButton>
-      </Tooltip>
-    );
-  };
+  const btnOpenModalViewAnswer = useCallback(
+    (data) => {
+      return (
+        <Tooltip title="Ver respuestas" placement="top-start" arrow>
+          <IconButton onClick={() => handleOpenR(data)}>
+            <VisibilityIcon />
+          </IconButton>
+        </Tooltip>
+      );
+    },
+    [handleOpenR]
+  );
+
+  const btnReasignation = useCallback(
+    (data) => {
+      return (
+        <Tooltip title="Reasignación" placement="top-start" arrow>
+          <IconButton onClick={() => handleOpenReasignacion(data)}>
+            <SendIcon />
+          </IconButton>
+        </Tooltip>
+      );
+    },
+    [handleOpenReasignacion]
+  );
 
   return (
     <div className="rounded-xl border border-gray-200 bg-white p-6">
@@ -200,9 +206,9 @@ export const TablePendingUser = ({
         paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
         currentPageReportTemplate="{first} a {last} de {totalRecords}"
         filters={filters}
-        onFilter={(e) => setFilters(e.filters)}
         editMode="row"
         onRowEditComplete={onRowEditComplete}
+        dataKey="id_radicado"
       >
         <Column field="numero_radicado" header="Número radicado" />
         <Column field="fecha_radicado" sortable header="Fecha radicado" body={(rowData) => formatDate(rowData.fecha_radicado)} />
@@ -210,7 +216,7 @@ export const TablePendingUser = ({
         <Column field="fecha_asignacion" sortable header="Fecha asignación" body={(rowData) => formatDate(rowData.fecha_asignacion)} />
         <Column field="nombre_procedencia" header="Procedencia" />
         <Column field="observaciones" header="Observaciones" />
-        <Column field="cantidad_respuesta" sortable header="Respuestas estimadas" editor={(options) => quantityAnswers(options)} />
+        <Column field="cantidad_respuesta" sortable header="Respuestas estimadas" editor={quantityAnswers} />
         <Column field="fecha_radicado" sortable header="Dias" body={renderDiasLaborables} />
         <Column body={btnOpenModalAddAnswer} />
         <Column body={btnOpenModalViewAnswer} />
