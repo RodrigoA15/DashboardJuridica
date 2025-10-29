@@ -104,7 +104,12 @@ function Reasignaciones({ open, close, asignaciones }) {
               selectEntidad={selectEntidad}
               setSelectEntidad={setSelectEntidad}
             />
-            <input className="form-control" placeholder="Digite observación" onChange={(e) => setObservacion(e.target.value)} />
+
+            <textarea
+              className="w-full max-w-md px-4 py-2 bg-gray-100 border border-transparent rounded-lg text-gray-700 text-center"
+              placeholder="Digite observación"
+              onChange={(e) => setObservacion(e.target.value)}
+            />
             <span className="errors">{error}</span>
           </form>
           <Button onClick={() => handleButtonClick()}>Actualizar</Button>
