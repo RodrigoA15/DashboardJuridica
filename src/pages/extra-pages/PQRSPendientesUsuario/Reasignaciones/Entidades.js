@@ -20,8 +20,11 @@ function Entidades({ selectArea, setSelectArea, setSelectEntidad, selectEntidad 
   };
 
   return (
-    <div>
-      <select className="form-select" onChange={(e) => setSelectEntidad(e.target.value)}>
+    <div className="mb-2">
+      <select
+        className="w-full px-4 py-2 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow"
+        onChange={(e) => setSelectEntidad(e.target.value)}
+      >
         <option value="">Seleccione entidad</option>
         {entidades.map((entidad) => (
           <option key={entidad._id} value={entidad._id}>

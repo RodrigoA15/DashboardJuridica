@@ -21,9 +21,12 @@ function Areas({ setSelectArea, selectEntidad }) {
   };
 
   return (
-    <div>
+    <div className="mb-2 mt-2">
       {selectEntidad != null && (
-        <select className="form-select" onChange={(e) => setSelectArea(e.target.value)}>
+        <select
+          className="w-full px-4 py-2 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow"
+          onChange={(e) => setSelectArea(e.target.value)}
+        >
           <option value="">Seleccione área</option>
           {areas.map((area) => (
             <option key={area._id} value={area._id}>
