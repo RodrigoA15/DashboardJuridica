@@ -18,6 +18,8 @@ export const AuthProvider = ({ children }) => {
   const queryClient = useQueryClient();
   const { user, isLoading, isError } = useUser();
 
+  const isAuthenticated = !!user && !isError;
+
   const logout = () => {
     Cookies.remove('token');
     queryClient.setQueryData(['user'], null);
@@ -28,7 +30,7 @@ export const AuthProvider = ({ children }) => {
       value={{
         user,
         isLoading,
-        isAuthenticated: !!user && !isError,
+        isAuthenticated,
         logout
       }}
     >

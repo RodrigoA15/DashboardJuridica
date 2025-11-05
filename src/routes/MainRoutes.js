@@ -11,6 +11,7 @@ import IndexCE from 'pages/admin/CanalEntrada/index';
 import IndexResumen from 'pages/admin/Resumen/index';
 import TabViewComponent from 'pages/admin/Radicados/index';
 import IndexParametros from 'pages/admin/Parametros/index';
+import ProtectedRoute from 'ProtectedRoutes';
 // render - dashboard
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
 
@@ -21,7 +22,11 @@ const Radicados = Loadable(lazy(() => import('pages/components-overview/Radicado
 
 const MainRoutes = {
   path: '/',
-  element: <MainLayout />,
+  element: (
+    <ProtectedRoute>
+      <MainLayout />
+    </ProtectedRoute>
+  ),
   children: [
     {
       path: '/',
