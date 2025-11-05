@@ -3,15 +3,15 @@ import { useRef, useState } from 'react';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import { Box, ButtonBase, CardContent, ClickAwayListener, Grid, Paper, Popper, Stack, Typography } from '@mui/material';
+import { Box, Button, ButtonBase, CardContent, ClickAwayListener, Grid, Paper, Popper, Stack, Typography } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 // project import
 import MainCard from 'components/MainCard';
 import Transitions from 'components/@extended/Transitions';
 import { useAuth } from 'context/authContext';
 // assets
-import { Button } from '../../../../../../node_modules/@mui/material/index';
 import LoaderComponent from 'components/LoaderComponent';
+import { useUser } from 'hooks/useUser';
 
 // tab panel wrapper
 function TabPanel({ children, value, index, ...other }) {
@@ -32,7 +32,8 @@ TabPanel.propTypes = {
 
 const Profile = () => {
   const theme = useTheme();
-  const { user, logout } = useAuth();
+  const { user } = useUser();
+  const { logout } = useAuth();
   const handleLogout = async () => {
     // Lógica para el logout aquí
     logout();
@@ -53,7 +54,6 @@ const Profile = () => {
   };
 
   const iconBackColorOpen = 'grey.300';
-
   return (
     <Box sx={{ flexShrink: 0, ml: 0.75 }}>
       <ButtonBase
@@ -71,7 +71,7 @@ const Profile = () => {
       >
         <Stack direction="row" spacing={2} alignItems="center" sx={{ p: 0.5 }}>
           <AccountCircleIcon />
-          <Typography variant="subtitle1">{user !== null ? user.username : <LoaderComponent />}</Typography>
+          <Typography variant="subtitle1">{!user ? <LoaderComponent /> : user.username}</Typography>
         </Stack>
       </ButtonBase>
       <Popper
