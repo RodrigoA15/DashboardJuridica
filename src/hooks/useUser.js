@@ -5,6 +5,8 @@ import Cookies from 'js-cookie';
 export const useUser = () => {
   const token = Cookies.get('token');
 
+  const TIME = 1000 * 60 * 60 * 23;
+
   const {
     data: user,
     isLoading,
@@ -14,7 +16,9 @@ export const useUser = () => {
     queryFn: verifyToken,
     enabled: !!token,
     retry: 1,
-    staleTime: Infinity
+    staleTime: Infinity,
+    refetchInterval: TIME,
+    refetchIntervalInBackground: true
   });
 
   return { user, isLoading, isError };
