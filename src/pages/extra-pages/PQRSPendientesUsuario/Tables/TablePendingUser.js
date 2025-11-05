@@ -57,9 +57,9 @@ export const TablePendingUser = ({
             text: 'Por favor marque la petición como respuesta',
             icon: 'success',
             customClass: { container: 'swal-zindex' }
-          }).then((alert) => {
-            if (alert.isConfirmed) handleClose();
           });
+
+          handleClose();
         }
       } catch (error) {
         if (error.response?.status === 404) {
