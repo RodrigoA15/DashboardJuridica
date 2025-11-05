@@ -51,6 +51,7 @@ export const FormWithoutParameter = ({ data, handleClose }) => {
     try {
       const formData = new FormData();
       formData.append('numero_radicado_respuesta', formDataValues.numero_radicado_respuesta);
+      formData.append('tipo_firma', formDataValues.tipo_firma);
       formData.append('concedido', null);
       formData.append('id_asignacion', data._id);
       formData.append('respuesta_pdf', urlFile);
@@ -77,36 +78,74 @@ export const FormWithoutParameter = ({ data, handleClose }) => {
       confirmButtonText: 'Sí, agregar',
       cancelButtonText: 'Cancelar',
       confirmButtonColor: '#3B82F6',
-      cancelButtonColor: '#6B7280'
+      cancelButtonColor: '#6B7280',
+      customClass: {
+        container: 'swal-zindex'
+      }
     });
 
     if (alert.isConfirmed) {
       await crearRespuesta(formDataValues);
     } else {
-      toast.info('Acción cancelada');
+      toast.error('Acción cancelada');
     }
   });
 
   return (
     // Use space-y to manage vertical spacing between form elements
     <form onSubmit={onSubmit} encType="multipart/form-data" className="space-y-6">
-      <div>
-        <label htmlFor="numero_radicado_respuesta" className="block text-sm font-semibold text-gray-600 mb-2">
-          Número radicado respuesta
-        </label>
-        <input
-          id="numero_radicado_respuesta"
-          // Consistent styling for inputs
-          className="w-80 px-4 py-2 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          type="number"
-          {...register('numero_radicado_respuesta', {
-            required: { value: true, message: 'Este campo es obligatorio' },
-            minLength: { value: 14, message: 'El número debe tener al menos 14 caracteres' }
-          })}
-        />
-        {errors.numero_radicado_respuesta && (
-          <span className="text-red-500 text-xs mt-1 block">{errors.numero_radicado_respuesta.message}</span>
-        )}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label htmlFor="numero_radicado_respuesta" className="block text-sm font-semibold text-gray-600 mb-2">
+            Número radicado respuesta
+          </label>
+          <input
+            id="numero_radicado_respuesta"
+            className="w-full px-4 py-2 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            type="number"
+            {...register('numero_radicado_respuesta', {
+              required: { value: true, message: 'Este campo es obligatorio' },
+              minLength: { value: 14, message: 'El número debe tener al menos 14 caracteres' }
+            })}
+          />
+          {errors.numero_radicado_respuesta && (
+            <span className="text-red-500 text-xs mt-1 block">{errors.numero_radicado_respuesta.message}</span>
+          )}
+        </div>
+
+        <fieldset>
+          <legend className="block text-sm font-semibold text-gray-600 mb-2">Tipo firma</legend>
+          <div className="flex gap-6 pt-2">
+            {/* Opción 1: Mecánica */}
+            <div className="flex items-center">
+              <input
+                type="radio"
+                id="mecanica"
+                value="MECANICA"
+                className="h-4 w-4 rounded-full border-gray-300 text-blue-600 focus:ring-blue-500"
+                {...register('tipo_firma', { required: 'Debe seleccionar un tipo de firma' })}
+              />
+              <label htmlFor="mecanica" className="ml-3 text-sm font-medium text-gray-700">
+                Mecánica
+              </label>
+            </div>
+
+            {/* Opción 2: Manual */}
+            <div className="flex items-center">
+              <input
+                type="radio"
+                id="manual"
+                value="MANUAL"
+                className="h-4 w-4 rounded-full border-gray-300 text-blue-600 focus:ring-blue-500"
+                {...register('tipo_firma')}
+              />
+              <label htmlFor="manual" className="ml-3 text-sm font-medium text-gray-700">
+                Manual
+              </label>
+            </div>
+          </div>
+          {errors.tipo_firma && <span className="text-red-500 text-xs mt-2 block">{errors.tipo_firma.message}</span>}
+        </fieldset>
       </div>
 
       <div>
@@ -148,7 +187,7 @@ export const FormWithoutParameter = ({ data, handleClose }) => {
         {urlFile ? (
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300"
+            className="w-60 bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300"
           >
             Responder
           </button>
