@@ -71,7 +71,7 @@ export default function ModalRadicadosRespuestas({ opens, handleCloses, respuest
     });
 
     if (!result.isConfirmed) {
-      toast.info('Operación cancelada');
+      toast.error('Operación cancelada');
       return;
     }
 

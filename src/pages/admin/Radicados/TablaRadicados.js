@@ -24,7 +24,7 @@ function AdminRadicados() {
       } catch (error) {
         setDataRadicados([]); // Limpiar datos en caso de error
         if (error.response && error.response.status === 404) {
-          toast.info('No se encontraron radicados en este rango de fechas.');
+          toast.error('No se encontraron radicados en este rango de fechas.');
         } else {
           toast.error('Error de servidor al cargar los datos.');
         }
