@@ -11,6 +11,7 @@ import { toast } from 'sonner';
 //icons
 import { FilterMatchMode } from 'primereact/api';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import AddIcon from '@mui/icons-material/Add';
 import SendIcon from '@mui/icons-material/Send';
 import { IconButton, Tooltip } from '@mui/material';
@@ -33,7 +34,9 @@ export const TablePendingUser = ({
   handleClose,
   setSelectedRespuesta,
   setOpenRespuestasModal,
-  setSelectedAsignacion
+  setSelectedAsignacion,
+  setSelectedDataAudiences,
+  setVisibleTA
 }) => {
   const { formatDate } = useFormatDate();
   const [filters, setFilters] = useState({
@@ -106,6 +109,14 @@ export const TablePendingUser = ({
       setOpenReasignacion(true);
     },
     [setSelectedAsignacion, setOpenReasignacion]
+  );
+
+  const handleOpenTemplateAudiences = useCallback(
+    (data) => {
+      setSelectedDataAudiences(data);
+      setVisibleTA(true);
+    },
+    [setSelectedDataAudiences, setVisibleTA]
   );
 
   const onGlobalFilterChange = useCallback(
@@ -192,6 +203,33 @@ export const TablePendingUser = ({
     [handleOpenReasignacion]
   );
 
+  const btnGenerateTemplate = useCallback(
+    (data) => {
+      return (
+        <Tooltip title="Generar plantilla" placement="top" arrow>
+          <IconButton onClick={() => handleOpenTemplateAudiences(data)}>
+            <AutoAwesomeIcon />
+          </IconButton>
+        </Tooltip>
+      );
+    },
+    [handleOpenTemplateAudiences]
+  );
+
+  const generalColumn = useCallback(
+    (rowData) => {
+      return (
+        <div className="flex items-center justify-center gap-1">
+          {btnOpenModalAddAnswer(rowData)}
+          {btnOpenModalViewAnswer(rowData)}
+          {btnReasignation(rowData)}
+          {btnGenerateTemplate(rowData)}
+        </div>
+      );
+    },
+    [btnOpenModalAddAnswer, btnOpenModalViewAnswer, btnReasignation, btnGenerateTemplate]
+  );
+
   return (
     <div className="rounded-xl border border-gray-200 bg-white p-6">
       {header}
@@ -218,9 +256,12 @@ export const TablePendingUser = ({
         <Column field="observaciones" header="Observaciones" />
         <Column field="cantidad_respuesta" sortable header="Respuestas estimadas" editor={quantityAnswers} />
         <Column field="fecha_radicado" sortable header="Dias" body={renderDiasLaborables} />
-        <Column body={btnOpenModalAddAnswer} />
-        <Column body={btnOpenModalViewAnswer} />
-        <Column body={btnReasignation} />
+        <Column
+          header="Acciones"
+          body={generalColumn}
+          headerStyle={{ textAlign: 'center', minWidth: '12rem' }}
+          bodyStyle={{ textAlign: 'center' }}
+        />
         <Column rowEditor={allowEdit} headerStyle={{ width: '10%', minWidth: '8rem' }} bodyStyle={{ textAlign: 'center' }} />
       </DataTable>
     </div>
