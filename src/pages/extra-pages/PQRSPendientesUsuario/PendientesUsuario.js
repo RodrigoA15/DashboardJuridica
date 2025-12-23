@@ -8,12 +8,15 @@ import ModalRadicadosRespuestas from './ModalRadicadosRespuestas';
 import Reasignaciones from './Reasignaciones/Reasignaciones';
 import { TablePendingUser } from './Tables/TablePendingUser';
 import { TableAprobations } from './Tables/TableAprobations';
+import { ModalTemplateAudiences } from './ModalTemplateAudiences';
 
 function PendientesUsuario() {
   const { user } = useAuth();
   const [asignados, setAsignados] = useState([]);
   const [visible, setVisible] = useState(false);
   const [visibleRM, setVisibleRM] = useState(false); //Modal Radicados Respuestas
+  const [visibleTA, setVisibleTA] = useState(false); //Modal Template Audiences
+  const [selectDataAudiences, setSelectedDataAudiences] = useState(null);
   const [selectedData, setSelectedData] = useState(null);
   const [selectedRespuesta, setSelectedRespuesta] = useState(null);
   const [error, setError] = useState('');
@@ -54,6 +57,11 @@ function PendientesUsuario() {
     setOpenReasignacion(false);
   };
 
+  const handleOpenTemplateAudiences = () => {
+    setVisibleTA(false);
+    setSelectedDataAudiences(null);
+  };
+
   return (
     <div className="card">
       <TabView>
@@ -69,6 +77,8 @@ function PendientesUsuario() {
             setSelectedRespuesta={setSelectedRespuesta}
             setOpenRespuestasModal={setVisibleRM}
             setSelectedAsignacion={setSelectedAsignacion}
+            setSelectedDataAudiences={setSelectedDataAudiences}
+            setVisibleTA={setVisibleTA}
           />
           <ModalRespuestas open={visible} handleClose={handleClose} data={selectedData} setAsignados={setAsignados} asignados={asignados} />
           <ModalRadicadosRespuestas
@@ -79,6 +89,7 @@ function PendientesUsuario() {
             respuestas={selectedRespuesta}
           />
           <Reasignaciones open={openReasignacion} close={handleCloseReasignacion} asignaciones={selectedAsignacion} />
+          <ModalTemplateAudiences open={visibleTA} close={handleOpenTemplateAudiences} asignaciones={selectDataAudiences} />
         </TabPanel>
         <TabPanel header="Aprobaciones">
           <TableAprobations />
