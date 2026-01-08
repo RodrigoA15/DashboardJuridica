@@ -3,7 +3,6 @@ import { Dialog } from 'primereact/dialog';
 import { Calendar } from 'primereact/calendar';
 import { useMutation } from '@tanstack/react-query';
 import { FloatLabel } from 'primereact/floatlabel';
-import { Button } from 'primereact/button';
 import { useFetchReport } from 'lib/admin/fetchReport';
 // Importa PrimeReact Toast para notificaciones (si lo usas)
 import { Toast } from 'primereact/toast';
@@ -17,7 +16,7 @@ export const ModalReport = () => {
   // Estados
   const [visible, setVisible] = useState(false);
   const [dates, setDates] = useState(null);
-  const { generateReport } = useFetchReport();
+  const { generateReport, generateReportDocx } = useFetchReport();
   const toast = useRef(null); // Ref para el Toast
 
   // 2. Definición del useMutation - Ajuste en onSuccess
@@ -36,9 +35,42 @@ export const ModalReport = () => {
         }
       }
 
-      // Opcional: Si quieres ser estricto con el tipo de contenido (Mime Type)
-      // aunque el blob ya debe tener el tipo correcto (application/pdf)
-      // const file = new Blob([blob], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', filename);
+      document.body.appendChild(link);
+
+      link.click();
+
+      link.remove();
+      window.URL.revokeObjectURL(url);
+      toast.current.show({
+        severity: 'success',
+        summary: 'Éxito',
+        detail: 'Reporte PDF generado y descargado correctamente.',
+        life: 3000
+      });
+
+      setVisible(false);
+      setDates(null);
+    }
+  });
+
+  const mutationDocx = useMutation({
+    mutationFn: (data) => generateReportDocx(data),
+    onSuccess: (response) => {
+      // 1. Obtener el Blob (el contenido binario del PDF)
+      const blob = response.data;
+      const contentDisposition = response.headers['content-disposition'];
+      let filename = 'INFORME_EJECUCION_JURIDICA.docx';
+
+      if (contentDisposition) {
+        const filenameMatch = contentDisposition.match(/filename="?([^"]+)"?/i);
+        if (filenameMatch && filenameMatch[1]) {
+          filename = filenameMatch[1];
+        }
+      }
 
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
@@ -80,26 +112,60 @@ export const ModalReport = () => {
     }
   };
 
+
+  const handleGenerateReportDocx = () => {
+    if (dates && dates.length === 2 && dates[0] && dates[1]) {
+      const [startDateObj, endDateObj] = dates;
+
+      const startDate = startDateObj.toISOString().split('T')[0];
+      const endDate = endDateObj.toISOString().split('T')[0];
+
+      mutationDocx.mutate({ startDate, endDate });
+    } else {
+      toast.current.show({
+        severity: 'warn',
+        summary: 'Atención',
+        detail: 'Por favor, selecciona un rango de fechas completo.',
+        life: 3000
+      });
+    }
+  };
+
   const dialogFooter = (
-    <div className="flex justify-content-end pt-3">
-      <Button
-        label="Cancelar"
+    <div className="flex justify-content-center gap-3 pt-3">
+      {/* <button
         onClick={() => {
           setVisible(false);
           setDates(null);
           mutation.reset();
         }}
-        className="p-button-text"
         disabled={mutation.isPending}
-      />
-      <Button
-        label={mutation.isPending ? 'Generando...' : 'Generar'}
+        className="rounded-lg bg-red-600 px-6 py-2 font-bold text-white shadow-md transition-colors hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400 disabled:opacity-70"
+      >
+        Cancelar
+      </button> */}
+
+      <button
         onClick={handleGenerateReport}
         autoFocus
         loading={mutation.isPending}
         // Deshabilitar si no hay fechas completas o si está cargando
         disabled={!dates || dates.length !== 2 || !dates[0] || !dates[1] || mutation.isPending}
-      />
+        className="rounded-lg bg-red-500 px-6 py-2 font-bold text-white shadow-md transition-colors hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400 disabled:opacity-70"
+      >
+        Generar PDF
+      </button>
+
+      <button
+        onClick={handleGenerateReportDocx}
+        autoFocus
+        loading={mutationDocx.isPending}
+        // Deshabilitar si no hay fechas completas o si está cargando
+        disabled={!dates || dates.length !== 2 || !dates[0] || !dates[1] || mutationDocx.isPending}
+        className="rounded-lg bg-blue-500 px-6 py-2 font-bold text-white shadow-md transition-colors hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400 disabled:opacity-70"
+      >
+        Generar Docx
+      </button>
     </div>
   );
 
@@ -144,6 +210,7 @@ export const ModalReport = () => {
             setVisible(false);
             setDates(null);
             mutation.reset();
+            mutationDocx.reset();
           }}
         >
           <div className="card flex justify-content-center flex-column gap-3">
