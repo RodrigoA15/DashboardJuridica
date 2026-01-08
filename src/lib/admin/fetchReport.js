@@ -17,7 +17,23 @@ export const useFetchReport = () => {
     return response;
   };
 
+  const generateReportDocx = async ({ startDate, endDate }) => {
+    const response = await axios.post(
+      'http://localhost:4000/api/v2/qx/generate-report-atlantico',
+      {
+        startDate,
+        endDate
+      },
+      {
+        responseType: 'blob'
+      }
+    );
+
+    return response;
+  };
+
   return {
-    generateReport
+    generateReport,
+    generateReportDocx
   };
 };
