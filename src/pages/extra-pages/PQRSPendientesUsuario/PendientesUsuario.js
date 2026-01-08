@@ -67,7 +67,7 @@ function PendientesUsuario() {
       <TabView>
         <TabPanel header="PQRS pendientes">
           <TablePendingUser
-            asignados={asignados}
+            asignados={asignados.data}
             setAsignados={setAsignados}
             error={error}
             setOpenReasignacion={setOpenReasignacion}
