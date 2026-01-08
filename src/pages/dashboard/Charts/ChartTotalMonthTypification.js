@@ -20,7 +20,7 @@ export const ChartTotalTypification = () => {
     );
   }
 
-  if (isError || !data) {
+  if (isError || data.length === 0) {
     return <p className="text-center text-red-500 p-4">Error al cargar los datos</p>;
   }
 
