@@ -80,7 +80,14 @@ export default function ModalRadicadosRespuestas({ opens, handleCloses, respuest
         estado_radicado: 'Respuesta'
       });
 
-      setAsignados((prev) => prev.filter((item) => item._id !== respuestas._id));
+      setAsignados((prev) => {
+        if (!prev || !prev.data) return prev;
+
+        return {
+          ...prev,
+          data: prev.data.filter((item) => item._id !== respuestas._id)
+        };
+      });
       updateEstadoAsignacion(respuestas);
       handleCloses();
       toast.success('Respondido correctamente');
