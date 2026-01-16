@@ -219,18 +219,14 @@ export const FormWithParameter = ({ data, asignados, setAsignados, handleClose }
         </div>
       </div>
       <div className="flex justify-center">
-        {!nameArea || !valueAffair || !granted ? (
-          <p className="errors">Seleccione todos los campos</p>
-        ) : (
-          <Button
-            variant="contained"
-            disabled={validorGranted}
-            className="bg-green-700 hover:bg-green-800 mt-4"
-            onClick={() => handleSubmitOutFile()}
-          >
-            Responder
-          </Button>
-        )}
+        <Button
+          variant="contained"
+          disabled={validorGranted || !nameArea || !valueAffair || !granted}
+          className="bg-green-700 hover:bg-green-800 mt-4"
+          onClick={() => handleSubmitOutFile()}
+        >
+          Responder
+        </Button>
       </div>
       <div className="flex justify-center">
         {validorGranted && (
