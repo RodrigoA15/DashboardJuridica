@@ -4,10 +4,11 @@ import { useAuth } from 'context/authContext';
 import { TabView, TabPanel } from 'primereact/tabview';
 //Componentes
 import ModalRespuestas from './ModalRespuestas';
-import ModalRadicadosRespuestas from './ModalRadicadosRespuestas';
+import { usePermissions } from 'hooks/usePermissions';
 import Reasignaciones from './Reasignaciones/Reasignaciones';
 import { TablePendingUser } from './Tables/TablePendingUser';
 import { TableAprobations } from './Tables/TableAprobations';
+import ModalRadicadosRespuestas from './ModalRadicadosRespuestas';
 import { ModalTemplateAudiences } from './ModalTemplateAudiences';
 
 function PendientesUsuario() {
@@ -23,6 +24,8 @@ function PendientesUsuario() {
   //Modal Reasignacion
   const [openReasignacion, setOpenReasignacion] = useState(false);
   const [selectedAsignacion, setSelectedAsignacion] = useState(null);
+  //Validation
+  const { canViewCreateAprobations } = usePermissions(user);
 
   useEffect(() => {
     {
@@ -91,9 +94,11 @@ function PendientesUsuario() {
           <Reasignaciones open={openReasignacion} close={handleCloseReasignacion} asignaciones={selectedAsignacion} />
           <ModalTemplateAudiences open={visibleTA} close={handleOpenTemplateAudiences} asignaciones={selectDataAudiences} />
         </TabPanel>
-        <TabPanel header="Aprobaciones">
-          <TableAprobations />
-        </TabPanel>
+        {canViewCreateAprobations && (
+          <TabPanel header="Aprobaciones">
+            <TableAprobations />
+          </TabPanel>
+        )}
       </TabView>
     </div>
   );

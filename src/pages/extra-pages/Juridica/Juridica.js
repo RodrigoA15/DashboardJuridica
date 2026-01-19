@@ -8,13 +8,16 @@ import GetAsignados from './GetAsignados';
 import GetRespuesta from './GetRespuesta';
 import { List, ListItem, Stack, Typography } from '@mui/material';
 import Dot from 'components/@extended/Dot';
+import { useAuth } from 'context/authContext';
 import { GetAssignedUser } from './GetAssignedUser';
+import { usePermissions } from 'hooks/usePermissions';
 import { GetAprobaciones } from './Aprobaciones/GetAprobaciones';
-
 // ==============================|| SAMPLE PAGE ||============================== //
 
 const Juridica = () => {
   const [value, setValue] = useState('1');
+  const { user } = useAuth();
+  const { canViewCreateAprobations } = usePermissions(user);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -47,7 +50,7 @@ const Juridica = () => {
             <Tab label="Pendientes" value="1" />
             <Tab label="Asignados" value="2" />
             <Tab label="Respuestas" value="3" />
-            <Tab label="Pendiente aprobacion" value="4" />
+            {canViewCreateAprobations && <Tab label="Aprobaciones" value="4" />}
             <Tab label="Asignados usuario" value="5" />
           </TabList>
         </Box>
