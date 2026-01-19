@@ -1,12 +1,15 @@
 // import { Toaster } from 'sonner';
-import axios from 'api/axios';
-import { ModalReport } from 'pages/admin/Reportes/ModalReport';
 import { useState } from 'react';
+import axios from 'api/axios';
+import { useAuth } from 'context/authContext';
+import { ModalReport } from 'pages/admin/Reportes/ModalReport';
 function JsonToFileExcel() {
   const [archivo, setArchivo] = useState(null);
   const [downloaded, setDownloaded] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const { user } = useAuth();
 
   const descargarArchivo = async () => {
     try {
@@ -79,10 +82,14 @@ function JsonToFileExcel() {
         </button>
       </div>
 
-      {/* 2. Botón "Generar reporte" (Rojo con Emoji) */}
-      <div className="flex-1 min-w-[200px] max-w-xs">
-        <ModalReport />
-      </div>
+      {/* 2. Botón "Generar reporte"*/}
+      {user?.role.nombre_rol === 'admin' || user?.role.nombre_rol === 'Coordinador' ? (
+        <div className="flex-1 min-w-[200px] max-w-xs">
+          <ModalReport />
+        </div>
+      ) : (
+        ''
+      )}
 
       {/* 3. Botón de Descarga (Gris, solo si hay archivo) */}
       {archivo && (
