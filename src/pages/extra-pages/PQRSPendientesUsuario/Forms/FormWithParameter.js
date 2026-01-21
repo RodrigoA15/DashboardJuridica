@@ -20,7 +20,7 @@ import { usePermissions } from 'hooks/usePermissions';
 
 const STATUS_SEND_APROBATION = 'Pendiente aprobacion';
 
-export const FormWithParameter = ({ data, asignados, setAsignados, handleClose }) => {
+export const FormWithParameter = ({ data, setAsignados, handleClose }) => {
   const { user } = useAuth();
   const { canViewCreateAprobations } = usePermissions(user);
   const [valueAffair, setValueAffair] = useState(null);
@@ -102,15 +102,20 @@ export const FormWithParameter = ({ data, asignados, setAsignados, handleClose }
       reject
     });
   };
-
   const updateState = async () => {
     try {
       await axios.put(`/radicados/reasignacion/${data.id_radicado}`, {
         estado_radicado: 'Devuelto',
         id_asunto: '674198216459b9e9df5473a4'
       });
-      const newData = asignados.filter((item) => item.id_radicado !== data.radicado);
-      setAsignados(newData);
+
+      setAsignados((prev) => {
+        if (!prev || !prev.data) return prev;
+        return {
+          ...prev,
+          data: prev.data.filter((item) => item.id_radicado !== data.id_radicado)
+        };
+      });
       handleClose();
       setGranted(null);
       toast.success('Radicado actualizado correctamente');

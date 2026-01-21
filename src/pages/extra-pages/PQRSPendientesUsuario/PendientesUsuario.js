@@ -91,7 +91,12 @@ function PendientesUsuario() {
             handleCloses={handleCloseR}
             respuestas={selectedRespuesta}
           />
-          <Reasignaciones open={openReasignacion} close={handleCloseReasignacion} asignaciones={selectedAsignacion} />
+          <Reasignaciones
+            open={openReasignacion}
+            close={handleCloseReasignacion}
+            asignaciones={selectedAsignacion}
+            setAsignados={setAsignados}
+          />
           <ModalTemplateAudiences open={visibleTA} close={handleOpenTemplateAudiences} asignaciones={selectDataAudiences} />
         </TabPanel>
         {canViewCreateAprobations && (

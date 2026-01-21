@@ -25,7 +25,7 @@ const style = {
   p: 4
 };
 
-function Reasignaciones({ open, close, asignaciones }) {
+function Reasignaciones({ open, close, asignaciones, setAsignados }) {
   //Todo capturar errores
   const [error, setError] = useState('');
   const [selectArea, setSelectArea] = useState('');
@@ -85,6 +85,13 @@ function Reasignaciones({ open, close, asignaciones }) {
       });
 
       if (alert.isConfirmed) {
+        setAsignados((prev) => {
+          if (!prev || !prev.data) return prev;
+          return {
+            ...prev,
+            data: prev.data.filter((item) => item.id_radicado !== asignaciones.id_radicado)
+          };
+        });
         updateRadicados();
         updateEstadoAsignacion();
       }
@@ -124,5 +131,6 @@ export default Reasignaciones;
 Reasignaciones.propTypes = {
   open: PropTypes.bool,
   close: PropTypes.func,
-  asignaciones: PropTypes.object
+  asignaciones: PropTypes.object,
+  setAsignados: PropTypes.func
 };
