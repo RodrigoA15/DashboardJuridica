@@ -136,11 +136,18 @@ export const TablePendingUser = ({
       try {
         await updateQuantityAnswers(newData);
 
-        setAsignados((prevAsignados) => prevAsignados.map((item) => (item.id_radicado === newData.id_radicado ? newData : item)));
+        setAsignados((prevAsignados) => {
+          if (!prevAsignados?.data) return prevAsignados;
 
-        toast.success('Registro actualizado correctamente.');
+          return {
+            ...prevAsignados,
+            data: prevAsignados.data.map((item) => (item.id_radicado === newData.id_radicado ? newData : item))
+          };
+        });
+
+        toast.success('Cantidad respuesta actualizada.');
       } catch (error) {
-        console.error('Error al actualizar:', error);
+        toast.error('Error al actualizar el registro');
       }
     },
     [updateQuantityAnswers, setAsignados]
@@ -151,7 +158,7 @@ export const TablePendingUser = ({
   };
 
   const quantityAnswers = useCallback((options) => {
-    return <InputNumber className="w-72" value={options.value} onValueChange={(e) => options.editorCallback(e.value)} />;
+    return <InputNumber value={options.value} onValueChange={(e) => options.editorCallback(e.value)} />;
   }, []);
 
   const header = useMemo(() => {
