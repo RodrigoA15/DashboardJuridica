@@ -1,116 +1,115 @@
-import React, { useEffect, useMemo } from 'react';
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination } from '@mui/material';
-import axios from 'api/axios';
-import { useAuth } from 'context/authContext';
-import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
-import * as locales from '@mui/material/locale';
 import { useState } from 'react';
+import { Column } from 'primereact/column';
+import { useQuery } from '@tanstack/react-query';
+import { DataTable } from 'primereact/datatable';
+import { InputText } from 'primereact/inputtext';
+import { FilterMatchMode } from 'primereact/api';
+import { MultiSelect } from 'primereact/multiselect';
+import { useAuth } from 'context/authContext';
 import PDFViewerAnswers from './PDFViewerAnswers';
+import { useFetchAnswers } from 'lib/PQRS/fetchAnswers';
+import { useFetchPendientes } from 'lib/PQRS/fetchPendientes.js';
+import { useFormatDate } from 'hooks/useFormatDate';
 
-function GetRespuesta() {
-  const [respondidos, setRespondidos] = useState([]);
-  const [error, setError] = useState('');
-  const [filtro, setFiltro] = useState('');
+export const GetRespuesta = () => {
   const { user } = useAuth();
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [locale, setLocale] = useState('esES');
+  const { formatDate } = useFormatDate();
+  const [filters, setFilters] = useState({
+    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    'id_asignacion.id_usuario.username': { value: null, matchMode: FilterMatchMode.IN }
+  });
+  const [globalFilterValue, setGlobalFilterValue] = useState('');
+  const { fetchUsersByArea } = useFetchPendientes();
+  const { fetchAnswers } = useFetchAnswers();
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['answers-area', user.departamento._id],
+    queryFn: () => fetchAnswers(user.departamento._id),
+    retry: false
+  });
 
-  useEffect(() => {
-    apiGetRespuesta();
-  }, []);
+  const { data: users } = useQuery({
+    queryKey: ['users-area', user.departamento._id],
+    queryFn: () => fetchUsersByArea(user.departamento._id),
+    enabled: !!user
+  });
 
-  const theme = useTheme();
+  const onGlobalFilterChange = (e) => {
+    const value = e.target.value;
+    let _filters = { ...filters };
+    _filters['global'].value = value;
 
-  const themeWithLocale = useMemo(() => createTheme(theme, locales[locale]), [locale, theme]);
-
-  const apiGetRespuesta = async () => {
-    try {
-      const response = await axios.get(`/answer/respuestasArea/${user.departamento._id}`);
-      setRespondidos(response.data);
-    } catch (error) {
-      if (error.response && error.response.status === 404) {
-        setError('No se encontraron resultados en la busqueda');
-      }
-    }
+    setFilters(_filters);
+    setGlobalFilterValue(value);
   };
 
-  const handleChangePage = (event, newPage, newValue) => {
-    setPage(newPage);
-    setLocale(newValue);
+  const representativeFilterTemplate = (options) => {
+    return (
+      <MultiSelect
+        value={options.value}
+        options={users}
+        onChange={(e) => options.filterCallback(e.value)}
+        optionLabel="username"
+        optionValue="username"
+        placeholder="Seleccionar usuarios"
+        className="p-column-filter"
+        maxSelectedLabels={1}
+      />
+    );
   };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
+  const renderHeader = () => {
+    return (
+      <div className="flex justify-content-between">
+        <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Buscar" />
+      </div>
+    );
   };
 
-  const filteredAnswers = respondidos.filter((answer) => answer.id_asignacion.id_radicado.numero_radicado.includes(filtro));
+  const header = renderHeader();
 
   return (
-    <div>
-      <div className="row m-1 mb-3">
-        <input
-          className="form-control w-25"
-          type="text"
-          placeholder="Buscar Respuestas"
-          value={filtro}
-          onChange={(e) => setFiltro(e.target.value)}
-        />
-        <div className="col-4">
-          <button className="btn btn-primary" onClick={apiGetRespuesta}>
-            Buscar
-          </button>
-        </div>
-      </div>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 350 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Número radicado</TableCell>
-              <TableCell align="left">Asunto</TableCell>
-              <TableCell align="left">Responsable</TableCell>
-              <TableCell>Número radicado respuestas</TableCell>
-              <TableCell>Archivo Cargado</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {error ? (
-              <TableRow key="error">
-                <TableCell colSpan={5}>{error}</TableCell>
-              </TableRow>
-            ) : (
-              <>
-                {filteredAnswers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((i) => (
-                  <TableRow key={i._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                    <TableCell component="th" scope="row">
-                      {i.id_asignacion.id_radicado.numero_radicado}
-                    </TableCell>
-                    <TableCell align="left">{i.id_asignacion.id_radicado.id_asunto.nombre_asunto}</TableCell>
-                    <TableCell align="left">{i.id_asignacion.id_usuario.username}</TableCell>
-                    <TableCell align="left">{i.numero_radicado_respuesta}</TableCell>
-                    <PDFViewerAnswers dataAnswer={i} />
-                  </TableRow>
-                ))}
-              </>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <ThemeProvider theme={themeWithLocale}>
-        <TablePagination
-          className="rowPage"
-          rowsPerPageOptions={[10, 25, 100]}
-          component="div"
-          count={respondidos.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </ThemeProvider>
-    </div>
+    <DataTable
+      value={data}
+      paginator
+      rows={10}
+      loading={isLoading}
+      dataKey="_id"
+      filters={filters}
+      globalFilterFields={[
+        'id_asignacion.id_radicado.numero_radicado',
+        'id_asignacion.id_radicado.id_asunto.nombre_asunto',
+        'id_asignacion.id_usuario.username',
+        'numero_radicado_respuesta'
+      ]}
+      header={header}
+      emptyMessage={'No se encontrarón respuestas' || error}
+      onFilter={(e) => setFilters(e.filters)}
+    >
+      <Column field="id_asignacion.id_radicado.numero_radicado" header="Número radicado" sortable />
+      <Column
+        field="id_asignacion.id_radicado.fecha_radicado"
+        header="Fecha radicado"
+        sortable
+        body={(rowData) => formatDate(rowData.id_asignacion.id_radicado.fecha_radicado)}
+      />
+      <Column field="id_asignacion.id_radicado.id_asunto.nombre_asunto" header="Asunto" sortable />
+      <Column
+        header="Usuario asignado"
+        field="id_asignacion.id_usuario.username"
+        filter
+        showFilterMatchModes={false}
+        filterElement={representativeFilterTemplate}
+        style={{ minWidth: '14rem' }}
+      />
+      <Column
+        field="id_asignacion.fecha_asignacion"
+        header="Fecha asignación"
+        sortable
+        body={(rowData) => formatDate(rowData.id_asignacion.fecha_asignacion)}
+      />
+      <Column field="numero_radicado_respuesta" header="Número radicado respuesta" sortable />
+      <Column field="fechaRespuesta" header="Fecha respuesta" sortable body={(rowData) => formatDate(rowData.fechaRespuesta)} />
+      <Column field="pdfRespuesta" header="PDF" body={(rowData) => <PDFViewerAnswers data={rowData} />} />
+    </DataTable>
   );
-}
-
-export default GetRespuesta;
+};
