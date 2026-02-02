@@ -169,10 +169,11 @@ export const ModalTemplateAudiences = ({ open, close, asignaciones }) => {
 
       {/* TABLA DE RESULTADOS */}
       <DataTable
-        value={dataComparendo || []}
+        value={dataComparendo}
+        removableSort
         selection={selected}
         onSelectionChange={(e) => setSelected(e.value)}
-        dataKey="_id"
+        dataKey="NRO_COMPARENDO"
         paginator
         rows={5}
         rowsPerPageOptions={[5, 10, 20]}
@@ -180,6 +181,7 @@ export const ModalTemplateAudiences = ({ open, close, asignaciones }) => {
         emptyMessage="Realice una búsqueda para ver los resultados."
         tableStyle={{ minWidth: '50rem' }}
         stripedRows
+        selectionPageOnly
         size="small"
       >
         <Column selectionMode="multiple" headerStyle={{ width: '3rem' }} />
