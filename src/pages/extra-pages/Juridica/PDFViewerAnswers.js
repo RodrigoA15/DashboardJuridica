@@ -1,22 +1,29 @@
 import PropTypes from 'prop-types';
-
-function PDFViewerAnswers({ dataAnswer }) {
+import { IconButton, Tooltip } from '@mui/material';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import { useAuth } from 'context/authContext';
+function PDFViewerAnswers({ data }) {
+  const { user } = useAuth();
   return (
-    <>
-      <a
-        href={`http://192.168.28.74:4000/api/v2/answer/pdf-viewer-answer/${dataAnswer._id}`}
+    <Tooltip title="Ver PDF" placement="top" arrow>
+      <IconButton
+        component="a"
+        href={`http://192.168.28.74:4000/api/v2/answer/pdf-viewer-answer/${data._id}`}
         target="_blank"
         rel="noreferrer"
-        title="Ver archivo PDF"
+        color="error"
+        disabled={user.id_ciudad !== 'Popayan'}
       >
-        Abrir
-      </a>
-    </>
+        <InsertDriveFileIcon />
+      </IconButton>
+    </Tooltip>
   );
 }
 
-export default PDFViewerAnswers;
-
 PDFViewerAnswers.propTypes = {
-  dataAnswer: PropTypes.object.isRequired
+  data: PropTypes.shape({
+    _id: PropTypes.string.isRequired
+  }).isRequired
 };
+
+export default PDFViewerAnswers;
