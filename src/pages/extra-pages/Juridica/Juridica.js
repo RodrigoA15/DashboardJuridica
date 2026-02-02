@@ -5,11 +5,11 @@ import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { useState } from 'react';
 import GetPendientes from './Pendientes/GetPendientes';
 import GetAsignados from './GetAsignados';
-import GetRespuesta from './GetRespuesta';
 import { List, ListItem, Stack, Typography } from '@mui/material';
 import Dot from 'components/@extended/Dot';
 import { useAuth } from 'context/authContext';
 import { GetAssignedUser } from './GetAssignedUser';
+import { GetRespuesta } from './GetRespuesta';
 import { usePermissions } from 'hooks/usePermissions';
 import { GetAprobaciones } from './Aprobaciones/GetAprobaciones';
 // ==============================|| SAMPLE PAGE ||============================== //
