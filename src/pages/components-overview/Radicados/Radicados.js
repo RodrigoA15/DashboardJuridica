@@ -95,7 +95,7 @@ function ComponentRadicados() {
                       {...register('numero_radicado', {
                         required: { value: true, message: 'El número de radicado es obligatorio' },
                         minLength: { value: 14, message: 'Debe tener al menos 14 caracteres' },
-                        maxLength: { value: 18, message: 'No debe exceder los 18 caracteres' }
+                        maxLength: { value: 14, message: 'No debe exceder los 14 caracteres' }
                       })}
                     />
                     {errors.numero_radicado && <span className="text-red-500 text-xs mt-2 block">{errors.numero_radicado.message}</span>}
