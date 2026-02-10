@@ -96,7 +96,7 @@ AdminGetAffairs.propTypes = {
 };
 
 function AdminGetStates({ setEstadoRadicado, estadoRadicado }) {
-  const states = [{ name: 'Pre-asignacion' }, { name: 'Pendiente' }, { name: 'Asignados' }, { name: 'Respuesta' }];
+  const states = [{ name: 'Pendiente' }];
 
   return (
     <Dropdown
