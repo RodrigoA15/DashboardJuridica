@@ -1,17 +1,19 @@
 import axios from 'api/axios';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAuth } from 'context/authContext';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { InputText } from 'primereact/inputtext';
 import { FilterMatchMode, FilterOperator } from 'primereact/api';
 import { useBadge } from 'hooks/Badge';
+import { useFormatDate } from 'hooks/useFormatDate';
 
 function GetAsignados() {
   const { renderDiasLaborables } = useBadge();
   const [asignados, setAsignados] = useState([]);
   const [error, setError] = useState(null);
   const { user } = useAuth();
+  const { formatDate } = useFormatDate();
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
     'id_usuario.username': {
@@ -29,25 +31,28 @@ function GetAsignados() {
     }
   });
 
-  useEffect(() => {
-    {
-      user && apiAsignados();
-      apiAsignados();
-    }
-  }, [user]);
+  const departamentosIds = useMemo(() => user?.departamento?.map((d) => d._id).join(',') || '', [user?.departamento]);
 
-  const apiAsignados = async () => {
+  const apiAsignados = useCallback(async () => {
+    if (!departamentosIds) return;
+
     try {
-      const response = await axios.get(`/assigned/area/${user.departamento._id}`);
+      const response = await axios.get(`/assigned/area/${departamentosIds}`);
       setAsignados(response.data);
+      setError(null);
     } catch (error) {
-      if (error.response && error.response.status === 404) {
-        setError('No Haz asignado PQRS');
+      if (error.response?.status === 404) {
+        setAsignados([]);
+        setError('No has asignado PQRS');
       } else {
         setError('Error de servidor');
       }
     }
-  };
+  }, [departamentosIds]);
+
+  useEffect(() => {
+    apiAsignados();
+  }, [apiAsignados]);
 
   const onGlobalFilterChange = (event) => {
     const value = event.target.value;
@@ -82,10 +87,15 @@ function GetAsignados() {
         onFilter={(e) => setFilters(e.filters)}
       >
         <Column field="id_radicado.numero_radicado" header="Número radicado" sortable />
-        <Column field="id_radicado.fecha_radicado" header="Fecha radicado" sortable />
+        <Column
+          field="id_radicado.fecha_radicado"
+          header="Fecha radicado"
+          sortable
+          body={(rowData) => formatDate(rowData.id_radicado.fecha_radicado)}
+        />
         <Column field="id_radicado.id_asunto.nombre_asunto" header="Asunto" />
         <Column field="id_radicado.estado_radicado" header="Estado" />
-        <Column field="fecha_asignacion" header="Fecha asignación" sortable />
+        <Column field="fecha_asignacion" header="Fecha asignación" body={(rowData) => formatDate(rowData.fecha_asignacion)} sortable />
         <Column field="id_usuario.username" header="Usuario encargado" sortable />
         <Column field="id_radicado.fecha_radicado" header="Dias" sortable body={(rowData) => renderDiasLaborables(rowData.id_radicado)} />
       </DataTable>

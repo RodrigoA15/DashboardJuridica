@@ -38,22 +38,23 @@ export const Reject = ({ selectedData, setSelected }) => {
 
     onMutate: async () => {
       await queryClient.cancelQueries({ queryKey: QUERY_KEY });
-      const keyByDept = [...QUERY_KEY, user.departamento._id];
+      const deptIds = user.departamento.map((d) => d._id);
+      const keyByDept = [...QUERY_KEY, deptIds];
       const previousData = queryClient.getQueryData(keyByDept);
-
       queryClient.setQueryData(keyByDept, (oldData = []) => {
+        if (!oldData) return [];
+
         const selectedIds = new Set(selectedData.map(({ _id }) => _id));
-        return oldData ? oldData.filter(({ _id }) => !selectedIds.has(_id)) : [];
+        return oldData.filter(({ _id }) => !selectedIds.has(_id));
       });
 
       return { previousData, keyByDept };
     },
 
-    onError: (error, _, context) => {
-      if (context?.previousData && context.keyByDept) {
+    onError: (err, variables, context) => {
+      if (context?.previousData) {
         queryClient.setQueryData(context.keyByDept, context.previousData);
       }
-      toast.error(`Ocurrió un error al asignar: ${error.message}`);
     },
 
     onSuccess: async () => {

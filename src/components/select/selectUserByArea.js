@@ -6,10 +6,14 @@ import { useFetchPendientes } from 'lib/PQRS/fetchPendientes.js';
 export const SelectUserByArea = ({ selectedUser, setSelectedUser }) => {
   const { user } = useAuth();
   const { fetchUsersByArea } = useFetchPendientes();
+
+  // Extraemos solo los IDs de los departamentos para la consulta
+  const departamentosIds = user?.departamento?.map((d) => d._id) || [];
+
   const { data, isLoading } = useQuery({
-    queryKey: ['users-area', user.departamento._id],
-    queryFn: () => fetchUsersByArea(user.departamento._id),
-    enabled: !!user
+    queryKey: ['users-area', departamentosIds],
+    queryFn: () => fetchUsersByArea(departamentosIds),
+    enabled: departamentosIds.length > 0
   });
 
   return (
@@ -21,6 +25,7 @@ export const SelectUserByArea = ({ selectedUser, setSelectedUser }) => {
       placeholder="Seleccione un usuario"
       className="w-full md:w-14rem"
       loading={isLoading}
+      filter
     />
   );
 };

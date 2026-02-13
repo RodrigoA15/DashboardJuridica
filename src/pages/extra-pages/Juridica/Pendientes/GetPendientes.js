@@ -10,15 +10,19 @@ import { useBadge } from 'hooks/Badge';
 import { CreateAssignment } from './CreateAssignment';
 import { useFetchPendientes } from 'lib/PQRS/fetchPendientes';
 import { SelectUserByArea } from 'components/select/selectUserByArea';
+import { useFormatDate } from 'hooks/useFormatDate';
 
 export default function GetPendientes() {
   const { user } = useAuth();
+  const { formatDate } = useFormatDate();
   const [usuario, setUsuario] = useState('');
   const { renderDiasLaborables } = useBadge();
   const { fetchRadicadosByStatus } = useFetchPendientes();
+  const departamentosIds = user?.departamento?.map((d) => d._id) || [];
+
   const { data, isLoading } = useQuery({
-    queryKey: ['radicados-pendientes', user.departamento._id],
-    queryFn: () => fetchRadicadosByStatus(user.departamento._id),
+    queryKey: ['radicados-pendientes', departamentosIds],
+    queryFn: () => fetchRadicadosByStatus(departamentosIds),
     retry: false
   });
   const [selected, setSelected] = useState([]);
@@ -90,7 +94,7 @@ export default function GetPendientes() {
         >
           <Column selectionMode="multiple" headerStyle={{ width: '3rem' }} className="bluegray-100" />
           <Column field="numero_radicado" sortable header="Número radicado" />
-          <Column field="fecha_radicado" sortable header="Fecha radicado" />
+          <Column field="fecha_radicado" sortable header="Fecha radicado" body={(rowData) => formatDate(rowData.fecha_radicado)} />
           <Column field="asunto" header="Asunto" />
           <Column field="observaciones_radicado" header="Observaciones" />
           <Column field="procedencia" header="Procedencia" />

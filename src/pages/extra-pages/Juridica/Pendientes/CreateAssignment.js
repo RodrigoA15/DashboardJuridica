@@ -25,15 +25,18 @@ export const CreateAssignment = ({ selectedData, setSelected, usuario, setUsuari
 
     onMutate: async () => {
       await queryClient.cancelQueries({ queryKey: QUERY_KEY });
-      const keyByDept = [...QUERY_KEY, user.departamento._id];
+
+      const deptIds = user.departamento.map((d) => d._id);
+
+      const keyByDept = [...QUERY_KEY, deptIds];
 
       const previousData = queryClient.getQueryData(keyByDept);
-
       queryClient.setQueryData(keyByDept, (oldData = []) => {
+        if (!Array.isArray(oldData)) return [];
+
         const selectedIds = new Set(selectedData.map(({ _id }) => _id));
         return oldData.filter(({ _id }) => !selectedIds.has(_id));
       });
-
       return { previousData, keyByDept };
     },
 
