@@ -44,7 +44,7 @@ export default function ModalRadicadosRespuestas({ opens, handleCloses, respuest
       setRadicadosRpta(data);
       setCountRadicados(data.length);
     } catch (error) {
-      toast.error(error.response?.data || 'Error al obtener respuestas');
+      toast.error(error.response?.data.message || 'Error al obtener respuestas');
     } finally {
       setLoading(false);
     }
