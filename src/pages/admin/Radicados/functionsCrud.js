@@ -127,7 +127,7 @@ function UpdateRadicados({ dataId, cantidadRespuesta, entidad, area, asunto, est
         observacion: datos
       });
     } catch (error) {
-      await Myswal.fire({
+      await MySwal.fire({
         text: 'Ops error de servidor  :(',
         icon: 'error',
         customClass: {
