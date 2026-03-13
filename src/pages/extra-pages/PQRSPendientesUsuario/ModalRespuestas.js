@@ -4,7 +4,7 @@ import { FormWithParameter } from './Forms/FormWithParameter';
 import { FormWithoutParameter } from './Forms/FormWithoutParameter';
 import { useAuth } from 'context/authContext';
 import { usePermissions } from 'hooks/usePermissions';
-function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
+function ModalRespuestas({ open, handleClose, data, asignados, setAsignados, dataAnswers }) {
   const { user } = useAuth();
   const { canViewAddAffairAnswer, canViewUploadFileAnswers } = usePermissions(user);
   return (
@@ -19,7 +19,7 @@ function ModalRespuestas({ open, handleClose, data, asignados, setAsignados }) {
           handleClose();
         }}
       >
-        {canViewUploadFileAnswers && <FormWithoutParameter data={data} handleClose={handleClose} />}
+        {canViewUploadFileAnswers && <FormWithoutParameter data={data} handleClose={handleClose} dataAnswers={dataAnswers} />}
         {canViewAddAffairAnswer && (
           <FormWithParameter data={data} asignados={asignados} setAsignados={setAsignados} handleClose={handleClose} />
         )}

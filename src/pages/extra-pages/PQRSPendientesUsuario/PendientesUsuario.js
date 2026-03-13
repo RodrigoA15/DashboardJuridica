@@ -14,6 +14,7 @@ import { ModalTemplateAudiences } from './ModalTemplateAudiences';
 function PendientesUsuario() {
   const { user } = useAuth();
   const [asignados, setAsignados] = useState([]);
+  const [answersData, setAnswersData] = useState([]);
   const [visible, setVisible] = useState(false);
   const [visibleRM, setVisibleRM] = useState(false); //Modal Radicados Respuestas
   const [visibleTA, setVisibleTA] = useState(false); //Modal Template Audiences
@@ -82,8 +83,17 @@ function PendientesUsuario() {
             setSelectedAsignacion={setSelectedAsignacion}
             setSelectedDataAudiences={setSelectedDataAudiences}
             setVisibleTA={setVisibleTA}
+            answersData={answersData}
+            setAnswersData={setAnswersData}
           />
-          <ModalRespuestas open={visible} handleClose={handleClose} data={selectedData} setAsignados={setAsignados} asignados={asignados} />
+          <ModalRespuestas
+            open={visible}
+            handleClose={handleClose}
+            data={selectedData}
+            setAsignados={setAsignados}
+            asignados={asignados}
+            dataAnswers={answersData}
+          />
           <ModalRadicadosRespuestas
             setAsignados={setAsignados}
             asignados={asignados}

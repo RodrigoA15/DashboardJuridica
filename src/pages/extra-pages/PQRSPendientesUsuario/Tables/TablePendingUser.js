@@ -36,7 +36,8 @@ export const TablePendingUser = ({
   setOpenRespuestasModal,
   setSelectedAsignacion,
   setSelectedDataAudiences,
-  setVisibleTA
+  setVisibleTA,
+  setAnswersData
 }) => {
   const { formatDate } = useFormatDate();
   const [filters, setFilters] = useState({
@@ -46,19 +47,23 @@ export const TablePendingUser = ({
   const { renderDiasLaborables } = useBadge();
 
   const answersByUser = useCallback(
-    async (data) => {
+    async (rowData) => {
       try {
-        const { numero_radicado, cantidad_respuesta } = data ?? {};
+        const { numero_radicado, cantidad_respuesta, estado_radicado } = rowData ?? {};
         if (!numero_radicado) return toast.error('Datos de radicado no válidos');
 
         const { data: answers } = await axios.get(`/answer/radicados_respuestas/${numero_radicado}`);
-        const cantidadRespuestasCargadas = answers?.length ?? 0;
+        setAnswersData(answers || []);
 
+        if (estado_radicado === 'Pendiente firma') {
+          return;
+        }
+        const cantidadRespuestasCargadas = answers?.length ?? 0;
         if (cantidadRespuestasCargadas === cantidad_respuesta) {
           MySwal.fire({
-            title: 'Esta petición tiene una respuesta cargada',
-            text: 'Por favor marque la petición como respuesta',
-            icon: 'success',
+            title: 'Esta petición tiene respuestas completas',
+            text: 'Si necesita modificar algo, contacte al administrador.',
+            icon: 'info',
             customClass: { container: 'swal-zindex' }
           });
 
@@ -155,6 +160,19 @@ export const TablePendingUser = ({
 
   const allowEdit = (rowData) => {
     return rowData.cantidad_respuesta !== 'Blue Band';
+  };
+
+  const statusBodyTemplate = (rowData) => {
+    const isPendingFirma = rowData.estado_radicado === 'Pendiente firma';
+    return (
+      <span
+        className={`px-3 py-1 rounded-full text-xs font-bold ${
+          isPendingFirma ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700'
+        }`}
+      >
+        {rowData.estado_radicado}
+      </span>
+    );
   };
 
   const quantityAnswers = useCallback((options) => {
@@ -256,6 +274,13 @@ export const TablePendingUser = ({
         dataKey="id_radicado"
       >
         <Column field="numero_radicado" header="Número radicado" />
+        <Column
+          field="estado_radicado"
+          header="Estado"
+          body={statusBodyTemplate}
+          sortable
+          headerStyle={{ textAlign: 'center', minWidth: '10rem' }}
+        />
         <Column field="fecha_radicado" sortable header="Fecha radicado" body={(rowData) => formatDate(rowData.fecha_radicado)} />
         <Column field="id_asunto" sortable header="Asunto" />
         <Column field="fecha_asignacion" sortable header="Fecha asignación" body={(rowData) => formatDate(rowData.fecha_asignacion)} />
@@ -263,13 +288,8 @@ export const TablePendingUser = ({
         <Column field="observaciones" header="Observaciones" />
         <Column field="cantidad_respuesta" sortable header="Respuestas estimadas" editor={quantityAnswers} />
         <Column field="fecha_radicado" sortable header="Dias" body={renderDiasLaborables} />
-        <Column
-          header="Acciones"
-          body={generalColumn}
-          headerStyle={{ textAlign: 'center', minWidth: '12rem' }}
-          bodyStyle={{ textAlign: 'center' }}
-        />
-        <Column rowEditor={allowEdit} headerStyle={{ width: '10%', minWidth: '8rem' }} bodyStyle={{ textAlign: 'center' }} />
+        <Column header="Acciones" body={generalColumn} headerStyle={{ textAlign: 'center', minWidth: '12rem' }} />
+        <Column rowEditor={allowEdit} headerStyle={{ width: '6%', minWidth: '4rem' }} bodyStyle={{ textAlign: 'center' }} />
       </DataTable>
     </div>
   );
@@ -285,5 +305,6 @@ TablePendingUser.propTypes = {
   handleClose: PropTypes.func,
   setSelectedRespuesta: PropTypes.func,
   setOpenRespuestasModal: PropTypes.func,
-  setSelectedAsignacion: PropTypes.func
+  setSelectedAsignacion: PropTypes.func,
+  setAnswersData: PropTypes.func
 };
