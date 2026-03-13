@@ -1,7 +1,6 @@
 // material-ui
-import logoConcesion from '../../assets/images/auth/LogoConcesion.webp';
-import logoAtlantico from '../../assets/images/auth/LogoAtlantico.webp';
-import { Parameters } from 'hooks/useParameters';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import logoDashboard from '../../assets/images/auth/logoDashboard.webp';
 
 /**
  * if you want to use image instead of <svg> uncomment following.
@@ -14,7 +13,6 @@ import { Parameters } from 'hooks/useParameters';
 // ==============================|| LOGO SVG ||============================== //
 
 const Logo = () => {
-  const { parameters } = Parameters();
   return (
     /**
      * if you want to use image instead of svg uncomment following, and comment out <svg> element.
@@ -23,11 +21,7 @@ const Logo = () => {
      *
      */
     <>
-      {parameters.some((parametro) => parametro.nombre_parametro === 'Logo Atlantico' && parametro.activo === true) ? (
-        <img src={logoAtlantico} alt="Consecion" width="60%" height="60%" />
-      ) : (
-        <img src={logoConcesion} alt="atlantico" width="60%" height="60%" />
-      )}
+      <LazyLoadImage src={logoDashboard} alt="image dashboard" width="60%" height="60%" />
     </>
   );
 };
