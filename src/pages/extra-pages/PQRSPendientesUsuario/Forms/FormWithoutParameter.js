@@ -1,13 +1,20 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDropzone } from 'react-dropzone';
-import { useForm, useWatch } from 'react-hook-form'; // Importamos useWatch
+import { useForm, useWatch } from 'react-hook-form';
 import { toast } from 'sonner';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import axios from 'api/axios';
 import PDFViewer from '../PDFViewer';
 import { FormUpdateUser } from './FormUpdateUser';
+
+const MySwal = withReactContent(Swal);
+
+const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10MB
+const STATUS_PENDIENTE_FIRMA = 'Pendiente firma';
+const REQ_FIRMA_SI = 'S';
+const REQ_FIRMA_NO = 'N';
 
 const UploadIcon = () => (
   <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
@@ -23,42 +30,33 @@ const UploadIcon = () => (
 export const FormWithoutParameter = ({ data, handleClose, dataAnswers }) => {
   const [url, setUrl] = useState('');
   const [urlFile, setUrlFile] = useState(null);
-  const isReadOnly = data?.estado_radicado === 'Pendiente firma';
-  const respuestaExistente = dataAnswers && dataAnswers.length > 0 ? dataAnswers[0] : null;
 
+  const isReadOnly = data?.estado_radicado === STATUS_PENDIENTE_FIRMA;
+  const respuestaExistente = dataAnswers?.[0] || null;
+
+  // 1. FIX: Agregamos defaultValues. Es una regla de oro en Clean Code con RHF
   const {
     register,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     handleSubmit,
     reset,
     control
   } = useForm({
     mode: 'onChange',
     defaultValues: {
-      numero_radicado_respuesta: respuestaExistente?.numero_radicado_respuesta || '',
-      tipo_firma: respuestaExistente?.tipo_firma || '',
-      requiere_firma: isReadOnly ? 'S' : 'N'
+      numero_radicado_respuesta: isReadOnly ? respuestaExistente?.numero_radicado_respuesta : '',
+      requiere_firma: null,
+      tipo_firma: null
     }
   });
 
-  useEffect(() => {
-    if (dataAnswers && dataAnswers.length > 0) {
-      const respuesta = dataAnswers[0];
-      reset({
-        numero_radicado_respuesta: respuesta.numero_radicado_respuesta,
-        tipo_firma: respuesta.tipo_firma,
-        requiere_firma: isReadOnly ? 'S' : 'N'
-      });
-    } else {
-      reset({
-        numero_radicado_respuesta: '',
-        tipo_firma: '',
-        requiere_firma: 'N'
-      });
-    }
-  }, [dataAnswers, reset, isReadOnly]);
-
   const requiereFirma = useWatch({ control, name: 'requiere_firma' });
+
+  useEffect(() => {
+    return () => {
+      if (url) URL.revokeObjectURL(url);
+    };
+  }, [url]);
 
   const onDrop = useCallback((acceptedFiles) => {
     const file = acceptedFiles[0];
@@ -71,20 +69,15 @@ export const FormWithoutParameter = ({ data, handleClose, dataAnswers }) => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: { 'application/pdf': ['.pdf'] },
-    maxSize: 10000000
+    maxSize: MAX_FILE_SIZE_BYTES
   });
-
-  const MySwal = withReactContent(Swal);
 
   const crearRespuesta = async (formDataValues) => {
     try {
       const formData = new FormData();
-
-      // Usamos los valores de la DB si es solo actualización, o del formulario si es nuevo
       const numero_radicado_respuesta = isReadOnly
         ? respuestaExistente?.numero_radicado_respuesta
         : formDataValues.numero_radicado_respuesta;
-
       const tipo_firma = isReadOnly ? respuestaExistente?.tipo_firma : formDataValues.tipo_firma;
 
       formData.append('numero_radicado_respuesta', numero_radicado_respuesta);
@@ -106,7 +99,7 @@ export const FormWithoutParameter = ({ data, handleClose, dataAnswers }) => {
         await axios.post('/answer', formData, {
           headers: { 'Content-Type': 'multipart/form-data' }
         });
-        toast.success(requiereFirma === 'S' ? 'Solicitud de firma enviada' : 'Respuesta creada con éxito');
+        toast.success(requiereFirma === REQ_FIRMA_SI ? 'Solicitud de firma enviada' : 'Respuesta creada con éxito');
       }
 
       setUrl('');
@@ -114,21 +107,25 @@ export const FormWithoutParameter = ({ data, handleClose, dataAnswers }) => {
       handleClose();
       reset();
     } catch (error) {
-      toast.error(error.response?.data || 'Error al procesar la solicitud.');
-      console.error(error);
+      toast.error(error.response?.data?.message || 'Error al procesar la solicitud.');
     }
   };
 
   const onSubmit = handleSubmit(async (formDataValues) => {
     const isUpdating = isReadOnly && respuestaExistente;
 
+    if (!isReadOnly && requiereFirma === REQ_FIRMA_NO && !urlFile) {
+      toast.error('Debe adjuntar el archivo PDF para la respuesta directa.');
+      return;
+    }
+
     const alert = await MySwal.fire({
       title: isUpdating ? '¿Finalizar proceso de firma?' : '¿Confirmar registro?',
       text: isUpdating
         ? 'Se cargará el PDF firmado y se cerrará la gestión de este radicado.'
-        : requiereFirma === 'S'
-        ? 'Se enviará la solicitud de firma a Secretaría.'
-        : 'Se registrará la respuesta definitiva.',
+        : requiereFirma === REQ_FIRMA_SI
+          ? 'Se enviará la solicitud de firma a Secretaría.'
+          : 'Se registrará la respuesta definitiva.',
       icon: 'question',
       showCancelButton: true,
       confirmButtonText: 'Sí, continuar',
@@ -136,13 +133,22 @@ export const FormWithoutParameter = ({ data, handleClose, dataAnswers }) => {
       customClass: {
         container: 'swal-zindex'
       },
-      confirmButtonColor: isUpdating ? '#10B981' : '#3B82F6' // Verde si es finalizar, azul si es crear
+      confirmButtonColor: isUpdating ? '#10B981' : '#3B82F6'
     });
 
     if (alert.isConfirmed) {
       await crearRespuesta(formDataValues);
     }
   });
+
+  // 2. FIX: Función validadora a prueba de balas extraída para no repetir código
+  const validateTipoFirma = (value) => {
+    // Si no es de lectura y el valor está vacío, disparamos el error
+    if (!isReadOnly && !value) {
+      return "Seleccione un tipo de firma";
+    }
+    return true; // Pasa la validación
+  };
 
   return (
     <form onSubmit={onSubmit} encType="multipart/form-data" className="space-y-6">
@@ -153,34 +159,36 @@ export const FormWithoutParameter = ({ data, handleClose, dataAnswers }) => {
           </label>
           <input
             id="numero_radicado_respuesta"
-            className={`w-full px-4 py-2 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              isReadOnly ? 'bg-gray-200 cursor-not-allowed' : 'bg-gray-100'
-            }`}
+            className={`w-full px-4 py-2 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${isReadOnly ? 'bg-gray-200 cursor-not-allowed' : 'bg-gray-100'}`}
             type="number"
-            disabled={isReadOnly}
+            disabled={isReadOnly || isSubmitting}
             {...register('numero_radicado_respuesta', {
               required: 'Este campo es obligatorio',
               minLength: { value: 14, message: 'Mínimo 14 caracteres' }
             })}
           />
           {errors.numero_radicado_respuesta && (
-            <span className="text-red-500 text-xs mt-1 block">{errors.numero_radicado_respuesta.message}</span>
+            <span className="text-red-500 text-xs mt-1 block font-medium">{errors.numero_radicado_respuesta.message}</span>
           )}
         </div>
 
         <fieldset>
-          <legend className="block text-sm font-semibold text-gray-600 mb-2">¿Requiere firma de Secretaría?</legend>
+          <legend className="block text-sm font-semibold text-gray-600 mb-2">
+            ¿Requiere firma de Secretaría? {!isReadOnly && <span className="text-red-500">*</span>}
+          </legend>
           <div className="flex gap-6 pt-2">
             <div className="flex items-center">
               <input
                 type="radio"
                 id="firma_no"
-                value="N"
-                className="h-4 w-4 text-blue-600 focus:ring-blue-500"
-                {...register('requiere_firma')}
-                disabled={isReadOnly}
+                value={REQ_FIRMA_NO}
+                className="h-4 w-4 text-blue-600 focus:ring-blue-500 disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
+                disabled={isReadOnly || isSubmitting}
+                {...register('requiere_firma', {
+                  validate: (val) => !isReadOnly && !val ? "Seleccione una opción" : true
+                })}
               />
-              <label htmlFor="firma_no" className="ml-2 text-sm text-gray-700">
+              <label htmlFor="firma_no" className="ml-2 text-sm text-gray-700 cursor-pointer">
                 No (Respuesta directa)
               </label>
             </div>
@@ -188,55 +196,69 @@ export const FormWithoutParameter = ({ data, handleClose, dataAnswers }) => {
               <input
                 type="radio"
                 id="firma_si"
-                value="S"
-                className="h-4 w-4 text-blue-600 focus:ring-blue-500"
-                {...register('requiere_firma')}
-                disabled={isReadOnly}
+                value={REQ_FIRMA_SI}
+                className="h-4 w-4 text-blue-600 focus:ring-blue-500 disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
+                disabled={isReadOnly || isSubmitting}
+                {...register('requiere_firma', {
+                  validate: (val) => !isReadOnly && !val ? "Seleccione una opción" : true
+                })}
               />
-              <label htmlFor="firma_si" className="ml-2 text-sm text-gray-700">
+              <label htmlFor="firma_si" className="ml-2 text-sm text-gray-700 cursor-pointer">
                 Sí (Enviar a firma)
               </label>
             </div>
           </div>
+          {/* Añadimos visualización del error para requiere_firma por buena práctica */}
+          {errors.requiere_firma && (
+            <span className="text-red-500 text-xs mt-2 block font-medium">{errors.requiere_firma.message}</span>
+          )}
         </fieldset>
       </div>
 
       <div>
         <fieldset>
-          <legend className="block text-sm font-semibold text-gray-600 mb-2">Tipo firma</legend>
+          <legend className="block text-sm font-semibold text-gray-600 mb-2">
+            Tipo firma {!isReadOnly && <span className="text-red-500">*</span>}
+          </legend>
           <div className="flex gap-6 pt-2">
+
+            {/* 3. FIX: Aplicar la validación idéntica a AMBOS inputs */}
             <div className="flex items-center">
               <input
                 type="radio"
                 id="mecanica"
                 value="MECANICA"
-                className="h-4 w-4 text-blue-600"
-                disabled={isReadOnly}
-                {...register('tipo_firma', {
-                  required: !isReadOnly ? 'Seleccione un tipo' : false
-                })}
+                className="h-4 w-4 text-blue-600 disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
+                disabled={isReadOnly || isSubmitting}
+                {...register('tipo_firma', { validate: validateTipoFirma })}
               />
-              <label htmlFor="mecanica" className="ml-3 text-sm text-gray-700">
+              <label htmlFor="mecanica" className="ml-3 text-sm text-gray-700 cursor-pointer">
                 Mecánica
               </label>
             </div>
+
             <div className="flex items-center">
               <input
                 type="radio"
                 id="manual"
                 value="MANUAL"
-                className="h-4 w-4 text-blue-600"
-                disabled={isReadOnly}
-                {...register('tipo_firma', {
-                  required: !isReadOnly ? 'Seleccione un tipo' : false
-                })}
+                className="h-4 w-4 text-blue-600 disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
+                disabled={isReadOnly || isSubmitting}
+                {...register('tipo_firma', { validate: validateTipoFirma })}
               />
-              <label htmlFor="manual" className="ml-3 text-sm text-gray-700">
+              <label htmlFor="manual" className="ml-3 text-sm text-gray-700 cursor-pointer">
                 Manual
               </label>
             </div>
+
           </div>
-          {errors.tipo_firma && <span className="text-red-500 text-xs mt-2 block">{errors.tipo_firma.message}</span>}
+
+          {/* Mensaje de error garantizado */}
+          {errors.tipo_firma && (
+            <span className="text-red-500 text-xs mt-2 block font-medium">
+              {errors.tipo_firma.message}
+            </span>
+          )}
         </fieldset>
       </div>
 
@@ -250,18 +272,15 @@ export const FormWithoutParameter = ({ data, handleClose, dataAnswers }) => {
         <FormUpdateUser data={data} />
       </div>
 
-      {/* --- SECCIÓN DROPZONE: CONDICIONAL --- */}
-      <div className={requiereFirma === 'S' && respuestaExistente === null ? 'opacity-50 pointer-events-none' : ''}>
+      <div className={requiereFirma === REQ_FIRMA_SI && 'opacity-50 pointer-events-none'}>
         <label className="block text-sm font-semibold text-gray-600 mb-2">
-          Adjuntar Archivo PDF {requiereFirma === 'No' && <span className="text-red-500">*</span>}
+          Adjuntar Archivo PDF {requiereFirma === REQ_FIRMA_NO && <span className="text-red-500">*</span>}
         </label>
         <div
           {...getRootProps()}
-          className={`p-6 border-2 border-dashed rounded-lg text-center cursor-pointer transition-colors ${
-            isDragActive ? 'bg-blue-50 border-blue-500' : 'bg-gray-50 border-gray-300'
-          } hover:border-blue-400`}
+          className={`p-6 border-2 border-dashed rounded-lg text-center cursor-pointer transition-colors ${isDragActive ? 'bg-blue-50 border-blue-500' : 'bg-gray-50 border-gray-300'} hover:border-blue-400`}
         >
-          <input {...getInputProps()} />
+          <input {...getInputProps()} disabled={isSubmitting} />
           <UploadIcon />
           <p className="mt-2 text-sm text-gray-600">
             {urlFile ? `Archivo seleccionado: ${urlFile.name}` : 'Arrastre el PDF firmado aquí para completar el proceso.'}
@@ -274,12 +293,10 @@ export const FormWithoutParameter = ({ data, handleClose, dataAnswers }) => {
       <div className="pt-4 border-t border-gray-200">
         <button
           type="submit"
-          disabled={isReadOnly && !urlFile}
-          className={`w-full md:w-60 font-bold py-3 px-6 rounded-lg transition-all shadow-md ${
-            isReadOnly && !urlFile ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700 text-white'
-          }`}
+          disabled={(isReadOnly && !urlFile) || isSubmitting}
+          className={`w-full md:w-60 font-bold py-3 px-6 rounded-lg transition-all shadow-md flex justify-center items-center ${(isReadOnly && !urlFile) || isSubmitting ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700 text-white'}`}
         >
-          {isReadOnly ? 'Completar y Firmar' : 'Crear Respuesta'}
+          {isSubmitting ? 'Procesando...' : isReadOnly ? 'Completar y Firmar' : 'Crear Respuesta'}
         </button>
       </div>
     </form>
