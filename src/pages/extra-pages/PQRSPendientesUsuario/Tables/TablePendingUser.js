@@ -1,28 +1,28 @@
-// Importa useMemo y useCallback
-import { useState, useMemo, useCallback } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { InputNumber } from 'primereact/inputnumber';
-//Sweet Alert
+import { InputText } from 'primereact/inputtext';
+import { FilterMatchMode } from 'primereact/api';
+
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { toast } from 'sonner';
-//icons
-import { FilterMatchMode } from 'primereact/api';
+
+// Iconos y UI
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import AddIcon from '@mui/icons-material/Add';
 import SendIcon from '@mui/icons-material/Send';
-import { IconButton, Tooltip } from '@mui/material';
-import { InputText } from 'primereact/inputtext';
-//Api functions
+import { IconButton, Tooltip, CircularProgress } from '@mui/material'; // Añadido CircularProgress
+
 import axios from 'api/axios';
-//Hooks
 import { useFormatDate } from 'hooks/useFormatDate';
 import { useBadge } from 'hooks/Badge';
 
 const MySwal = withReactContent(Swal);
+const STATUS_PENDIENTE_FIRMA = 'Pendiente firma';
 
 export const TablePendingUser = ({
   asignados,
@@ -31,7 +31,6 @@ export const TablePendingUser = ({
   setOpenReasignacion,
   setSelectedData,
   setVisible,
-  handleClose,
   setSelectedRespuesta,
   setOpenRespuestasModal,
   setSelectedAsignacion,
@@ -40,227 +39,207 @@ export const TablePendingUser = ({
   setAnswersData
 }) => {
   const { formatDate } = useFormatDate();
+  const { renderDiasLaborables } = useBadge();
+
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS }
   });
   const [globalFilterValue, setGlobalFilterValue] = useState('');
-  const { renderDiasLaborables } = useBadge();
 
-  const answersByUser = useCallback(
-    async (rowData) => {
-      try {
-        const { numero_radicado, cantidad_respuesta, estado_radicado } = rowData ?? {};
-        if (!numero_radicado) return toast.error('Datos de radicado no válidos');
+  // Nuevo estado para controlar qué fila se está validando
+  const [validatingRowId, setValidatingRowId] = useState(null);
 
-        const { data: answers } = await axios.get(`/answer/radicados_respuestas/${numero_radicado}`);
-        setAnswersData(answers || []);
-
-        if (estado_radicado === 'Pendiente firma') {
-          return;
-        }
-        const cantidadRespuestasCargadas = answers?.length ?? 0;
-        if (cantidadRespuestasCargadas === cantidad_respuesta) {
-          MySwal.fire({
-            title: 'Esta petición tiene respuestas completas',
-            text: 'Si necesita modificar algo, contacte al administrador.',
-            icon: 'info',
-            customClass: { container: 'swal-zindex' }
-          });
-
-          handleClose();
-        }
-      } catch (error) {
-        if (error.response?.status === 404) {
-          toast.error('No se encontraron respuestas cargadas');
-        } else {
-          toast.error('Ocurrió un error al cargar las respuestas');
-        }
+  const checkAnswersStatus = async (rowData) => {
+    try {
+      const { numero_radicado, cantidad_respuesta, estado_radicado } = rowData ?? {};
+      if (!numero_radicado) {
+        toast.error('Datos de radicado no válidos');
+        return false;
       }
-    },
-    [handleClose]
-  );
 
-  const updateQuantityAnswers = useCallback(async (data) => {
-    if (data.cantidad_respuesta <= 0) {
+      const { data: answers } = await axios.get(`/answer/radicados_respuestas/${numero_radicado}`);
+      setAnswersData(answers || []);
+
+      if (estado_radicado === STATUS_PENDIENTE_FIRMA) {
+        return true;
+      }
+
+      const cantidadCargadas = answers?.length ?? 0;
+      if (cantidadCargadas === cantidad_respuesta) {
+        await MySwal.fire({
+          title: 'Esta petición tiene respuestas completas',
+          text: 'Si necesita modificar algo, contacte al administrador.',
+          icon: 'info',
+          customClass: { container: 'swal-zindex' }
+        });
+        return false;
+      }
+
+      return true;
+    } catch (err) {
+      if (err.response?.status === 404) {
+        setAnswersData([]);
+        return true;
+      }
+      toast.error('Ocurrió un error al cargar las respuestas');
+      return false;
+    }
+  };
+
+  const handleOpenAddAnswer = async (data) => {
+    // 1. Prevenir múltiples clics
+    if (validatingRowId) return;
+
+    // 2. Iniciar estado de carga visual
+    setValidatingRowId(data.id_radicado);
+    const loadingToastId = toast.loading('Verificando información del radicado...');
+
+    try {
+      const canAdd = await checkAnswersStatus(data);
+      if (canAdd) {
+        setSelectedData(data);
+        setVisible(true);
+      }
+    } finally {
+      // 3. Limpiar estado de carga siempre (falle o tenga éxito)
+      toast.dismiss(loadingToastId);
+      setValidatingRowId(null);
+    }
+  };
+
+  const handleOpenViewAnswer = (data) => {
+    setSelectedRespuesta(data);
+    setOpenRespuestasModal(true);
+  };
+
+  const handleOpenReasignacion = (data) => {
+    setSelectedAsignacion(data);
+    setOpenReasignacion(true);
+  };
+
+  const handleOpenTemplate = (data) => {
+    setSelectedDataAudiences(data);
+    setVisibleTA(true);
+  };
+
+  const onGlobalFilterChange = (e) => {
+    const value = e.target.value;
+    setFilters({ ...filters, global: { value, matchMode: FilterMatchMode.CONTAINS } });
+    setGlobalFilterValue(value);
+  };
+
+  const onRowEditComplete = async (e) => {
+    const { newData } = e;
+
+    if (newData.cantidad_respuesta <= 0) {
       toast.error('La cantidad de respuestas debe ser mayor a 0');
-      throw new Error('Cantidad de respuesta no válida');
+      e.preventDefault();
+      return;
     }
 
-    await axios.put(`/radicados/updateQuantity/${data.id_radicado}`, {
-      cantidad_respuesta: data.cantidad_respuesta
-    });
-  }, []);
+    try {
+      await axios.put(`/radicados/updateQuantity/${newData.id_radicado}`, {
+        cantidad_respuesta: newData.cantidad_respuesta
+      });
 
-  const handleOpen = useCallback(
-    (data) => {
-      setSelectedData(data);
-      setVisible(true);
-      answersByUser(data);
-    },
-    [setSelectedData, setVisible, answersByUser]
-  );
+      // SOLUCIÓN AL BUG DE ITERACIÓN: Actualización condicional segura
+      setAsignados((prevAsignados) => {
+        // Caso 1: Es un arreglo plano
+        if (Array.isArray(prevAsignados)) {
+          return prevAsignados.map((item) =>
+            item.id_radicado === newData.id_radicado ? newData : item
+          );
+        }
 
-  const handleOpenR = useCallback(
-    (respuesta) => {
-      setSelectedRespuesta(respuesta);
-      setOpenRespuestasModal(true);
-    },
-    [setSelectedRespuesta, setOpenRespuestasModal]
-  );
-
-  const handleOpenReasignacion = useCallback(
-    (asignacion) => {
-      setSelectedAsignacion(asignacion);
-      setOpenReasignacion(true);
-    },
-    [setSelectedAsignacion, setOpenReasignacion]
-  );
-
-  const handleOpenTemplateAudiences = useCallback(
-    (data) => {
-      setSelectedDataAudiences(data);
-      setVisibleTA(true);
-    },
-    [setSelectedDataAudiences, setVisibleTA]
-  );
-
-  const onGlobalFilterChange = useCallback(
-    (event) => {
-      const value = event.target.value;
-      let _filters = { ...filters };
-      _filters['global'].value = value;
-      setFilters(_filters);
-      setGlobalFilterValue(value);
-    },
-    [filters]
-  );
-
-  const onRowEditComplete = useCallback(
-    async (e) => {
-      const { newData } = e;
-      try {
-        await updateQuantityAnswers(newData);
-
-        setAsignados((prevAsignados) => {
-          if (!prevAsignados?.data) return prevAsignados;
-
+        // Caso 2: Es un objeto paginado (ej: { data: [...] })
+        if (prevAsignados?.data && Array.isArray(prevAsignados.data)) {
           return {
             ...prevAsignados,
-            data: prevAsignados.data.map((item) => (item.id_radicado === newData.id_radicado ? newData : item))
+            data: prevAsignados.data.map((item) =>
+              item.id_radicado === newData.id_radicado ? newData : item
+            )
           };
-        });
+        }
 
-        toast.success('Cantidad respuesta actualizada.');
-      } catch (error) {
-        toast.error('Error al actualizar el registro');
-      }
-    },
-    [updateQuantityAnswers, setAsignados]
-  );
+        // Fallback de seguridad
+        return prevAsignados;
+      });
 
-  const allowEdit = (rowData) => {
-    return rowData.cantidad_respuesta !== 'Blue Band';
+      toast.success('Cantidad respuesta actualizada.');
+    } catch (err) {
+      toast.error('Error al actualizar el registro');
+      e.preventDefault();
+    }
   };
 
   const statusBodyTemplate = (rowData) => {
-    const isPendingFirma = rowData.estado_radicado === 'Pendiente firma';
+    const isPending = rowData.estado_radicado === STATUS_PENDIENTE_FIRMA;
     return (
-      <span
-        className={`px-3 py-1 rounded-full text-xs font-bold ${
-          isPendingFirma ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700'
-        }`}
-      >
+      <span className={`px-3 py-1 rounded-full text-xs font-bold ${isPending ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700'}`}>
         {rowData.estado_radicado}
       </span>
     );
   };
 
-  const quantityAnswers = useCallback((options) => {
-    return <InputNumber value={options.value} onValueChange={(e) => options.editorCallback(e.value)} />;
-  }, []);
+  const actionBodyTemplate = (rowData) => {
+    const isRowLoading = validatingRowId === rowData.id_radicado;
 
-  const header = useMemo(() => {
     return (
-      <div className="grid grid-cols-4 gap-4 mb-3">
-        <div>
-          <InputText className="inputUser" type="search" value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Buscar" />
-        </div>
-      </div>
-    );
-  }, [globalFilterValue, onGlobalFilterChange]);
-
-  const btnOpenModalAddAnswer = useCallback(
-    (data) => {
-      return (
-        <Tooltip title="Agregar respuestas" placement="top-start" arrow>
-          <IconButton onClick={() => handleOpen(data)}>
-            <AddIcon />
-          </IconButton>
+      <div className="flex items-center justify-center gap-1">
+        <Tooltip title={isRowLoading ? "Validando..." : "Agregar respuestas"} placement="top-start" arrow>
+          <span> {/* El span envuelve para que Tooltip funcione en botones deshabilitados */}
+            <IconButton
+              onClick={() => handleOpenAddAnswer(rowData)}
+              disabled={isRowLoading || validatingRowId !== null} // Deshabilita si ESTA fila carga, o si OTRA fila está cargando
+            >
+              {isRowLoading ? <CircularProgress size={20} color="inherit" /> : <AddIcon />}
+            </IconButton>
+          </span>
         </Tooltip>
-      );
-    },
-    [handleOpen]
-  );
 
-  const btnOpenModalViewAnswer = useCallback(
-    (data) => {
-      return (
         <Tooltip title="Ver respuestas" placement="top-start" arrow>
-          <IconButton onClick={() => handleOpenR(data)}>
+          <IconButton onClick={() => handleOpenViewAnswer(rowData)} disabled={validatingRowId !== null}>
             <VisibilityIcon />
           </IconButton>
         </Tooltip>
-      );
-    },
-    [handleOpenR]
-  );
 
-  const btnReasignation = useCallback(
-    (data) => {
-      return (
         <Tooltip title="Reasignación" placement="top-start" arrow>
-          <IconButton onClick={() => handleOpenReasignacion(data)}>
+          <IconButton onClick={() => handleOpenReasignacion(rowData)} disabled={validatingRowId !== null}>
             <SendIcon />
           </IconButton>
         </Tooltip>
-      );
-    },
-    [handleOpenReasignacion]
-  );
 
-  const btnGenerateTemplate = useCallback(
-    (data) => {
-      return (
         <Tooltip title="Generar plantilla" placement="top" arrow>
-          <IconButton onClick={() => handleOpenTemplateAudiences(data)}>
+          <IconButton onClick={() => handleOpenTemplate(rowData)} disabled={validatingRowId !== null}>
             <AutoAwesomeIcon />
           </IconButton>
         </Tooltip>
-      );
-    },
-    [handleOpenTemplateAudiences]
-  );
+      </div>
+    );
+  };
 
-  const generalColumn = useCallback(
-    (rowData) => {
-      return (
-        <div className="flex items-center justify-center gap-1">
-          {btnOpenModalAddAnswer(rowData)}
-          {btnOpenModalViewAnswer(rowData)}
-          {btnReasignation(rowData)}
-          {btnGenerateTemplate(rowData)}
-        </div>
-      );
-    },
-    [btnOpenModalAddAnswer, btnOpenModalViewAnswer, btnReasignation, btnGenerateTemplate]
+  // NUEVO DISEÑO DEL HEADER
+  const renderHeader = () => (
+    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-50 p-4 rounded-t-xl border-b border-gray-200">
+      <div className="w-full md:w-auto relative">
+        <i className="pi pi-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 z-10" />
+        <InputText
+          className="w-full md:w-80 pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-sm"
+          type="search"
+          value={globalFilterValue}
+          onChange={onGlobalFilterChange}
+          placeholder="Buscar radicado, asunto..."
+        />
+      </div>
+    </div>
   );
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-6">
-      {header}
+    <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+      {/* PrimeReact soporta la prop 'header', renderizamos el nuestro aquí */}
       <DataTable
-        value={asignados}
-        emptyMessage={error}
+        value={asignados?.data || asignados} // Renderizado seguro dependiendo del formato
+        emptyMessage={error || "No se encontraron registros pendientes"}
         stripedRows
         removableSort
         paginator
@@ -272,31 +251,33 @@ export const TablePendingUser = ({
         editMode="row"
         onRowEditComplete={onRowEditComplete}
         dataKey="id_radicado"
+        header={renderHeader()}
       >
         <Column field="numero_radicado" header="Número radicado" />
-        <Column
-          field="estado_radicado"
-          header="Estado"
-          body={statusBodyTemplate}
-          sortable
-          headerStyle={{ textAlign: 'center', minWidth: '10rem' }}
-        />
+        <Column field="estado_radicado" header="Estado" body={statusBodyTemplate} sortable headerStyle={{ textAlign: 'center' }} />
         <Column field="fecha_radicado" sortable header="Fecha radicado" body={(rowData) => formatDate(rowData.fecha_radicado)} />
         <Column field="id_asunto" sortable header="Asunto" />
         <Column field="fecha_asignacion" sortable header="Fecha asignación" body={(rowData) => formatDate(rowData.fecha_asignacion)} />
         <Column field="nombre_procedencia" header="Procedencia" />
         <Column field="observaciones" header="Observaciones" />
-        <Column field="cantidad_respuesta" sortable header="Respuestas estimadas" editor={quantityAnswers} />
+
+        <Column
+          field="cantidad_respuesta"
+          sortable
+          header="Respuestas estimadas"
+          editor={(options) => <InputNumber value={options.value} onValueChange={(e) => options.editorCallback(e.value)} className="w-full" />}
+        />
+
         <Column field="fecha_radicado" sortable header="Dias" body={renderDiasLaborables} />
-        <Column header="Acciones" body={generalColumn} headerStyle={{ textAlign: 'center', minWidth: '12rem' }} />
-        <Column rowEditor={allowEdit} headerStyle={{ width: '6%', minWidth: '4rem' }} bodyStyle={{ textAlign: 'center' }} />
+        <Column header="Acciones" body={actionBodyTemplate} headerStyle={{ textAlign: 'center', minWidth: '12rem' }} />
+        <Column rowEditor={(rowData) => rowData.cantidad_respuesta !== 'Blue Band'} headerStyle={{ width: '6%', minWidth: '4rem' }} bodyStyle={{ textAlign: 'center' }} />
       </DataTable>
     </div>
   );
 };
 
 TablePendingUser.propTypes = {
-  asignados: PropTypes.array,
+  asignados: PropTypes.oneOfType([PropTypes.array, PropTypes.object]), // Actualizado para soportar objetos
   setAsignados: PropTypes.func,
   error: PropTypes.string,
   setOpenReasignacion: PropTypes.func,
@@ -306,5 +287,7 @@ TablePendingUser.propTypes = {
   setSelectedRespuesta: PropTypes.func,
   setOpenRespuestasModal: PropTypes.func,
   setSelectedAsignacion: PropTypes.func,
+  setSelectedDataAudiences: PropTypes.func,
+  setVisibleTA: PropTypes.func,
   setAnswersData: PropTypes.func
 };
