@@ -11,6 +11,7 @@ import withReactContent from 'sweetalert2-react-content';
 import { toast } from 'sonner';
 
 // Iconos y UI
+import EditNoteIcon from '@mui/icons-material/EditNote';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import AddIcon from '@mui/icons-material/Add';
@@ -36,7 +37,9 @@ export const TablePendingUser = ({
   setSelectedAsignacion,
   setSelectedDataAudiences,
   setVisibleTA,
-  setAnswersData
+  setAnswersData,
+  setVisibleSignatures,
+  setSelectedSignatureRow
 }) => {
   const { formatDate } = useFormatDate();
   const { renderDiasLaborables } = useBadge();
@@ -105,6 +108,11 @@ export const TablePendingUser = ({
       toast.dismiss(loadingToastId);
       setValidatingRowId(null);
     }
+  };
+
+  const handleOpenSignatures = (data) => {
+    setVisibleSignatures(true);
+    setSelectedSignatureRow(data);
   };
 
   const handleOpenViewAnswer = (data) => {
@@ -193,6 +201,14 @@ export const TablePendingUser = ({
               disabled={isRowLoading || validatingRowId !== null} // Deshabilita si ESTA fila carga, o si OTRA fila está cargando
             >
               {isRowLoading ? <CircularProgress size={20} color="inherit" /> : <AddIcon />}
+            </IconButton>
+          </span>
+        </Tooltip>
+
+        <Tooltip title="Agregar información" placement="top-start" arrow>
+          <span>
+            <IconButton onClick={() => handleOpenSignatures(rowData)}>
+              <EditNoteIcon />
             </IconButton>
           </span>
         </Tooltip>

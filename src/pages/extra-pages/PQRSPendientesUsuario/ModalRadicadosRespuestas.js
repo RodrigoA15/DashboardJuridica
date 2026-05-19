@@ -7,19 +7,29 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import axios from 'api/axios';
 import { useFetchAprobations } from 'lib/PQRS/fetchAprobations';
+import { useFetchAnswers } from 'lib/PQRS/fetchAnswers';
 import LoaderComponent from 'components/LoaderComponent';
-
 const SEARCH_STATUS_APROBATION = 'Pendiente aprobacion';
+const REQUIREMENT_SIGNATURE = 'S';
+const SIGNATURE_STATUS = 'PENDIENTE';
 
 export default function ModalRadicadosRespuestas({ opens, handleCloses, respuestas, setAsignados }) {
   const [radicadosRpta, setRadicadosRpta] = useState([]);
   const [countRadicados, setCountRadicados] = useState(0);
   const [loading, setLoading] = useState(false);
   const { fetchSearchAprobations } = useFetchAprobations();
+  const { fetchTypeSignature } = useFetchAnswers();
 
   const { data = [{ count: 0 }], refetch } = useQuery({
     queryKey: ['search-aprobations', respuestas?.id_radicado, SEARCH_STATUS_APROBATION],
     queryFn: () => fetchSearchAprobations(respuestas?.id_radicado, SEARCH_STATUS_APROBATION),
+    enabled: false,
+    placeholderData: [{ count: 0 }]
+  });
+
+  const { data: dataSignature = [{ count: 0 }], refetch: refetchSignature } = useQuery({
+    queryKey: ['search-type-signature', respuestas?._id, REQUIREMENT_SIGNATURE, SIGNATURE_STATUS],
+    queryFn: () => fetchTypeSignature(respuestas?._id, REQUIREMENT_SIGNATURE, SIGNATURE_STATUS),
     enabled: false,
     placeholderData: [{ count: 0 }]
   });
@@ -29,8 +39,9 @@ export default function ModalRadicadosRespuestas({ opens, handleCloses, respuest
       resetModalState();
       loadRadicadosRespuestas();
       refetch();
+      refetchSignature();
     }
-  }, [respuestas, refetch]);
+  }, [respuestas, refetch, refetchSignature]);
 
   const resetModalState = useCallback(() => {
     setRadicadosRpta([]);
@@ -99,7 +110,7 @@ export default function ModalRadicadosRespuestas({ opens, handleCloses, respuest
 
   const respuestasPendientes = useMemo(() => data?.[0]?.count || 0, [data]);
   const respuestasEsperadas = respuestas?.cantidad_respuesta || 0;
-  const botonDeshabilitado = respuestasEsperadas !== countRadicados || respuestasPendientes > 0;
+  const botonDeshabilitado = respuestasEsperadas !== countRadicados || respuestasPendientes > 0 || dataSignature?.total > 0;
 
   return (
     <Dialog
@@ -120,6 +131,10 @@ export default function ModalRadicadosRespuestas({ opens, handleCloses, respuest
 
           <p className="mb-6 text-center text-gray-600">
             Tienes <strong className="text-gray-900">{respuestasPendientes}</strong> respuestas pendientes de aprobación
+          </p>
+
+          <p className="mb-6 text-center text-gray-600">
+            Tienes <strong className="text-gray-900">{dataSignature?.total}</strong> respuestas pendientes de firma
           </p>
 
           {loading ? (

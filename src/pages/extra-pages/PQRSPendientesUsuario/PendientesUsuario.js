@@ -10,6 +10,7 @@ import { TablePendingUser } from './Tables/TablePendingUser';
 import { TableAprobations } from './Tables/TableAprobations';
 import ModalRadicadosRespuestas from './ModalRadicadosRespuestas';
 import { ModalTemplateAudiences } from './ModalTemplateAudiences';
+import { ModalSignaturesList } from './ModalSignaturesList';
 
 function PendientesUsuario() {
   const { user } = useAuth();
@@ -18,9 +19,11 @@ function PendientesUsuario() {
   const [visible, setVisible] = useState(false);
   const [visibleRM, setVisibleRM] = useState(false); //Modal Radicados Respuestas
   const [visibleTA, setVisibleTA] = useState(false); //Modal Template Audiences
+  const [visibleSignatures, setVisibleSignatures] = useState(false); //Modal Firmas
   const [selectDataAudiences, setSelectedDataAudiences] = useState(null);
   const [selectedData, setSelectedData] = useState(null);
   const [selectedRespuesta, setSelectedRespuesta] = useState(null);
+  const [selectedSignatureRow, setSelectedSignatureRow] = useState(null);
   const [error, setError] = useState('');
   //Modal Reasignacion
   const [openReasignacion, setOpenReasignacion] = useState(false);
@@ -49,6 +52,11 @@ function PendientesUsuario() {
   const handleClose = () => {
     setVisible(false);
     setSelectedData(null);
+  };
+
+  const handleCloseSignatures = () => {
+    setVisibleSignatures(false);
+    setSelectedSignatureRow(null);
   };
 
   const handleCloseR = () => {
@@ -85,7 +93,11 @@ function PendientesUsuario() {
             setVisibleTA={setVisibleTA}
             answersData={answersData}
             setAnswersData={setAnswersData}
+            setVisibleSignatures={setVisibleSignatures}
+            setSelectedSignatureRow={setSelectedSignatureRow}
+
           />
+          <ModalSignaturesList open={visibleSignatures} close={handleCloseSignatures} assignmentData={selectedSignatureRow} />
           <ModalRespuestas
             open={visible}
             handleClose={handleClose}

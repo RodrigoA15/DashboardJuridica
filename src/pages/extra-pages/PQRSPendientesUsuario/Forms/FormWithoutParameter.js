@@ -34,7 +34,6 @@ export const FormWithoutParameter = ({ data, handleClose, dataAnswers }) => {
   const isReadOnly = data?.estado_radicado === STATUS_PENDIENTE_FIRMA;
   const respuestaExistente = dataAnswers?.[0] || null;
 
-  // 1. FIX: Agregamos defaultValues. Es una regla de oro en Clean Code con RHF
   const {
     register,
     formState: { errors, isSubmitting },
@@ -71,6 +70,7 @@ export const FormWithoutParameter = ({ data, handleClose, dataAnswers }) => {
     accept: { 'application/pdf': ['.pdf'] },
     maxSize: MAX_FILE_SIZE_BYTES
   });
+
 
   const crearRespuesta = async (formDataValues) => {
     try {
@@ -124,8 +124,8 @@ export const FormWithoutParameter = ({ data, handleClose, dataAnswers }) => {
       text: isUpdating
         ? 'Se cargará el PDF firmado y se cerrará la gestión de este radicado.'
         : requiereFirma === REQ_FIRMA_SI
-          ? 'Se enviará la solicitud de firma a Secretaría.'
-          : 'Se registrará la respuesta definitiva.',
+        ? 'Se enviará la solicitud de firma a Secretaría.'
+        : 'Se registrará la respuesta definitiva.',
       icon: 'question',
       showCancelButton: true,
       confirmButtonText: 'Sí, continuar',
@@ -145,7 +145,7 @@ export const FormWithoutParameter = ({ data, handleClose, dataAnswers }) => {
   const validateTipoFirma = (value) => {
     // Si no es de lectura y el valor está vacío, disparamos el error
     if (!isReadOnly && !value) {
-      return "Seleccione un tipo de firma";
+      return 'Seleccione un tipo de firma';
     }
     return true; // Pasa la validación
   };
@@ -159,7 +159,9 @@ export const FormWithoutParameter = ({ data, handleClose, dataAnswers }) => {
           </label>
           <input
             id="numero_radicado_respuesta"
-            className={`w-full px-4 py-2 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${isReadOnly ? 'bg-gray-200 cursor-not-allowed' : 'bg-gray-100'}`}
+            className={`w-full px-4 py-2 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+              isReadOnly ? 'bg-gray-200 cursor-not-allowed' : 'bg-gray-100'
+            }`}
             type="number"
             disabled={isReadOnly || isSubmitting}
             {...register('numero_radicado_respuesta', {
@@ -185,7 +187,7 @@ export const FormWithoutParameter = ({ data, handleClose, dataAnswers }) => {
                 className="h-4 w-4 text-blue-600 focus:ring-blue-500 disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
                 disabled={isReadOnly || isSubmitting}
                 {...register('requiere_firma', {
-                  validate: (val) => !isReadOnly && !val ? "Seleccione una opción" : true
+                  validate: (val) => (!isReadOnly && !val ? 'Seleccione una opción' : true)
                 })}
               />
               <label htmlFor="firma_no" className="ml-2 text-sm text-gray-700 cursor-pointer">
@@ -200,7 +202,7 @@ export const FormWithoutParameter = ({ data, handleClose, dataAnswers }) => {
                 className="h-4 w-4 text-blue-600 focus:ring-blue-500 disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
                 disabled={isReadOnly || isSubmitting}
                 {...register('requiere_firma', {
-                  validate: (val) => !isReadOnly && !val ? "Seleccione una opción" : true
+                  validate: (val) => (!isReadOnly && !val ? 'Seleccione una opción' : true)
                 })}
               />
               <label htmlFor="firma_si" className="ml-2 text-sm text-gray-700 cursor-pointer">
@@ -209,9 +211,7 @@ export const FormWithoutParameter = ({ data, handleClose, dataAnswers }) => {
             </div>
           </div>
           {/* Añadimos visualización del error para requiere_firma por buena práctica */}
-          {errors.requiere_firma && (
-            <span className="text-red-500 text-xs mt-2 block font-medium">{errors.requiere_firma.message}</span>
-          )}
+          {errors.requiere_firma && <span className="text-red-500 text-xs mt-2 block font-medium">{errors.requiere_firma.message}</span>}
         </fieldset>
       </div>
 
@@ -221,7 +221,6 @@ export const FormWithoutParameter = ({ data, handleClose, dataAnswers }) => {
             Tipo firma {!isReadOnly && <span className="text-red-500">*</span>}
           </legend>
           <div className="flex gap-6 pt-2">
-
             {/* 3. FIX: Aplicar la validación idéntica a AMBOS inputs */}
             <div className="flex items-center">
               <input
@@ -250,15 +249,10 @@ export const FormWithoutParameter = ({ data, handleClose, dataAnswers }) => {
                 Manual
               </label>
             </div>
-
           </div>
 
           {/* Mensaje de error garantizado */}
-          {errors.tipo_firma && (
-            <span className="text-red-500 text-xs mt-2 block font-medium">
-              {errors.tipo_firma.message}
-            </span>
-          )}
+          {errors.tipo_firma && <span className="text-red-500 text-xs mt-2 block font-medium">{errors.tipo_firma.message}</span>}
         </fieldset>
       </div>
 
@@ -278,7 +272,9 @@ export const FormWithoutParameter = ({ data, handleClose, dataAnswers }) => {
         </label>
         <div
           {...getRootProps()}
-          className={`p-6 border-2 border-dashed rounded-lg text-center cursor-pointer transition-colors ${isDragActive ? 'bg-blue-50 border-blue-500' : 'bg-gray-50 border-gray-300'} hover:border-blue-400`}
+          className={`p-6 border-2 border-dashed rounded-lg text-center cursor-pointer transition-colors ${
+            isDragActive ? 'bg-blue-50 border-blue-500' : 'bg-gray-50 border-gray-300'
+          } hover:border-blue-400`}
         >
           <input {...getInputProps()} disabled={isSubmitting} />
           <UploadIcon />
@@ -294,7 +290,9 @@ export const FormWithoutParameter = ({ data, handleClose, dataAnswers }) => {
         <button
           type="submit"
           disabled={(isReadOnly && !urlFile) || isSubmitting}
-          className={`w-full md:w-60 font-bold py-3 px-6 rounded-lg transition-all shadow-md flex justify-center items-center ${(isReadOnly && !urlFile) || isSubmitting ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700 text-white'}`}
+          className={`w-full md:w-60 font-bold py-3 px-6 rounded-lg transition-all shadow-md flex justify-center items-center ${
+            (isReadOnly && !urlFile) || isSubmitting ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700 text-white'
+          }`}
         >
           {isSubmitting ? 'Procesando...' : isReadOnly ? 'Completar y Firmar' : 'Crear Respuesta'}
         </button>
