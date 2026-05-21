@@ -119,7 +119,6 @@ export const ModalSignaturesList = ({ open, close, assignmentData }) => {
               name="demo[]"
               url="/api/upload"
               accept=".pdf"
-              maxFileSize={1000000}
               mode="advanced"
               headerTemplate={headerTemplate}
               chooseOptions={chooseOptions}
