@@ -37,7 +37,6 @@ export const TablePendingUser = ({
   setSelectedAsignacion,
   setSelectedDataAudiences,
   setVisibleTA,
-  setAnswersData,
   setVisibleSignatures,
   setSelectedSignatureRow
 }) => {
@@ -53,22 +52,16 @@ export const TablePendingUser = ({
   const [validatingRowId, setValidatingRowId] = useState(null);
 
   const checkAnswersStatus = async (rowData) => {
+
     try {
-      const { numero_radicado, cantidad_respuesta, estado_radicado } = rowData ?? {};
+      const { _id: id_asignacion, numero_radicado } = rowData ?? {};
       if (!numero_radicado) {
         toast.error('Datos de radicado no válidos');
         return false;
       }
+      const { data: validationQuantityAnswer } = await axios.get(`/answer/validation-quantity-answers/${numero_radicado}/${id_asignacion}`)
 
-      const { data: answers } = await axios.get(`/answer/radicados_respuestas/${numero_radicado}`);
-      setAnswersData(answers || []);
-
-      if (estado_radicado === STATUS_PENDIENTE_FIRMA) {
-        return true;
-      }
-
-      const cantidadCargadas = answers?.length ?? 0;
-      if (cantidadCargadas === cantidad_respuesta) {
+      if (validationQuantityAnswer.data.isValid) {
         await MySwal.fire({
           title: 'Esta petición tiene respuestas completas',
           text: 'Si necesita modificar algo, contacte al administrador.',
@@ -80,12 +73,7 @@ export const TablePendingUser = ({
 
       return true;
     } catch (err) {
-      if (err.response?.status === 404) {
-        setAnswersData([]);
-        return true;
-      }
-      toast.error('Ocurrió un error al cargar las respuestas');
-      return false;
+      toast.error('Hubo un error al validar la informacion');
     }
   };
 
@@ -93,9 +81,7 @@ export const TablePendingUser = ({
     // 1. Prevenir múltiples clics
     if (validatingRowId) return;
 
-    // 2. Iniciar estado de carga visual
     setValidatingRowId(data.id_radicado);
-    const loadingToastId = toast.loading('Verificando información del radicado...');
 
     try {
       const canAdd = await checkAnswersStatus(data);
@@ -104,8 +90,7 @@ export const TablePendingUser = ({
         setVisible(true);
       }
     } finally {
-      // 3. Limpiar estado de carga siempre (falle o tenga éxito)
-      toast.dismiss(loadingToastId);
+
       setValidatingRowId(null);
     }
   };
@@ -305,5 +290,4 @@ TablePendingUser.propTypes = {
   setSelectedAsignacion: PropTypes.func,
   setSelectedDataAudiences: PropTypes.func,
   setVisibleTA: PropTypes.func,
-  setAnswersData: PropTypes.func
 };

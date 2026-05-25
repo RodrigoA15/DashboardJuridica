@@ -15,7 +15,6 @@ import { ModalSignaturesList } from './ModalSignaturesList';
 function PendientesUsuario() {
   const { user } = useAuth();
   const [asignados, setAsignados] = useState([]);
-  const [answersData, setAnswersData] = useState([]);
   const [visible, setVisible] = useState(false);
   const [visibleRM, setVisibleRM] = useState(false); //Modal Radicados Respuestas
   const [visibleTA, setVisibleTA] = useState(false); //Modal Template Audiences
@@ -91,11 +90,8 @@ function PendientesUsuario() {
             setSelectedAsignacion={setSelectedAsignacion}
             setSelectedDataAudiences={setSelectedDataAudiences}
             setVisibleTA={setVisibleTA}
-            answersData={answersData}
-            setAnswersData={setAnswersData}
             setVisibleSignatures={setVisibleSignatures}
             setSelectedSignatureRow={setSelectedSignatureRow}
-
           />
           <ModalSignaturesList open={visibleSignatures} close={handleCloseSignatures} assignmentData={selectedSignatureRow} />
           <ModalRespuestas
@@ -104,7 +100,6 @@ function PendientesUsuario() {
             data={selectedData}
             setAsignados={setAsignados}
             asignados={asignados}
-            dataAnswers={answersData}
           />
           <ModalRadicadosRespuestas
             setAsignados={setAsignados}
