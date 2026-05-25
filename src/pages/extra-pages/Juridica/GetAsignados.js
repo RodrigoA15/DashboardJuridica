@@ -93,7 +93,7 @@ function GetAsignados() {
           sortable
           body={(rowData) => formatDate(rowData.id_radicado.fecha_radicado)}
         />
-        <Column field="id_radicado.id_asunto.nombre_asunto" header="Asunto" />
+        <Column field="id_radicado.id_asunto.nombre_asunto" header="Asunto" sortable/>
         <Column field="id_radicado.estado_radicado" header="Estado" />
         <Column field="fecha_asignacion" header="Fecha asignación" body={(rowData) => formatDate(rowData.fecha_asignacion)} sortable />
         <Column field="id_usuario.username" header="Usuario encargado" sortable />
