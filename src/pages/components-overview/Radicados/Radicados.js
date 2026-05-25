@@ -52,7 +52,7 @@ function ComponentRadicados() {
     } catch (error) {
       MySwal.fire({
         title: '¡Ups! Algo salió mal',
-        text: error.response.data,
+        text: error.response.data.message,
         icon: 'error',
         confirmButtonColor: '#F87171' // Rojo claro
       });
