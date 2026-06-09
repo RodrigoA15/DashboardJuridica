@@ -3,6 +3,7 @@ import { lazy } from 'react';
 // project import
 
 import Loadable from 'components/Loadable';
+import GuestRoute from './GuestRoute';
 import Unauthorized from 'pages/authentication/Unauthorized';
 
 // render - login
@@ -12,23 +13,19 @@ const AuthRegister = Loadable(lazy(() => import('pages/authentication/Register')
 // ==============================|| AUTH ROUTING ||============================== //
 
 const LoginRoutes = {
+  element: <GuestRoute />,
   children: [
     {
-      path: '/',
-      children: [
-        {
-          path: 'login',
-          element: <AuthLogin />
-        },
-        {
-          path: 'register',
-          element: <AuthRegister />
-        },
-        {
-          path: 'unauthorized',
-          element: <Unauthorized />
-        }
-      ]
+      path: 'login',
+      element: <AuthLogin />
+    },
+    {
+      path: 'register',
+      element: <AuthRegister />
+    },
+    {
+      path: 'unauthorized',
+      element: <Unauthorized />
     }
   ]
 };

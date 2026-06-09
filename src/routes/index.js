@@ -1,8 +1,9 @@
 import { useRoutes } from 'react-router-dom';
 import MainRoutes from './MainRoutes';
+import LoginRoutes from './LoginRoutes';
 
 // ==============================|| ROUTING RENDER ||============================== //
 
 export function ThemeRoutes() {
-  return useRoutes([MainRoutes]);
+  return useRoutes([LoginRoutes, MainRoutes]);
 }

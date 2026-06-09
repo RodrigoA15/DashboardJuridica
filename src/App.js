@@ -1,3 +1,5 @@
+import { useLocation } from 'react-router-dom';
+import Cookies from 'js-cookie';
 // project import
 import { ThemeRoutes } from './routes/index';
 import ThemeCustomization from 'themes';
@@ -8,13 +10,20 @@ import 'primereact/resources/primereact.min.css'; //core css
 import LoaderComponent from 'components/LoaderComponent';
 import { useAuth } from 'context/authContext';
 
+const PUBLIC_PATHS = ['/login', '/register', '/unauthorized'];
+
 // ==============================|| APP - THEME, ROUTER, LOCAL  ||============================== //
 
 const App = () => {
   const { isLoading } = useAuth();
-  if (isLoading) {
+  const location = useLocation();
+  const hasToken = !!Cookies.get('token');
+  const isPublicRoute = PUBLIC_PATHS.some((path) => location.pathname.endsWith(path));
+
+  if (hasToken && isLoading && !isPublicRoute) {
     return <LoaderComponent />;
   }
+
   return (
     <ThemeCustomization>
       <ScrollTop>

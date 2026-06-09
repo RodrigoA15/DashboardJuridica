@@ -1,4 +1,5 @@
 import { lazy } from 'react';
+import { Navigate } from 'react-router-dom';
 // project import
 import Loadable from 'components/Loadable';
 import MainLayout from 'layout/MainLayout';
@@ -12,6 +13,7 @@ import IndexResumen from 'pages/admin/Resumen/index';
 import TabViewComponent from 'pages/admin/Radicados/index';
 import IndexParametros from 'pages/admin/Parametros/index';
 import ProtectedRoute from 'ProtectedRoutes';
+import config from 'config';
 // render - dashboard
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
 
@@ -22,64 +24,65 @@ const Radicados = Loadable(lazy(() => import('pages/components-overview/Radicado
 
 const MainRoutes = {
   path: '/',
-  element: (
-    <ProtectedRoute>
-      <MainLayout />
-    </ProtectedRoute>
-  ),
+  element: <ProtectedRoute />,
   children: [
     {
-      path: '/',
-      element: <DashboardDefault />
-    },
-    {
-      path: 'dashboard',
+      element: <MainLayout />,
       children: [
         {
-          path: 'default',
-          element: <DashboardDefault />
+          index: true,
+          element: <Navigate to={config.defaultPath} replace />
+        },
+        {
+          path: 'dashboard',
+          children: [
+            {
+              path: 'default',
+              element: <DashboardDefault />
+            }
+          ]
+        },
+        {
+          path: 'pqrs',
+          element: <Juridica />
+        },
+        {
+          path: 'radicados',
+          element: <Radicados />
+        },
+        {
+          path: 'pendientes',
+          element: <PendientesUsuario />
+        },
+        {
+          path: 'radicadosAdmin',
+          element: <TabViewComponent />
+        },
+        {
+          path: 'usuariosqx',
+          element: <UsuariosQX />
+        },
+        {
+          path: 'pdfPQRS',
+          element: <PDFViewer />
+        },
+        {
+          path: 'asuntosAdmin',
+          element: <Index />
+        },
+        {
+          path: 'canalesAdmin',
+          element: <IndexCE />
+        },
+        {
+          path: 'resumenAdmin',
+          element: <IndexResumen />
+        },
+        {
+          path: 'parameters',
+          element: <IndexParametros />
         }
       ]
-    },
-    {
-      path: 'pqrs',
-      element: <Juridica />
-    },
-    {
-      path: 'radicados',
-      element: <Radicados />
-    },
-    {
-      path: 'pendientes',
-      element: <PendientesUsuario />
-    },
-    {
-      path: 'radicadosAdmin',
-      element: <TabViewComponent />
-    },
-    {
-      path: 'usuariosqx',
-      element: <UsuariosQX />
-    },
-    {
-      path: 'pdfPQRS',
-      element: <PDFViewer />
-    },
-    {
-      path: 'asuntosAdmin',
-      element: <Index />
-    },
-    {
-      path: 'canalesAdmin',
-      element: <IndexCE />
-    },
-    {
-      path: 'resumenAdmin',
-      element: <IndexResumen />
-    },
-    {
-      path: 'parameters',
-      element: <IndexParametros />
     }
   ]
 };

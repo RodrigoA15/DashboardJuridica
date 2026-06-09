@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -9,9 +10,6 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MainCard from 'components/MainCard';
 import Transitions from 'components/@extended/Transitions';
 import { useAuth } from 'context/authContext';
-// assets
-import LoaderComponent from 'components/LoaderComponent';
-import { useUser } from 'hooks/useUser';
 
 // tab panel wrapper
 function TabPanel({ children, value, index, ...other }) {
@@ -32,12 +30,11 @@ TabPanel.propTypes = {
 
 const Profile = () => {
   const theme = useTheme();
-  const { user } = useUser();
-  const { logout } = useAuth();
-  const handleLogout = async () => {
-    // Lógica para el logout aquí
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
+  const handleLogout = () => {
     logout();
-    window.location.replace('http://localhost:5174/login');
+    navigate('/login', { replace: true });
   };
 
   const anchorRef = useRef(null);
@@ -71,7 +68,7 @@ const Profile = () => {
       >
         <Stack direction="row" spacing={2} alignItems="center" sx={{ p: 0.5 }}>
           <AccountCircleIcon />
-          <Typography variant="subtitle1">{!user ? <LoaderComponent /> : user.username}</Typography>
+          <Typography variant="subtitle1">{user?.username ?? 'Usuario'}</Typography>
         </Stack>
       </ButtonBase>
       <Popper
@@ -107,7 +104,7 @@ const Profile = () => {
                 }}
               >
                 <ClickAwayListener onClickAway={handleClose}>
-                  {user !== null ? (
+                  {user ? (
                     <MainCard elevation={0} border={false} content={false}>
                       <CardContent sx={{ px: 2.5, pt: 3 }}>
                         <Grid container justifyContent="space-between" alignItems="center">
@@ -116,20 +113,18 @@ const Profile = () => {
                               <Stack>
                                 <Typography variant="h6">{user.username}</Typography>
                                 <Typography variant="body2" color="textSecondary">
-                                  {user.role.nombre_rol}
+                                  {user.role?.nombre_rol}
                                 </Typography>
                               </Stack>
                             </Stack>
                           </Grid>
                           <Grid item>
-                            <Button onClick={handleLogout}>Cerrar</Button>
+                            <Button onClick={handleLogout}>Cerrar sesión</Button>
                           </Grid>
                         </Grid>
                       </CardContent>
                     </MainCard>
-                  ) : (
-                    <LoaderComponent />
-                  )}
+                  ) : null}
                 </ClickAwayListener>
               </Paper>
             )}

@@ -38,11 +38,11 @@ root.render(
     <QueryClientProvider client={queryClient}>
       <PrimeReactProvider>
         <ReduxProvider store={store}>
-          <AuthProvider>
-            <BrowserRouter basename="/pqrs">
+          <BrowserRouter basename="/pqrs">
+            <AuthProvider>
               <App />
-            </BrowserRouter>
-          </AuthProvider>
+            </AuthProvider>
+          </BrowserRouter>
         </ReduxProvider>
       </PrimeReactProvider>
     </QueryClientProvider>
