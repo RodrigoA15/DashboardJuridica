@@ -1,5 +1,4 @@
 import { useLocation } from 'react-router-dom';
-import Cookies from 'js-cookie';
 // project import
 import { ThemeRoutes } from './routes/index';
 import ThemeCustomization from 'themes';
@@ -17,10 +16,9 @@ const PUBLIC_PATHS = ['/login', '/register', '/unauthorized'];
 const App = () => {
   const { isLoading } = useAuth();
   const location = useLocation();
-  const hasToken = !!Cookies.get('token');
   const isPublicRoute = PUBLIC_PATHS.some((path) => location.pathname.endsWith(path));
 
-  if (hasToken && isLoading && !isPublicRoute) {
+  if (isLoading && !isPublicRoute) {
     return <LoaderComponent />;
   }
 

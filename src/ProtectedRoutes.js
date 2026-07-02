@@ -1,5 +1,4 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import Cookies from 'js-cookie';
 import { useAuth } from 'context/authContext';
 import LoaderComponent from 'components/LoaderComponent';
 
@@ -8,9 +7,8 @@ const LOGIN_PATH = '/login';
 function ProtectedRoute() {
   const { isAuthenticated, isLoading } = useAuth();
   const location = useLocation();
-  const hasToken = !!Cookies.get('token');
 
-  if (hasToken && isLoading) {
+  if (isLoading) {
     return <LoaderComponent />;
   }
 

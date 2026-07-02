@@ -1,8 +1,10 @@
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
-import { login, register, verifyToken } from '../api/auth';
+import { login, register, verifyToken, logout as logoutApi } from '../api/auth';
+import { setAuthFailureHandler } from '../api/axios';
+import { clearAccessToken, hasAccessToken, setAccessToken } from '../api/token';
 import { useUser } from '../hooks/useUser';
 
 export const AuthContext = createContext(null);
@@ -15,60 +17,75 @@ export const useAuth = () => {
   return context;
 };
 
-const getToken = () => Cookies.get('token');
-
-const persistToken = (data) => {
-  const token = data?.token ?? data?.accessToken;
+const persistSession = (data) => {
+  const token = data?.accessToken ?? data?.token;
   if (token) {
-    Cookies.set('token', token, { path: '/' });
+    setAccessToken(token);
   }
-};
-
-const clearToken = () => {
-  Cookies.remove('token');
-  Cookies.remove('token', { path: '/' });
 };
 
 export const AuthProvider = ({ children }) => {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const { user, isLoading, isError } = useUser();
-  const hasToken = !!getToken();
+  const tokenPresent = hasAccessToken();
 
-  const isAuthenticated = hasToken && !!user && !isError;
+  const isAuthenticated = tokenPresent && !!user && !isError;
+
+  useEffect(() => {
+    setAuthFailureHandler(() => {
+      clearAccessToken();
+      queryClient.setQueryData(['user'], null);
+      queryClient.removeQueries({ queryKey: ['user'] });
+      navigate('/login', { replace: true });
+    });
+
+    return () => setAuthFailureHandler(null);
+  }, [navigate, queryClient]);
 
   const signin = async (credentials) => {
     const data = await login(credentials);
-    persistToken(data);
+    persistSession(data);
+
     if (data?.user) {
       queryClient.setQueryData(['user'], data.user);
     } else {
       await queryClient.fetchQuery({ queryKey: ['user'], queryFn: verifyToken });
     }
+
     return data;
   };
 
   const signup = async (userData) => {
     const data = await register(userData);
-    persistToken(data);
+    persistSession(data);
+
     if (data?.user) {
       queryClient.setQueryData(['user'], data.user);
     } else {
       await queryClient.fetchQuery({ queryKey: ['user'], queryFn: verifyToken });
     }
+
     return data;
   };
 
-  const logout = () => {
-    clearToken();
-    queryClient.setQueryData(['user'], null);
-    queryClient.removeQueries({ queryKey: ['user'] });
+  const logout = async () => {
+    try {
+      await logoutApi();
+    } catch {
+      // La sesión local se limpia aunque falle el endpoint remoto.
+    } finally {
+      clearAccessToken();
+      queryClient.setQueryData(['user'], null);
+      queryClient.removeQueries({ queryKey: ['user'] });
+    }
   };
 
   return (
     <AuthContext.Provider
       value={{
-        user: hasToken ? user : null,
-        isLoading: hasToken && isLoading,
+        user: tokenPresent ? user : null,
+        isLoading: tokenPresent && isLoading,
         isAuthenticated,
         signin,
         signup,
