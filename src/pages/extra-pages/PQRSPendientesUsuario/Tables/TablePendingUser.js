@@ -52,14 +52,13 @@ export const TablePendingUser = ({
   const [validatingRowId, setValidatingRowId] = useState(null);
 
   const checkAnswersStatus = async (rowData) => {
-
     try {
       const { _id: id_asignacion, numero_radicado } = rowData ?? {};
       if (!numero_radicado) {
         toast.error('Datos de radicado no válidos');
         return false;
       }
-      const { data: validationQuantityAnswer } = await axios.get(`/answer/validation-quantity-answers/${numero_radicado}/${id_asignacion}`)
+      const { data: validationQuantityAnswer } = await axios.get(`/answer/validation-quantity-answers/${numero_radicado}/${id_asignacion}`);
 
       if (validationQuantityAnswer.data.isValid) {
         await MySwal.fire({
@@ -90,7 +89,6 @@ export const TablePendingUser = ({
         setVisible(true);
       }
     } finally {
-
       setValidatingRowId(null);
     }
   };
@@ -139,18 +137,14 @@ export const TablePendingUser = ({
       setAsignados((prevAsignados) => {
         // Caso 1: Es un arreglo plano
         if (Array.isArray(prevAsignados)) {
-          return prevAsignados.map((item) =>
-            item.id_radicado === newData.id_radicado ? newData : item
-          );
+          return prevAsignados.map((item) => (item.id_radicado === newData.id_radicado ? newData : item));
         }
 
         // Caso 2: Es un objeto paginado (ej: { data: [...] })
         if (prevAsignados?.data && Array.isArray(prevAsignados.data)) {
           return {
             ...prevAsignados,
-            data: prevAsignados.data.map((item) =>
-              item.id_radicado === newData.id_radicado ? newData : item
-            )
+            data: prevAsignados.data.map((item) => (item.id_radicado === newData.id_radicado ? newData : item))
           };
         }
 
@@ -168,7 +162,9 @@ export const TablePendingUser = ({
   const statusBodyTemplate = (rowData) => {
     const isPending = rowData.estado_radicado === STATUS_PENDIENTE_FIRMA;
     return (
-      <span className={`px-3 py-1 rounded-full text-xs font-bold ${isPending ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700'}`}>
+      <span
+        className={`px-3 py-1 rounded-full text-xs font-bold ${isPending ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700'}`}
+      >
         {rowData.estado_radicado}
       </span>
     );
@@ -179,8 +175,10 @@ export const TablePendingUser = ({
 
     return (
       <div className="flex items-center justify-center gap-1">
-        <Tooltip title={isRowLoading ? "Validando..." : "Agregar respuestas"} placement="top-start" arrow>
-          <span> {/* El span envuelve para que Tooltip funcione en botones deshabilitados */}
+        <Tooltip title={isRowLoading ? 'Validando...' : 'Agregar respuestas'} placement="top-start" arrow>
+          <span>
+            {' '}
+            {/* El span envuelve para que Tooltip funcione en botones deshabilitados */}
             <IconButton
               onClick={() => handleOpenAddAnswer(rowData)}
               disabled={isRowLoading || validatingRowId !== null} // Deshabilita si ESTA fila carga, o si OTRA fila está cargando
@@ -240,7 +238,7 @@ export const TablePendingUser = ({
       {/* PrimeReact soporta la prop 'header', renderizamos el nuestro aquí */}
       <DataTable
         value={asignados?.data || asignados} // Renderizado seguro dependiendo del formato
-        emptyMessage={error || "No se encontraron registros pendientes"}
+        emptyMessage={error || 'No se encontraron registros pendientes'}
         stripedRows
         removableSort
         paginator
@@ -266,12 +264,18 @@ export const TablePendingUser = ({
           field="cantidad_respuesta"
           sortable
           header="Respuestas estimadas"
-          editor={(options) => <InputNumber value={options.value} onValueChange={(e) => options.editorCallback(e.value)} className="w-full" />}
+          editor={(options) => (
+            <InputNumber value={options.value} onValueChange={(e) => options.editorCallback(e.value)} className="w-full" />
+          )}
         />
 
         <Column field="fecha_radicado" sortable header="Dias" body={renderDiasLaborables} />
         <Column header="Acciones" body={actionBodyTemplate} headerStyle={{ textAlign: 'center', minWidth: '12rem' }} />
-        <Column rowEditor={(rowData) => rowData.cantidad_respuesta !== 'Blue Band'} headerStyle={{ width: '6%', minWidth: '4rem' }} bodyStyle={{ textAlign: 'center' }} />
+        <Column
+          rowEditor={(rowData) => rowData.cantidad_respuesta !== 'Blue Band'}
+          headerStyle={{ width: '6%', minWidth: '4rem' }}
+          bodyStyle={{ textAlign: 'center' }}
+        />
       </DataTable>
     </div>
   );
@@ -289,5 +293,5 @@ TablePendingUser.propTypes = {
   setOpenRespuestasModal: PropTypes.func,
   setSelectedAsignacion: PropTypes.func,
   setSelectedDataAudiences: PropTypes.func,
-  setVisibleTA: PropTypes.func,
+  setVisibleTA: PropTypes.func
 };
