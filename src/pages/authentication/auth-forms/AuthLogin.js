@@ -45,7 +45,7 @@ const AuthLogin = ({
     >
       {backgroundImageUrl ? (
         <>
-          <img src={backgroundImageUrl} alt="Fondo Sistema" className="absolute inset-0 h-full w-full z-0" />
+          <img src={backgroundImageUrl} alt="Fondo Sistema" className="absolute inset-0 h-full w-full" />
         </>
       ) : (
         <div className="absolute inset-0 h-full w-full bg-gray-900 z-0" />
@@ -58,8 +58,8 @@ const AuthLogin = ({
             <div className="relative flex items-center justify-end w-full">
               {/* Contenedor del logo, posicionado absolutamente en el centro horizontal */}
               <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center pt-28">
-                <img src={secretariaLogoUrl} alt="Secretaría de Movilidad" className="h-20 w-auto object-contain drop-shadow-lg" />
-                <h3 className="mb-4 text-center text-sm font-bold tracking-tight drop-shadow-md text-gray-700">Alcaldia de Envigado</h3>
+                <img src={secretariaLogoUrl} alt="Secretaría de Movilidad" className="h-18 w-auto object-contain drop-shadow-lg" />
+                <h3 className="mb-4 text-center text-sm font-bold tracking-tight drop-shadow-md text-gray-700">{''}</h3>
               </div>
             </div>
           </>
@@ -205,10 +205,11 @@ const AuthLogin = ({
       </main>
 
       {/* ================= FOOTER: COPYRIGHT CENTRAL ================= */}
-      <footer className="relative z-10 flex w-full justify-center px-6 pb-8 pt-4">
-        <p className="text-center text-sm font-medium text-gray-500 drop-shadow-md">
+      <footer className="relative z-10 flex flex-col w-full justify-center px-6 pb-8 pt-4">
+        <p className="text-center text-sm font-medium text-gray-900 drop-shadow-md">
           &copy; {new Date().getFullYear()} Quipux Popay&aacute;n.
         </p>
+        <p className='text-start text-[8px] font-semibold text-gray-800'>Designed by Angely Escobar</p>
       </footer>
     </div>
   );
