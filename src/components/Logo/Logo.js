@@ -1,6 +1,6 @@
 // material-ui
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import logoDashboard from '../../assets/images/auth/logoDashboard.webp';
+import logoDashboard from '../../assets/images/auth/logo_login.png';
 
 /**
  * if you want to use image instead of <svg> uncomment following.
@@ -21,7 +21,7 @@ const Logo = () => {
      *
      */
     <>
-      <LazyLoadImage src={logoDashboard} alt="image dashboard" width="60%" height="60%" />
+      <LazyLoadImage src={logoDashboard} alt="image dashboard" width="80%" height="100%" />
     </>
   );
 };
