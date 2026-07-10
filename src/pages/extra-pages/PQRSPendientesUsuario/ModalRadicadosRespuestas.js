@@ -8,6 +8,8 @@ import withReactContent from 'sweetalert2-react-content';
 import axios from 'api/axios';
 import { useFetchAprobations } from 'lib/PQRS/fetchAprobations';
 import { useFetchAnswers } from 'lib/PQRS/fetchAnswers';
+import { usePermissions } from 'hooks/usePermissions';
+import { useAuth } from 'context/authContext';
 import LoaderComponent from 'components/LoaderComponent';
 const SEARCH_STATUS_APROBATION = 'Pendiente aprobacion';
 const REQUIREMENT_SIGNATURE = 'S';
@@ -19,6 +21,8 @@ export default function ModalRadicadosRespuestas({ opens, handleCloses, respuest
   const [loading, setLoading] = useState(false);
   const { fetchSearchAprobations } = useFetchAprobations();
   const { fetchTypeSignature } = useFetchAnswers();
+  const { user } = useAuth();
+  const { canViewUploadFileAnswers, canViewCreateAprobations } = usePermissions(user);
 
   const { data = [{ count: 0 }], refetch } = useQuery({
     queryKey: ['search-aprobations', respuestas?.id_radicado, SEARCH_STATUS_APROBATION],
@@ -51,7 +55,7 @@ export default function ModalRadicadosRespuestas({ opens, handleCloses, respuest
   const loadRadicadosRespuestas = useCallback(async () => {
     setLoading(true);
     try {
-      const { data } = await axios.get(`/answer/radicados_respuestas/${respuestas.numero_radicado}`);
+      const { data } = await axios.get(`/answer/radicados_respuestas/${respuestas._id}`);
       setRadicadosRpta(data);
       setCountRadicados(data.length);
     } catch (error) {
@@ -129,13 +133,17 @@ export default function ModalRadicadosRespuestas({ opens, handleCloses, respuest
             <strong className="text-gray-900">{respuestasEsperadas}</strong> estimadas
           </p>
 
-          <p className="mb-6 text-center text-gray-600">
-            Tienes <strong className="text-gray-900">{respuestasPendientes}</strong> respuestas pendientes de aprobación
-          </p>
+          {canViewCreateAprobations && (
+            <p className="mb-6 text-center text-gray-600">
+              Tienes <strong className="text-gray-900">{respuestasPendientes}</strong> respuestas pendientes de aprobación
+            </p>
+          )}
 
-          <p className="mb-6 text-center text-gray-600">
-            Tienes <strong className="text-gray-900">{dataSignature?.total}</strong> respuestas pendientes de firma
-          </p>
+          {canViewUploadFileAnswers && (
+            <p className="mb-6 text-center text-gray-600">
+              Tienes <strong className="text-gray-900">{dataSignature?.total}</strong> respuestas pendientes de firma
+            </p>
+          )}
 
           {loading ? (
             <div className="flex justify-center py-8">

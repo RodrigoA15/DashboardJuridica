@@ -5,6 +5,8 @@ import { Column } from 'primereact/column';
 import { InputNumber } from 'primereact/inputnumber';
 import { InputText } from 'primereact/inputtext';
 import { FilterMatchMode } from 'primereact/api';
+import { usePermissions } from 'hooks/usePermissions';
+import { useAuth } from 'context/authContext';
 
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
@@ -42,6 +44,8 @@ export const TablePendingUser = ({
 }) => {
   const { formatDate } = useFormatDate();
   const { renderDiasLaborables } = useBadge();
+  const { user } = useAuth();
+  const { canViewUploadFileAnswers } = usePermissions(user);
 
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS }
@@ -188,13 +192,15 @@ export const TablePendingUser = ({
           </span>
         </Tooltip>
 
-        <Tooltip title="Agregar información" placement="top-start" arrow>
-          <span>
-            <IconButton onClick={() => handleOpenSignatures(rowData)}>
-              <EditNoteIcon />
-            </IconButton>
-          </span>
-        </Tooltip>
+        {canViewUploadFileAnswers && (
+          <Tooltip title="Agregar información" placement="top-start" arrow>
+            <span>
+              <IconButton onClick={() => handleOpenSignatures(rowData)}>
+                <EditNoteIcon />
+              </IconButton>
+            </span>
+          </Tooltip>
+        )}
 
         <Tooltip title="Ver respuestas" placement="top-start" arrow>
           <IconButton onClick={() => handleOpenViewAnswer(rowData)} disabled={validatingRowId !== null}>
@@ -208,11 +214,13 @@ export const TablePendingUser = ({
           </IconButton>
         </Tooltip>
 
-        <Tooltip title="Generar plantilla" placement="top" arrow>
-          <IconButton onClick={() => handleOpenTemplate(rowData)} disabled={validatingRowId !== null}>
-            <AutoAwesomeIcon />
-          </IconButton>
-        </Tooltip>
+        {canViewUploadFileAnswers && (
+          <Tooltip title="Generar plantilla" placement="top" arrow>
+            <IconButton onClick={() => handleOpenTemplate(rowData)} disabled={validatingRowId !== null}>
+              <AutoAwesomeIcon />
+            </IconButton>
+          </Tooltip>
+        )}
       </div>
     );
   };
