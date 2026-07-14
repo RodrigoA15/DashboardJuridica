@@ -74,7 +74,6 @@ export const AsignacionUsuarios = () => {
       const pqrsKey = `${username}_${anio}_PQRS`;
       const tutelasKey = `${username}_${anio}_TUTELAS`;
 
-      // Solo creamos las filas de PQRS y TUTELAS (se elimina la creación de _TOTAL)
       if (!rowsMap[pqrsKey]) rowsMap[pqrsKey] = { username, anio, concepto: 'PQRS', esTotal: false };
       if (!rowsMap[tutelasKey]) rowsMap[tutelasKey] = { username, anio, concepto: 'TUTELAS', esTotal: false };
 
@@ -103,17 +102,23 @@ export const AsignacionUsuarios = () => {
         }
       });
     });
-
     Object.values(rowsMap).forEach((row) => {
       let sumaPromediosDiarios = 0;
+      let mesesValidos = 0;
 
       dynamicColumns.forEach((col) => {
         if (row[col.field] && typeof row[col.field].promedio_diario === 'number') {
-          sumaPromediosDiarios += row[col.field].promedio_diario;
+          // Verificamos si el promedio del mes es mayor a 0
+          if (row[col.field].promedio_diario > 0) {
+            sumaPromediosDiarios += row[col.field].promedio_diario;
+            mesesValidos++; // Incrementamos el divisor solo si se cumple la condición
+          }
         }
       });
 
-      const divisor = dynamicColumns.length > 0 ? dynamicColumns.length : 1;
+      // Si hay meses válidos, dividimos entre esa cantidad.
+      // Si todos son 0, dividimos por 1 para evitar errores (0 / 1 = 0).
+      const divisor = mesesValidos > 0 ? mesesValidos : 1;
       row.promedio_diario_total = sumaPromediosDiarios / divisor;
     });
 
