@@ -22,9 +22,8 @@ export const meses = [
 
 export const AsignacionMensual = () => {
   const { monthlyProductivity } = useFetchProductivity();
-  const [fechaInicio, setFechaInicio] = useState(new Date('2025-01-01T00:00:00'));
-  const [fechaFin, setFechaFin] = useState(new Date('2026-06-01T00:00:00'));
-
+  const [fechaInicio, setFechaInicio] = useState(() => new Date(new Date().getFullYear(), 0, 1));
+  const [fechaFin, setFechaFin] = useState(() => new Date());
   const { data, isLoading } = useQuery({
     queryKey: ['capacidad-juridica-mes', fechaInicio, fechaFin],
     queryFn: () => monthlyProductivity(fechaInicio, fechaFin),
@@ -110,13 +109,27 @@ export const AsignacionMensual = () => {
           <label htmlFor="fecha_inicio" className="font-bold block mb-2">
             Fecha inicio
           </label>
-          <Calendar id="fecha_inicio" value={fechaInicio} onChange={(e) => setFechaInicio(e.value)} showIcon dateFormat="yy/mm/dd" />
+          <Calendar
+            id="fecha_inicio"
+            value={fechaInicio}
+            onChange={(e) => setFechaInicio(e.value)}
+            showIcon
+            dateFormat="yy/mm/dd"
+            maxDate={fechaFin}
+          />
         </div>
         <div className="flex-auto">
           <label htmlFor="fecha_fin" className="font-bold block mb-2">
             Fecha fin
           </label>
-          <Calendar id="fecha_fin" className="" value={fechaFin} onChange={(e) => setFechaFin(e.value)} showIcon dateFormat="yy/mm/dd" />
+          <Calendar
+            id="fecha_fin"
+            value={fechaFin}
+            onChange={(e) => setFechaFin(e.value)}
+            showIcon
+            dateFormat="yy/mm/dd"
+            minDate={fechaInicio} // No puede ser menor a la fecha inicio
+          />
         </div>
       </div>
     );

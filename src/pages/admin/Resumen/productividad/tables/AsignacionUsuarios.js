@@ -15,8 +15,8 @@ export const AsignacionUsuarios = () => {
   const { userProductivity, projections } = useFetchProductivity();
   const [selectedCells, setSelectedCells] = useState([]);
   const [promedioCell, setPromedioCell] = useState(0);
-  const [fechaInicio, setFechaInicio] = useState(new Date('2026-01-01'));
-  const [fechaFin, setFechaFin] = useState(new Date('2026-06-01'));
+  const [fechaInicio, setFechaInicio] = useState(() => new Date(new Date().getFullYear(), 0, 1));
+  const [fechaFin, setFechaFin] = useState(() => new Date());
   const [metas, setMetas] = useState({
     PQRS: 12,
     TUTELAS: 4
@@ -162,7 +162,7 @@ export const AsignacionUsuarios = () => {
             onChange={(e) => setFechaInicio(e.value)}
             showIcon
             dateFormat="yy/mm/dd"
-            className="w-full"
+            maxDate={fechaFin}
           />
         </div>
 
@@ -176,7 +176,7 @@ export const AsignacionUsuarios = () => {
             onChange={(e) => setFechaFin(e.value)}
             showIcon
             dateFormat="yy/mm/dd"
-            className="w-full"
+            minDate={fechaInicio}
           />
         </div>
 
