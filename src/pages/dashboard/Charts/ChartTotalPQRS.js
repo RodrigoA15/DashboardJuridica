@@ -26,12 +26,20 @@ export const ChartTotalPQRS = () => {
     return <p className="text-center text-red-500 p-4">Error al cargar los datos</p>;
   }
 
-  const series = [
-    {
-      name: 'Total Radicados',
-      data: data.map((item) => item.count ?? 0)
-    }
-  ];
+  // 1. Extraer los nombres de todas las entidades únicas (sin repetir) que vienen en la data
+  const entidadesUnicas = Array.from(new Set(data.flatMap((mesData) => mesData.entity.map((e) => e.name))));
+
+  const series = entidadesUnicas.map((nombreEntidad) => {
+    return {
+      name: nombreEntidad,
+      data: data.map((mesData) => {
+        // Buscamos si la entidad tuvo radicados en este mes en específico
+        const entidadEncontrada = mesData.entity.find((e) => e.name === nombreEntidad);
+        // Si tuvo, pasamos el valor. Si no aparece en el mes, ponemos 0
+        return entidadEncontrada ? entidadEncontrada.count : 0;
+      })
+    };
+  });
 
   const options = {
     chart: {
@@ -40,14 +48,9 @@ export const ChartTotalPQRS = () => {
       toolbar: { show: false },
       fontFamily: 'Inter, sans-serif'
     },
-    colors: ['#0288d1'],
+
     dataLabels: {
-      enabled: true,
-      style: {
-        fontSize: '12px',
-        fontWeight: 'bold',
-        colors: ['#374151']
-      }
+      enabled: true
     },
     stroke: {
       curve: 'smooth',
@@ -80,13 +83,15 @@ export const ChartTotalPQRS = () => {
     },
     tooltip: {
       theme: 'light',
-      style: { fontSize: '13px' }
+      style: { fontSize: '13px' },
+      shared: true, // Esto hace que al pasar el mouse te muestre el valor de TODAS las entidades en ese mes
+      intersect: false
     }
   };
 
   return (
     <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-      <h3 className="mb-4 text-lg font-semibold text-gray-800">Total PQRS por meses ({CURRENT_YEAR})</h3>
+      <h3 className="mb-4 text-lg font-semibold text-gray-800">PQRS por Entidad ({CURRENT_YEAR})</h3>
       <Chart options={options} series={series} height={330} />
     </div>
   );
