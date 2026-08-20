@@ -26,7 +26,7 @@ import IndexTipoAsunto from 'pages/components-overview/TipoAsunto/index';
 import { ChartTotalPQRS } from './Charts/ChartTotalPQRS';
 import { ChartTotalTypification } from './Charts/ChartTotalMonthTypification';
 import { MetricsDashboard } from './Metrics/MetricsDashboard';
-import { ChartTotalTypifications } from './Charts/ChartTotalTypifications';
+import { ChartMonthlyRadicados } from './Charts/ChartAverageYears';
 import { ChartTotalPQRSAnswers } from './Charts/ChartTotalPQRSAnswers';
 import { TabVencidas } from './Tables/index';
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
@@ -164,7 +164,7 @@ const DashboardDefault = () => {
           <ChartTotalPQRS />
         </div>
         <div className="col-span-12 xl:col-span-6">
-          <ChartTotalTypifications />
+          <ChartMonthlyRadicados />
         </div>
         <div className="col-span-12 xl:col-span-6">
           <ChartTotalPQRSAnswers />
