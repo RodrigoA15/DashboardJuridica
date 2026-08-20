@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'api/axios';
+import Dot from 'components/@extended/Dot';
 import { useAuth } from 'context/authContext';
 import { TabView, TabPanel } from 'primereact/tabview';
+import { List, ListItem, Stack, Typography } from '@mui/material';
+
+
 //Componentes
 import ModalRespuestas from './ModalRespuestas';
 import { usePermissions } from 'hooks/usePermissions';
@@ -75,6 +79,26 @@ function PendientesUsuario() {
 
   return (
     <div className="card">
+      <List component="nav" aria-label="Horizontal List">
+        <ListItem sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <Stack direction="row" alignItems="center" sx={{ marginRight: 5 }}>
+            <Dot color="success" />
+            <Typography> 0-5 Dias</Typography>
+          </Stack>
+          <Stack direction="row" alignItems="center" sx={{ marginRight: 5 }}>
+            <Dot color="warning" className="m-1" />
+            <Typography> 6-9 Dias</Typography>
+          </Stack>
+          <Stack direction="row" alignItems="center" sx={{ marginRight: 5 }}>
+            <Dot color="info" sx={{ margin: 5 }} />
+            <Typography> 10-12 Dias</Typography>
+          </Stack>
+          <Stack direction="row" alignItems="center">
+            <Dot color="error" />
+            <Typography> +13 Dias</Typography>
+          </Stack>
+        </ListItem>
+      </List>
       <TabView>
         <TabPanel header="PQRS pendientes">
           <TablePendingUser
@@ -94,13 +118,7 @@ function PendientesUsuario() {
             setSelectedSignatureRow={setSelectedSignatureRow}
           />
           <ModalSignaturesList open={visibleSignatures} close={handleCloseSignatures} assignmentData={selectedSignatureRow} />
-          <ModalRespuestas
-            open={visible}
-            handleClose={handleClose}
-            data={selectedData}
-            setAsignados={setAsignados}
-            asignados={asignados}
-          />
+          <ModalRespuestas open={visible} handleClose={handleClose} data={selectedData} setAsignados={setAsignados} asignados={asignados} />
           <ModalRadicadosRespuestas
             setAsignados={setAsignados}
             asignados={asignados}
