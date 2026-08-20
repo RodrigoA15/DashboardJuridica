@@ -49,6 +49,7 @@ export const AuthProvider = ({ children }) => {
 
     if (data?.user) {
       queryClient.setQueryData(['user'], data.user);
+      await queryClient.fetchQuery({ queryKey: ['user'], queryFn: verifyToken });
     } else {
       await queryClient.fetchQuery({ queryKey: ['user'], queryFn: verifyToken });
     }
