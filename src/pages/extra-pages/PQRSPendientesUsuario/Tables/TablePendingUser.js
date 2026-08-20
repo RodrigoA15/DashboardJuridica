@@ -23,9 +23,9 @@ import { IconButton, Tooltip, CircularProgress } from '@mui/material'; // Añadi
 import axios from 'api/axios';
 import { useFormatDate } from 'hooks/useFormatDate';
 import { useBadge } from 'hooks/Badge';
+import { AnswersByUser, AssignmentsExpired } from '../Totals';
 
 const MySwal = withReactContent(Swal);
-const STATUS_PENDIENTE_FIRMA = 'Pendiente firma';
 
 export const TablePendingUser = ({
   asignados,
@@ -163,17 +163,6 @@ export const TablePendingUser = ({
     }
   };
 
-  const statusBodyTemplate = (rowData) => {
-    const isPending = rowData.estado_radicado === STATUS_PENDIENTE_FIRMA;
-    return (
-      <span
-        className={`px-3 py-1 rounded-full text-xs font-bold ${isPending ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700'}`}
-      >
-        {rowData.estado_radicado}
-      </span>
-    );
-  };
-
   const actionBodyTemplate = (rowData) => {
     const isRowLoading = validatingRowId === rowData.id_radicado;
 
@@ -227,7 +216,7 @@ export const TablePendingUser = ({
 
   // NUEVO DISEÑO DEL HEADER
   const renderHeader = () => (
-    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-50 p-4 rounded-t-xl border-b border-gray-200">
+    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-4 rounded-t-xl border-b border-gray-200">
       <div className="w-full md:w-auto relative">
         <i className="pi pi-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 z-10" />
         <InputText
@@ -238,6 +227,14 @@ export const TablePendingUser = ({
           placeholder="Buscar radicado, asunto..."
         />
       </div>
+      <div className="flex items-center gap-2">
+        <span className="text-sm font-medium text-gray-700">Pendientes:</span>
+        <div className="rounded-full flex justify-center items-center text-center font-bold w-8 h-8 bg-blue-100 text-blue-700">
+          {asignados?.length || 0}
+        </div>
+      </div>
+      <AssignmentsExpired />
+      <AnswersByUser />
     </div>
   );
 
@@ -261,13 +258,11 @@ export const TablePendingUser = ({
         header={renderHeader()}
       >
         <Column field="numero_radicado" header="Número radicado" />
-        <Column field="estado_radicado" header="Estado" body={statusBodyTemplate} sortable headerStyle={{ textAlign: 'center' }} />
         <Column field="fecha_radicado" sortable header="Fecha radicado" body={(rowData) => formatDate(rowData.fecha_radicado)} />
         <Column field="id_asunto" sortable header="Asunto" />
         <Column field="fecha_asignacion" sortable header="Fecha asignación" body={(rowData) => formatDate(rowData.fecha_asignacion)} />
         <Column field="nombre_procedencia" header="Procedencia" />
         <Column field="observaciones" header="Observaciones" />
-
         <Column
           field="cantidad_respuesta"
           sortable
@@ -276,7 +271,6 @@ export const TablePendingUser = ({
             <InputNumber value={options.value} onValueChange={(e) => options.editorCallback(e.value)} className="w-full" />
           )}
         />
-
         <Column field="fecha_radicado" sortable header="Dias" body={renderDiasLaborables} />
         <Column header="Acciones" body={actionBodyTemplate} headerStyle={{ textAlign: 'center', minWidth: '12rem' }} />
         <Column
