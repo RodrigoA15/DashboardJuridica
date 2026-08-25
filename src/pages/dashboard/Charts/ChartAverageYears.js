@@ -165,7 +165,7 @@ export const ChartMonthlyRadicados = () => {
       },
 
       dataLabels: {
-        enabled: false
+        enabled: true
       },
 
       grid: {
