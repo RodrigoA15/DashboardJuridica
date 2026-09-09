@@ -1,20 +1,27 @@
+import { useEffect, useMemo, useState } from 'react';
 import MainCard from 'components/MainCard';
 import { Grid, Typography } from '@mui/material';
-//import ChartArea from './chartArea';
-import { ChartEstados } from './chartEstados';
 import { BarChart } from './StatesByUser';
 import { TableUsersAnswer } from './tableUsersAnswer';
-import ChartRadicadosAnswer from 'pages/dashboard/ChartRadicadosAnswer';
+import { TableAffairsAnswers } from './tableAffairAnswers';
+import { DateRangeFilter } from './DateRangeFilter';
+import { getCurrentMonthDateRange } from './utils/date';
 import { useParameters } from 'hooks/useParameters';
-import { useEffect, useState } from 'react';
 import { Productivity } from './productividad/index';
 import { AsignacionUsuarios } from './productividad/tables/AsignacionUsuarios';
-// import { ChartPQRSmonth } from './chartPQRSmonth';
-// import { AnswerByuser } from './answerByuser';
 
 function IndexResumen() {
   const { parameters } = useParameters();
   const [validateParam, setValidateParam] = useState(false);
+
+  const currentMonthRange = useMemo(() => getCurrentMonthDateRange(), []);
+
+  // Borrador: lo que el usuario edita en los inputs
+  const [draftStartDate, setDraftStartDate] = useState(currentMonthRange.startDate);
+  const [draftEndDate, setDraftEndDate] = useState(currentMonthRange.endDate);
+
+  // Rango aplicado: lo que reciben las tablas (se actualiza al filtrar)
+  const [appliedRange, setAppliedRange] = useState(currentMonthRange);
 
   useEffect(() => {
     const validatorParameter = parameters.some((parametro) => parametro.nombre_parametro === 'Tabla asuntos' && parametro.activo);
@@ -22,6 +29,14 @@ function IndexResumen() {
       setValidateParam(validatorParameter);
     }
   }, [parameters, validateParam]);
+
+  const handleApplyDateFilter = (event) => {
+    event.preventDefault();
+    setAppliedRange({
+      startDate: draftStartDate,
+      endDate: draftEndDate
+    });
+  };
 
   return (
     <Grid container rowSpacing={4.5} columnSpacing={2.75}>
@@ -32,7 +47,6 @@ function IndexResumen() {
           </Grid>
         </Grid>
         <MainCard content={false} sx={{ mt: 1.5 }}>
-          {/*<ChartArea /> */}
           <Productivity />
         </MainCard>
       </Grid>
@@ -44,45 +58,35 @@ function IndexResumen() {
           </Grid>
         </Grid>
         <MainCard content={false} sx={{ mt: 1.5 }}>
-          {/*<ChartArea /> */}
           <AsignacionUsuarios />
         </MainCard>
       </Grid>
 
-      <Grid item xs={6} md={6}>
-        <Grid container alignItems="center" justifyContent="space-between">
+      <Grid item xs={12}>
+        <Grid container alignItems="center" justifyContent="start" spacing={2}>
           <Grid item>
-            <Typography variant="h5">Total de radicados por estado</Typography>
+            <DateRangeFilter
+              startDate={draftStartDate}
+              endDate={draftEndDate}
+              onStartDateChange={setDraftStartDate}
+              onEndDateChange={setDraftEndDate}
+              onSubmit={handleApplyDateFilter}
+            />
           </Grid>
         </Grid>
+      </Grid>
+
+      <Grid item xs={6} md={6}>
         <MainCard content={false} sx={{ mt: 1.5 }}>
-          <ChartEstados />
+          <TableAffairsAnswers startDate={appliedRange.startDate} endDate={appliedRange.endDate} />
         </MainCard>
       </Grid>
 
       <Grid item xs={6} md={6}>
-        <Grid container alignItems="center" justifyContent="space-between">
-          <Grid item>
-            <Typography variant="h5">Total respuestas por usuario</Typography>
-          </Grid>
-        </Grid>
         <MainCard content={false} sx={{ mt: 1.5 }}>
-          <TableUsersAnswer />
+          <TableUsersAnswer startDate={appliedRange.startDate} endDate={appliedRange.endDate} />
         </MainCard>
       </Grid>
-
-      {validateParam && (
-        <Grid item xs={6} md={6}>
-          <Grid container alignItems="center" justifyContent="space-between">
-            <Grid item>
-              <Typography variant="h5">Total porcentaje de PQRS sin responder</Typography>
-            </Grid>
-          </Grid>
-          <MainCard content={false} sx={{ mt: 1.5 }}>
-            <ChartRadicadosAnswer />
-          </MainCard>
-        </Grid>
-      )}
 
       <Grid item xs={6} md={12}>
         <Grid container alignItems="center" justifyContent="space-between">
