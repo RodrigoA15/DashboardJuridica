@@ -126,6 +126,10 @@ function ConsultaRadicados() {
     return new Date(fecha).toLocaleDateString('es-ES', { timeZone: 'UTC' });
   };
 
+  const concatProcedencia = (rowData) => {
+    return rowData.id_procedencia.nombre + ' ' + rowData.id_procedencia.apellido;
+  };
+
   const header = renderHeader();
   return (
     <div>
@@ -134,7 +138,8 @@ function ConsultaRadicados() {
         <Column field="fecha_radicado" body={formatFecha} header="Fecha radicado" />
         <Column field="cantidad_respuesta" header="Cantidad respuesta" />
         <Column field="observaciones_radicado" header="Observaciones" />
-        <Column field="id_procedencia.nombre" header="Procedencia" />
+        <Column field="id_procedencia.numero_identificacion" header="Identificacion" />
+        <Column header="Procedencia" body={concatProcedencia} />
         <Column field="id_canal_entrada.nombre_canal" header="Canal de entrada" />
         <Column field="id_asunto.nombre_asunto" header="Asunto" />
         <Column field="id_tipificacion.nombre_tipificacion" header="Tipificacion" />
