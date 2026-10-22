@@ -1,18 +1,4 @@
-import { useFetchMetrics } from 'lib/dashboard/fetchMetrics';
-import { useQuery } from '@tanstack/react-query';
-
-export const MetricTotalPQRS = () => {
-  const { fetchTotalPqrs } = useFetchMetrics();
-  const { data } = useQuery({
-    queryKey: ['totalPqrs'],
-    queryFn: fetchTotalPqrs,
-    placeholderData: [
-      {
-        count: 0
-      }
-    ]
-  });
-
+export const MetricTotalPQRS = ({ data }) => {
   return (
     <div className="rounded-2xl border border-gray-200 bg-[#9DBC98] p-4 h-24 flex flex-col items-center justify-center text-center">
       <p className="text-sm text-white/90">TOTAL PQRS</p>

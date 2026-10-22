@@ -1,18 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
-import { useFetchMetrics } from 'lib/dashboard/fetchMetrics';
-
-export const MetricTotalWitoutAssigned = () => {
-  const { fetchTotalWithoutAssigned } = useFetchMetrics();
-  const { data } = useQuery({
-    queryKey: ['total-without-assigned'],
-    queryFn: fetchTotalWithoutAssigned,
-    placeholderData: [
-      {
-        count: 0
-      }
-    ]
-  });
-
+export const MetricTotalWitoutAssigned = ({ data }) => {
   return (
     // <div className="rounded-2xl border border-gray-200 bg-[#F46060] p-5 md:p-6">
     <div className="rounded-2xl border border-gray-200 bg-[#F46060] p-4 h-24">

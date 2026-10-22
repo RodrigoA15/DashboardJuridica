@@ -1,18 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
-import { useFetchMetrics } from 'lib/dashboard/fetchMetrics';
-
-export const MetricTotalUnanswered = () => {
-  const { fetchTotalUnanswered } = useFetchMetrics();
-  const { data } = useQuery({
-    queryKey: ['total-unanswered'],
-    queryFn: fetchTotalUnanswered,
-    placeholderData: [
-      {
-        count: 0
-      }
-    ]
-  });
-
+export const MetricTotalUnanswered = ({data}) => {
   return (
     <div className="rounded-2xl border border-gray-200 bg-[#9DBC98] p-4 h-24">
       <div className="flex flex-col items-center justify-center text-center">

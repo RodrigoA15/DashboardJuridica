@@ -1,18 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
-import { useFetchMetrics } from 'lib/dashboard/fetchMetrics';
-export const MetricTotalEntities = () => {
-  const { fetchTotalEntities } = useFetchMetrics();
-  const { data } = useQuery({
-    queryKey: ['total-entities'],
-    queryFn: fetchTotalEntities,
-    placeholderData: [
-      {
-        count: 0,
-        entidad: 'N/A'
-      }
-    ]
-  });
-
+export const MetricTotalEntities = ({ data }) => {
   return (
     <>
       {data?.map((item) => (
