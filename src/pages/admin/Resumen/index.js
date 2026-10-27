@@ -9,9 +9,13 @@ import { getCurrentMonthDateRange } from './utils/date';
 import { useParameters } from 'hooks/useParameters';
 import { Productivity } from './productividad/index';
 import { AsignacionUsuarios } from './productividad/tables/AsignacionUsuarios';
+import { usePermissions } from 'hooks/usePermissions';
+import { useAuth } from 'context/authContext';
 
 function IndexResumen() {
   const { parameters } = useParameters();
+  const { user } = useAuth();
+  const { canViewMetricTotalReturned } = usePermissions(user);
   const [validateParam, setValidateParam] = useState(false);
 
   const currentMonthRange = useMemo(() => getCurrentMonthDateRange(), []);
@@ -40,27 +44,30 @@ function IndexResumen() {
 
   return (
     <Grid container rowSpacing={4.5} columnSpacing={2.75}>
-      <Grid item xs={6} md={12}>
-        <Grid container alignItems="center" justifyContent="space-between">
-          <Grid item>
-            <Typography variant="h5">Capacidad Jur&iacute;dica - Promedios mensuales</Typography>
+      {canViewMetricTotalReturned && (
+        <>
+          <Grid item xs={6} md={12}>
+            <Grid container alignItems="center" justifyContent="space-between">
+              <Grid item>
+                <Typography variant="h5">Capacidad Jur&iacute;dica - Promedios mensuales</Typography>
+              </Grid>
+            </Grid>
+            <MainCard content={false} sx={{ mt: 1.5 }}>
+              <Productivity />
+            </MainCard>
           </Grid>
-        </Grid>
-        <MainCard content={false} sx={{ mt: 1.5 }}>
-          <Productivity />
-        </MainCard>
-      </Grid>
-
-      <Grid item xs={6} md={12}>
-        <Grid container alignItems="center" justifyContent="space-between">
-          <Grid item>
-            <Typography variant="h5">Capacidad Jur&iacute;dica - Usuarios</Typography>
+          <Grid item xs={6} md={12}>
+            <Grid container alignItems="center" justifyContent="space-between">
+              <Grid item>
+                <Typography variant="h5">Capacidad Jur&iacute;dica - Usuarios</Typography>
+              </Grid>
+            </Grid>
+            <MainCard content={false} sx={{ mt: 1.5 }}>
+              <AsignacionUsuarios />
+            </MainCard>
           </Grid>
-        </Grid>
-        <MainCard content={false} sx={{ mt: 1.5 }}>
-          <AsignacionUsuarios />
-        </MainCard>
-      </Grid>
+        </>
+      )}
 
       <Grid item xs={12}>
         <Grid container alignItems="center" justifyContent="start" spacing={2}>
