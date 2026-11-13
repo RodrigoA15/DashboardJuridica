@@ -21,15 +21,18 @@ export const GetRespuesta = () => {
   const [globalFilterValue, setGlobalFilterValue] = useState('');
   const { fetchUsersByArea } = useFetchPendientes();
   const { fetchAnswers } = useFetchAnswers();
+
+  const departamentosIds = user?.departamento?.map((d) => d._id) || [];
+
   const { data, isLoading, error } = useQuery({
-    queryKey: ['answers-area', user.departamento._id],
-    queryFn: () => fetchAnswers(user.departamento._id),
+    queryKey: ['answers-area', departamentosIds],
+    queryFn: () => fetchAnswers(departamentosIds),
     retry: false
   });
 
   const { data: users } = useQuery({
-    queryKey: ['users-area', user.departamento._id],
-    queryFn: () => fetchUsersByArea(user.departamento._id),
+    queryKey: ['users-area', departamentosIds],
+    queryFn: () => fetchUsersByArea(departamentosIds),
     enabled: !!user
   });
 
